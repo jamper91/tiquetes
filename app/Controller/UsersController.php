@@ -115,18 +115,13 @@ class UsersController extends AppController {
                 "Country.nombre"
             ),
             "recursive"=>-2
-        ));
-//            
-//       
+        ));       
         debug($countriesName);
-        
-        //debug($citiesName);
-        ///**/
         $people = $this->User->Person->find('list');
         $typeUsers = $this->User->TypeUser->find('list');
         $authorizations = $this->User->Authorization->find('list');
         $this->set(compact('people', 'typeUsers', 'authorizations', 'documentTypes', 'countries'));
-        $this->set(compact('departments'));
+        $this->set(compact('state'));
 
         $cities = $this->User->Person->City->find('list');
         $this->set(compact('cities'));
@@ -161,9 +156,9 @@ class UsersController extends AppController {
         }
         $people = $this->User->Person->find('list');
         $typeUsers = $this->User->TypeUser->find('list');
-        $departments = $this->User->State->find('list');
+        $states = $this->User->State->find('list');
         $authorizations = $this->User->Authorization->find('list');
-        $this->set(compact('people', 'typeUsers', 'departments', 'authorizations'));
+        $this->set(compact('people', 'typeUsers', 'states', 'authorizations'));
     }
 
     /**

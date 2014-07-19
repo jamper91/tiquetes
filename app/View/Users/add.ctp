@@ -85,7 +85,7 @@
                 <td><input name="data[User][usuario]" maxlength="20" id="UserUsuario" type="text"></td>
                 <td>Contraseña</td>
                 <td><input name="data[User][password]" id="UserPassword" type="password"></td>
-                               
+
             </tr>
             <tr>
                 <td>Confirmar Contraseña</td>
@@ -100,11 +100,22 @@
                 </td>                
             </tr>
             <tr>
+                <td>Valido Hasta</td>
                 <td>
-                <?php
-                echo $this->Form->input('validohasta');
-                echo $this->Form->input('Identificador');
-                ?></td>
+                    <?php
+                    echo $this->Form->input('validohasta', array(
+                        'label' => ''
+                    ));
+                    ?>
+                </td>                
+                <td>Indentificador</td>
+                <td>
+                    <?php
+                    echo $this->Form->input('Identificador', array(
+                        'label' => ''
+                    ));
+                    ?>
+                </td>
             </tr>
             <!--        //echo $this->Form->input('type_user_id');
                         //echo $this->Form->input('document_type_id');
@@ -116,19 +127,19 @@
             ?>
         </table>
     </fieldset>
-<?php echo $this->Form->end(__('Crear')); ?>
+    <?php echo $this->Form->end(__('Crear')); ?>
 </div>
 
 
 <script>
     $("#UserStateId").change(function() {
-
         var url2 = urlbase + "cities/getCitiesByState.xml";
         var datos2 = {
-            department_id: $(this).val()
+            state_id: $(this).val()
         };
-        //alert(datos2.department_id);
+
         ajax(url2, datos2, function(xml) {
+            alert(datos2.state_id);
             $("#UserCityId").html("");
             $("datos", xml).each(function() {
                 var obj = $(this).find("City");
@@ -156,7 +167,7 @@
             ajax(url, datos, function(xml) {
                 $("#UserStateId").html("");
                 $("datos", xml).each(function() {
-                    var obj = $(this).find("States");
+                    var obj = $(this).find("State");
                     var valor, texto;
                     valor = $("id", obj).text();
                     texto = $("nombre", obj).text();
