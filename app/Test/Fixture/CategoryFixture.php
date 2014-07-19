@@ -11,7 +11,7 @@ class CategoryFixture extends CakeTestFixture {
  * @var array
  */
 	public $fields = array(
-		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'unsigned' => true, 'key' => 'primary'),
 		'descripcion' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'precio' => array('type' => 'float', 'null' => true, 'default' => null, 'unsigned' => false),
 		'indexes' => array(
@@ -28,7 +28,7 @@ class CategoryFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'id' => '',
+			'id' => 1,
 			'descripcion' => 'Lorem ipsum dolor sit amet',
 			'precio' => 1
 		),

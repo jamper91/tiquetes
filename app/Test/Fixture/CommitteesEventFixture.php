@@ -11,7 +11,7 @@ class CommitteesEventFixture extends CakeTestFixture {
  * @var array
  */
 	public $fields = array(
-		'id' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 20, 'key' => 'primary', 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 20, 'unsigned' => false, 'key' => 'primary'),
 		'committee_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
 		'event_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
 		'indexes' => array(
@@ -27,7 +27,7 @@ class CommitteesEventFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'id' => 'Lorem ipsum dolor ',
+			'id' => 1,
 			'committee_id' => 1,
 			'event_id' => 1
 		),

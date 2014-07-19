@@ -11,7 +11,7 @@ class SaleFixture extends CakeTestFixture {
  * @var array
  */
 	public $fields = array(
-		'sale_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
+		'sale_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 20, 'unsigned' => true, 'key' => 'primary'),
 		'cantidad' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
 		'tipo_de_pago' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'fecha' => array('type' => 'date', 'null' => true, 'default' => null),
@@ -29,7 +29,7 @@ class SaleFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'sale_id' => '',
+			'sale_id' => 1,
 			'cantidad' => 1,
 			'tipo_de_pago' => 'Lorem ipsum dolor sit amet',
 			'fecha' => '2014-07-19'

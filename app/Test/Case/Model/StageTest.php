@@ -17,14 +17,14 @@ class StageTest extends CakeTestCase {
 		'app.city',
 		'app.department',
 		'app.user',
-		'app.company',
 		'app.person',
 		'app.document_type',
-		'app.data',
-		'app.form',
-		'app.personal_datum',
+		'app.company',
 		'app.event',
 		'app.event_type',
+		'app.form',
+		'app.personal_datum',
+		'app.data',
 		'app.paper',
 		'app.shelf',
 		'app.location',
@@ -46,7 +46,10 @@ class StageTest extends CakeTestCase {
 		'app.events_hotel',
 		'app.payment',
 		'app.events_payment',
-		'app.committees_events_person'
+		'app.committees_events_person',
+		'app.type_user',
+		'app.authorization',
+		'app.authorizations_user'
 	);
 
 /**

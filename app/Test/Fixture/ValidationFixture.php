@@ -11,7 +11,7 @@ class ValidationFixture extends CakeTestFixture {
  * @var array
  */
 	public $fields = array(
-		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 20, 'unsigned' => true, 'key' => 'primary'),
 		'descripcion' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'fechainicio' => array('type' => 'date', 'null' => true, 'default' => null),
 		'fechafin' => array('type' => 'date', 'null' => true, 'default' => null),
@@ -31,7 +31,7 @@ class ValidationFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'id' => '',
+			'id' => 1,
 			'descripcion' => 'Lorem ipsum dolor sit amet',
 			'fechainicio' => '2014-07-19',
 			'fechafin' => '2014-07-19',

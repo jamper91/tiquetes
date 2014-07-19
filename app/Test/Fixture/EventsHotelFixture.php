@@ -11,7 +11,7 @@ class EventsHotelFixture extends CakeTestFixture {
  * @var array
  */
 	public $fields = array(
-		'id' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 20, 'key' => 'primary', 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 20, 'unsigned' => false, 'key' => 'primary'),
 		'event_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
 		'hotel_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
 		'indexes' => array(
@@ -27,7 +27,7 @@ class EventsHotelFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'id' => 'Lorem ipsum dolor ',
+			'id' => 1,
 			'event_id' => 1,
 			'hotel_id' => 1
 		),

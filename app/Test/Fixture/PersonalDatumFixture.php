@@ -11,7 +11,7 @@ class PersonalDatumFixture extends CakeTestFixture {
  * @var array
  */
 	public $fields = array(
-		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 20, 'unsigned' => true, 'key' => 'primary'),
 		'descripcion' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'id_padre' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
 		'tipo' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
@@ -30,7 +30,7 @@ class PersonalDatumFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'id' => '',
+			'id' => 1,
 			'descripcion' => 'Lorem ipsum dolor sit amet',
 			'id_padre' => 1,
 			'tipo' => 'Lorem ipsum dolor ',
