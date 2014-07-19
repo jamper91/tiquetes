@@ -51,11 +51,11 @@ class UsersController extends AppController {
      */
     public function add() {
         $this->layout = false;
-        $this->loadModel('People');
+        
         if ($this->request->is('post')) {
 
             $data = $this->data;
-
+           $this->loadModel('People');
 // this is for the case you want to insert into 2 tables at a same time
             $newPeole = $this->People->create();
             $newPeole = array(
@@ -108,48 +108,33 @@ class UsersController extends AppController {
         ));
         //debug($typeUserName);
         //pais
-        $countriesName = $this->User->Person->City->State->Country->find('list', array(
-            "fields" => array(
+//               
+        $this->loadModel('Country');
+        $countriesName = $this->Country->find('list', array(
+            "fields"=>array(
                 "Country.nombre"
-            )
-        ));//               
-//        $this->loadModel('Country');
-//        $countriesName = $this->Country->find('all', null);
+            ),
+            "recursive"=>-2
+        ));
 //            
 //       
-//        debug($countriesName);
-        //debug($countriesName);
-        //departamento
-        $statesName = $this->User->Person->City->State->find('list', array(
-            "fields" => array(
-                "State.nombre"
-            )
-        ));
-        //debug($statesName);
-        //ciudad
-        $citiesName = $this->User->Person->City->find('list', array(
-            "fields" => array(
-                "City.nombre"
-            )
-        ));
+        debug($countriesName);
+        
         //debug($citiesName);
         ///**/
         $people = $this->User->Person->find('list');
         $typeUsers = $this->User->TypeUser->find('list');
-        $departments = $this->User->State->find('list');
         $authorizations = $this->User->Authorization->find('list');
         $this->set(compact('people', 'typeUsers', 'authorizations', 'documentTypes', 'countries'));
-        $departments = $this->User->Person->City->State->find('list');
         $this->set(compact('departments'));
 
         $cities = $this->User->Person->City->find('list');
         $this->set(compact('cities'));
         //montar descripcion a select
-        $this->set("documentTypeName", $documentTypeName);
+        $this->set(compact("documentTypeName"));
         $this->set("typeUserName", $typeUserName);
-        $this->set("countriesName", $countriesName);
-        $this->set("statesName", $statesName);
-        $this->set("citiesName", $citiesName);
+        $this->set(compact("countriesName"));
+        
     }
 
     /**

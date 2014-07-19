@@ -34,9 +34,8 @@
                 </td>
                 <td><?php echo 'Departamento' ?></td>
                 <td><?php
-                    echo $this->Form->input('department_id', array(
+                    echo $this->Form->input('state_id', array(
                         'label' => '',
-                        "options" => $departmentsName,
                         "empty" => "Seleccione un Departamento"
                     ));
                     ?>
@@ -48,7 +47,6 @@
                     <?php
                     echo $this->Form->input('city_id', array(
                         'label' => '',
-                        "options" => $citiesName,
                         "empty" => "Seleccione Una Ciudad"
                     ));
                     ?>
@@ -87,8 +85,26 @@
                 <td><input name="data[User][usuario]" maxlength="20" id="UserUsuario" type="text"></td>
                 <td>Contraseña</td>
                 <td><input name="data[User][password]" id="UserPassword" type="password"></td>
+                               
+            </tr>
+            <tr>
                 <td>Confirmar Contraseña</td>
-                <td><input name="data[User][passwordConfirm]" id="UserPassword" type="password"></td>
+                <td><input name="data[User][passwordConfirm]" id="UserPassword" type="password"></td> 
+                <td>Valido Desde</td>                
+                <td>
+                    <?php
+                    echo $this->Form->input('validodesde', array(
+                        'label' => ''
+                    ));
+                    ?>
+                </td>                
+            </tr>
+            <tr>
+                <td>
+                <?php
+                echo $this->Form->input('validohasta');
+                echo $this->Form->input('Identificador');
+                ?></td>
             </tr>
             <!--        //echo $this->Form->input('type_user_id');
                         //echo $this->Form->input('document_type_id');
@@ -100,14 +116,14 @@
             ?>
         </table>
     </fieldset>
-    <?php echo $this->Form->end(__('Crear')); ?>
+<?php echo $this->Form->end(__('Crear')); ?>
 </div>
 
 
 <script>
-    $("#UserDepartmentId").change(function() {
+    $("#UserStateId").change(function() {
 
-        var url2 = urlbase + "cities/getCitiesByDepartment.xml";        
+        var url2 = urlbase + "cities/getCitiesByState.xml";
         var datos2 = {
             department_id: $(this).val()
         };
@@ -130,17 +146,17 @@
         });
     });
     $(document).ready(function() {
-        $("#UserDepartmentId").html("");
+        $("#UserStateId").html("");
         $("#UserCityId").html("");
         $("#UserCountryId").change(function() {
-            var url = urlbase + "departments/getDepartamentsByCountry.xml";
+            var url = urlbase + "states/getStatesByCountry.xml";
             var datos = {
                 country_id: $(this).val()
             };
             ajax(url, datos, function(xml) {
-                $("#UserDepartmentId").html("");
+                $("#UserStateId").html("");
                 $("datos", xml).each(function() {
-                    var obj = $(this).find("Department");
+                    var obj = $(this).find("States");
                     var valor, texto;
                     valor = $("id", obj).text();
                     texto = $("nombre", obj).text();
@@ -148,7 +164,7 @@
                         var html = "<option value='$1'>$2</option>";
                         html = html.replace("$1", valor);
                         html = html.replace("$2", texto);
-                        $("#UserDepartmentId").append(html);
+                        $("#UserStateId").append(html);
                     }
                 });
             });

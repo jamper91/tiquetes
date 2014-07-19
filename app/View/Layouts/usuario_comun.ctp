@@ -50,35 +50,35 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
         <script src="http://malsup.github.com/jquery.form.js"></script>
         <script>
-            $(document).ready(function() {
-                $("#cssmenu a").click(function(e) {
-                    e.preventDefault();
-                    $("#contenido").load($(this).attr("href"));
-                });
-                $("#contenido").on("submit", "form", function(e) {
-                    e.preventDefault();
-                    var url = $(this).attr("action");
-                    $.post(url, $(this).serialize()).done(function(data) {
-                        var url2 = url.substring(0, url.length - 3);
-                        $("#contenido").load(url2);
-                    });
-                });
-                $("#contenido").on("click", "a", function(e) {
-                    e.preventDefault();
-                    var url = $(this).attr("href");
-                    var url2 = $(this).attr("redi");
-                    var tipo = $(this).attr("tipo");
-                    if (tipo !== "borrar")
-                        $("#contenido").load(url);
-                    else {
-                        ajax(url, null, function(xml) {
-
-                            $("#contenido").load(url2);
-                        });
-                    }
-
-                });
-            });
+//            $(document).ready(function() {
+//                $("#cssmenu a").click(function(e) {
+//                    e.preventDefault();
+//                    $("#contenido").load($(this).attr("href"));
+//                });
+//                $("#contenido").on("submit", "form", function(e) {
+//                    e.preventDefault();
+//                    var url = $(this).attr("action");
+//                    $.post(url, $(this).serialize()).done(function(data) {
+//                        var url2 = url.substring(0, url.length - 3);
+//                        $("#contenido").load(url2);
+//                    });
+//                });
+//                $("#contenido").on("click", "a", function(e) {
+//                    e.preventDefault();
+//                    var url = $(this).attr("href");
+//                    var url2 = $(this).attr("redi");
+//                    var tipo = $(this).attr("tipo");
+//                    if (tipo !== "borrar")
+//                        $("#contenido").load(url);
+//                    else {
+//                        ajax(url, null, function(xml) {
+//
+//                            $("#contenido").load(url2);
+//                        });
+//                    }
+//
+//                });
+//            });
 
         </script>
         <!----webfonts---->
@@ -144,7 +144,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         <div class="main">
             <div class="container">		   
                 <div class="row content">
-                    <div class="col-md-3" id="cssmenu">
+<!--                    <div class="col-md-3" id="cssmenu">
                         <h3><?php echo __('Menú Principal'); ?></h3>
                         <ul>
                             <li><font color="white">&numsp;</font></li>
@@ -178,11 +178,11 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                             </li>
                             <li class="has-sub"><a><span>Usuarios</span></a>
                                 <ul>
-                                    <li><a id="lnkDepa" href="<?php echo $this->Html->url(array("controller" => "type_users", "action" => "index")); ?>">
+                                    <li><a id="lnkDepa" href="<?php echo $this->Html->url(array("controller" => "typeusers", "action" => "index")); ?>">
                                             Listar Tipos de Usuario
                                         </a> 
                                     </li>
-                                    <li><a id="lnkDepa" href="<?php echo $this->Html->url(array("controller" => "type_users", "action" => "add")); ?>">
+                                    <li><a id="lnkDepa" href="<?php echo $this->Html->url(array("controller" => "typeusers", "action" => "add")); ?>">
                                             Crear Tipo de Usuario
                                         </a> 
                                     </li>
@@ -206,11 +206,11 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                                             Crear Permiso
                                         </a> 
                                     </li>
-                                    <li><a id="lnkDepa" href="<?php echo $this->Html->url(array("controller" => "authorizations_users", "action" => "index")); ?>">
+                                    <li><a id="lnkDepa" href="<?php echo $this->Html->url(array("controller" => "authorizationsusers", "action" => "index")); ?>">
                                             Listar Permisos por Usuario
                                         </a> 
                                     </li>
-                                    <li><a id="lnkDepa" href="<?php echo $this->Html->url(array("controller" => "authorizations_users", "action" => "add")); ?>">
+                                    <li><a id="lnkDepa" href="<?php echo $this->Html->url(array("controller" => "authorizationsusers", "action" => "add")); ?>">
                                             Agregar Permiso a Usuario
                                         </a> 
                                     </li>
@@ -346,7 +346,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                                 </ul>
                             </li>                                                        
                         </ul>
-                    </div>
+                    </div>-->
 
                     <div >                        
                         <div id="contenido">
