@@ -15,8 +15,11 @@ class UsersController extends AppController {
      *
      * @var array
      */
-    public $components = array('Paginator', 'RequestHandler');
+    public $components = array('Paginator', 'Auth');
 
+    public function beforeFilter() {
+        $this->Auth->allow('add', 'asociartarjeta');
+    }
     /**
      * index method
      *
@@ -187,4 +190,30 @@ class UsersController extends AppController {
         return $this->redirect(array('action' => 'index'));
     }
 
+    public function login() {
+        if ($this->request->is('post')) {
+            debug($this->Auth->login());
+            if ($this->Auth->login()) {
+                $this->Session->write('User.username', $this->request->data["User"]["username"]);
+                $options = array(
+                    'conditions' => array(
+                        "User.username" => $this->request->data["User"]["username"]
+                    ),
+                    'fields' => array(
+                        "User.id"
+                    ),
+                    'recursive' => -2
+                );
+                $this->Session->setFlash(__('Bienvenido '.$this->request->data["User"]["username"]));
+                $datos = $this->User->find('first', $options);
+                $this->Session->write('User.id', $datos['User']['id']);
+                return $this->redirect($this->Auth->redirect());
+            }
+            $this->Session->setFlash(__('Invalid username or password, try again'));
+        }
+    }
+
+     public function logout() {
+        return $this->redirect($this->Auth->logout());
+    }
 }
