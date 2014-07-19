@@ -105,4 +105,26 @@ class StatesController extends AppController {
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
+        
+        public function getStatesByCountry() {
+        $this->layout="webservices";
+        $country_id = $this->request->data["country_id"];
+        $options = array(
+            "conditions" => array(
+                "State.country_id" => $country_id
+            ),
+            "fields"=>array(
+                "State.id",
+                "State.nombre"
+            ),
+            "recursive"=>0
+        );
+        $states = $this->State->find("all", $options);
+        $this->set(
+                array(
+                    "datos" => $states,
+                    "_serialize" => array("datos")
+                )
+        );
+    }
 }

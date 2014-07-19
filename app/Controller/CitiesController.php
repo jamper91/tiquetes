@@ -105,4 +105,30 @@ class CitiesController extends AppController {
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
+        
+        public function getCitiesByState() {
+
+        $this->layout = "webservices";
+        $state_id = $this->request->data["state_id"]; //State
+        //debug($state_id);
+        $options = array(
+            "conditions" => array(
+                "City.state_id" => $state_id
+            ),
+            "fields" => array(
+                "City.id",
+                "City.nombre"
+            ),
+            "recursive" => 0
+        );
+        $cities = $this->City->find("all", $options);
+        $log = $this->City->getDataSource()->getLog(false, false);
+        //debug($log);
+        $this->set(
+                array(
+                    "datos" => $cities,
+                    "_serialize" => array("datos")
+                )
+        );
+    }
 }
