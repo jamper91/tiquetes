@@ -21,6 +21,7 @@ class CitiesController extends AppController {
  * @return void
  */
 	public function index() {
+             $this->layout = false;
 		$this->City->recursive = 0;
 		$this->set('cities', $this->Paginator->paginate());
 	}
@@ -33,6 +34,7 @@ class CitiesController extends AppController {
  * @return void
  */
 	public function view($id = null) {
+             $this->layout = false;
 		if (!$this->City->exists($id)) {
 			throw new NotFoundException(__('Invalid city'));
 		}
@@ -46,6 +48,7 @@ class CitiesController extends AppController {
  * @return void
  */
 	public function add() {
+             $this->layout = false;
 		if ($this->request->is('post')) {
 			$this->City->create();
 			if ($this->City->save($this->request->data)) {
@@ -55,8 +58,8 @@ class CitiesController extends AppController {
 				$this->Session->setFlash(__('The city could not be saved. Please, try again.'));
 			}
 		}
-		$departments = $this->City->Department->find('list');
-		$this->set(compact('departments'));
+		$states = $this->City->State->find('list');
+		$this->set(compact('states'));
 	}
 
 /**
@@ -67,6 +70,7 @@ class CitiesController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
+             $this->layout = false;
 		if (!$this->City->exists($id)) {
 			throw new NotFoundException(__('Invalid city'));
 		}
@@ -81,8 +85,8 @@ class CitiesController extends AppController {
 			$options = array('conditions' => array('City.' . $this->City->primaryKey => $id));
 			$this->request->data = $this->City->find('first', $options);
 		}
-		$departments = $this->City->Department->find('list');
-		$this->set(compact('departments'));
+		$state = $this->City->State->find('list');
+		$this->set(compact('state'));
 	}
 
 /**
@@ -93,6 +97,7 @@ class CitiesController extends AppController {
  * @return void
  */
 	public function delete($id = null) {
+             $this->layout = false;
 		$this->City->id = $id;
 		if (!$this->City->exists()) {
 			throw new NotFoundException(__('Invalid city'));

@@ -3,7 +3,7 @@ App::uses('AppModel', 'Model');
 /**
  * City Model
  *
- * @property Department $Department
+ * @property State $State
  * @property Company $Company
  * @property Person $Person
  * @property Stage $Stage
@@ -16,7 +16,7 @@ class City extends AppModel {
  * @var array
  */
 	public $validate = array(
-		'department_id' => array(
+		'state_id' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
 				//'message' => 'Your custom message here',
@@ -46,9 +46,9 @@ class City extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Department' => array(
-			'className' => 'Department',
-			'foreignKey' => 'department_id',
+		'State' => array(
+			'className' => 'State',
+			'foreignKey' => 'state_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
