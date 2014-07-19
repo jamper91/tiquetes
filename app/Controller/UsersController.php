@@ -15,7 +15,7 @@ class UsersController extends AppController {
      *
      * @var array
      */
-    public $components = array('Paginator');
+    public $components = array('Paginator', 'RequestHandler');
 
     /**
      * index method
@@ -112,7 +112,12 @@ class UsersController extends AppController {
             "fields" => array(
                 "Country.nombre"
             )
-        ));
+        ));//               
+//        $this->loadModel('Country');
+//        $countriesName = $this->Country->find('all', null);
+//            
+//       
+//        debug($countriesName);
         //debug($countriesName);
         //departamento
         $statesName = $this->User->Person->City->State->find('list', array(
