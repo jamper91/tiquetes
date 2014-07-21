@@ -14,7 +14,6 @@
 		<td><?php echo h($typeUser['TypeUser']['id']); ?>&nbsp;</td>
 		<td><?php echo h($typeUser['TypeUser']['descripcion']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $typeUser['TypeUser']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $typeUser['TypeUser']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $typeUser['TypeUser']['id']), array(), __('Are you sure you want to delete # %s?', $typeUser['TypeUser']['id'])); ?>
 		</td>
@@ -35,12 +34,4 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Type User'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
-	</ul>
 </div>
