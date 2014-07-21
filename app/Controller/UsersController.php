@@ -133,6 +133,7 @@ class UsersController extends AppController {
         $this->set("typeUserName", $typeUserName);
         $this->set(compact("countriesName"));
         
+        
     }
 
     /**

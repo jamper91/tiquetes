@@ -55,9 +55,9 @@ class DatasController extends AppController {
 				$this->Session->setFlash(__('The data could not be saved. Please, try again.'));
 			}
 		}
-		$forms = $this->Data->Form->find('list');
 		$people = $this->Data->Person->find('list');
-		$this->set(compact('forms', 'people'));
+		$formsPersonalDatas = $this->Data->FormsPersonalDatum->find('list');
+		$this->set(compact('people', 'formsPersonalDatas'));
 	}
 
 /**
@@ -82,9 +82,9 @@ class DatasController extends AppController {
 			$options = array('conditions' => array('Data.' . $this->Data->primaryKey => $id));
 			$this->request->data = $this->Data->find('first', $options);
 		}
-		$forms = $this->Data->Form->find('list');
 		$people = $this->Data->Person->find('list');
-		$this->set(compact('forms', 'people'));
+		$formsPersonalDatas = $this->Data->FormsPersonalDatum->find('list');
+		$this->set(compact('people', 'formsPersonalDatas'));
 	}
 
 /**

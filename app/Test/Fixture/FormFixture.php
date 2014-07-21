@@ -12,7 +12,6 @@ class FormFixture extends CakeTestFixture {
  */
 	public $fields = array(
 		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
-		'personal_datum_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
 		'event_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
@@ -29,7 +28,6 @@ class FormFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => '',
-			'personal_datum_id' => '',
 			'event_id' => 1
 		),
 	);

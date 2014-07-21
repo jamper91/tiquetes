@@ -3,28 +3,11 @@ App::uses('AppModel', 'Model');
 /**
  * Data Model
  *
- * @property Form $Form
  * @property Person $Person
+ * @property FormsPersonalData $FormsPersonalData
  */
 class Data extends AppModel {
 
-/**
- * Validation rules
- *
- * @var array
- */
-	public $validate = array(
-		'person_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
@@ -34,16 +17,16 @@ class Data extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Form' => array(
-			'className' => 'Form',
-			'foreignKey' => 'form_id',
+		'Person' => array(
+			'className' => 'Person',
+			'foreignKey' => 'person_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
 		),
-		'Person' => array(
-			'className' => 'Person',
-			'foreignKey' => 'person_id',
+		'FormsPersonalData' => array(
+			'className' => 'FormsPersonalData',
+			'foreignKey' => 'forms_personal_data_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

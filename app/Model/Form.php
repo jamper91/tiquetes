@@ -3,29 +3,12 @@ App::uses('AppModel', 'Model');
 /**
  * Form Model
  *
- * @property PersonalDatum $PersonalDatum
  * @property Event $Event
  * @property Data $Data
+ * @property PersonalDatum $PersonalDatum
  */
 class Form extends AppModel {
 
-/**
- * Validation rules
- *
- * @var array
- */
-	public $validate = array(
-		'event_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
@@ -35,13 +18,6 @@ class Form extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'PersonalDatum' => array(
-			'className' => 'PersonalDatum',
-			'foreignKey' => 'personal_datum_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		),
 		'Event' => array(
 			'className' => 'Event',
 			'foreignKey' => 'event_id',
@@ -69,6 +45,28 @@ class Form extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
+		)
+	);
+
+
+/**
+ * hasAndBelongsToMany associations
+ *
+ * @var array
+ */
+	public $hasAndBelongsToMany = array(
+		'PersonalDatum' => array(
+			'className' => 'PersonalDatum',
+			'joinTable' => 'forms_personal_data',
+			'foreignKey' => 'form_id',
+			'associationForeignKey' => 'personal_datum_id',
+			'unique' => 'keepExisting',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
 		)
 	);
 
