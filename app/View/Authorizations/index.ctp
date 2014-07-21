@@ -14,7 +14,6 @@
 		<td><?php echo h($authorization['Authorization']['id']); ?>&nbsp;</td>
 		<td><?php echo h($authorization['Authorization']['nombre']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $authorization['Authorization']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $authorization['Authorization']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $authorization['Authorization']['id']), array(), __('Are you sure you want to delete # %s?', $authorization['Authorization']['id'])); ?>
 		</td>

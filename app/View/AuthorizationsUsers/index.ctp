@@ -22,7 +22,6 @@
 		</td>
 		<td><?php echo h($authorizationsUser['AuthorizationsUser']['estado']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $authorizationsUser['AuthorizationsUser']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $authorizationsUser['AuthorizationsUser']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $authorizationsUser['AuthorizationsUser']['id']), array(), __('Are you sure you want to delete # %s?', $authorizationsUser['AuthorizationsUser']['id'])); ?>
 		</td>
@@ -43,14 +42,4 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Authorizations User'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Authorizations'), array('controller' => 'authorizations', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Authorization'), array('controller' => 'authorizations', 'action' => 'add')); ?> </li>
-	</ul>
 </div>
