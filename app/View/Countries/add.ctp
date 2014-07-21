@@ -8,7 +8,7 @@
             </div>
             <div class="widget-content nopadding">
                 <?php
-                echo $this->Form->create('Form', array(
+                echo $this->Form->create('Country', array(
                     "class" => "form-horizontal"
                 ));
                 ?>
