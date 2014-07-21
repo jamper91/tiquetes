@@ -18,19 +18,3 @@
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-
-		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('User.id')), array(), __('Are you sure you want to delete # %s?', $this->Form->value('User.id'))); ?></li>
-		<li><?php echo $this->Html->link(__('List Users'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List People'), array('controller' => 'people', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Person'), array('controller' => 'people', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Type Users'), array('controller' => 'type_users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Type User'), array('controller' => 'type_users', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Departments'), array('controller' => 'departments', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Department'), array('controller' => 'departments', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Authorizations'), array('controller' => 'authorizations', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Authorization'), array('controller' => 'authorizations', 'action' => 'add')); ?> </li>
-	</ul>
-</div>

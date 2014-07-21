@@ -18,19 +18,6 @@
 		</dd>
 	</dl>
 </div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('Edit Category'), array('action' => 'edit', $category['Category']['id'])); ?> </li>
-		<li><?php echo $this->Form->postLink(__('Delete Category'), array('action' => 'delete', $category['Category']['id']), array(), __('Are you sure you want to delete # %s?', $category['Category']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('List Categories'), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Category'), array('action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Entradas'), array('controller' => 'entradas', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Entrada'), array('controller' => 'entradas', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Inputs'), array('controller' => 'inputs', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Input'), array('controller' => 'inputs', 'action' => 'add')); ?> </li>
-	</ul>
-</div>
 <div class="related">
 	<h3><?php echo __('Related Entradas'); ?></h3>
 	<?php if (!empty($category['Entrada'])): ?>

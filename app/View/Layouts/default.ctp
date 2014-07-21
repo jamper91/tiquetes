@@ -160,7 +160,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <span>Formularios</span>
                     </a>
                     <ul>
-                        <li><a href="<?= $this->Html->url(array("controller" => "PersonalData", "action" => "add")); ?>">Campos</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "PersonalData", "action" => "add")); ?>">Crear Campos</a></li>
                         <li><a href="<?= $this->Html->url(array("controller" => "forms", "action" => "add")); ?>">Formularios</a></li>
                     </ul>
                 </li>
@@ -175,17 +175,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "edit")); ?>">Editar Persona</a></li>
                     </ul>
                 </li>
-                <li class="submenu"  > 
-                    <a href="#">
-                        <i class="icon icon-th-list"></i> 
-                        <span>Gestionar Personas</span>
-                    </a>
-                    <ul>
-                        <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "add")); ?>">Crear Persona</a></li>
-                        <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "index")); ?>">Listar Personas</a></li>
-                        <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "edit")); ?>">Editar Persona</a></li>
-                    </ul>
-                </li>
+                
             </ul>
         </div>
         <!--sidebar-menu-->
