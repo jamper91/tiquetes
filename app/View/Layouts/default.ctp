@@ -171,12 +171,21 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <span>Gestionar Personas</span>
                     </a>
                     <ul>
-                        <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "add")); ?>">Crear Persona</a></li>
-                        <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "index")); ?>">Listar Personas</a></li>
-                        <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "edit")); ?>">Editar Persona</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "add2")); ?>">Crear Persona</a></li>
+                        
                     </ul>
                 </li>
-                
+                <li class="submenu"  > 
+                    <a href="#">
+                        <i class="icon icon-th-list"></i> 
+                        <span>Gestionar Tipos de Usuario</span>
+                    </a>
+                    <ul>
+                        <li><a href="<?= $this->Html->url(array("controller" => "TypeUsers", "action" => "add")); ?>">Crear Tipo de Usuario</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "TypeUsers", "action" => "index")); ?>">Listar Tipos de Usuario</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "TypeUsers", "action" => "edit")); ?>">Editar Tipo de Usuario</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
         <!--sidebar-menu-->
