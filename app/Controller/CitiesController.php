@@ -21,7 +21,7 @@ class CitiesController extends AppController {
  * @return void
  */
 	public function index() {
-             $this->layout = false;
+//             $this->layout = false;
 		$this->City->recursive = 0;
 		$this->set('cities', $this->Paginator->paginate());
 	}
@@ -34,7 +34,7 @@ class CitiesController extends AppController {
  * @return void
  */
 	public function view($id = null) {
-             $this->layout = false;
+//             $this->layout = false;
 		if (!$this->City->exists($id)) {
 			throw new NotFoundException(__('Invalid city'));
 		}
@@ -58,7 +58,12 @@ class CitiesController extends AppController {
 				$this->Session->setFlash(__('The city could not be saved. Please, try again.'));
 			}
 		}
-		$states = $this->City->State->find('list');
+		$states = $this->City->State->find('list',array(
+                    "fields"=>array(
+                        "State.id",
+                        "State.nombre"
+                    )
+                ));
 		$this->set(compact('states'));
 	}
 

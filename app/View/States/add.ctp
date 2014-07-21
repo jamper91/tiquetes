@@ -1,20 +1,55 @@
-<div class="states form">
-<?php echo $this->Form->create('State'); ?>
-	<fieldset>
-		<legend><?php echo __('Add State'); ?></legend>
-	<?php
-		echo $this->Form->input('country_id');
-		echo $this->Form->input('nombre');
-	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
 
-		<li><?php echo $this->Html->link(__('List States'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Countries'), array('controller' => 'countries', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Country'), array('controller' => 'countries', 'action' => 'add')); ?> </li>
-	</ul>
+<div class="row-fluid">
+    <div class="span6">
+        <div class="widget-box">
+            <div class="widget-title">
+                <h5>
+                    Crear Departamento
+                </h5>
+            </div>
+            <div class="widget-content nopadding">
+                <?php
+                echo $this->Form->create('Form', array(
+                    "class" => "form-horizontal"
+                ));
+                ?>
+                <div class="control-group">
+                    <label class="control-label">Pais</label>
+                    <?php
+                    echo $this->Form->input('country_id', array(
+                        "div" => array(
+                            "class" => "controls"
+                        ),
+                        "label" => ""
+                    ));
+                    ?>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Nombre</label>
+                    <?php
+//                    echo $this->Form->input('PersonalDatum');
+                    ?>
+                    <?php
+                    echo $this->Form->input('nombre', array(
+                        "div" => array(
+                            "class" => "controls"
+                        ),
+                        "label" => ""
+                    ));
+//                    ?>
+                </div>
+                <?php
+                echo $this->Form->end(array(
+                    "div" => array(
+                        "class" => "form-actions"
+                    ),
+                    "class" => "btn btn-success",
+                    "label" => "Crear"
+                ));
+                ?>
+            </div>
+
+        </div>
+
+    </div>
 </div>

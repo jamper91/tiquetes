@@ -49,7 +49,6 @@ class FormsController extends AppController {
      * @return void
      */
     public function add() {
-        
         if ($this->request->is('post')) {
             $this->Form->create();
             if ($this->Form->save($this->request->data)) {
@@ -72,8 +71,6 @@ class FormsController extends AppController {
             )
         ));
         $this->set(compact('events', 'personalData'));
-        
-       
     }
 
     /**
@@ -98,8 +95,18 @@ class FormsController extends AppController {
             $options = array('conditions' => array('Form.' . $this->Form->primaryKey => $id));
             $this->request->data = $this->Form->find('first', $options);
         }
-        $events = $this->Form->Event->find('list');
-        $personalData = $this->Form->PersonalDatum->find('list');
+        $events = $this->Form->Event->find('list', array(
+            "fields" => array(
+                "Event.id",
+                "Event.even_nombre"
+            )
+        ));
+        $personalData = $this->Form->PersonalDatum->find('list', array(
+            "fields" => array(
+                "PersonalDatum.id",
+                "PersonalDatum.descripcion"
+            )
+        ));
         $this->set(compact('events', 'personalData'));
     }
 

@@ -55,7 +55,12 @@ class StatesController extends AppController {
 				$this->Session->setFlash(__('The state could not be saved. Please, try again.'));
 			}
 		}
-		$countries = $this->State->Country->find('list');
+		$countries = $this->State->Country->find('list',array(
+                    "fields"=>array(
+                        "Country.id",
+                        "Country.nombre"
+                    )
+                ));
 		$this->set(compact('countries'));
 	}
 
@@ -81,7 +86,12 @@ class StatesController extends AppController {
 			$options = array('conditions' => array('State.' . $this->State->primaryKey => $id));
 			$this->request->data = $this->State->find('first', $options);
 		}
-		$countries = $this->State->Country->find('list');
+		$countries = $this->State->Country->find('list',array(
+                    "fields"=>array(
+                        "Country.id",
+                        "Country.nombre"
+                    )
+                ));
 		$this->set(compact('countries'));
 	}
 

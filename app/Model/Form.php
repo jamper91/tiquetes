@@ -4,7 +4,6 @@ App::uses('AppModel', 'Model');
  * Form Model
  *
  * @property Event $Event
- * @property Data $Data
  * @property PersonalDatum $PersonalDatum
  */
 class Form extends AppModel {
@@ -26,28 +25,6 @@ class Form extends AppModel {
 			'order' => ''
 		)
 	);
-
-/**
- * hasMany associations
- *
- * @var array
- */
-	public $hasMany = array(
-		'Data' => array(
-			'className' => 'Data',
-			'foreignKey' => 'form_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		)
-	);
-
 
 /**
  * hasAndBelongsToMany associations

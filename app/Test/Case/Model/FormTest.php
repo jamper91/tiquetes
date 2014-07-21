@@ -23,6 +23,7 @@ class FormTest extends CakeTestCase {
 		'app.person',
 		'app.document_type',
 		'app.data',
+		'app.forms_personal_data',
 		'app.input',
 		'app.input_state',
 		'app.events_registration_type',

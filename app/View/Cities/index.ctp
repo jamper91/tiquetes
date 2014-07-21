@@ -1,56 +1,65 @@
-<div class="cities index">
-	<h2><?php echo __('Cities'); ?></h2>
-	<table cellpadding="0" cellspacing="0">
-	<thead>
-	<tr>
-			<th><?php echo $this->Paginator->sort('id'); ?></th>
-			<th><?php echo $this->Paginator->sort('department_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('nombre'); ?></th>
-			<th class="actions"><?php echo __('Actions'); ?></th>
-	</tr>
-	</thead>
-	<tbody>
-	<?php foreach ($cities as $city): ?>
-	<tr>
-		<td><?php echo h($city['City']['id']); ?>&nbsp;</td>
-		<td>
-			<?php echo $this->Html->link($city['Department']['id'], array('controller' => 'departments', 'action' => 'view', $city['Department']['id'])); ?>
-		</td>
-		<td><?php echo h($city['City']['nombre']); ?>&nbsp;</td>
-		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $city['City']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $city['City']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $city['City']['id']), array(), __('Are you sure you want to delete # %s?', $city['City']['id'])); ?>
-		</td>
-	</tr>
-<?php endforeach; ?>
-	</tbody>
-	</table>
-	<p>
-	<?php
-	echo $this->Paginator->counter(array(
-	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
-	));
-	?>	</p>
-	<div class="paging">
-	<?php
-		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
-		echo $this->Paginator->numbers(array('separator' => ''));
-		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
-	?>
-	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New City'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Departments'), array('controller' => 'departments', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Department'), array('controller' => 'departments', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Companies'), array('controller' => 'companies', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Company'), array('controller' => 'companies', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List People'), array('controller' => 'people', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Person'), array('controller' => 'people', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Stages'), array('controller' => 'stages', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Stage'), array('controller' => 'stages', 'action' => 'add')); ?> </li>
-	</ul>
-</div>
+<?php
+echo $this->Html->script(array('matrix.tables'));
+?>
+<div class="row-fluid">
+    <div class="span12">
+        <ul class="quick-actions">
+            <li class="bg_lg">
+                <a href="<?= $this->Html->url(array("controller"=>"cities","action"=>"add"))?>">
+                    <i class="icon-plus">
+                        
+                    </i>
+                    Crear Ciudad
+                </a>
+            </li>
+            <li class="bg_lg">
+                <a href="<?= $this->Html->url(array("controller"=>"states","action"=>"index"))?>">
+                    <i class="icon-reorder">
+                        
+                    </i>
+                    Departamentos
+                </a>
+            </li>
+        </ul>
+        <div class="widget-box">
+            <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
+                <h5>Ciudades</h5>
+            </div>
+            <div class="widget-content nopadding">
+                <table class="table table-bordered data-table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Ciudad</th>
+                            <th>Departamento</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($cities as $city): ?>
+                            <tr>
+                                <td><?php echo $city['City']['id']; ?>&nbsp;</td>
+
+                                <td><?php echo $city['City']['nombre']; ?>&nbsp;</td>
+                                <td>
+                                    <?php echo $city['State']['nombre']; ?>
+                                </td>
+                                <td class="actions">
+                                    <span class="btn btn-success btn-mini">
+                                        <?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $city['City']['id'])); ?>
+                                    </span>
+                                    <span class="btn btn-danger btn-mini">
+                                        <?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $city['City']['id']), array(), __('Esta seguro que desea eliminar # %s?', $city['City']['nombre'])); ?>
+                                    </span>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+
+
