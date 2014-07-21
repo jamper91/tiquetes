@@ -9,7 +9,7 @@
             </div>
             <div class="widget-content nopadding">
                 <?php
-                echo $this->Form->create('Form', array(
+                echo $this->Form->create('City', array(
                     "class" => "form-horizontal"
                 ));
                 ?>

@@ -18,7 +18,7 @@ class UsersController extends AppController {
     public $components = array('Paginator', 'Auth');
 
     public function beforeFilter() {
-        $this->Auth->allow('add', 'asociartarjeta');
+        $this->Auth->allow('add', 'asociartarjeta', 'add2');
     }
     /**
      * index method
@@ -211,5 +211,126 @@ class UsersController extends AppController {
 
      public function logout() {
         return $this->redirect($this->Auth->logout());
+    }
+
+     public function asociartarjeta() {
+
+        $this->loadModel('Entrada');
+        if ($this->request->is('post')) {
+            $datos = $this->data;
+
+
+            $newUser = $this->User->create();
+            $newUser = array(
+                'User' => array(
+                    'nombre' => $datos['User']['nombre']));
+            $this->User->save($datos);
+            $newUserId = $this->User->getLastInsertId();
+
+            $newEntrada = $this->Entrada->create();
+            $newEntrada = array(
+                'Entrada' => array(
+                    'usuario_id' => $newUserId,
+                    'tarjeta' => $datos['Entrada']['tarjeta']));
+
+            $this->Session->setFlash("Operacion realizada con exito");
+            $this->Entrada->save($newEntrada);
+            $this->redirect(array('action' => 'asociartarjeta'));
+        }
+    }
+
+    public function asociar() {
+        $this->loadModel('Entrada');
+        if ($this->request->is('post')) {
+            $datos = $this->data;
+            $options = array(
+                "conditions" => array(
+                    'User.documento' => $datos["User"]["documento"]
+                )
+            );
+            $usuario = $this->User->find("first", $options);
+            if ($usuario) {
+                $newEntrada = $this->Entrada->create();
+                $newEntrada = array(
+                    'Entrada' => array(
+                        'usuario_id' => $usuario["User"]["id"],
+                        'tarjeta' => $datos['Entrada']['tarjeta']));
+
+                $this->Session->setFlash("Operacion realizada con exito");
+                $this->Entrada->save($newEntrada);
+                $this->redirect(array('action' => 'asociartarjeta'));
+            }else{
+                
+            }
+        }
+    }
+
+    public function add2()
+    {
+        $this->loadModel('Forms');
+        //$forms = $this->Forms->findAllByEventId('1');
+        $forms =$this->Forms->find('list',array(
+                    "fields"=>array(
+                        "id",
+                    )
+                ));
+        //debug($forms);
+        $this->loadModel('FormsPersonalDatum');
+        $formPersonal = $this->FormsPersonalDatum->findAllByFormId($forms);
+        //debug($formPersonal);
+
+
+        if ($this->request->is('post')) 
+        {
+
+            $data = $this->data;
+            $this->loadModel('People');
+
+            $newPeole = $this->People->create();
+             $newPeole = array(
+                'People' => array(
+                    'pers_documento' => $data['PersonalDatum']['documento'],
+                 
+                )
+            );
+            $this->People->save($newPeole);
+            $newPeopleId = $this->People->getLastInsertId();
+
+            $datos = $this->request->data;
+           
+            foreach ($datos as $dato) {
+               while($value = current($dato))
+               { 
+                    
+                    // $nuevo=substr(key($dato),1);
+                    // debug($nuevo);
+
+                    if(key($dato) != 'documento')
+                    {
+                       $this->loadModel('Data');
+                        $newData = $this->Data->create();
+                        $newData = array(
+                            'Data' => array(
+                                'descripcion' => $value,
+                                'forms_personal_data_id' =>key($dato),
+                                'person_id' => $newPeopleId,
+
+                            )
+                        );
+                        $this->Data->save($newData);
+                       
+                    }
+                     next($dato); 
+                    
+               }
+            
+            }
+           
+        }          
+            
+         
+
+        
+         $this->set('form', $formPersonal);
     }
 }
