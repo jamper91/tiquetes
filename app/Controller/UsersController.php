@@ -53,7 +53,7 @@ class UsersController extends AppController {
      * @return void
      */
     public function add() {
-        $this->layout = false;
+//        $this->layout = false;
         
         if ($this->request->is('post')) {
 

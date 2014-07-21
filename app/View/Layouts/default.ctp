@@ -45,6 +45,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         echo $this->fetch('css');
         echo $this->fetch('script');
         ?>
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
         <script>
 //            $(document).ready(function() {
 //                $(".submenu > a > ul > li >a").click(function(e) {
@@ -131,7 +132,17 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                 <li ><a id="asfsa" href="index.html"><i class="icon icon-home"></i> <span>Dashboard</span></a> </li>
                 <li> <a href="#"><i class="icon icon-signal"></i> <span>Consultar</span></a> </li>
                 <!--<li> <a href="widgets.html"><i class="icon icon-inbox"></i> <span>Widgets</span></a> </li>-->
-                <li><a href="#"><i class="icon icon-th"></i> <span>Usuarios</span></a></li>
+                <li class="submenu"  > 
+                    <a href="#">
+                        <i class="icon icon-fullscreen"></i> 
+                        <span>Gestionar Usuarios</span>
+                    </a>
+                    <ul>
+                        <li><a href="<?= $this->Html->url(array("controller" => "users", "action" => "add")); ?>">Crear Usuario</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "users", "action" => "index")); ?>">Listar Usuario</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "users", "action" => "edit")); ?>">Editar Usuario</a></li>
+                    </ul>
+                </li>
                 <!--<li><a href="grid.html"><i class="icon icon-fullscreen"></i> <span>Geografia</span></a></li>-->
                 <li class="submenu"  > 
                     <a href="#">
@@ -154,7 +165,28 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <li><a href="<?= $this->Html->url(array("controller" => "forms", "action" => "add")); ?>">Formularios</a></li>
                     </ul>
                 </li>
-
+                <li class="submenu"  > 
+                    <a href="#">
+                        <i class="icon icon-th-list"></i> 
+                        <span>Gestionar Personas</span>
+                    </a>
+                    <ul>
+                        <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "add")); ?>">Crear Persona</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "index")); ?>">Listar Personas</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "edit")); ?>">Editar Persona</a></li>
+                    </ul>
+                </li>
+                <li class="submenu"  > 
+                    <a href="#">
+                        <i class="icon icon-th-list"></i> 
+                        <span>Gestionar Personas</span>
+                    </a>
+                    <ul>
+                        <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "add")); ?>">Crear Persona</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "index")); ?>">Listar Personas</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "edit")); ?>">Editar Persona</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
         <!--sidebar-menu-->
@@ -174,7 +206,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         <!--Footer-part-->
 
         <div class="row-fluid">
-            <div id="footer" class="span12"> 2013 &copy; Matrix Admin. Brought to you by <a href="http://themedesigner.in/">Themedesigner.in</a> </div>
+            <div id="footer" class="span12">  <a href="http://themedesigner.in/">Themedesigner.in</a> </div>
         </div>
 
 

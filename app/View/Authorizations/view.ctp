@@ -13,17 +13,7 @@
 		</dd>
 	</dl>
 </div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('Edit Authorization'), array('action' => 'edit', $authorization['Authorization']['id'])); ?> </li>
-		<li><?php echo $this->Form->postLink(__('Delete Authorization'), array('action' => 'delete', $authorization['Authorization']['id']), array(), __('Are you sure you want to delete # %s?', $authorization['Authorization']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('List Authorizations'), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Authorization'), array('action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
-	</ul>
-</div>
+
 <div class="related">
 	<h3><?php echo __('Related Users'); ?></h3>
 	<?php if (!empty($authorization['User'])): ?>
@@ -63,9 +53,5 @@
 	</table>
 <?php endif; ?>
 
-	<div class="actions">
-		<ul>
-			<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
-		</ul>
-	</div>
+	
 </div>
