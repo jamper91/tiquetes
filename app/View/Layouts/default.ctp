@@ -45,6 +45,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         echo $this->fetch('css');
         echo $this->fetch('script');
         ?>
+        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
         <script>
 //            $(document).ready(function() {
 //                $(".submenu > a > ul > li >a").click(function(e) {

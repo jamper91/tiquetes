@@ -47,6 +47,7 @@ class StatesController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
+                    debug("Entre post");
 			$this->State->create();
 			if ($this->State->save($this->request->data)) {
 				$this->Session->setFlash(__('The state has been saved.'));
