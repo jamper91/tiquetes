@@ -18,7 +18,7 @@ class UsersController extends AppController {
     public $components = array('Paginator', 'Auth');
 
     public function beforeFilter() {
-        $this->Auth->allow('add', 'asociartarjeta', 'add2');
+        $this->Auth->allow('add', 'asociartarjeta', 'add2', 'buscador');
     }
     /**
      * index method
@@ -326,11 +326,62 @@ class UsersController extends AppController {
             
             }
            
-        }          
-            
-         
-
-        
+        }           
          $this->set('form', $formPersonal);
+    }
+
+    public function buscador()
+    {
+        $this->loadModel('Forms');
+        //$forms = $this->Forms->findAllByEventId('1');
+        $forms =$this->Forms->find('list',array(
+                    "fields"=>array(
+                        "id",
+                    )
+                ));
+        //debug($forms);
+        $this->loadModel('FormsPersonalDatum');
+        $formPersonal = $this->FormsPersonalDatum->findAllByFormId($forms);
+        //debug($formPersonal);
+
+        if ($this->request->is('post')) 
+        {
+
+            $data = $this->data;
+            $this->loadModel('People');
+
+            //$newPeole = $this->People->create();
+
+            //$this->People->save($newPeole);
+            //$newPeopleId = $this->People->getLastInsertId();
+
+            $datos = $this->request->data;
+           debug($datos);
+            foreach ($datos as $dato) 
+            {
+               while($value = current($dato))
+               {
+                    debug(key($dato));
+                    // if(key($dato) != '')
+                    // {
+
+                    //    $this->loadModel('Data');
+                    //     $newData = $this->Data->create();
+                    //     $newData = array(
+                    //         'Data' => array(
+                    //             'descripcion' => $value,
+                    //             'forms_personal_data_id' =>key($dato),
+                    //             'person_id' => $newPeopleId,
+
+                    //         )
+                    //     );
+                    //     $this->Data->save($newData);
+                       
+                    // }
+                     next($dato);   
+               }
+            }
+        } 
+        $this->set('form', $formPersonal);
     }
 }

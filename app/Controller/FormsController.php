@@ -52,6 +52,7 @@ class FormsController extends AppController {
         if ($this->request->is('post')) {
             $this->Form->create();
             if ($this->Form->save($this->request->data)) {
+                
                 $this->Session->setFlash(__('The form has been saved.'));
                 return $this->redirect(array('action' => 'index'));
             } else {
