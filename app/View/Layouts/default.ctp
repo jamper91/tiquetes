@@ -150,7 +150,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                     <ul>
                         <li><a href="<?= $this->Html->url(array("controller" => "countries", "action" => "add")); ?>">Paises</a></li>
                         <li><a href="<?= $this->Html->url(array("controller" => "states", "action" => "add")); ?>">Departamentos</a></li>
-                        <!--<li><a href="<?= $this->Html->url(array("controller" => "cities", "action" => "add")); ?>">Ciudades</a></li>-->
+                        <li><a href="<?= $this->Html->url(array("controller" => "cities", "action" => "add")); ?>">Ciudades</a></li>
                     </ul>
                 </li>
                 <li class="submenu"  > 
@@ -181,7 +181,6 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                     <ul>
                         <li><a href="<?= $this->Html->url(array("controller" => "TypeUsers", "action" => "add")); ?>">Crear Tipo de Usuario</a></li>
                         <li><a href="<?= $this->Html->url(array("controller" => "TypeUsers", "action" => "index")); ?>">Listar Tipos de Usuario</a></li>
-                        
                     </ul>
                 </li>
             </ul>
