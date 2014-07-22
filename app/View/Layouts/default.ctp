@@ -96,7 +96,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
             <a href="#" class="visible-phone">
                 <i class="icon icon-home"></i> Dashboard</a>
             <ul id="menu">
-                <li ><a id="asfsa" href="index.html"><i class="icon icon-home"></i> <span>Dashboard</span></a> </li>
+                <li ><a id="asfsa" href="#"><i class="icon icon-home"></i> <span>Dashboard</span></a> </li>
                 <li> <a href="#"><i class="icon icon-signal"></i> <span>Consultar</span></a> </li>
                 <!--<li> <a href="widgets.html"><i class="icon icon-inbox"></i> <span>Widgets</span></a> </li>-->
                 <li class="submenu"  > 
@@ -138,6 +138,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                     </a>
                     <ul>
                         <li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "add2")); ?>">Crear Persona</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador")); ?>">Buscar Persona</a></li>
 
                     </ul>
                 </li>

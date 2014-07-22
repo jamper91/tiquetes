@@ -50,7 +50,7 @@ class PersonalDataController extends AppController {
 			$this->PersonalDatum->create();
 			if ($this->PersonalDatum->save($this->request->data)) {
 				$this->Session->setFlash(__('The personal datum has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				return $this->redirect(array('action' => 'add'));
 			} else {
 				$this->Session->setFlash(__('The personal datum could not be saved. Please, try again.'));
 			}
