@@ -20,7 +20,6 @@
 		<td><?php echo h($personalDatum['PersonalDatum']['tipo']); ?>&nbsp;</td>
 		<td><?php echo h($personalDatum['PersonalDatum']['obligatorio']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $personalDatum['PersonalDatum']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $personalDatum['PersonalDatum']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $personalDatum['PersonalDatum']['id']), array(), __('Are you sure you want to delete # %s?', $personalDatum['PersonalDatum']['id'])); ?>
 		</td>
@@ -41,12 +40,4 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Personal Datum'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Forms'), array('controller' => 'forms', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Form'), array('controller' => 'forms', 'action' => 'add')); ?> </li>
-	</ul>
 </div>
