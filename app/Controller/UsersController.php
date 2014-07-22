@@ -15,18 +15,27 @@ class UsersController extends AppController {
      *
      * @var array
      */
-    public $components = array('Paginator', 'Auth');
+    public $components = array('Paginator', 'Auth', 'Session');
 
     public function beforeFilter() {
-        $this->Auth->allow('add', 'asociartarjeta', 'add2');
+
+        $this->Auth->allow('add', 'asociartarjeta', 'add2', 'buscador');
+
+        parent:: beforeFilter();
+        if ($this->Auth->user('role') == 'admin') {
+            $this->Auth->allow('add', 'asociartarjeta', 'add2');
+        } else {
+            $this->Auth->allow();
+        }
+
     }
+
     /**
      * index method
      *
      * @return void
      */
     public function index() {
-        $this->layout = false;
         $this->User->recursive = 0;
         $this->set('users', $this->Paginator->paginate());
     }
@@ -39,7 +48,7 @@ class UsersController extends AppController {
      * @return void
      */
     public function view($id = null) {
-         $this->layout = false;
+        $this->layout = false;
         if (!$this->User->exists($id)) {
             throw new NotFoundException(__('Usuario Invalido'));
         }
@@ -54,11 +63,11 @@ class UsersController extends AppController {
      */
     public function add() {
 //        $this->layout = false;
-        
+
         if ($this->request->is('post')) {
 
             $data = $this->data;
-           $this->loadModel('People');
+            $this->loadModel('People');
 // this is for the case you want to insert into 2 tables at a same time
             $newPeole = $this->People->create();
             $newPeole = array(
@@ -76,64 +85,101 @@ class UsersController extends AppController {
                     'pers_mail' => $data['People']['pers_mail']
                 )
             );
-            $this->People->save($newPeole);
-            $newPeopleId = $this->People->getLastInsertId();
-            debug($newPeopleId);
+            try {
+                $this->People->save($newPeole);
+                $newPeopleId = $this->People->getLastInsertId();
+                
+                $newUser = $this->User->create();
+            $newUser = array(
+                'User' => array(
+                    'person_id' => $newPeopleId,
+                    'username' => $data['User']['username'],
+                    'password' => $data['User']['password'],
+                    'estado' => 1,
+                    'type_user_id' => $data['User']['type_user_id'],
+                    'department_id' => $data['User']['department_id'],
+                    'validodesde' => $data['User']['validodesde']['year'] . '-' . $data['User']['validodesde']['month'] . '-' . $data['User']['validodesde']['day'],
+                    'validohasta' => $data['User']['validohasta']['year'] . '-' . $data['User']['validohasta']['month'] . '-' . $data['User']['validohasta']['day'],
+                    'identificador' => $data['User']['Identificador']
+                )
+            );
+            $this->User->save($newUser);
+            $usuario = $this->User->getLastInsertId();
+            $this->loadModel('Authorization');
+            $newAutirizationsUser = $this->Authorization->create();
+            $this->Authorization->save($this->request->data);
+            debug($this->request->data("data[User][Autorization][]"));
+            for($i = 0; $i<sizeof($this->request->data("data[User][Autorization][]")); $i++)
+            $newAutirizationsUser = array(
+               'AutorizartionUser' => array(
+                   $this
+               )                
+            );
+                return $this->redirect(array('action' => 'index'));
+            } catch (Exception $ex) {
+                $error2 = $ex->getCode();
+                if ($error2 == '23000') {
+                    $this->Session->setFlash('Error ya hay una persona con el mismo documento en la base de datos', 'error');
+                }
+            }
+
+            
+//debug($newPeopleId);
             /**
              * or if you already have Game Id, and Developer Id, then just load it on, and 
              * put it in the statement below, to create a new Assignment
              * */
-            $newUser = $this->User->create();
-            $newUser = array(
-                'User' => array(
-                    'person_id' => $newPeopleId,
-                    'usuario' => $data['User']['usuario'],
-                    'password' => $data['User']['password'],
-                    'type_user_id' => $data['User']['type_user_id']
-                )
-            );
-            $this->User->save($newUser);
-            //fin codigo para la isercion multiple
+            
+//fin codigo para la isercion multiple
         }
-        //cargar select
-        //tipo de documento
+//cargar select
+//tipo de documento
         $documentTypeName = $this->User->Person->DocumentType->find('list', array(
             "fields" => array(
                 "DocumentType.tido_descripcion"
             )
         ));
-        //debug($documentTypeName);
-        //tipo de usuario
+//debug($documentTypeName);
+//tipo de usuario
         $typeUserName = $this->User->TypeUser->find('list', array(
             "fields" => array(
                 "TypeUser.descripcion"
             )
         ));
-        //debug($typeUserName);
-        //pais
+
+        $departmentName = $this->User->Department->find('list', array(
+            "fields" => array(
+                "Department.descripcion"
+            )
+        ));
+//debug($departmentName);
+//pais
 //               
         $this->loadModel('Country');
         $countriesName = $this->Country->find('list', array(
-            "fields"=>array(
-                "Country.nombre"
+            "fields" => array(
+                "Country.name"
             ),
-            "recursive"=>-2
-        ));       
-        debug($countriesName);
+            "recursive" => -2
+        ));
+//debug($countriesName);
         $people = $this->User->Person->find('list');
         $typeUsers = $this->User->TypeUser->find('list');
-        $authorizations = $this->User->Authorization->find('list');
+        $authorizations = $this->User->Authorization->find('list', array(
+            'fields' => array(
+                "Authorization.nombre"
+            )
+        ));
         $this->set(compact('people', 'typeUsers', 'authorizations', 'documentTypes', 'countries'));
         $this->set(compact('state'));
 
         $cities = $this->User->Person->City->find('list');
         $this->set(compact('cities'));
-        //montar descripcion a select
+//montar descripcion a select
         $this->set(compact("documentTypeName"));
         $this->set("typeUserName", $typeUserName);
+        $this->set("departmentName", $departmentName);
         $this->set(compact("countriesName"));
-        
-        
     }
 
     /**
@@ -158,11 +204,23 @@ class UsersController extends AppController {
             $options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
             $this->request->data = $this->User->find('first', $options);
         }
-        $people = $this->User->Person->find('list');
-        $typeUsers = $this->User->TypeUser->find('list');
-        $states = $this->User->State->find('list');
-        $authorizations = $this->User->Authorization->find('list');
-        $this->set(compact('people', 'typeUsers', 'states', 'authorizations'));
+        
+        $typeUsers = $this->User->TypeUser->find('list', array(
+            "fields" => array(
+                "TypeUser.descripcion"
+            )
+        ));
+        $departments = $this->User->Department->find('list', array(
+            "fields" => array(
+                "Department.descripcion"
+            )
+        ));
+        
+        $authorizations = $this->User->Authorization->find('list', array(
+            "fields" => array(
+                "Autorization.nombre"
+            )));
+        $this->set(compact('people', 'typeUsers', 'departments', 'authorizations'));
     }
 
     /**
@@ -200,7 +258,7 @@ class UsersController extends AppController {
                     ),
                     'recursive' => -2
                 );
-                $this->Session->setFlash(__('Bienvenido '.$this->request->data["User"]["username"]));
+                $this->Session->setFlash(__('Bienvenido ' . $this->request->data["User"]["username"]));
                 $datos = $this->User->find('first', $options);
                 $this->Session->write('User.id', $datos['User']['id']);
                 return $this->redirect($this->Auth->redirect());
@@ -209,11 +267,11 @@ class UsersController extends AppController {
         }
     }
 
-     public function logout() {
+    public function logout() {
         return $this->redirect($this->Auth->logout());
     }
 
-     public function asociartarjeta() {
+    public function asociartarjeta() {
 
         $this->loadModel('Entrada');
         if ($this->request->is('post')) {
@@ -259,78 +317,183 @@ class UsersController extends AppController {
                 $this->Session->setFlash("Operacion realizada con exito");
                 $this->Entrada->save($newEntrada);
                 $this->redirect(array('action' => 'asociartarjeta'));
-            }else{
+            } else {
                 
             }
         }
     }
 
-    public function add2()
-    {
+    public function add2() {
         $this->loadModel('Forms');
-        //$forms = $this->Forms->findAllByEventId('1');
-        $forms =$this->Forms->find('list',array(
-                    "fields"=>array(
-                        "id",
-                    )
-                ));
-        //debug($forms);
+//$forms = $this->Forms->findAllByEventId('1');
+        $forms = $this->Forms->find('list', array(
+            "fields" => array(
+                "id",
+            )
+        ));
+//debug($forms);
         $this->loadModel('FormsPersonalDatum');
         $formPersonal = $this->FormsPersonalDatum->findAllByFormId($forms);
-        //debug($formPersonal);
+//debug($formPersonal);
 
 
-        if ($this->request->is('post')) 
-        {
+        if ($this->request->is('post')) {
 
             $data = $this->data;
             $this->loadModel('People');
 
             $newPeole = $this->People->create();
-             $newPeole = array(
+            $newPeole = array(
                 'People' => array(
                     'pers_documento' => $data['PersonalDatum']['documento'],
-                 
                 )
             );
             $this->People->save($newPeole);
             $newPeopleId = $this->People->getLastInsertId();
 
             $datos = $this->request->data;
-           
-            foreach ($datos as $dato) {
-               while($value = current($dato))
-               { 
-                    
-                    // $nuevo=substr(key($dato),1);
-                    // debug($nuevo);
 
-                    if(key($dato) != 'documento')
-                    {
-                       $this->loadModel('Data');
+            foreach ($datos as $dato) {
+                while ($value = current($dato)) {
+
+// $nuevo=substr(key($dato),1);
+// debug($nuevo);
+
+                    if (key($dato) != 'documento') {
+                        $this->loadModel('Data');
                         $newData = $this->Data->create();
                         $newData = array(
                             'Data' => array(
                                 'descripcion' => $value,
-                                'forms_personal_data_id' =>key($dato),
+                                'forms_personal_data_id' => key($dato),
                                 'person_id' => $newPeopleId,
-
                             )
                         );
                         $this->Data->save($newData);
-                       
                     }
-                     next($dato); 
-                    
-               }
-            
+                    next($dato);
+                }
             }
            
-        }          
-            
-         
-
-        
+        }           
          $this->set('form', $formPersonal);
     }
+
+    public function buscador()
+    {
+        $this->loadModel('Forms');
+        $forms =$this->Forms->find('list',array(
+                    "fields"=>array(
+                        "id",
+                    )
+                ));
+        $this->loadModel('FormsPersonalDatum');
+        $formPersonal = $this->FormsPersonalDatum->findAllByFormId($forms);
+
+        if ($this->request->is('post')) 
+        {
+            $data = $this->data;
+            $this->loadModel('People');
+
+            $datos = $this->request->data;
+            
+            // if(count($datos) == 1)
+            // {
+            //     $conditions = 
+            // }
+            $conditions="";
+            $conditions2="";
+            
+
+            foreach ($datos as $dato) 
+            {
+                //debug(key($dato));
+
+               while($value = key($dato))
+               {
+                    
+                    $value = current($dato);
+                    if($value != '')
+                    {
+                         
+                        if(key($dato)!="documento")
+                        {
+                            
+                            if(!is_int($value))
+                                    $value="'".$value."'";
+                            if($conditions!="")
+                            {
+                                 
+                                $conditions.=" or ".'forms_personal_data_id='.key($dato);
+
+                                $conditions.=" and ".'descripcion='.$value;
+                            }else{
+                                 
+                                $conditions.=' forms_personal_data_id='.key($dato);
+                                $conditions.=' and descripcion='.$value;    
+                            }
+                        }else{
+                                $conditions2.=' pers_documento='.$value;
+                            
+                        }  
+                    }
+                     next($dato);   
+               }
+            }
+            if($conditions !='')   
+            $conditions="select * from datas where ".$conditions;
+
+            
+            if($conditions2 !='')   
+            $conditions2="select * from people where ".$conditions2;
+
+
+            $this->loadModel('Data');
+            if($conditions != '')
+            {
+              $datas = $this->Data->query($conditions); 
+              $datosVista = array();
+              $datosVista2 = array();
+              foreach ($datas as $data) {
+                  $person_id = $data['datas']['person_id'];
+                  $queryDatos = "select * from datas where person_id=".$person_id;
+
+                  $personas = $this->Data->query($queryDatos); 
+                  array_push($datosVista, $personas);
+                  $queryPersona = "select * from people where id=".$person_id;
+                  $personas2 = $this->People->query($queryPersona);
+                  array_push($datosVista2, $personas2); 
+
+              }
+              $this->set('datosvista', $datosVista);
+              $this->set('datosvista2', $datosVista2);
+            }
+            
+             if($conditions2 != '')
+            {
+              $people = $this->Data->query($conditions2); 
+              $datosVista = array();
+              $datosVista2 = array();
+              foreach ($people as $value) {
+                    $person_id = $value['people']['id'];
+                    $queryDatos = "select * from datas where person_id=".$person_id;
+                    //datos para ser enviados a la vista.
+                    $personas = $this->Data->query($queryDatos);
+                    array_push($datosVista, $personas);
+                    $queryPersona = "select * from people where id=".$person_id;
+                    $personas2 = $this->People->query($queryPersona);
+                    array_push($datosVista2, $personas2);
+              }
+              $this->set('datosvista', $datosVista);
+              $this->set('datosvista2', $datosVista2);; 
+            }
+            
+           
+        } 
+
+        $this->set('form', $formPersonal);
+
+
+    }
+
 }

@@ -6,14 +6,12 @@
 		echo $this->Form->input('id');
 		echo $this->Form->input('username');
 		echo $this->Form->input('password');
-		echo $this->Form->input('estado');
-		echo $this->Form->input('person_id');
+		echo $this->Form->input('estado');		
 		echo $this->Form->input('type_user_id');
 		echo $this->Form->input('department_id');
 		echo $this->Form->input('validodesde');
 		echo $this->Form->input('validohasta');
-		echo $this->Form->input('identificador');
-		echo $this->Form->input('Authorization');
+		
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
