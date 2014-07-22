@@ -100,6 +100,17 @@ class UsersController extends AppController {
                 )
             );
             $this->User->save($newUser);
+            $usuario = $this->User->getLastInsertId();
+            $this->loadModel('Authorization');
+            $newAutirizationsUser = $this->Authorization->create();
+            $this->Authorization->save($this->request->data);
+            debug($this->request->data("data[User][Autorization][]"));
+            for($i = 0; $i<sizeof($this->request->data("data[User][Autorization][]")); $i++)
+            $newAutirizationsUser = array(
+               'AutorizartionUser' => array(
+                   $this
+               )                
+            );
                 return $this->redirect(array('action' => 'index'));
             } catch (Exception $ex) {
                 $error2 = $ex->getCode();
@@ -150,7 +161,11 @@ class UsersController extends AppController {
 //debug($countriesName);
         $people = $this->User->Person->find('list');
         $typeUsers = $this->User->TypeUser->find('list');
-        $authorizations = $this->User->Authorization->find('list');
+        $authorizations = $this->User->Authorization->find('list', array(
+            'fields' => array(
+                "Authorization.nombre"
+            )
+        ));
         $this->set(compact('people', 'typeUsers', 'authorizations', 'documentTypes', 'countries'));
         $this->set(compact('state'));
 
@@ -196,8 +211,12 @@ class UsersController extends AppController {
                 "Department.descripcion"
             )
         ));
-        $authorizations = $this->User->Authorization->find('list');
-        $this->set(compact('people', 'typeUsers', 'departments', 'authorizations' ));
+        
+        $authorizations = $this->User->Authorization->find('list', array(
+            "fields" => array(
+                "Autorization.nombre"
+            )));
+        $this->set(compact('people', 'typeUsers', 'departments', 'authorizations'));
     }
 
     /**
