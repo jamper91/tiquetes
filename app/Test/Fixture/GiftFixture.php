@@ -11,7 +11,7 @@ class GiftFixture extends CakeTestFixture {
  * @var array
  */
 	public $fields = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 20, 'unsigned' => true, 'key' => 'primary'),
+		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
 		'descripcion' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'cantidad' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
 		'categoria' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
@@ -29,7 +29,7 @@ class GiftFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'id' => 1,
+			'id' => '',
 			'descripcion' => 'Lorem ipsum dolor sit amet',
 			'cantidad' => 1,
 			'categoria' => 1

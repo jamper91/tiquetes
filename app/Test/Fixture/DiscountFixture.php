@@ -32,8 +32,8 @@ class DiscountFixture extends CakeTestFixture {
 		array(
 			'id' => '',
 			'porcentaje' => 1,
-			'fecha_inicio' => '2014-07-19',
-			'fecha_fin' => '2014-07-19',
+			'fecha_inicio' => '2014-07-22',
+			'fecha_fin' => '2014-07-22',
 			'categoria' => 1
 		),
 	);

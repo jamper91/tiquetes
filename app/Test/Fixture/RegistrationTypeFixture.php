@@ -12,7 +12,7 @@ class RegistrationTypeFixture extends CakeTestFixture {
  */
 	public $fields = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
-		'nombre' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 20, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+		'nombre' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
@@ -27,7 +27,7 @@ class RegistrationTypeFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => 1,
-			'nombre' => 'Lorem ipsum dolor '
+			'nombre' => 'Lorem ipsum dolor sit amet'
 		),
 	);
 

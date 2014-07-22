@@ -18,13 +18,14 @@ class LogFixture extends CakeTestFixture {
  * @var array
  */
 	public $fields = array(
-		'id_log' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 20, 'unsigned' => true, 'key' => 'primary'),
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
+		'id_log' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
+		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
 		'fecha_realizado' => array('type' => 'timestamp', 'null' => false, 'default' => 'CURRENT_TIMESTAMP'),
 		'descripcion' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id_log', 'unique' => 1),
-			'id_log' => array('column' => 'id_log', 'unique' => 1)
+			'id_log' => array('column' => 'id_log', 'unique' => 1),
+			'id' => array('column' => 'id', 'unique' => 0)
 		),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
@@ -36,9 +37,9 @@ class LogFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'id_log' => 1,
-			'id' => 1,
-			'fecha_realizado' => 1405781473,
+			'id_log' => '',
+			'id' => '',
+			'fecha_realizado' => 1405998746,
 			'descripcion' => 'Lorem ipsum dolor sit amet'
 		),
 	);

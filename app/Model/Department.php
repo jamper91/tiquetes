@@ -3,7 +3,6 @@ App::uses('AppModel', 'Model');
 /**
  * Department Model
  *
- * @property City $City
  * @property User $User
  */
 class Department extends AppModel {
@@ -34,19 +33,6 @@ class Department extends AppModel {
  * @var array
  */
 	public $hasMany = array(
-		'City' => array(
-			'className' => 'City',
-			'foreignKey' => 'department_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
 		'User' => array(
 			'className' => 'User',
 			'foreignKey' => 'department_id',

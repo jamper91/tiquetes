@@ -11,11 +11,14 @@ class FormsPersonalDatumFixture extends CakeTestFixture {
  * @var array
  */
 	public $fields = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
-		'personal_datum_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
-		'form_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
+		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
+		'personal_datum_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
+		'form_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
 		'indexes' => array(
-			'PRIMARY' => array('column' => 'id', 'unique' => 1)
+			'PRIMARY' => array('column' => 'id', 'unique' => 1),
+			'id' => array('column' => 'id', 'unique' => 1),
+			'personal_datum_id' => array('column' => 'personal_datum_id', 'unique' => 0),
+			'form_id' => array('column' => 'form_id', 'unique' => 0)
 		),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
@@ -27,7 +30,7 @@ class FormsPersonalDatumFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'id' => 1,
+			'id' => '',
 			'personal_datum_id' => '',
 			'form_id' => ''
 		),
