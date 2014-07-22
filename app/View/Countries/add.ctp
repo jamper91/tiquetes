@@ -15,7 +15,7 @@
                 <div class="control-group">
                     <label class="control-label">Nombre</label>
                     <?php
-                    echo $this->Form->input('nombre', array(
+                    echo $this->Form->input('name', array(
                         "div" => array(
                             "class" => "controls"
                         ),

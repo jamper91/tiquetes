@@ -40,16 +40,16 @@ echo $this->Html->script(array('matrix.tables'));
                             <tr>
                                 <td><?php echo $state['State']['id']; ?>&nbsp;</td>
 
-                                <td><?php echo $state['State']['nombre']; ?>&nbsp;</td>
+                                <td><?php echo $state['State']['name']; ?>&nbsp;</td>
                                 <td>
-                                    <?php echo $state['Country']['nombre']; ?>
+                                    <?php echo $state['Country']['name']; ?>
                                 </td>
                                 <td class="center">
                                     <span class="btn btn-success btn-mini">
                                         <?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $state['State']['id'])); ?>
                                     </span>
                                     <span class="btn btn-danger btn-mini">
-                                        <?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $state['State']['id']), array(), __('Esta seguro que desea eliminar # %s?', $state['State']['nombre'])); ?>
+                                        <?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $state['State']['id']), array(), __('Esta seguro que desea eliminar # %s?', $state['State']['name'])); ?>
                                     </span>
                                 </td>
                             </tr>

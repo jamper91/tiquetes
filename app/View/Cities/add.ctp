@@ -20,7 +20,8 @@
                         "div" => array(
                             "class" => "controls"
                         ),
-                        "label" => ""
+                        "label" => "",
+                        "empty" => "Seleccione un País"
                     ));
                     ?>
                 </div>
@@ -34,7 +35,8 @@
                         "div" => array(
                             "class" => "controls"
                         ),
-                        "label" => ""
+                        "label" => "",
+                        
                     ));
 //                    ?>
                 </div>
@@ -44,7 +46,7 @@
 //                    echo $this->Form->input('PersonalDatum');
                     ?>
                     <?php
-                    echo $this->Form->input('nombre', array(
+                    echo $this->Form->input('name', array(
                         "div" => array(
                             "class" => "controls"
                         ),
@@ -67,3 +69,30 @@
 
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+          $("#CityStateId").html("");
+        $("#CityCountryId").change(function() {
+            var url = urlbase + "states/getStatesByCountry.xml";
+            var datos = {
+                country_id: $(this).val()
+            };
+            ajax(url, datos, function(xml) {
+                $("#CityStateId").html("<option>Seleccione un Departamento</option>");
+                $("datos", xml).each(function() {
+                    var obj = $(this).find("State");
+                    var valor, texto;                    
+                    valor = $("id", obj).text();
+                    texto = $("name", obj).text();
+                    if (valor) {
+                        var html = "<option value='$1'>$2</option>";
+                        html = html.replace("$1", valor);
+                        html = html.replace("$2", texto);
+                        $("#CityStateId").append(html);
+                    }
+                });
+            });
+        });
+    });
+
+</script>
