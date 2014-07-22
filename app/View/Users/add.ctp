@@ -15,7 +15,7 @@
                     echo $this->Form->input('document_type_id', array(
                         'label' => '',
                         "options" => $documentTypeName,
-                        "empty" => "Seleccione"
+                        "empty" => "Seleccione un tipo de documento"
                     ));
                     ?>
                 </td>
@@ -35,8 +35,7 @@
                 <td><?php echo 'Departamento' ?></td>
                 <td><?php
                     echo $this->Form->input('state_id', array(
-                        'label' => '',
-                        "empty" => "Seleccione un Departamento"
+                        'label' => ''
                     ));
                     ?>
                 </td>
@@ -81,25 +80,34 @@
                 </td>
             </tr>
             <tr>
+                <td>Departamento</td>
+                <td><?php
+                    echo $this->Form->input('department_id', array(
+                        'label' => '',
+                        "options" => $departmentName,
+                        "empty" => "Seleccione"
+                    ));
+                    ?></td>
                 <td>Nombre de Usuario</td>
-                <td><input name="data[User][usuario]" maxlength="20" id="UserUsuario" type="text"></td>
-                <td>Contraseña</td>
-                <td><input name="data[User][password]" id="UserPassword" type="password"></td>
+                <td><input name="data[User][username]" maxlength="20" id="UserUsuario" type="text"></td>
+                
 
             </tr>
             <tr>
+                <td>Contraseña</td>
+                <td><input name="data[User][password]" id="UserPassword" type="password"></td>
                 <td>Confirmar Contraseña</td>
-                <td><input name="data[User][passwordConfirm]" id="UserPassword" type="password"></td> 
-                <td>Valido Desde</td>                
+                <td><input name="data[User][passwordConfirm]" id="UserPasswordConfirm" type="password"></td> 
+                                
+            </tr>
+            <tr><td>Valido Desde</td>                
                 <td>
                     <?php
                     echo $this->Form->input('validodesde', array(
                         'label' => ''
                     ));
                     ?>
-                </td>                
-            </tr>
-            <tr>
+                </td>
                 <td>Valido Hasta</td>
                 <td>
                     <?php
@@ -107,16 +115,17 @@
                         'label' => ''
                     ));
                     ?>
-                </td>                
-                <td>Indentificador</td>
+                </td>              
+                
+            </tr>
+            <tr><td>Indentificador</td>
                 <td>
                     <?php
                     echo $this->Form->input('Identificador', array(
                         'label' => ''
                     ));
                     ?>
-                </td>
-            </tr>
+                </td></tr>
             <!--        //echo $this->Form->input('type_user_id');
                         //echo $this->Form->input('document_type_id');
                         //echo $this->Form->input('department_id');                        
@@ -139,14 +148,12 @@
         };
 
         ajax(url2, datos2, function(xml) {
-            alert(datos2.state_id);
-            $("#UserCityId").html("");
+            $("#UserCityId").html("<option>Seleccione una ciudad</option>");
             $("datos", xml).each(function() {
                 var obj = $(this).find("City");
                 var valor, texto;
                 valor = $("id", obj).text();
-                texto = $("nombre", obj).text();
-                alert("valor   " + valor + "  text   " + texto);
+                texto = $("name", obj).text();               
                 if (valor) {
                     var html = "<option value='$1'>$2</option>";
                     html = html.replace("$1", valor);
@@ -157,6 +164,15 @@
         });
     });
     $(document).ready(function() {
+        $("#UserAddForm").submit(function(e){
+            
+            if($("#UserPassword").val()===$("#UserPasswordConfirm").val()){
+                return true;
+            } else{
+                alert("Error la contraseña no coinside con la confirmación");
+                return false; 
+            }
+        });
         $("#UserStateId").html("");
         $("#UserCityId").html("");
         $("#UserCountryId").change(function() {
@@ -165,12 +181,12 @@
                 country_id: $(this).val()
             };
             ajax(url, datos, function(xml) {
-                $("#UserStateId").html("");
+                $("#UserStateId").html("<option>Seleccione un Departamento</option>");
                 $("datos", xml).each(function() {
                     var obj = $(this).find("State");
                     var valor, texto;
                     valor = $("id", obj).text();
-                    texto = $("nombre", obj).text();
+                    texto = $("name", obj).text();
                     if (valor) {
                         var html = "<option value='$1'>$2</option>";
                         html = html.replace("$1", valor);
