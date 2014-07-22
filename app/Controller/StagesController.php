@@ -63,7 +63,19 @@ class StagesController extends AppController {
 
         /* Comprobamos si las fotografías del $data de paso5 son correctas */
         
-
+        
+//pais
+//               
+        $this->loadModel('Country');
+        $countriesName = $this->Country->find('list', array(
+            "fields" => array(
+                "Country.name"
+            ),
+            "recursive" => -2
+        ));
+        
+        $this->set(compact('state'));
+        
         $cities = $this->Stage->City->find('list');
         $this->set(compact('cities'));
     }
