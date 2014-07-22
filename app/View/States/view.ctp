@@ -13,7 +13,7 @@
 		</dd>
 		<dt><?php echo __('Nombre'); ?></dt>
 		<dd>
-			<?php echo h($state['State']['nombre']); ?>
+			<?php echo h($state['State']['name']); ?>
 			&nbsp;
 		</dd>
 	</dl>

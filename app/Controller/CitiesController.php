@@ -49,23 +49,48 @@ class CitiesController extends AppController {
  */
 	public function add() {
 //             $this->layout = false;
-		if ($this->request->is('post')) {
-			$this->City->create();
-			if ($this->City->save($this->request->data)) {
-				$this->Session->setFlash(__('The city has been saved.'));
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The city could not be saved. Please, try again.'));
-			}
-		}
-		$states = $this->City->State->find('list',array(
-                    "fields"=>array(
-                        "State.id",
-                        "State.nombre"
-                    )
-                ));
-		$this->set(compact('states'));
-	}
+//		if ($this->request->is('post')) {
+//			$this->City->create();
+//			if ($this->City->save($this->request->data)) {
+//				$this->Session->setFlash(__('The city has been saved.'));
+//				return $this->redirect(array('action' => 'index'));
+//			} else {
+//				$this->Session->setFlash(__('The city could not be saved. Please, try again.'));
+//			}
+//		}
+//		$states = $this->City->State->find('list',array(
+//                    "fields"=>array(
+//                        "State.id",
+//                        "State.name"
+//                    )
+//                ));
+//		$this->set(compact('states'));
+//	}
+        
+        $this->loadModel('Country');
+        if ($this->request->is('post')) {
+            $this->City->create();
+            if ($this->City->save($this->request->data)) {
+                $this->Session->setFlash(__('La ciudad ha sido creada.'));
+                return $this->redirect(array('action' => 'index'));
+            } else {
+                $this->Session->setFlash(__('Error al crear la ciudad, por favor intente de nuevo.'));
+            }
+        }
+        $countriesName = $this->Country->find('list', array(
+            "fields" => array(
+                "Country.name"
+            )
+        ));
+        //debug($countriesName);
+        $countries = $this->Country->find('list');
+
+        $this->set(compact('countries'));
+        $this->set("countriesName", $countriesName);
+
+        $departments = $this->City->State->find('list');
+        $this->set(compact('states'));
+    }
 
 /**
  * edit method
@@ -116,8 +141,7 @@ class CitiesController extends AppController {
 		return $this->redirect(array('action' => 'index'));
 	}
         
-        public function getCitiesByState() {
-
+        public function getCitiesByState(){
         $this->layout = "webservices";
         $state_id = $this->request->data["state_id"]; //State
         //debug($state_id);
@@ -127,7 +151,7 @@ class CitiesController extends AppController {
             ),
             "fields" => array(
                 "City.id",
-                "City.nombre"
+                "City.name"
             ),
             "recursive" => 0
         );
@@ -141,4 +165,5 @@ class CitiesController extends AppController {
                 )
         );
     }
+    
 }

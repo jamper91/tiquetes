@@ -8,7 +8,7 @@
 		</dd>
 		<dt><?php echo __('Nombre'); ?></dt>
 		<dd>
-			<?php echo h($country['Country']['nombre']); ?>
+			<?php echo h($country['Country']['name']); ?>
 			&nbsp;
 		</dd>
 	</dl>
@@ -38,7 +38,7 @@
 		<tr>
 			<td><?php echo $state['id']; ?></td>
 			<td><?php echo $state['country_id']; ?></td>
-			<td><?php echo $state['nombre']; ?></td>
+			<td><?php echo $state['name']; ?></td>
 			<td class="actions">
 				<?php echo $this->Html->link(__('View'), array('controller' => 'states', 'action' => 'view', $state['id'])); ?>
 				<?php echo $this->Html->link(__('Edit'), array('controller' => 'states', 'action' => 'edit', $state['id'])); ?>

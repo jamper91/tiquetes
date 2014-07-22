@@ -59,7 +59,7 @@ class StatesController extends AppController {
 		$countries = $this->State->Country->find('list',array(
                     "fields"=>array(
                         "Country.id",
-                        "Country.nombre"
+                        "Country.name"
                     )
                 ));
 		$this->set(compact('countries'));
@@ -90,7 +90,7 @@ class StatesController extends AppController {
 		$countries = $this->State->Country->find('list',array(
                     "fields"=>array(
                         "Country.id",
-                        "Country.nombre"
+                        "Country.name"
                     )
                 ));
 		$this->set(compact('countries'));
@@ -126,7 +126,7 @@ class StatesController extends AppController {
             ),
             "fields"=>array(
                 "State.id",
-                "State.nombre"
+                "State.name"
             ),
             "recursive"=>0
         );
