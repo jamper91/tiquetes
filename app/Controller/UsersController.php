@@ -20,9 +20,9 @@ class UsersController extends AppController {
     public function beforeFilter() {
         parent:: beforeFilter();
         if ($this->Auth->user('role') == 'admin') {
-            $this->Auth->allow('add', 'asociartarjeta', 'add2');            
+            $this->Auth->allow('add', 'asociartarjeta', 'add2');
         } else {
-            $this->Auth->allow();           
+            $this->Auth->allow();
         }
     }
 
@@ -31,7 +31,7 @@ class UsersController extends AppController {
      *
      * @return void
      */
-    public function index() {       
+    public function index() {
         $this->User->recursive = 0;
         $this->set('users', $this->Paginator->paginate());
     }
@@ -81,28 +81,40 @@ class UsersController extends AppController {
                     'pers_mail' => $data['People']['pers_mail']
                 )
             );
-            $this->People->save($newPeole);
-            $newPeopleId = $this->People->getLastInsertId();
-//debug($newPeopleId);
-            /**
-             * or if you already have Game Id, and Developer Id, then just load it on, and 
-             * put it in the statement below, to create a new Assignment
-             * */
-            $newUser = $this->User->create();
+            try {
+                $this->People->save($newPeole);
+                $newPeopleId = $this->People->getLastInsertId();
+                
+                $newUser = $this->User->create();
             $newUser = array(
                 'User' => array(
                     'person_id' => $newPeopleId,
                     'username' => $data['User']['username'],
                     'password' => $data['User']['password'],
-                    'estado'=> 1,
+                    'estado' => 1,
                     'type_user_id' => $data['User']['type_user_id'],
                     'department_id' => $data['User']['department_id'],
-                    'validodesde' => $data['User']['validodesde']['month'].'-'.$data['User']['validodesde']['day'].'-'.$data['User']['validodesde']['year'],
-                    'validohasta' => $data['User']['validohasta']['month'].'-'.$data['User']['validohasta']['day'].'-'.$data['User']['validohasta']['year'],
-                    'identificador'=> $data['User']['Identificador']
+                    'validodesde' => $data['User']['validodesde']['month'] . '-' . $data['User']['validodesde']['day'] . '-' . $data['User']['validodesde']['year'],
+                    'validohasta' => $data['User']['validohasta']['month'] . '-' . $data['User']['validohasta']['day'] . '-' . $data['User']['validohasta']['year'],
+                    'identificador' => $data['User']['Identificador']
                 )
             );
             $this->User->save($newUser);
+                return $this->redirect(array('action' => 'index'));
+            } catch (Exception $ex) {
+                $error2 = $ex->getCode();
+                if ($error2 == '23000') {
+                    $this->Session->setFlash('Error ya hay una persona con el mismo documento en la base de datos', 'error');
+                }
+            }
+
+            
+//debug($newPeopleId);
+            /**
+             * or if you already have Game Id, and Developer Id, then just load it on, and 
+             * put it in the statement below, to create a new Assignment
+             * */
+            
 //fin codigo para la isercion multiple
         }
 //cargar select
@@ -119,7 +131,7 @@ class UsersController extends AppController {
                 "TypeUser.descripcion"
             )
         ));
-        
+
         $departmentName = $this->User->Department->find('list', array(
             "fields" => array(
                 "Department.descripcion"
