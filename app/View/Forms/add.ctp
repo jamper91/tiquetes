@@ -35,7 +35,7 @@ echo $this->Html->css(array('multi-select'));
 //                    echo $this->Form->input('PersonalDatum');
                     ?>
                     <?php
-                    echo $this->Form->input('personal_datum_id', array(
+                    echo $this->Form->input('PersonalDatum', array(
                         "div" => array(
                             "class" => "controls"
                         ),
@@ -61,11 +61,11 @@ echo $this->Html->css(array('multi-select'));
     </div>
 </div>
 <script>
-    $('#FormPersonalDatumId').multiSelect({
+    $('#PersonalDatumPersonalDatum').multiSelect({
         afterSelect: function(values) {
 //                alert("Select value: " + values);
 //            console.log($('#FormPersonalDatumId option[value="' + values + '"]').html());
-            $('#FormPersonalDatumId option[value="' + values + '"]').attr("selected", "selected")
+            $('#PersonalDatumPersonalDatum option[value="' + values + '"]').attr("selected", "selected")
         }
     });
 </script>
