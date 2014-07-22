@@ -20,7 +20,6 @@
 			<?php echo $this->Html->link($paperInput['Input']['id'], array('controller' => 'inputs', 'action' => 'view', $paperInput['Input']['id'])); ?>
 		</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $paperInput['PaperInput']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $paperInput['PaperInput']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $paperInput['PaperInput']['id']), array(), __('Are you sure you want to delete # %s?', $paperInput['PaperInput']['id'])); ?>
 		</td>
@@ -41,14 +40,4 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Paper Input'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Papers'), array('controller' => 'papers', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Paper'), array('controller' => 'papers', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Inputs'), array('controller' => 'inputs', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Input'), array('controller' => 'inputs', 'action' => 'add')); ?> </li>
-	</ul>
 </div>

@@ -20,7 +20,6 @@
 			<?php echo $this->Html->link($deliveryMethodsInput['Input']['id'], array('controller' => 'inputs', 'action' => 'view', $deliveryMethodsInput['Input']['id'])); ?>
 		</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $deliveryMethodsInput['DeliveryMethodsInput']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $deliveryMethodsInput['DeliveryMethodsInput']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $deliveryMethodsInput['DeliveryMethodsInput']['id']), array(), __('Are you sure you want to delete # %s?', $deliveryMethodsInput['DeliveryMethodsInput']['id'])); ?>
 		</td>
@@ -41,14 +40,4 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Delivery Methods Input'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Delivery Methods'), array('controller' => 'delivery_methods', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Delivery Method'), array('controller' => 'delivery_methods', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Inputs'), array('controller' => 'inputs', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Input'), array('controller' => 'inputs', 'action' => 'add')); ?> </li>
-	</ul>
 </div>

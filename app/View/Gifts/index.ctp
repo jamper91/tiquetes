@@ -18,7 +18,6 @@
 		<td><?php echo h($gift['Gift']['cantidad']); ?>&nbsp;</td>
 		<td><?php echo h($gift['Gift']['categoria']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $gift['Gift']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $gift['Gift']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $gift['Gift']['id']), array(), __('Are you sure you want to delete # %s?', $gift['Gift']['id'])); ?>
 		</td>
@@ -39,10 +38,4 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Gift'), array('action' => 'add')); ?></li>
-	</ul>
 </div>

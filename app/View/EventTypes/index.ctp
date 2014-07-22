@@ -14,7 +14,6 @@
 		<td><?php echo h($eventType['EventType']['id']); ?>&nbsp;</td>
 		<td><?php echo h($eventType['EventType']['nombre']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $eventType['EventType']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $eventType['EventType']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $eventType['EventType']['id']), array(), __('Are you sure you want to delete # %s?', $eventType['EventType']['id'])); ?>
 		</td>
@@ -35,12 +34,4 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Event Type'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Events'), array('controller' => 'events', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Event'), array('controller' => 'events', 'action' => 'add')); ?> </li>
-	</ul>
 </div>

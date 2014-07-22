@@ -22,7 +22,6 @@
 			<?php echo $this->Html->link($data['Person']['id'], array('controller' => 'people', 'action' => 'view', $data['Person']['id'])); ?>
 		</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $data['Data']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $data['Data']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $data['Data']['id']), array(), __('Are you sure you want to delete # %s?', $data['Data']['id'])); ?>
 		</td>
@@ -43,14 +42,4 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Data'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Forms'), array('controller' => 'forms', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Form'), array('controller' => 'forms', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List People'), array('controller' => 'people', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Person'), array('controller' => 'people', 'action' => 'add')); ?> </li>
-	</ul>
 </div>
