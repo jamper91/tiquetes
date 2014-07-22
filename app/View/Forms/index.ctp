@@ -40,7 +40,7 @@ echo $this->Html->script(array('matrix.tables'));
                             <tr>
                                 <td><?php echo $dato['Form']['id']; ?>&nbsp;</td>
 
-                                <td>-</td>
+                                <td><?php echo $dato['Form']['nombre']; ?>&nbsp;</td>
                                 <td>
                                     <?php echo $dato['Event']['even_nombre']; ?>
                                 </td>
