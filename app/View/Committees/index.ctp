@@ -14,7 +14,6 @@
 		<td><?php echo h($committee['Committee']['id']); ?>&nbsp;</td>
 		<td><?php echo h($committee['Committee']['nombre']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $committee['Committee']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $committee['Committee']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $committee['Committee']['id']), array(), __('Are you sure you want to delete # %s?', $committee['Committee']['id'])); ?>
 		</td>
@@ -35,12 +34,4 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Committee'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Events'), array('controller' => 'events', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Event'), array('controller' => 'events', 'action' => 'add')); ?> </li>
-	</ul>
 </div>

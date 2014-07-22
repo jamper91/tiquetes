@@ -25,10 +25,10 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         <?php echo $this->Html->charset(); ?>
         <title><?php echo $cakeDescription ?>:
             <?php echo $title_for_layout; ?></title>
-        
+
         <?php
 //        echo $this->Html->css(array('bootstrap', 'style', 'menuVertical'));
-        echo $this->Html->css(array('bootstrap.min', 'bootstrap-responsive.min', 'matrix-style', 'matrix-media', 'jquery.gritter',"select2"));
+        echo $this->Html->css(array('bootstrap.min', 'bootstrap-responsive.min', 'matrix-style', 'matrix-media', 'jquery.gritter', "select2"));
         echo $this->Html->css(array('colorpicker', 'datepicker.css', 'uniform', 'bootstrap-wysihtml5'));
 //        echo $this->Html->script(array('jquery.min', 'menu_jquery2', 'operaciones'));
         echo $this->Html->script(array('excanvas.min', 'jquery.min', 'operaciones', 'jquery.ui.custom', 'bootstrap.min', 'jquery.flot.min', 'jquery.flot.resize.min', 'jquery.peity.min', 'fullcalendar.min'));
@@ -36,7 +36,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         echo $this->Html->script(array('select2.min', 'matrix.popover', 'jquery.dataTables.min', 'matrix.tables'));
         ?>
         <link href="http://localhost/tiquetes/font-awesome/css/font-awesome.css" rel="stylesheet" />
-        
+
         <?php
         echo $this->Html->meta('icon');
 
@@ -46,39 +46,6 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         echo $this->fetch('script');
         ?>
         <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-        <script>
-//            $(document).ready(function() {
-//                $(".submenu > a > ul > li >a").click(function(e) {
-////                    console.log("href: "+$("#contenido").load($(this).attr("href"));
-//                    e.preventDefault();
-//                    $("#contenido").load($(this).attr("href"));
-//                });
-//                $("#contenido").on("submit", "form", function(e) {
-//                    e.preventDefault();
-//                    var url = $(this).attr("action");
-//                    $.post(url, $(this).serialize()).done(function(data) {
-//                        var url2 = url.substring(0, url.length - 3);
-//                        $("#contenido").load(url2);
-//                    });
-//                });
-//                $("#contenido").on("click", "a", function(e) {
-//                    e.preventDefault();
-//                    var url = $(this).attr("href");
-//                    var url2 = $(this).attr("redi");
-//                    var tipo = $(this).attr("tipo");
-//                    if (tipo !== "borrar")
-//                        $("#contenido").load(url);
-//                    else {
-//                        ajax(url, null, function(xml) {
-//
-//                            $("#contenido").load(url2);
-//                        });
-//                    }
-//
-//                });
-//            });
-
-        </script>
     </head>
 
     <body>
@@ -138,7 +105,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <span>Gestionar Usuarios</span>
                     </a>
                     <ul>
-                        <li><a href="<?= $this->Html->url(array("controller" => "users", "action" => "add2")); ?>">Crear Usuario</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "users", "action" => "add")); ?>">Crear Usuario</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "users", "action" => "index")); ?>">Listar Usuario</a></li>
                     </ul>
                 </li>
                 <!--<li><a href="grid.html"><i class="icon icon-fullscreen"></i> <span>Geografia</span></a></li>-->
@@ -150,7 +118,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                     <ul>
                         <li><a href="<?= $this->Html->url(array("controller" => "countries", "action" => "add")); ?>">Paises</a></li>
                         <li><a href="<?= $this->Html->url(array("controller" => "states", "action" => "add")); ?>">Departamentos</a></li>
-                        <!--<li><a href="<?= $this->Html->url(array("controller" => "cities", "action" => "add")); ?>">Ciudades</a></li>-->
+                        <li><a href="<?= $this->Html->url(array("controller" => "cities", "action" => "add")); ?>">Ciudades</a></li>
                     </ul>
                 </li>
                 <li class="submenu"  > 
@@ -170,7 +138,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                     </a>
                     <ul>
                         <li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "add2")); ?>">Crear Persona</a></li>
-                        
+
                     </ul>
                 </li>
                 <li class="submenu"  > 
@@ -181,7 +149,6 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                     <ul>
                         <li><a href="<?= $this->Html->url(array("controller" => "TypeUsers", "action" => "add")); ?>">Crear Tipo de Usuario</a></li>
                         <li><a href="<?= $this->Html->url(array("controller" => "TypeUsers", "action" => "index")); ?>">Listar Tipos de Usuario</a></li>
-                        
                     </ul>
                 </li>
             </ul>
@@ -192,10 +159,12 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         <div id="content">
             <div class="container-fluid">
                 <hr>
-                
+                <?php
+                echo $this->Session->flash();
+                ?>
                 <?php echo $this->fetch('content'); ?>
             </div>
-            
+
         </div>
 
         <!--end-main-container-part-->
@@ -208,7 +177,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 
 
 
-        
+
     </body>
 </html>
 

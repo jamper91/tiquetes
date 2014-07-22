@@ -20,7 +20,6 @@
 		<td><?php echo h($discount['Discount']['fecha_fin']); ?>&nbsp;</td>
 		<td><?php echo h($discount['Discount']['categoria']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $discount['Discount']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $discount['Discount']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $discount['Discount']['id']), array(), __('Are you sure you want to delete # %s?', $discount['Discount']['id'])); ?>
 		</td>
@@ -41,10 +40,4 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Discount'), array('action' => 'add')); ?></li>
-	</ul>
 </div>

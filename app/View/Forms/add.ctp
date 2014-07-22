@@ -30,12 +30,23 @@ echo $this->Html->css(array('multi-select'));
                     ?>
                 </div>
                 <div class="control-group">
+                    <label class="control-label">Nombre</label>
+                    <?php
+                    echo $this->Form->input('nombre', array(
+                        "div" => array(
+                            "class" => "controls"
+                        ),
+                        "label" => ""
+                    ));
+                    ?>
+                </div>
+                <div class="control-group">
                     <label class="control-label">Campos</label>
                     <?php
 //                    echo $this->Form->input('PersonalDatum');
                     ?>
                     <?php
-                    echo $this->Form->input('personal_datum_id', array(
+                    echo $this->Form->input('PersonalDatum', array(
                         "div" => array(
                             "class" => "controls"
                         ),
@@ -61,11 +72,11 @@ echo $this->Html->css(array('multi-select'));
     </div>
 </div>
 <script>
-    $('#FormPersonalDatumId').multiSelect({
+    $('#PersonalDatumPersonalDatum').multiSelect({
         afterSelect: function(values) {
-//                alert("Select value: " + values);
+                alert("Select value: " + values);
 //            console.log($('#FormPersonalDatumId option[value="' + values + '"]').html());
-            $('#FormPersonalDatumId option[value="' + values + '"]').attr("selected", "selected")
+            $('#PersonalDatumPersonalDatum option[value="' + values + '"]').attr("selected", "selected")
         }
     });
 </script>

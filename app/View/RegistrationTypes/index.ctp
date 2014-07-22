@@ -14,7 +14,6 @@
 		<td><?php echo h($registrationType['RegistrationType']['id']); ?>&nbsp;</td>
 		<td><?php echo h($registrationType['RegistrationType']['nombre']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $registrationType['RegistrationType']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $registrationType['RegistrationType']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $registrationType['RegistrationType']['id']), array(), __('Are you sure you want to delete # %s?', $registrationType['RegistrationType']['id'])); ?>
 		</td>

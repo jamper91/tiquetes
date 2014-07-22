@@ -88,10 +88,11 @@ class FormsController extends AppController {
         }
         if ($this->request->is(array('post', 'put'))) {
             if ($this->Form->save($this->request->data)) {
-                $this->Session->setFlash(__('The form has been saved.'));
+//                $this->Session->setFlash(__('The form has been saved.'));
+                $this->Session->setFlash('Formulario Actualizado con exito', 'good');
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('The form could not be saved. Please, try again.'));
+                $this->Session->setFlash('El formulario no pudo ser actualizado con exito', 'error');
             }
         } else {
             $options = array('conditions' => array('Form.' . $this->Form->primaryKey => $id));

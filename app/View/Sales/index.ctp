@@ -18,7 +18,6 @@
 		<td><?php echo h($sale['Sale']['tipo_de_pago']); ?>&nbsp;</td>
 		<td><?php echo h($sale['Sale']['fecha']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $sale['Sale']['sale_id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $sale['Sale']['sale_id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $sale['Sale']['sale_id']), array(), __('Are you sure you want to delete # %s?', $sale['Sale']['sale_id'])); ?>
 		</td>
@@ -39,12 +38,4 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Sale'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Inputs'), array('controller' => 'inputs', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Input'), array('controller' => 'inputs', 'action' => 'add')); ?> </li>
-	</ul>
 </div>

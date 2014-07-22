@@ -22,7 +22,6 @@
 		<td><?php echo h($validation['Validation']['cantidad_reingresos']); ?>&nbsp;</td>
 		<td><?php echo h($validation['Validation']['categoria']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $validation['Validation']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $validation['Validation']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $validation['Validation']['id']), array(), __('Are you sure you want to delete # %s?', $validation['Validation']['id'])); ?>
 		</td>
@@ -43,10 +42,4 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Validation'), array('action' => 'add')); ?></li>
-	</ul>
 </div>
