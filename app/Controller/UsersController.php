@@ -94,8 +94,8 @@ class UsersController extends AppController {
                     'estado' => 1,
                     'type_user_id' => $data['User']['type_user_id'],
                     'department_id' => $data['User']['department_id'],
-                    'validodesde' => $data['User']['validodesde']['month'] . '-' . $data['User']['validodesde']['day'] . '-' . $data['User']['validodesde']['year'],
-                    'validohasta' => $data['User']['validohasta']['month'] . '-' . $data['User']['validohasta']['day'] . '-' . $data['User']['validohasta']['year'],
+                    'validodesde' => $data['User']['validodesde']['year'] . '-' . $data['User']['validodesde']['month'] . '-' . $data['User']['validodesde']['day'],
+                    'validohasta' => $data['User']['validohasta']['year'] . '-' . $data['User']['validohasta']['month'] . '-' . $data['User']['validohasta']['day'],
                     'identificador' => $data['User']['Identificador']
                 )
             );
@@ -185,11 +185,19 @@ class UsersController extends AppController {
             $options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
             $this->request->data = $this->User->find('first', $options);
         }
-        $people = $this->User->Person->find('list');
-        $typeUsers = $this->User->TypeUser->find('list');
-        $states = $this->User->State->find('list');
+        
+        $typeUsers = $this->User->TypeUser->find('list', array(
+            "fields" => array(
+                "TypeUser.descripcion"
+            )
+        ));
+        $departments = $this->User->Department->find('list', array(
+            "fields" => array(
+                "Department.descripcion"
+            )
+        ));
         $authorizations = $this->User->Authorization->find('list');
-        $this->set(compact('people', 'typeUsers', 'states', 'authorizations'));
+        $this->set(compact('people', 'typeUsers', 'departments', 'authorizations' ));
     }
 
     /**

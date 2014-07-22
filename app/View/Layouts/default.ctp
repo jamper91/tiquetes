@@ -106,6 +106,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                     </a>
                     <ul>
                         <li><a href="<?= $this->Html->url(array("controller" => "users", "action" => "add")); ?>">Crear Usuario</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "users", "action" => "index")); ?>">Listar Usuario</a></li>
                     </ul>
                 </li>
                 <!--<li><a href="grid.html"><i class="icon icon-fullscreen"></i> <span>Geografia</span></a></li>-->
