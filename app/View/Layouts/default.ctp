@@ -150,6 +150,26 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <li><a href="<?= $this->Html->url(array("controller" => "TypeUsers", "action" => "index")); ?>">Listar Tipos de Usuario</a></li>
                     </ul>
                 </li>
+                <li class="submenu"  > 
+                    <a href="#">
+                        <i class="icon icon-th-list"></i> 
+                        <span>Gestionar Escenario</span>
+                    </a>
+                    <ul>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Stages", "action" => "add")); ?>">Crear Escenario</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Stages", "action" => "index")); ?>">Listar Escenarios</a></li>
+                    </ul>
+                </li>
+                <li class="submenu"  > 
+                    <a href="#">
+                        <i class="icon icon-th-list"></i> 
+                        <span>Gestionar Evento</span>
+                    </a>
+                    <ul>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Events", "action" => "add")); ?>">Crear evento</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Events", "action" => "index")); ?>">Listar eventos</a></li>
+                    </ul>
+                </li>
             </ul>
         </div>
         <!--sidebar-menu-->
