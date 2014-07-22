@@ -50,6 +50,7 @@ class FormsController extends AppController {
      */
     public function add() {
         if ($this->request->is('post')) {
+            debug($this->request->data);
             $this->Form->create();
             if ($this->Form->save($this->request->data)) {
                 

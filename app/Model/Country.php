@@ -13,7 +13,7 @@ class Country extends AppModel {
  * @var array
  */
 	public $validate = array(
-		'nombre' => array(
+		'name' => array(
 			'notEmpty' => array(
 				'rule' => array('notEmpty'),
 				//'message' => 'Your custom message here',

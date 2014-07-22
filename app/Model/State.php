@@ -4,6 +4,7 @@ App::uses('AppModel', 'Model');
  * State Model
  *
  * @property Country $Country
+ * @property City $City
  */
 class State extends AppModel {
 
@@ -13,17 +14,7 @@ class State extends AppModel {
  * @var array
  */
 	public $validate = array(
-		'country_id' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
-			),
-		),
-		'nombre' => array(
+		'name' => array(
 			'notEmpty' => array(
 				'rule' => array('notEmpty'),
 				//'message' => 'Your custom message here',
@@ -51,4 +42,26 @@ class State extends AppModel {
 			'order' => ''
 		)
 	);
+
+/**
+ * hasMany associations
+ *
+ * @var array
+ */
+	public $hasMany = array(
+		'City' => array(
+			'className' => 'City',
+			'foreignKey' => 'state_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		)
+	);
+
 }

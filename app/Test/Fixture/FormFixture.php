@@ -12,10 +12,11 @@ class FormFixture extends CakeTestFixture {
  */
 	public $fields = array(
 		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
-		'event_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
+		'event_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'id' => array('column' => 'id', 'unique' => 1)
+			'id' => array('column' => 'id', 'unique' => 1),
+			'event_id' => array('column' => 'event_id', 'unique' => 0)
 		),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
@@ -28,7 +29,7 @@ class FormFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => '',
-			'event_id' => 1
+			'event_id' => ''
 		),
 	);
 

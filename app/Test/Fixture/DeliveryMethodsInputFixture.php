@@ -11,11 +11,14 @@ class DeliveryMethodsInputFixture extends CakeTestFixture {
  * @var array
  */
 	public $fields = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
-		'delivery_method_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
-		'input_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
+		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
+		'delivery_method_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
+		'input_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
 		'indexes' => array(
-			'PRIMARY' => array('column' => 'id', 'unique' => 1)
+			'PRIMARY' => array('column' => 'id', 'unique' => 1),
+			'id' => array('column' => 'id', 'unique' => 1),
+			'input_id' => array('column' => 'input_id', 'unique' => 0),
+			'delivery_method_id' => array('column' => 'delivery_method_id', 'unique' => 0)
 		),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
@@ -27,9 +30,9 @@ class DeliveryMethodsInputFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'id' => 1,
-			'delivery_method_id' => 1,
-			'input_id' => 1
+			'id' => '',
+			'delivery_method_id' => '',
+			'input_id' => ''
 		),
 	);
 
