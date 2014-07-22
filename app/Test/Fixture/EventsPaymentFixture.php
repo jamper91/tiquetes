@@ -11,11 +11,14 @@ class EventsPaymentFixture extends CakeTestFixture {
  * @var array
  */
 	public $fields = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
-		'payment_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
-		'event_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
+		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
+		'payment_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
+		'event_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
 		'indexes' => array(
-			'PRIMARY' => array('column' => 'id', 'unique' => 1)
+			'PRIMARY' => array('column' => 'id', 'unique' => 1),
+			'id' => array('column' => 'id', 'unique' => 1),
+			'event_id' => array('column' => 'event_id', 'unique' => 0),
+			'payment_id' => array('column' => 'payment_id', 'unique' => 0)
 		),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
@@ -27,9 +30,9 @@ class EventsPaymentFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'id' => 1,
-			'payment_id' => 1,
-			'event_id' => 1
+			'id' => '',
+			'payment_id' => '',
+			'event_id' => ''
 		),
 	);
 

@@ -18,7 +18,8 @@ class AuthorizationsUserTest extends CakeTestCase {
 		'app.person',
 		'app.document_type',
 		'app.city',
-		'app.department',
+		'app.state',
+		'app.country',
 		'app.company',
 		'app.event',
 		'app.stage',
@@ -39,7 +40,7 @@ class AuthorizationsUserTest extends CakeTestCase {
 		'app.event_type',
 		'app.form',
 		'app.personal_datum',
-		'app.data',
+		'app.forms_personal_datum',
 		'app.committee',
 		'app.committees_event',
 		'app.companies_event',
@@ -47,8 +48,11 @@ class AuthorizationsUserTest extends CakeTestCase {
 		'app.events_hotel',
 		'app.payment',
 		'app.events_payment',
+		'app.data',
+		'app.forms_personal_data',
 		'app.committees_events_person',
 		'app.type_user',
+		'app.department',
 		'app.authorization'
 	);
 

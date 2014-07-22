@@ -11,13 +11,15 @@ class ShelfFixture extends CakeTestFixture {
  * @var array
  */
 	public $fields = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
-		'location_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
-		'esta_nombre' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 20, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
-		'esta_estado' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
+		'location_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
+		'esta_nombre' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+		'esta_estado' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'esta_precio' => array('type' => 'float', 'null' => true, 'default' => null, 'unsigned' => false),
 		'indexes' => array(
-			'PRIMARY' => array('column' => 'id', 'unique' => 1)
+			'PRIMARY' => array('column' => 'id', 'unique' => 1),
+			'id' => array('column' => 'id', 'unique' => 1),
+			'location_id' => array('column' => 'location_id', 'unique' => 0)
 		),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
@@ -29,10 +31,10 @@ class ShelfFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'id' => 1,
-			'location_id' => 1,
-			'esta_nombre' => 'Lorem ipsum dolor ',
-			'esta_estado' => 'Lorem ipsum dolor ',
+			'id' => '',
+			'location_id' => '',
+			'esta_nombre' => 'Lorem ipsum dolor sit amet',
+			'esta_estado' => 'Lorem ipsum dolor sit amet',
 			'esta_precio' => 1
 		),
 	);

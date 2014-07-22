@@ -11,12 +11,16 @@ class CompaniesEventFixture extends CakeTestFixture {
  * @var array
  */
 	public $fields = array(
-		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
-		'company_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
-		'event_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
-		'role_company_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
+		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
+		'company_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
+		'event_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
+		'role_company_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
 		'indexes' => array(
-			'PRIMARY' => array('column' => 'id', 'unique' => 1)
+			'PRIMARY' => array('column' => 'id', 'unique' => 1),
+			'id' => array('column' => 'id', 'unique' => 1),
+			'company_id' => array('column' => 'company_id', 'unique' => 0),
+			'event_id' => array('column' => 'event_id', 'unique' => 0),
+			'role_company_id' => array('column' => 'role_company_id', 'unique' => 0)
 		),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
@@ -28,10 +32,10 @@ class CompaniesEventFixture extends CakeTestFixture {
  */
 	public $records = array(
 		array(
-			'id' => 1,
-			'company_id' => 1,
-			'event_id' => 1,
-			'role_company_id' => 1
+			'id' => '',
+			'company_id' => '',
+			'event_id' => '',
+			'role_company_id' => ''
 		),
 	);
 

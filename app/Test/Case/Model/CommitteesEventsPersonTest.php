@@ -17,11 +17,8 @@ class CommitteesEventsPersonTest extends CakeTestCase {
 		'app.person',
 		'app.document_type',
 		'app.city',
-		'app.department',
-		'app.user',
-		'app.type_user',
-		'app.authorization',
-		'app.authorizations_user',
+		'app.state',
+		'app.country',
 		'app.company',
 		'app.event',
 		'app.stage',
@@ -42,14 +39,21 @@ class CommitteesEventsPersonTest extends CakeTestCase {
 		'app.event_type',
 		'app.form',
 		'app.personal_datum',
-		'app.data',
+		'app.forms_personal_datum',
 		'app.committee',
 		'app.committees_event',
 		'app.companies_event',
 		'app.hotel',
 		'app.events_hotel',
 		'app.payment',
-		'app.events_payment'
+		'app.events_payment',
+		'app.data',
+		'app.forms_personal_data',
+		'app.user',
+		'app.type_user',
+		'app.department',
+		'app.authorization',
+		'app.authorizations_user'
 	);
 
 /**
