@@ -333,55 +333,116 @@ class UsersController extends AppController {
     public function buscador()
     {
         $this->loadModel('Forms');
-        //$forms = $this->Forms->findAllByEventId('1');
         $forms =$this->Forms->find('list',array(
                     "fields"=>array(
                         "id",
                     )
                 ));
-        //debug($forms);
         $this->loadModel('FormsPersonalDatum');
         $formPersonal = $this->FormsPersonalDatum->findAllByFormId($forms);
-        //debug($formPersonal);
 
         if ($this->request->is('post')) 
         {
-
             $data = $this->data;
             $this->loadModel('People');
 
-            //$newPeole = $this->People->create();
-
-            //$this->People->save($newPeole);
-            //$newPeopleId = $this->People->getLastInsertId();
-
             $datos = $this->request->data;
-           debug($datos);
+            
+            // if(count($datos) == 1)
+            // {
+            //     $conditions = 
+            // }
+            $conditions="";
+            $conditions2="";
+            
+
             foreach ($datos as $dato) 
             {
-               while($value = current($dato))
+                //debug(key($dato));
+
+               while($value = key($dato))
                {
-                    debug(key($dato));
-                    // if(key($dato) != '')
-                    // {
+                    
+                    $value = current($dato);
+                    if($value != '')
+                    {
+                         
+                        if(key($dato)!="documento")
+                        {
+                            
+                            if(!is_int($value))
+                                    $value="'".$value."'";
+                            if($conditions!="")
+                            {
+                                 
+                                $conditions.=" or ".'forms_personal_data_id='.key($dato);
 
-                    //    $this->loadModel('Data');
-                    //     $newData = $this->Data->create();
-                    //     $newData = array(
-                    //         'Data' => array(
-                    //             'descripcion' => $value,
-                    //             'forms_personal_data_id' =>key($dato),
-                    //             'person_id' => $newPeopleId,
-
-                    //         )
-                    //     );
-                    //     $this->Data->save($newData);
-                       
-                    // }
+                                $conditions.=" and ".'descripcion='.$value;
+                            }else{
+                                 
+                                $conditions.=' forms_personal_data_id='.key($dato);
+                                $conditions.=' and descripcion='.$value;    
+                            }
+                        }else{
+                                $conditions2.=' pers_documento='.$value;
+                            
+                        }  
+                    }
                      next($dato);   
                }
             }
+            if($conditions !='')   
+            $conditions="select * from datas where ".$conditions;
+
+            
+            if($conditions2 !='')   
+            $conditions2="select * from people where ".$conditions2;
+
+
+            $this->loadModel('Data');
+            if($conditions != '')
+            {
+              $datas = $this->Data->query($conditions); 
+              $datosVista = array();
+              $datosVista2 = array();
+              foreach ($datas as $data) {
+                  $person_id = $data['datas']['person_id'];
+                  $queryDatos = "select * from datas where person_id=".$person_id;
+
+                  $personas = $this->Data->query($queryDatos); 
+                  array_push($datosVista, $personas);
+                  $queryPersona = "select * from people where id=".$person_id;
+                  $personas2 = $this->People->query($queryPersona);
+                  array_push($datosVista2, $personas2); 
+
+              }
+              $this->set('datosvista', $datosVista);
+              $this->set('datosvista2', $datosVista2);
+            }
+            
+             if($conditions2 != '')
+            {
+              $people = $this->Data->query($conditions2); 
+              $datosVista = array();
+              $datosVista2 = array();
+              foreach ($people as $value) {
+                    $person_id = $value['people']['id'];
+                    $queryDatos = "select * from datas where person_id=".$person_id;
+                    //datos para ser enviados a la vista.
+                    $personas = $this->Data->query($queryDatos);
+                    array_push($datosVista, $personas);
+                    $queryPersona = "select * from people where id=".$person_id;
+                    $personas2 = $this->People->query($queryPersona);
+                    array_push($datosVista2, $personas2);
+              }
+              $this->set('datosvista', $datosVista);
+              $this->set('datosvista2', $datosVista2);; 
+            }
+            
+           
         } 
+
         $this->set('form', $formPersonal);
+
     }
 }
