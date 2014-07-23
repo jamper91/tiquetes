@@ -15,7 +15,7 @@ class StagesController extends AppController {
      *
      * @var array
      */
-    public $components = array('Paginator');
+    public $components = array('Paginator','Auth', 'Session');
 
     /**
      * index method
@@ -25,6 +25,7 @@ class StagesController extends AppController {
     public function index() {
         $this->Stage->recursive = 0;
         $this->set('stages', $this->Paginator->paginate());
+        
     }
 
     /**
@@ -62,8 +63,8 @@ class StagesController extends AppController {
 //        $validaFoto2 = $this->Subirfoto->validar($this->data['Stage']['foto2']['tmp_name'], $this->data['Stage']['foto2']['size'], $this->data['Stage']['foto2']['nombre']);
 
         /* Comprobamos si las fotografías del $data de paso5 son correctas */
-        
-        
+
+
 //pais
 //               
         $this->loadModel('Country');
@@ -73,9 +74,9 @@ class StagesController extends AppController {
             ),
             "recursive" => -2
         ));
-        
+        $this->set(compact('countriesName'));
         $this->set(compact('state'));
-        
+
         $cities = $this->Stage->City->find('list');
         $this->set(compact('cities'));
     }
@@ -127,4 +128,55 @@ class StagesController extends AppController {
         return $this->redirect(array('action' => 'index'));
     }
 
+    public function imagenAjax() {
+        $this->layout = "webservices";
+        $input = $this->request->data["file"]; //State
+        
+        debug($input);
+        
+//        if (isset($_FILES[$input])) {
+//            $file = $_FILES[$input];
+//            $nombre = $file["name"];
+//            $tipo = $file["type"];
+//            $ruta_provicional = $file["tmp_name"];
+//            $size = $file["size"];
+//            $dimensiones = getimagesize($ruta_provicional);
+//            $width = $dimensiones[0];
+//            $height = $dimensiones[1];
+//            $carpeta = 'imagenes/';
+//            alert($tipo);
+//            if ($tipo != 'image/jpg' && $tipo = 'image/jepg') {
+//                echo "Error el archivo no es compatible solo recibe imagenes jpg";
+//            } elseif ($width > 500 && $height > 500) {
+//                echo "Error las dimenciones no son correctas";
+//            } else {
+//                $src = $carpeta . $nombre;
+//                debug($src);
+//                move_uploaded_file($ruta_provicional, $src);
+//                echo '<img src="$src" />';
+//            }
+//        }
+//        if (isset($_FILES["file"])) {
+//            $file = $_FILES["file"];
+//            $nombre = $file["name"];
+//            $tipo = $file["type"];
+//            $ruta_provicional = $file["tmp_name"];
+//            $size = $file["size"];
+//            $dimensiones = getimagesize($ruta_provicional);
+//            $width = $dimensiones[0];
+//            $height = $dimensiones[1];
+//            $carpeta = 'imagenes/';
+//            alert($tipo);
+//            if ($tipo != 'image/jpg' && $tipo = 'image/jepg') {
+//                echo "Error el archivo no es compatible solo recibe imagenes jpg";
+//            } elseif ($width > 500 && $height > 500) {
+//                echo "Error las dimenciones no son correctas";
+//            } else {
+//                $src = $carpeta . $nombre;
+//                debug($src);
+//                move_uploaded_file($ruta_provicional, $src);
+//                echo '<img src="$src" />';
+//            }
+//        }
+    }
 }
