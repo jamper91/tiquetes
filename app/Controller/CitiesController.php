@@ -80,7 +80,7 @@ class CitiesController extends AppController {
         $this->set(compact('countries'));
         $this->set("countriesName", $countriesName);
 
-        $departments = $this->City->State->find('list');
+        $states = $this->City->State->find('list');
         $this->set(compact('states'));
     }
 
