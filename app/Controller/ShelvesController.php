@@ -127,29 +127,6 @@ class ShelvesController extends AppController {
         return $this->redirect(array('action' => 'index'));
     }
     
-    public function getShelvesByCity() {
-        $this->layout = "webservices";
-        $city_id = $this->request->data["city_id"]; //city
-        debug($city_id);
-        $options = array(
-            "conditions" => array(
-                "Stage.stage_id" => $city_id
-            ),
-            "fields" => array(
-                "Stage.stage_id",
-                "Stage.esce_nombre"
-            ),
-            "recursive" => 0
-        );        
-        $shelves = $this->Shelve->find("all", $options);
-        $log = $this->Shelve->getDataSource()->getLog(false, false);
-        //debug($log);
-        $this->set(
-                array(
-                    "datos" => $shelves,
-                    "_serialize" => array("datos")
-                )
-        );
-    }
+    
 
 }

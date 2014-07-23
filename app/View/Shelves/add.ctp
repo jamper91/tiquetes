@@ -64,14 +64,14 @@
     });
     
     $("#ShelfCityId").change(function() {
-        var url2 = urlbase + "shelves/getShelvesByCity.xml";
+        var url2 = urlbase + "stages/getStagesByCity.xml";
         var datos2 = {
             city_id: $(this).val()
         };
         ajax(url2, datos2, function(xml) {
             $("#ShelfLocationId").html("<option>Seleccione un escenario</option>");
             $("datos", xml).each(function() {
-                var obj = $(this).find("Shelve");
+                var obj = $(this).find("Stage");
                 var valor, texto;
                 valor = $("id", obj).text();
                 texto = $("name", obj).text();

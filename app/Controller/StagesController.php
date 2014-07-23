@@ -62,8 +62,8 @@ class StagesController extends AppController {
 //        $validaFoto2 = $this->Subirfoto->validar($this->data['Stage']['foto2']['tmp_name'], $this->data['Stage']['foto2']['size'], $this->data['Stage']['foto2']['nombre']);
 
         /* Comprobamos si las fotografías del $data de paso5 son correctas */
-        
-        
+
+
 //pais
 //               
         $this->loadModel('Country');
@@ -73,9 +73,9 @@ class StagesController extends AppController {
             ),
             "recursive" => -2
         ));
-        
+
         $this->set(compact('state'));
-        
+
         $cities = $this->Stage->City->find('list');
         $this->set(compact('cities'));
     }
@@ -125,6 +125,31 @@ class StagesController extends AppController {
             $this->Session->setFlash(__('The stage could not be deleted. Please, try again.'));
         }
         return $this->redirect(array('action' => 'index'));
+    }
+
+    public function getStagesByCity() {
+        debug("hijo de tu señora progenitora");
+        $this->layout = "webservices";
+        $city_id = $this->request->data["city_id"]; //city        
+        $options = array(
+            "conditions" => array(
+                "Stage.stage_id" => $city_id
+            ),
+            "fields" => array(
+                "Stage.stage_id",
+                "Stage.esce_nombre"
+            ),
+            "recursive" => 0
+        );
+        $stages = $this->Stage->find("all", $options);
+        $log = $this->Stage->getDataSource()->getLog(false, false);
+        //debug($log);
+        $this->set(
+                array(
+                    "datos" => $stages,
+                    "_serialize" => array("datos")
+                )
+        );
     }
 
 }
