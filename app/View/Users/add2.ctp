@@ -4,7 +4,11 @@
          <tr>  
 
 
-          
+          	<td >Número de Documento: </td>
+            <td><input type="text" id="PersonalDatum_documento" name="data[PersonalDatum][documento]"/></td>
+            <td>
+	          	&nbsp;
+	        </td> 
           	
           
          
