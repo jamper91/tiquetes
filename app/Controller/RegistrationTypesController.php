@@ -56,7 +56,8 @@ class RegistrationTypesController extends AppController {
 			}
 		}
 		$events = $this->RegistrationType->Event->find('list');
-		$this->set(compact('events'));
+		$categorys = $this->RegistrationType->Category->find('list');
+		$this->set(compact('events',$categorys));
 	}
 
 /**
