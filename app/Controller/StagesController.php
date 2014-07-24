@@ -160,6 +160,7 @@ class StagesController extends AppController {
         } else {
             echo "Invalid file";
         }
+    }
 
 ////        $file = $this->request->data("file");
 //        if (isset($_FILES["file"])) {
@@ -184,7 +185,6 @@ class StagesController extends AppController {
 //                echo '<img src="$src" />';
 //            }
 //        }
-=======
     public function getStagesByCity() {        
         $this->layout = "webservices";
         $city_id = $this->request->data["city_id"]; //city  
@@ -212,7 +212,6 @@ class StagesController extends AppController {
                     "_serialize" => array("datos")
                 )
         );
->>>>>>> 62b0193d3fdb51a1b487c2aeb4722a29a21d8d68
     }
 
 }
