@@ -184,6 +184,35 @@ class StagesController extends AppController {
 //                echo '<img src="$src" />';
 //            }
 //        }
+=======
+    public function getStagesByCity() {        
+        $this->layout = "webservices";
+        $city_id = $this->request->data["city_id"]; //city  
+        
+        $options = array(
+            "conditions" => array(
+                "Stage.city_id" => $city_id
+            ),
+            "fields" => array(
+                "Stage.id",
+                "Stage.esce_nombre as name"
+            ),
+            "recursive" => 0
+        );
+        $stages = $this->Stage->find("all", $options);
+//        var_dump($stages); 
+        $log = $this->Stage->getDataSource()->getLog(false, false);
+//        debug($log);
+        //$stages=array("datos"=>$stages);
+        
+        
+        $this->set(
+                array(
+                    "datos" => $stages,
+                    "_serialize" => array("datos")
+                )
+        );
+>>>>>>> 62b0193d3fdb51a1b487c2aeb4722a29a21d8d68
     }
 
 }

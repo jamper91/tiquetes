@@ -80,7 +80,7 @@ class CitiesController extends AppController {
         $this->set(compact('countries'));
         $this->set("countriesName", $countriesName);
 
-        $departments = $this->City->State->find('list');
+        $states = $this->City->State->find('list');
         $this->set(compact('states'));
     }
 
@@ -150,6 +150,7 @@ class CitiesController extends AppController {
         $cities = $this->City->find("all", $options);
         $log = $this->City->getDataSource()->getLog(false, false);
         //debug($log);
+//        var_dump($cities);
         $this->set(
                 array(
                     "datos" => $cities,

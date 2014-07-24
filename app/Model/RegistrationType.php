@@ -47,5 +47,15 @@ class RegistrationType extends AppModel {
 			'finderQuery' => '',
 		)
 	);
+        
+        public $belongsTo = array(
+		'Category' => array(
+			'className' => 'Category',
+			'foreignKey' => 'category_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		)
+            );
 
 }
