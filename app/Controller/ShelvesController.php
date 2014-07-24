@@ -60,11 +60,7 @@ class ShelvesController extends AppController {
                 $this->Session->setFlash(__('The shelf could not be saved. Please, try again.'));
             }
         }
-        $locations = $this->Shelf->Location->find('list', array(
-            "fields" => array(
-                "Location.loca_nombre"
-            )
-        ));
+        $locations = $this->Shelf->Location->find('list');
         $this->set(compact('locations'));
         
         $countriesName = $this->Country->find('list', array(
@@ -78,6 +74,8 @@ class ShelvesController extends AppController {
         $this->set("countriesName", $countriesName);
         $states = $this->City->State->find('list');
         $this->set(compact('states'));
+        $stages = $this->Shelf->Location->Stage->find('list');
+        $this->set(compact('stages'));
     }
 
     /**
