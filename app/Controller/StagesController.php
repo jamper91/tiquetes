@@ -15,7 +15,7 @@ class StagesController extends AppController {
      *
      * @var array
      */
-    public $components = array('Paginator');
+    public $components = array('Paginator','RequestHandler');
 
     /**
      * index method
@@ -78,6 +78,7 @@ class StagesController extends AppController {
 
         $cities = $this->Stage->City->find('list');
         $this->set(compact('cities'));
+        
     }
 
     /**
@@ -127,23 +128,27 @@ class StagesController extends AppController {
         return $this->redirect(array('action' => 'index'));
     }
 
-    public function getStagesByCity() {
-        debug("hijo de tu señora progenitora");
+    public function getStagesByCity() {        
         $this->layout = "webservices";
-        $city_id = $this->request->data["city_id"]; //city        
+        $city_id = $this->request->data["city_id"]; //city  
+        
         $options = array(
             "conditions" => array(
-                "Stage.stage_id" => $city_id
+                "Stage.city_id" => $city_id
             ),
             "fields" => array(
-                "Stage.stage_id",
-                "Stage.esce_nombre"
+                "Stage.id",
+                "Stage.esce_nombre as name"
             ),
             "recursive" => 0
         );
         $stages = $this->Stage->find("all", $options);
+//        var_dump($stages); 
         $log = $this->Stage->getDataSource()->getLog(false, false);
-        //debug($log);
+//        debug($log);
+        //$stages=array("datos"=>$stages);
+        
+        
         $this->set(
                 array(
                     "datos" => $stages,

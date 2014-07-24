@@ -13,7 +13,7 @@ class LocationsController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator');
+	public $components = array('Paginator', 'RequestHandler');
 
 /**
  * index method
@@ -107,4 +107,29 @@ class LocationsController extends AppController {
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
+        
+        public function getLocationByStage() {        
+        $this->layout = "webservices";
+        $stage_id = $this->request->data["stage_id"]; //Stage      
+        $options = array(
+            "conditions" => array(
+                "Location.stage_id" => $stage_id
+            ),
+            "fields" => array(
+                "Location.id",
+                "Location.loca_nombre"
+            ),
+            "recursive" => 0
+        );
+        $loca = $this->Location->find("all", $options);        
+        $log = $this->Location->getDataSource()->getLog(false, false);
+//        debug($log);
+        //$stages=array("datos"=>$locations);
+        $this->set(
+                array(
+                    "datos" => $loca,
+                    "_serialize" => array("datos")
+                )
+        );
+    }
 }

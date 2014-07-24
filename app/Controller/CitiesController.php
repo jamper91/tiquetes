@@ -150,6 +150,7 @@ class CitiesController extends AppController {
         $cities = $this->City->find("all", $options);
         $log = $this->City->getDataSource()->getLog(false, false);
         //debug($log);
+//        var_dump($cities);
         $this->set(
                 array(
                     "datos" => $cities,
