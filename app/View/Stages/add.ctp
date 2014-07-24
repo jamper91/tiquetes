@@ -1,4 +1,4 @@
-<div id="respuesta"></div>
+
 <div class="stages form">
     <?php echo $this->Form->create('Stage'); ?>
     <fieldset>
@@ -17,7 +17,8 @@
                 <td><?php echo 'Departamento' ?></td>
                 <td><?php
                     echo $this->Form->input('state_id', array(
-                        'label' => ''
+                        'label' => '',
+                        "empty" => "Seleccione un Dpto"
                     ));
                     ?>
                 </td>
@@ -42,19 +43,21 @@
         ?>
 
         <input type="file" id="file" name="file" >
+        <div id="respuesta"></div>
     </fieldset>
     <?php echo $this->Form->end(__('Submit')); ?>
 </div>
 <script>
     $(document).ready(function() {
-        $("#CityStateId").html("");
-        $("#CityCountryId").change(function() {
+        $("#StageStateId").html("");
+        $("#StageCityId").html("");
+        $("#StageCountryId").change(function() {
             var url = urlbase + "states/getStatesByCountry.xml";
             var datos = {
                 country_id: $(this).val()
             };
             ajax(url, datos, function(xml) {
-                $("#CityStateId").html("<option>Seleccione un Departamento</option>");
+                $("#StageStateId").html("<option>Seleccione un Departamento</option>");
                 $("datos", xml).each(function() {
                     var obj = $(this).find("State");
                     var valor, texto;
@@ -64,43 +67,49 @@
                         var html = "<option value='$1'>$2</option>";
                         html = html.replace("$1", valor);
                         html = html.replace("$2", texto);
-                        $("#CityStateId").append(html);
+                        $("#StageStateId").append(html);
+                    }
+                });
+            });
+        });
+        $("#StageStateId").change(function() {
+            var url2 = urlbase + "cities/getCitiesByState.xml";
+            var datos2 = {
+                state_id: $(this).val()
+            };
+
+            ajax(url2, datos2, function(xml) {
+                $("#StageCityId").html("<option>Seleccione una ciudad</option>");
+                $("datos", xml).each(function() {
+                    var obj = $(this).find("City");
+                    var valor, texto;
+                    valor = $("id", obj).text();
+                    texto = $("name", obj).text();
+                    if (valor) {
+                        var html = "<option value='$1'>$2</option>";
+                        html = html.replace("$1", valor);
+                        html = html.replace("$2", texto);
+                        $("#StageCityId").append(html);
                     }
                 });
             });
         });
 
         $("input[name='file']").on("change", function() {
-            var formData = new FormData($("#StageAddForm"));
             var ruta = urlbase + "stages/imagenAjax.xml";
+            alert("entro a la imagen:  "+$("#file").val());
             $.ajax({
                 url: ruta,
                 type: "POST",
-                data: formData,
+                data: {"file": $("#file").val()},
                 contentType: false,
                 processData: false,
-                success: function(datos) {
-                    alert("salio a la imagen");
-                    $("#respuesta").html(datos);
+                success: function(data) {
+                    alert("salio a la imagen"+data);
+                    $("#respuesta").html(data);
                 }
             });
         });
     });
-//        $("input[name='file']").on("change", function() {        
-////        var formData = new FormData($("#StageAddForm"));
-//            var ruta = urlbase + "stages/imagenAjax.xml";
-//            var datos = {
-//                file: $(this).val()
-//            };
-//            ajax(url, datos, function(xml) {
-//                
-//                $("datos", xml).each(function() {
-//                    
-//                        $("#respuesta").append(html);
-//                    
-//                });
-//            });
-//        
-//    });
-
+//       
 </script>
