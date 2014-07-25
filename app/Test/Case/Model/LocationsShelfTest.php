@@ -1,11 +1,11 @@
 <?php
-App::uses('Shelf', 'Model');
+App::uses('LocationsShelf', 'Model');
 
 /**
- * Shelf Test Case
+ * LocationsShelf Test Case
  *
  */
-class ShelfTest extends CakeTestCase {
+class LocationsShelfTest extends CakeTestCase {
 
 /**
  * Fixtures
@@ -13,9 +13,8 @@ class ShelfTest extends CakeTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'app.shelf',
-		'app.paper',
-		'app.event',
+		'app.locations_shelf',
+		'app.location',
 		'app.stage',
 		'app.city',
 		'app.state',
@@ -31,6 +30,21 @@ class ShelfTest extends CakeTestCase {
 		'app.registration_type',
 		'app.category',
 		'app.entrada',
+		'app.paper',
+		'app.event',
+		'app.event_type',
+		'app.form',
+		'app.personal_datum',
+		'app.forms_personal_datum',
+		'app.committee',
+		'app.committees_event',
+		'app.companies_event',
+		'app.hotel',
+		'app.events_hotel',
+		'app.payment',
+		'app.events_payment',
+		'app.shelf',
+		'app.paper_input',
 		'app.delivery_method',
 		'app.delivery_methods_input',
 		'app.sale',
@@ -40,21 +54,7 @@ class ShelfTest extends CakeTestCase {
 		'app.department',
 		'app.authorization',
 		'app.authorizations_user',
-		'app.committees_event',
-		'app.committee',
-		'app.committees_events_person',
-		'app.companies_event',
-		'app.location',
-		'app.event_type',
-		'app.form',
-		'app.personal_datum',
-		'app.forms_personal_datum',
-		'app.hotel',
-		'app.events_hotel',
-		'app.payment',
-		'app.events_payment',
-		'app.paper_input',
-		'app.locations_shelf'
+		'app.committees_events_person'
 	);
 
 /**
@@ -64,7 +64,7 @@ class ShelfTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->Shelf = ClassRegistry::init('Shelf');
+		$this->LocationsShelf = ClassRegistry::init('LocationsShelf');
 	}
 
 /**
@@ -73,7 +73,7 @@ class ShelfTest extends CakeTestCase {
  * @return void
  */
 	public function tearDown() {
-		unset($this->Shelf);
+		unset($this->LocationsShelf);
 
 		parent::tearDown();
 	}

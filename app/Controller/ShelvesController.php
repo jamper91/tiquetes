@@ -7,6 +7,7 @@ App::uses('AppController', 'Controller');
  *
  * @property Shelf $Shelf
  * @property PaginatorComponent $Paginator
+ * @property SessionComponent $Session
  */
 class ShelvesController extends AppController {
 
@@ -15,7 +16,7 @@ class ShelvesController extends AppController {
      *
      * @var array
      */
-    public $components = array('Paginator', 'RequestHandler');
+    public $components = array('Paginator', 'Session');
 
     /**
      * index method
@@ -51,6 +52,8 @@ class ShelvesController extends AppController {
         $this->loadModel('Country');
         $this->loadModel('State');
         $this->loadModel('City');
+        $this->loadModel('Location');
+        $this->loadModel('LocationsShelf');
         if ($this->request->is('post')) {
             $this->Shelf->create();
             if ($this->Shelf->save($this->request->data)) {
@@ -60,17 +63,28 @@ class ShelvesController extends AppController {
                 $this->Session->setFlash(__('The shelf could not be saved. Please, try again.'));
             }
         }
+//        $newShelf = $this->Shelf->getLastInsertId();
+//        $newlocation = $this->request->data("data[Shelf][location_id]");
+//        $newLocationShelf = $this->LocationsShelf->create();
+//        $newLocationShelf = array(
+//            "LocationsShelf" =>array(
+//                'Shelf_id'=>$newShelf,
+//                'location_id'=>$newlocation,
+//                
+//            )
+//        );
+//        $this->LocationsShelf->save($newLocationShelf);
         $locations = $this->Shelf->Location->find('list');
         $this->set(compact('locations'));
-        
+
         $countriesName = $this->Country->find('list', array(
             "fields" => array(
                 "Country.name"
             )
-        ));       
+        ));
 
-        
-        $this->set("locations", $locations);        
+
+        $this->set("locations", $locations);
         $this->set("countriesName", $countriesName);
         $states = $this->City->State->find('list');
         $this->set(compact('states'));
@@ -124,7 +138,5 @@ class ShelvesController extends AppController {
         }
         return $this->redirect(array('action' => 'index'));
     }
-    
-    
 
 }
