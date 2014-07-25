@@ -2,18 +2,14 @@
 	<legend><?php echo __('Buscador'); ?></legend>
 	<?php echo $this->Form->create('User', array('action' => 'buscador')); ?>
   	<table>
-         <tr>  
-
-
-          
-                
+         <tr>             
             
 	<?php 
 	
 	$count = 0;
 	foreach ($form as $value) { ?>
 
-			<?php if($count%2 == 0){ ?>
+			<?php if($count%3 == 0){ ?>
 			</tr>
 			<tr>
 			<?php } ?>
@@ -40,54 +36,64 @@
 	  
  </div>
 <?php if(isset($datosvista)){?>
-  <div class="widget-box">
-            <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-                <h5>Ciudades</h5>
-            </div>
-            <div class="widget-content nopadding">
-                <table class="table table-bordered data-table">
-                    <thead>
-                        <tr>
-                        	<?php 
-                        	$descripcion = array();
-                        	foreach ($form as $value) 
-                        		{ ?>
+  	<div class="widget-box">
+        <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
+            <h5>Resultado de la búsqueda</h5>
+        </div>
+    	<div class="widget-content nopadding">
+            <table class="table table-bordered data-table">
+                <thead>
+                    <tr>
+                    	<?php 
 
-		                            <th><?php echo $value["PersonalDatum"]["descripcion"];?></th>
-		                            <?php  array_push($descripcion, $value["PersonalDatum"]["descripcion"]);
-
-                        		} ?>
-                            <th>Documento</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <?php $con = 0; 
+                    	foreach ($form as $value) 
+                    		{ ?>
+                    			
+	                            <th><?php echo $value["PersonalDatum"]["descripcion"];?></th>
+	                 
+							<?php } ?>
+                        <th>Documento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                	<?php $con = 0; 
+                		
                         foreach ($datosvista as $datovista){ ?>
 	                        <tr>
-	                        	<?php foreach ($datovista as $dato){ ?>
-		                            
-	                                <td><?php 
-		                                
-		                                	echo $dato['datas']['descripcion'];
-		                               
-		                                 ?>
-	                                </td>
+	                        	<?php 
 
-		                            
-		                        <?php } ?>
-		                        	<td><?php $aux1 = $datosvista2[$con];
-		                        			$aux1 = $aux1[0];
-		                        			echo $aux1['people']['pers_documento']; 
-		                        		 ?>
-		                        	</td>
+									foreach ($form as $value) 
+                    				{ 
+                    			
+	                             		$PersonalDatum_id=$value["PersonalDatum"]["id"];
+	                             		$esta=0;
+	                             		foreach ($datovista as $dato){
+	                             			$aux2343=$dato["personal_data"]["id"];
+	                             			if($aux2343==$PersonalDatum_id){
+	                             				echo "<td>".$dato["datas"]["descripcion"]."</td>";
+	                             				$esta=1;
+	                             			}
+	                             		}	
+	                             		if($esta==0)
+	                             		{
+	                             			echo "<td>-</td>";
+	                             		}
+	                 
+								 	} 
+								 ?>
+	                      
+	                        	
+		                       
+	                        	<td><?php $aux1 = $datosvista2[$con];
+	                        			$aux1 = $aux1[0];
+	                        			echo $aux1['people']['pers_documento']; 
+	                        		 ?>
+	                        	</td>
 		                    </tr>
-                        <?php $con ++;
-                         } ?>
-                    </tbody>
-                </table>
-            </div>
-
+                    <?php $con ++;
+                     	} ?>
+                </tbody>
+            </table>
         </div>
-
-        <?php }?>
+    </div>
+<?php }?>

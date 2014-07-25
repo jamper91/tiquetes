@@ -15,6 +15,7 @@ class UsersController extends AppController {
      *
      * @var array
      */
+
     public $components = array('Paginator', 'Auth', 'Session', 'RequestHandler');
 
     public function beforeFilter() {
@@ -321,17 +322,50 @@ class UsersController extends AppController {
         }
     }
 
-    public function add2() {
-        $this->loadModel('Forms');
-//$forms = $this->Forms->findAllByEventId('1');
-        $forms = $this->Forms->find('list', array(
-            "fields" => array(
-                "id",
-            )
-        ));
-//debug($forms);
-//debug($formPersonal);
+    public function elegirEvento(){
+        $this->loadModel('Event');
+        $eventos = $this->Event->find('list',array(
+         "fields" => array(
+                "Event.even_nombre"
+            )));
+        if ($this->request->is('post')) {
+             $data = $this->data;
+             //debug($data['User']['event_id']);
+             // $event_id = $data['User']['event_id'];
+             // $_SESSION['event_id'] = $event_id;
 
+             $this->redirect(array('action' => 'add2', '?'=>array(
+                                'event_id'=>$data['User']['event_id'])));
+        }
+        $this->set('eventos', $eventos);
+
+    }
+
+    public function add2() {
+        // $this->layout = "webservices";
+        //$event_id = $this->request->query["event_id"];
+      // debug(implode("','",$event_id));
+        $event_id = $this->request->query["event_id"];
+       //debug($event_id);
+
+
+        $this->loadModel('Forms');
+
+        $forms = $this->Forms->findAllByEventId($event_id);
+        //debug(!Empty($forms));
+        if(!Empty($forms))
+        {
+           foreach ($forms as $form) {
+           $form_id = $form['Forms']['event_id'];
+            } 
+            $this->loadModel('FormsPersonalDatum');
+            $formPersonal = $this->FormsPersonalDatum->findAllByFormId($form_id);
+        }
+
+        else{
+            $formPersonal = '';
+        }
+        
 
         if ($this->request->is('post')) {
 
@@ -374,15 +408,13 @@ class UsersController extends AppController {
         $this->set('form', $formPersonal);
     }
 
-    public function buscador() {
-        $this->loadModel('Forms');
-        $forms = $this->Forms->find('list', array(
-            "fields" => array(
-                "id",
-            )
-        ));
-        $this->loadModel('FormsPersonalDatum');
-        $formPersonal = $this->FormsPersonalDatum->findAllByFormId($forms);
+
+    public function buscador()
+    {
+
+        $this->loadModel('PersonalDatum');
+        $formPersonal =$this->PersonalDatum->find('all');
+
 
         if ($this->request->is('post')) {
             $data = $this->data;
@@ -390,45 +422,49 @@ class UsersController extends AppController {
 
             $datos = $this->request->data;
 
-            // if(count($datos) == 1)
-            // {
-            //     $conditions = 
-            // }
-            $conditions = "";
-            $conditions2 = "";
 
-
-            foreach ($datos as $dato) {
-                //debug(key($dato));
-
-                while ($value = key($dato)) {
-
+            $conditions="";
+            $conditions2="";
+        
+            foreach ($datos as $dato) 
+            {
+               while($value = key($dato))
+               {
+                    
                     $value = current($dato);
-                    if ($value != '') {
+                    if($value != '')
+                    {
+                         
+                        if(key($dato)!="documento")
+                        {
+                            
+                            if(!is_int($value))
+                                    $value="like '%".$value."%'";
+                                else
+                                    $value="=".$value;
+                            if($conditions!="")
+                            {
+                                 
+                                $conditions.=" or ".'and d.forms_personal_data_id=fp.id and fp.personal_datum_id='.key($dato);
 
-                        if (key($dato) != "documento") {
-
-                            if (!is_int($value))
-                                $value = "'" . $value . "'";
-                            if ($conditions != "") {
-
-                                $conditions.=" or " . 'forms_personal_data_id=' . key($dato);
-
-                                $conditions.=" and " . 'descripcion=' . $value;
-                            } else {
-
-                                $conditions.=' forms_personal_data_id=' . key($dato);
-                                $conditions.=' and descripcion=' . $value;
+                                $conditions.=" and ".'d.descripcion '.$value;
+                            }else{
+                                 
+                                $conditions.='  d.forms_personal_data_id=fp.id and fp.personal_datum_id='.key($dato);
+                                $conditions.='  and d.descripcion '.$value;    
                             }
-                        } else {
-                            $conditions2.=' pers_documento=' . $value;
-                        }
+                        }else{
+                                $conditions2.=' pers_documento ='.$value;
+                            
+                        }  
+
                     }
                     next($dato);
                 }
             }
-            if ($conditions != '')
-                $conditions = "select * from datas where " . $conditions;
+
+            if($conditions !='')   
+            $conditions="select * from datas d,forms_personal_data fp where ".$conditions;
 
 
             if ($conditions2 != '')
@@ -436,71 +472,115 @@ class UsersController extends AppController {
 
 
             $this->loadModel('Data');
-            if ($conditions != '') {
-                $datas = $this->Data->query($conditions);
-                $datosVista = array();
-                $datosVista2 = array();
-                foreach ($datas as $data) {
-                    $person_id = $data['datas']['person_id'];
-                    $queryDatos = "select * from datas where person_id=" . $person_id;
 
-                    $personas = $this->Data->query($queryDatos);
-                    array_push($datosVista, $personas);
-                    $queryPersona = "select * from people where id=" . $person_id;
-                    $personas2 = $this->People->query($queryPersona);
-                    array_push($datosVista2, $personas2);
-                }
+            if($conditions != '')
+            {
+              $datas = $this->Data->query($conditions); 
+              $datosVista = array();
+              $datosVista2 = array();
+              foreach ($datas as $data) {
+                    //debug($data);
+                  $person_id = $data['d']['person_id'];
+
+                  $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_data_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=".$person_id."";
+
+
+                  $personas = $this->Data->query($queryDatos); 
+                  array_push($datosVista, $personas);
+                  $queryPersona = "select * from people where id=".$person_id;
+                  $personas2 = $this->People->query($queryPersona);
+                  array_push($datosVista2, $personas2); 
+
+              }
+
+               
                 $this->set('datosvista', $datosVista);
                 $this->set('datosvista2', $datosVista2);
+
             }
 
-            if ($conditions2 != '') {
-                $people = $this->Data->query($conditions2);
-                $datosVista = array();
-                $datosVista2 = array();
-                foreach ($people as $value) {
-                    $person_id = $value['people']['id'];
-                    $queryDatos = "select * from datas where person_id=" . $person_id;
-                    //datos para ser enviados a la vista.
-                    $personas = $this->Data->query($queryDatos);
-                    array_push($datosVista, $personas);
-                    $queryPersona = "select * from people where id=" . $person_id;
-                    $personas2 = $this->People->query($queryPersona);
-                    array_push($datosVista2, $personas2);
-                }
-                $this->set('datosvista', $datosVista);
-                $this->set('datosvista2', $datosVista2);
-                ;
-            }
+
+
+            
+            if($conditions2 != '')
+            {
+                  $people = $this->Data->query($conditions2); 
+                  $datosVista = array();
+                  $datosVista2 = array();
+                  foreach ($people as $value) {
+                        $person_id = $value['people']['id'];
+                        $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_data_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=".$person_id."";
+                        //datos para ser enviados a la vista.
+                        $personas = $this->Data->query($queryDatos);
+                        array_push($datosVista, $personas);
+                        $queryPersona = "select * from people where id=".$person_id;
+                        $personas2 = $this->People->query($queryPersona);
+                        array_push($datosVista2, $personas2);
+                  }
+
+               
+           
+            $this->set('datosvista', $datosVista);
+            $this->set('datosvista2', $datosVista2);
+            
+            } 
         }
-
+        
+          
+       //debug($FPD_ids);
+        
         $this->set('form', $formPersonal);
+
+
+
     }
 
     public function registrar() {
         if ($this->request->is("POST")) {
-            $this->loadModel('People');
 
-            //Creo y almaceno a la persona
-            $newPeole = $this->People->create();
-            $this->People->save($this->request->data);
-            $newPeopleId = $this->People->getLastInsertId();
+            //Primero determino si la tarjeta esta registrada en el sistema
+            $this->loadModel("Input");
+            $input = $this->Input->find('first', array(
+                "conditions" => array(
+                    "Input.entr_codigo" => $this->request->data["Input"]["entr_codigo"]
+                )
+            ));
+            if ($input) {
+
+                try {
+                    $this->loadModel('People');
+
+                    //Creo y almaceno a la persona
+                    $newPeole = $this->People->create();
+                    $this->People->save($this->request->data);
+                    $newPeopleId = $this->People->getLastInsertId();
 
 //            Almaceno la informacion de la persona
-            $this->loadModel('Data');
-            $cont = 0;
-            foreach ($this->request->data["Data"] as $value) {
-                $this->request->data["Data"][$cont]["person_id"] = $newPeopleId;
-                $cont++;
+                    $this->loadModel('Data');
+                    $cont = 0;
+                    foreach ($this->request->data["Data"] as $value) {
+                        $this->request->data["Data"][$cont]["person_id"] = $newPeopleId;
+                        $cont++;
+                    }
+                    $this->Data->saveAll($this->request->data['Data']);
+
+
+                    //Agrego la entrada
+                    $this->request->data["Input"]["id"] = $input["Input"]["id"];
+                    $this->request->data["Input"]["person_id"] = $newPeopleId;
+                    $this->request->data["Input"]["events_registration_type_id"] = $this->request->data["User"]["registration_type_id"];
+                    $this->loadModel("Input");
+                    $this->Input->save($this->request->data);
+                    $this->Session->setFlash('Registro realizado con exito', 'good');
+                } catch (Exception $exc) {
+                    $error2 = $exc->getCode();
+                    if ($error2 == '23000') {
+                        $this->Session->setFlash('Ya existe un usuario con ese documento', 'error');
+                    }
+                }
+            } else {
+                $this->Session->setFlash('Tarjeta no esta registrada en el sistema', 'Error');
             }
-            $this->Data->saveAll($this->request->data['Data']);
-
-
-            //Agrego la entrada
-            $this->request->data["Input"]["person_id"] = $newPeopleId;
-            $this->request->data["Input"]["events_registration_type_id"] = $this->request->data["User"]["registration_type_id"];
-            $this->loadModel("Input");
-            $this->Input->save($this->request->data);
         }
 
         //Listo los eventos
@@ -527,6 +607,7 @@ class UsersController extends AppController {
                     "_serialize" => array("datos")
                 )
         );
+
     }
 
 }
