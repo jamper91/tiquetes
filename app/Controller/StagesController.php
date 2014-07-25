@@ -60,15 +60,60 @@ class StagesController extends AppController {
      * @return void
      */
     public function add() {
+        $src="";
         if ($this->request->is('post')) {
-            $this->Stage->create();
-            if ($this->Stage->save($this->request->data)) {
-                $this->Session->setFlash(__('The stage has been saved.'));
-                return $this->redirect(array('action' => 'index'));
-            } else {
-                $this->Session->setFlash(__('The stage could not be saved. Please, try again.'));
+            $data = $this->data;
+            $this->loadModel('Stage');
+            if (isset($this->request->data["doc_file"])) {
+                $file = $this->request->data["doc_file"];
+                $nombre = $file["name"];
+                $tipo = $file["type"];
+                $ruta_provicional = $file["tmp_name"];
+                $size = $file["size"];
+//                $dimensiones = getimagesize($ruta_provicional);
+//                $width = $dimensiones[0];
+//                $height = $dimensiones[1];
+                $carpeta = WWW_ROOT."/img/escenario/";
+                $src = $carpeta .$nombre;
+
+                    move_uploaded_file($ruta_provicional, $src);
+                    $newStage = $this->Stage->create();
+                    $newStage = array(
+                        'Stage' => array(
+                            'city_id' => $data['city_id'],
+                            'esce_nombre' => $data['esce_nombre'],
+                            'esce_direccion' => $data['esce_direccion'],
+                            'esce_telefono' => $data['esce_telefono'],
+                            'esce_mapa' => $src
+                        )
+                    );
+                    try {
+                        $this->Stage->save($newStage);                        
+                        return $this->redirect(array('action' => 'index'));
+                    } catch (Exception $ex) {
+                        $error2 = $ex->getCode();
+                        if ($error2 == '23000') {
+                            $this->Session->setFlash('Error ya hay un escenario igual', 'error');
+                        }
+                    }
+                    if ($this->Stage->save($this->request->data)) {
+                        $this->Session->setFlash(__('The stage has been saved.'));
+                        return $this->redirect(array('action' => 'index'));
+                    } else {
+                        $this->Session->setFlash(__('The stage could not be saved. Please, try again.'));
+                    }
+//                if ($tipo != 'image/jpg' || $tipo = 'image/jepg') {
+//                    echo "Error el archivo no es compatible solo recibe imagenes jpg o jepg";
+////                } elseif ($width > 500 && $height > 500) {
+////                    echo "Error las dimenciones no son correctas";
+//                } else {
+//                    
+////                    echo '<img src="$src" />';
+//                    
+//                }
             }
         }
+
 
         $this->loadModel('Country');
         $countriesName = $this->Country->find('list', array(
@@ -133,62 +178,34 @@ class StagesController extends AppController {
     }
 
     public function imagenAjax() {
-        $file = $_FILES['file'];
-        move_uploaded_file($_FILES["file"]["tmp_name"], "imagenes/" . $_FILES["file"]["name"]);
-        var_dump($file);die();
-        $allowedExts = array("gif", "jpeg", "jpg", "png");
-        $nombre=$_FILES["file"]["name"];
-        $temp = explode(".", $nombre);
-        $extension = end($temp);
-        var_dump($nombre);die();
-        $tipo = $_FILES["file"]["type"];
-        if ((( $tipo == "image/gif") || ($tipo == "image/jpeg") || ($tipo == "image/jpg") || ($tipo == "image/pjpeg") || ($tipo == "image/x-png") || ($tipo == "image/png")) && ($_FILES["file"]["size"] < 2000000) && in_array($extension, $allowedExts)) {
-            if ($_FILES["file"]["error"] > 0) {
-                echo "Return Code: " . $_FILES["file"]["error"] . "<br>";
-            } else {
-                echo "Upload: " . $_FILES["file"]["name"] . "<br>";
-                echo "Type: " . $_FILES["file"]["type"] . "<br>";
-                echo "Size: " . ($_FILES["file"]["size"] / 1024) . " kB<br>";
-                echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br>";
-                if (file_exists("upload/" . $_FILES["file"]["name"])) {
-                    echo $_FILES["file"]["name"] . " already exists. ";
-                } else {
-                    move_uploaded_file($_FILES["file"]["tmp_name"], "imagenes/" . $_FILES["file"]["name"]);
-                    echo "Stored in: " . "imagenes/" . $_FILES["file"]["name"];
-                }
-            }
-        } else {
-            echo "Invalid file";
-        }
+        $this->layout = "webservices";
+        $file = $this->request->data["doc_file"]["name"];
+        debug($file);
+//        $pru = $_FILES["doc_file"];
+//        debug($pru);
+//        $tipo = $file["type"];
+//        $ruta_provicional = $file["tmp_name"];
+//        $size = $file["size"];
+//        $dimensiones = getimagesize($ruta_provicional);
+//        $width = $dimensiones[0];
+//        $height = $dimensiones[1];
+//        $carpeta = 'imagenes/';
+//        move_uploaded_file($_FILES["file"]["tmp_name"], "imagenes/" . $_FILES["file"]["name"]);
+//        debug($file);
+        $mensaje = "OK";
+        $this->set(
+                array(
+                    "datos" => $mensaje,
+                    "_serialize" => array("datos")
+                )
+        );
     }
 
-////        $file = $this->request->data("file");
-//        if (isset($_FILES["file"])) {
-//            $file = $_FILES["file"];
-//            $nombre = $file["name"];
-//            $tipo = $file["type"];
-//            $ruta_provicional = $file["tmp_name"];
-//            $size = $file["size"];
-//            $dimensiones = getimagesize($ruta_provicional);
-//            $width = $dimensiones[0];
-//            $height = $dimensiones[1];
-//            $carpeta = 'imagenes/';
-//            debug($file);
-//            if ($tipo != 'image/jpg' && $tipo = 'image/jepg') {
-//                echo "Error el archivo no es compatible solo recibe imagenes jpg";
-//            } elseif ($width > 500 && $height > 500) {
-//                echo "Error las dimenciones no son correctas";
-//            } else {
-//                $src = $carpeta . $nombre;
-//                
-//                move_uploaded_file($ruta_provicional, $src);
-//                echo '<img src="$src" />';
-//            }
-//        }
-    public function getStagesByCity() {        
+//        
+    public function getStagesByCity() {
         $this->layout = "webservices";
         $city_id = $this->request->data["city_id"]; //city  
-        
+
         $options = array(
             "conditions" => array(
                 "Stage.city_id" => $city_id
@@ -204,8 +221,8 @@ class StagesController extends AppController {
         $log = $this->Stage->getDataSource()->getLog(false, false);
 //        debug($log);
         //$stages=array("datos"=>$stages);
-        
-        
+
+
         $this->set(
                 array(
                     "datos" => $stages,
