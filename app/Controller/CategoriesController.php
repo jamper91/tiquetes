@@ -13,7 +13,7 @@ class CategoriesController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator');
+	public $components = array('Paginator', 'RequestHandler');
 
 /**
  * index method
@@ -101,4 +101,29 @@ class CategoriesController extends AppController {
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
+        
+        public function getCategoriesByEvent() {
+            $this->layout = "webservices";
+        $even_id = $this->request->data["even_id"];    
+        $options = array(
+            "conditions" => array(
+                "Category.event_id" => $even_id
+            ),
+            "fields" => array(
+                "Category.id",
+                "Category.descripcion as name"
+            ),
+            "recursive" => 0
+        );
+        $eventos = $this->Category->find("all", $options);
+        $log = $this->Category->getDataSource()->getLog(false, false);
+        //debug($log);
+//        var_dump($cities);
+        $this->set(
+                array(
+                    "datos" => $eventos,
+                    "_serialize" => array("datos")
+                )
+        );
+        }
 }

@@ -36,9 +36,9 @@
                             "class" => "controls"
                         ),
                         "label" => "",
-                        
                     ));
-//                    ?>
+//                    
+                    ?>
                 </div>
                 <div class="control-group">
                     <label class="control-label">Nombre</label>
@@ -52,7 +52,8 @@
                         ),
                         "label" => ""
                     ));
-//                    ?>
+//                    
+                    ?>
                 </div>
                 <?php
                 echo $this->Form->end(array(
@@ -71,7 +72,7 @@
 </div>
 <script>
     $(document).ready(function() {
-          $("#CityStateId").html("");
+        $("#CityStateId").html("");
         $("#CityCountryId").change(function() {
             var url = urlbase + "states/getStatesByCountry.xml";
             var datos = {
@@ -81,7 +82,7 @@
                 $("#CityStateId").html("<option>Seleccione un Departamento</option>");
                 $("datos", xml).each(function() {
                     var obj = $(this).find("State");
-                    var valor, texto;                    
+                    var valor, texto;
                     valor = $("id", obj).text();
                     texto = $("name", obj).text();
                     if (valor) {
