@@ -28,7 +28,6 @@ class UsersController extends AppController {
         } else {
             $this->Auth->allow();
         }
-
     }
 
     /**
@@ -89,33 +88,33 @@ class UsersController extends AppController {
             try {
                 $this->People->save($newPeole);
                 $newPeopleId = $this->People->getLastInsertId();
-                
+
                 $newUser = $this->User->create();
-            $newUser = array(
-                'User' => array(
-                    'person_id' => $newPeopleId,
-                    'username' => $data['User']['username'],
-                    'password' => $data['User']['password'],
-                    'estado' => 1,
-                    'type_user_id' => $data['User']['type_user_id'],
-                    'department_id' => $data['User']['department_id'],
-                    'validodesde' => $data['User']['validodesde']['year'] . '-' . $data['User']['validodesde']['month'] . '-' . $data['User']['validodesde']['day'],
-                    'validohasta' => $data['User']['validohasta']['year'] . '-' . $data['User']['validohasta']['month'] . '-' . $data['User']['validohasta']['day'],
-                    'identificador' => $data['User']['Identificador']
-                )
-            );
-            $this->User->save($newUser);
-            $usuario = $this->User->getLastInsertId();
-            $this->loadModel('Authorization');
-            $newAutirizationsUser = $this->Authorization->create();
-            $this->Authorization->save($this->request->data);
-            debug($this->request->data("data[User][Autorization][]"));
-            for($i = 0; $i<sizeof($this->request->data("data[User][Autorization][]")); $i++)
-            $newAutirizationsUser = array(
-               'AutorizartionUser' => array(
-                   $this
-               )                
-            );
+                $newUser = array(
+                    'User' => array(
+                        'person_id' => $newPeopleId,
+                        'username' => $data['User']['username'],
+                        'password' => $data['User']['password'],
+                        'estado' => 1,
+                        'type_user_id' => $data['User']['type_user_id'],
+                        'department_id' => $data['User']['department_id'],
+                        'validodesde' => $data['User']['validodesde']['year'] . '-' . $data['User']['validodesde']['month'] . '-' . $data['User']['validodesde']['day'],
+                        'validohasta' => $data['User']['validohasta']['year'] . '-' . $data['User']['validohasta']['month'] . '-' . $data['User']['validohasta']['day'],
+                        'identificador' => $data['User']['Identificador']
+                    )
+                );
+                $this->User->save($newUser);
+                $usuario = $this->User->getLastInsertId();
+                $this->loadModel('Authorization');
+                $newAutirizationsUser = $this->Authorization->create();
+                $this->Authorization->save($this->request->data);
+                debug($this->request->data("data[User][Autorization][]"));
+                for ($i = 0; $i < sizeof($this->request->data("data[User][Autorization][]")); $i++)
+                    $newAutirizationsUser = array(
+                        'AutorizartionUser' => array(
+                            $this
+                        )
+                    );
                 return $this->redirect(array('action' => 'index'));
             } catch (Exception $ex) {
                 $error2 = $ex->getCode();
@@ -124,13 +123,12 @@ class UsersController extends AppController {
                 }
             }
 
-            
+
 //debug($newPeopleId);
             /**
              * or if you already have Game Id, and Developer Id, then just load it on, and 
              * put it in the statement below, to create a new Assignment
              * */
-            
 //fin codigo para la isercion multiple
         }
 //cargar select
@@ -205,7 +203,7 @@ class UsersController extends AppController {
             $options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
             $this->request->data = $this->User->find('first', $options);
         }
-        
+
         $typeUsers = $this->User->TypeUser->find('list', array(
             "fields" => array(
                 "TypeUser.descripcion"
@@ -216,11 +214,11 @@ class UsersController extends AppController {
                 "Department.descripcion"
             )
         ));
-        
+
         $authorizations = $this->User->Authorization->find('list', array(
             "fields" => array(
                 "Autorization.nombre"
-            )));
+        )));
         $this->set(compact('people', 'typeUsers', 'departments', 'authorizations'));
     }
 
@@ -352,6 +350,7 @@ class UsersController extends AppController {
 
 
         $this->loadModel('Forms');
+
         $forms = $this->Forms->findAllByEventId($event_id);
         //debug(!Empty($forms));
         if(!Empty($forms))
@@ -367,8 +366,6 @@ class UsersController extends AppController {
             $formPersonal = '';
         }
         
-
-
 
         if ($this->request->is('post')) {
 
@@ -407,10 +404,10 @@ class UsersController extends AppController {
                     next($dato);
                 }
             }
-           
-        }           
-         $this->set('form', $formPersonal);
+        }
+        $this->set('form', $formPersonal);
     }
+
 
     public function buscador()
     {
@@ -418,12 +415,13 @@ class UsersController extends AppController {
         $this->loadModel('PersonalDatum');
         $formPersonal =$this->PersonalDatum->find('all');
 
-        if ($this->request->is('post')) 
-        {
+
+        if ($this->request->is('post')) {
             $data = $this->data;
             $this->loadModel('People');
 
             $datos = $this->request->data;
+
 
             $conditions="";
             $conditions2="";
@@ -459,19 +457,22 @@ class UsersController extends AppController {
                                 $conditions2.=' pers_documento ='.$value;
                             
                         }  
+
                     }
-                     next($dato);   
-               }
+                    next($dato);
+                }
             }
+
             if($conditions !='')   
             $conditions="select * from datas d,forms_personal_data fp where ".$conditions;
 
-            
-            if($conditions2 !='')   
-            $conditions2="select * from people where ".$conditions2;
+
+            if ($conditions2 != '')
+                $conditions2 = "select * from people where " . $conditions2;
 
 
             $this->loadModel('Data');
+
             if($conditions != '')
             {
               $datas = $this->Data->query($conditions); 
@@ -529,6 +530,84 @@ class UsersController extends AppController {
        //debug($FPD_ids);
         
         $this->set('form', $formPersonal);
+
+
+
+    }
+
+    public function registrar() {
+        if ($this->request->is("POST")) {
+
+            //Primero determino si la tarjeta esta registrada en el sistema
+            $this->loadModel("Input");
+            $input = $this->Input->find('first', array(
+                "conditions" => array(
+                    "Input.entr_codigo" => $this->request->data["Input"]["entr_codigo"]
+                )
+            ));
+            if ($input) {
+
+                try {
+                    $this->loadModel('People');
+
+                    //Creo y almaceno a la persona
+                    $newPeole = $this->People->create();
+                    $this->People->save($this->request->data);
+                    $newPeopleId = $this->People->getLastInsertId();
+
+//            Almaceno la informacion de la persona
+                    $this->loadModel('Data');
+                    $cont = 0;
+                    foreach ($this->request->data["Data"] as $value) {
+                        $this->request->data["Data"][$cont]["person_id"] = $newPeopleId;
+                        $cont++;
+                    }
+                    $this->Data->saveAll($this->request->data['Data']);
+
+
+                    //Agrego la entrada
+                    $this->request->data["Input"]["id"] = $input["Input"]["id"];
+                    $this->request->data["Input"]["person_id"] = $newPeopleId;
+                    $this->request->data["Input"]["events_registration_type_id"] = $this->request->data["User"]["registration_type_id"];
+                    $this->loadModel("Input");
+                    $this->Input->save($this->request->data);
+                    $this->Session->setFlash('Registro realizado con exito', 'good');
+                } catch (Exception $exc) {
+                    $error2 = $exc->getCode();
+                    if ($error2 == '23000') {
+                        $this->Session->setFlash('Ya existe un usuario con ese documento', 'error');
+                    }
+                }
+            } else {
+                $this->Session->setFlash('Tarjeta no esta registrada en el sistema', 'Error');
+            }
+        }
+
+        //Listo los eventos
+        $this->loadModel("Event");
+        $events = $this->Event->find("list", array(
+            "fields" => array(
+                "Event.id",
+                "Event.even_nombre"
+            )
+        ));
+        $this->set('events', $events);
+    }
+
+    public function getPersonalDataByEvent() {
+        $this->layout = "webservices";
+        $eventId = $this->request->data("event_id");
+        $this->loadModel('Forms');
+        $form = $this->Forms->findByEventId($eventId);
+        $this->loadModel('FormsPersonalDatum');
+        $formPersonal = $this->FormsPersonalDatum->findAllByFormId($form["Forms"]["id"]);
+        $this->set(
+                array(
+                    "datos" => $formPersonal,
+                    "_serialize" => array("datos")
+                )
+        );
+
     }
 
 }
