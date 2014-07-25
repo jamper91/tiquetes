@@ -479,28 +479,50 @@ class UsersController extends AppController {
 
     public function registrar() {
         if ($this->request->is("POST")) {
-            $this->loadModel('People');
 
-            //Creo y almaceno a la persona
-            $newPeole = $this->People->create();
-            $this->People->save($this->request->data);
-            $newPeopleId = $this->People->getLastInsertId();
+            //Primero determino si la tarjeta esta registrada en el sistema
+            $this->loadModel("Input");
+            $input = $this->Input->find('first', array(
+                "conditions" => array(
+                    "Input.entr_codigo" => $this->request->data["Input"]["entr_codigo"]
+                )
+            ));
+            if ($input) {
+
+                try {
+                    $this->loadModel('People');
+
+                    //Creo y almaceno a la persona
+                    $newPeole = $this->People->create();
+                    $this->People->save($this->request->data);
+                    $newPeopleId = $this->People->getLastInsertId();
 
 //            Almaceno la informacion de la persona
-            $this->loadModel('Data');
-            $cont = 0;
-            foreach ($this->request->data["Data"] as $value) {
-                $this->request->data["Data"][$cont]["person_id"] = $newPeopleId;
-                $cont++;
+                    $this->loadModel('Data');
+                    $cont = 0;
+                    foreach ($this->request->data["Data"] as $value) {
+                        $this->request->data["Data"][$cont]["person_id"] = $newPeopleId;
+                        $cont++;
+                    }
+                    $this->Data->saveAll($this->request->data['Data']);
+
+
+                    //Agrego la entrada
+                    $this->request->data["Input"]["id"] = $input["Input"]["id"];
+                    $this->request->data["Input"]["person_id"] = $newPeopleId;
+                    $this->request->data["Input"]["events_registration_type_id"] = $this->request->data["User"]["registration_type_id"];
+                    $this->loadModel("Input");
+                    $this->Input->save($this->request->data);
+                    $this->Session->setFlash('Registro realizado con exito', 'good');
+                } catch (Exception $exc) {
+                    $error2 = $exc->getCode();
+                    if ($error2 == '23000') {
+                        $this->Session->setFlash('Ya existe un usuario con ese documento', 'error');
+                    }
+                }
+            } else {
+                $this->Session->setFlash('Tarjeta no esta registrada en el sistema', 'Error');
             }
-            $this->Data->saveAll($this->request->data['Data']);
-
-
-            //Agrego la entrada
-            $this->request->data["Input"]["person_id"] = $newPeopleId;
-            $this->request->data["Input"]["events_registration_type_id"] = $this->request->data["User"]["registration_type_id"];
-            $this->loadModel("Input");
-            $this->Input->save($this->request->data);
         }
 
         //Listo los eventos
