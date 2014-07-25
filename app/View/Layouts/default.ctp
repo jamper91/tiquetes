@@ -35,8 +35,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         echo $this->Html->script(array('matrix', 'matrix.dashboard', 'jquery.gritter.min', 'matrix.interface', 'matrix.chat', 'jquery.validate', 'matrix.form_validation', 'jquery.wizard', 'jquery.uniform'));
         echo $this->Html->script(array('select2.min', 'matrix.popover', 'jquery.dataTables.min', 'matrix.tables'));
         ?>
-        <link href="http://localhost/tiquetes/font-awesome/css/font-awesome.css" rel="stylesheet" />
-
+        <link href="http://localhost/tiquetes/font-awesome/css/font-awesome.css" rel="stylesheet" />        
         <?php
         echo $this->Html->meta('icon');
 
@@ -46,6 +45,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         echo $this->fetch('script');
         ?>
         <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="http://malsup.github.com/jquery.form.js"></script> 
     </head>
 
     <body>
