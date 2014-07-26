@@ -35,8 +35,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         echo $this->Html->script(array('matrix', 'matrix.dashboard', 'jquery.gritter.min', 'matrix.interface', 'matrix.chat', 'jquery.validate', 'matrix.form_validation', 'jquery.wizard', 'jquery.uniform'));
         echo $this->Html->script(array('select2.min', 'matrix.popover', 'jquery.dataTables.min', 'matrix.tables'));
         ?>
-        <link href="http://localhost/tiquetes/font-awesome/css/font-awesome.css" rel="stylesheet" />
-
+        <link href="http://localhost/tiquetes/font-awesome/css/font-awesome.css" rel="stylesheet" />        
         <?php
         echo $this->Html->meta('icon');
 
@@ -46,6 +45,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         echo $this->fetch('script');
         ?>
         <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="http://malsup.github.com/jquery.form.js"></script> 
     </head>
 
     <body>
@@ -165,11 +165,23 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                 <li class="submenu"  > 
                     <a href="#">
                         <i class="icon icon-th-list"></i> 
-                        <span>Gestionar Evento</span>
+                        <span>Gestionar Escenario</span>
                     </a>
                     <ul>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Events", "action" => "add")); ?>">Crear evento</a></li>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Events", "action" => "index")); ?>">Listar eventos</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Stages", "action" => "add")); ?>">Crear Escenario</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Stages", "action" => "index")); ?>">Listar Escenarios</a></li>
+                    </ul>
+                </li>
+                <li class="submenu"  > 
+                    <a href="#">
+                        <i class="icon icon-th-list"></i> 
+                        <span>Gestionar Eventos</span>
+                    </a>
+                    <ul>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Locations", "action" => "add")); ?>">Crear Localidad</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Shelves", "action" => "add")); ?>">Crear Grupo de Estan</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Inputs", "action" => "add")); ?>">Crear entradas por Evento</a></li>
+                        
                     </ul>
                 </li>
             </ul>

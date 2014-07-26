@@ -1,11 +1,11 @@
 <?php
-App::uses('ShelvesController', 'Controller');
+App::uses('LocationsShelvesController', 'Controller');
 
 /**
- * ShelvesController Test Case
+ * LocationsShelvesController Test Case
  *
  */
-class ShelvesControllerTest extends ControllerTestCase {
+class LocationsShelvesControllerTest extends ControllerTestCase {
 
 /**
  * Fixtures
@@ -13,9 +13,8 @@ class ShelvesControllerTest extends ControllerTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'app.shelf',
-		'app.paper',
-		'app.event',
+		'app.locations_shelf',
+		'app.location',
 		'app.stage',
 		'app.city',
 		'app.state',
@@ -31,6 +30,21 @@ class ShelvesControllerTest extends ControllerTestCase {
 		'app.registration_type',
 		'app.category',
 		'app.entrada',
+		'app.paper',
+		'app.event',
+		'app.event_type',
+		'app.form',
+		'app.personal_datum',
+		'app.forms_personal_datum',
+		'app.committee',
+		'app.committees_event',
+		'app.companies_event',
+		'app.hotel',
+		'app.events_hotel',
+		'app.payment',
+		'app.events_payment',
+		'app.shelf',
+		'app.paper_input',
 		'app.delivery_method',
 		'app.delivery_methods_input',
 		'app.sale',
@@ -40,21 +54,7 @@ class ShelvesControllerTest extends ControllerTestCase {
 		'app.department',
 		'app.authorization',
 		'app.authorizations_user',
-		'app.committees_event',
-		'app.committee',
-		'app.committees_events_person',
-		'app.companies_event',
-		'app.location',
-		'app.event_type',
-		'app.form',
-		'app.personal_datum',
-		'app.forms_personal_datum',
-		'app.hotel',
-		'app.events_hotel',
-		'app.payment',
-		'app.events_payment',
-		'app.paper_input',
-		'app.locations_shelf'
+		'app.committees_events_person'
 	);
 
 /**

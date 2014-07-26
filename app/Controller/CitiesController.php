@@ -147,6 +147,7 @@ class CitiesController extends AppController {
             ),
             "recursive" => 0
         );
+        
         $cities = $this->City->find("all", $options);
         $log = $this->City->getDataSource()->getLog(false, false);
         //debug($log);

@@ -1,6 +1,7 @@
 
 <div class="stages form">
-    <?php echo $this->Form->create('Stage'); ?>
+    <form method="POST" action="add" id="Stage" name="Stage" enctype="multipart/form-data">
+    <?php // echo $this->Form->create('Stage'); ?>
     <fieldset>
         <legend><?php echo __('Add Stage'); ?></legend>
         <table>
@@ -33,31 +34,59 @@
                     ));
                     ?>
                 </td>
+                <td><?php echo 'Nombre' ?></td>           
+                <td>
+                    <?php
+                    echo $this->Form->input('esce_nombre',array(
+                        'label' => ''
+                    ));
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td><?php echo 'Direccion' ?></td>
+                <td>
+                    <?php
+                    echo $this->Form->input('esce_direccion',array(
+                        'label' => ''
+                    ));
+                    ?>
+                </td>
+                <td><?php echo 'telefono' ?></td>
+                <td>
+                    <?php
+                    echo $this->Form->input('esce_telefono', Array(
+                        'laber'=>''
+                    ));
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td><?php echo 'mapa' ?></td>
+                <td>
+                    <!--<input type="file" id="doc_file" name="doc_file">-->
+                    <?php echo $this->Form->input('doc_file', array('type' => 'file', 'label' => '')); ?>
+                </td>
             </tr>
         </table>
-        <?php
-        echo $this->Form->input('esce_nombre');
-        echo $this->Form->input('esce_direccion');
-        echo $this->Form->input('esce_telefono');
-        echo $this->Form->input('esce_mapa');
-        ?>
 
-        <input type="file" id="file" name="file" >
-        <div id="respuesta"></div>
+
     </fieldset>
-    <?php echo $this->Form->end(__('Submit')); ?>
+    <?php // echo $this->Form->end(__('Submit')); ?>
+    <input type="submit">
+    </form>
 </div>
 <script>
     $(document).ready(function() {
-        $("#StageStateId").html("");
-        $("#StageCityId").html("");
-        $("#StageCountryId").change(function() {
+        $("#state_id").html("");
+        $("#city_id").html("");
+        $("#country_id").change(function() {
             var url = urlbase + "states/getStatesByCountry.xml";
             var datos = {
                 country_id: $(this).val()
             };
             ajax(url, datos, function(xml) {
-                $("#StageStateId").html("<option>Seleccione un Departamento</option>");
+                $("#state_id").html("<option>Seleccione un Departamento</option>");
                 $("datos", xml).each(function() {
                     var obj = $(this).find("State");
                     var valor, texto;
@@ -67,19 +96,19 @@
                         var html = "<option value='$1'>$2</option>";
                         html = html.replace("$1", valor);
                         html = html.replace("$2", texto);
-                        $("#StageStateId").append(html);
+                        $("#state_id").append(html);
                     }
                 });
             });
         });
-        $("#StageStateId").change(function() {
+        $("#state_id").change(function() {
             var url2 = urlbase + "cities/getCitiesByState.xml";
             var datos2 = {
                 state_id: $(this).val()
             };
 
             ajax(url2, datos2, function(xml) {
-                $("#StageCityId").html("<option>Seleccione una ciudad</option>");
+                $("#city_id").html("<option>Seleccione una ciudad</option>");
                 $("datos", xml).each(function() {
                     var obj = $(this).find("City");
                     var valor, texto;
@@ -89,27 +118,41 @@
                         var html = "<option value='$1'>$2</option>";
                         html = html.replace("$1", valor);
                         html = html.replace("$2", texto);
-                        $("#StageCityId").append(html);
+                        $("#city_id").append(html);
                     }
                 });
             });
         });
 
-        $("input[name='file']").on("change", function() {
-            var ruta = urlbase + "stages/imagenAjax.xml";
-            alert("entro a la imagen:  "+$("#file").val());
-            $.ajax({
-                url: ruta,
-                type: "POST",
-                data: {"file": $("#file").val()},
-                contentType: false,
-                processData: false,
-                success: function(data) {
-                    alert("salio a la imagen"+data);
-                    $("#respuesta").html(data);
-                }
-            });
-        });
+//        $("#doc_file").change(function() {
+//            alert("entra");
+////            var ruta = urlbase + "stages/imagenAjax.xml";
+////            alert("entro a la imagen:  "+$("#file").val());
+//            var url3 = urlbase + "stages/imagenAjax.xml";
+//            var datos3 = {
+//                doc_file: $(this).val()
+//            };
+//            ajax(url3, datos3, function(xml) {
+////                $("#StageCityId").html("<option>Seleccione una ciudad</option>");
+//                $("datos", xml).each(function() {
+////                    alert("regresa");
+//                    var obj = $(this).text();
+////                    var obj = $(xml).find("datos");
+//                    alert(obj.toString());
+//                });
+//            });
+////            $.ajax({
+////                url: ruta,
+////                type: "POST",
+////                data: $("#Image").serialize(), ,
+////                        contentType: false,
+////                processData: false,
+////                success: function(data) {
+////                    alert("salio a la imagen" + data);
+////                    $("#respuesta").html(data);
+////                }
+////            });
+//        });
     });
 //       
 </script>

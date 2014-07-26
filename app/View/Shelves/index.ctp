@@ -1,13 +1,11 @@
 <div class="shelves index">
-	<h2><?php echo __('Shelves'); ?></h2>
+	<h2><?php echo __('Estands'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<thead>
 	<tr>
-			<th><?php echo $this->Paginator->sort('id'); ?></th>
-			<th><?php echo $this->Paginator->sort('location_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('esta_nombre'); ?></th>
-			<th><?php echo $this->Paginator->sort('esta_estado'); ?></th>
-			<th><?php echo $this->Paginator->sort('esta_precio'); ?></th>
+			<th><?php echo $this->Paginator->sort('id'); ?></th>			
+			<th><?php echo $this->Paginator->sort('esta_nombre'); ?></th>			
+			<th><?php echo $this->Paginator->sort('cantidad'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	</thead>
@@ -15,12 +13,12 @@
 	<?php foreach ($shelves as $shelf): ?>
 	<tr>
 		<td><?php echo h($shelf['Shelf']['id']); ?>&nbsp;</td>
-		<td>
+<!--		<td>
 			<?php echo $this->Html->link($shelf['Location']['id'], array('controller' => 'locations', 'action' => 'view', $shelf['Location']['id'])); ?>
-		</td>
+		</td>-->
 		<td><?php echo h($shelf['Shelf']['esta_nombre']); ?>&nbsp;</td>
-		<td><?php echo h($shelf['Shelf']['esta_estado']); ?>&nbsp;</td>
-		<td><?php echo h($shelf['Shelf']['esta_precio']); ?>&nbsp;</td>
+		<td><?php echo h($shelf['Shelf']['cantidad']); ?>&nbsp;</td>
+		<!--<td><?php echo h($shelf['Shelf']['esta_precio']); ?>&nbsp;</td>-->
 		<td class="actions">
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $shelf['Shelf']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $shelf['Shelf']['id']), array(), __('Are you sure you want to delete # %s?', $shelf['Shelf']['id'])); ?>

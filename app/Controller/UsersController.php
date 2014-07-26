@@ -573,6 +573,7 @@ class UsersController extends AppController {
                     $this->request->data["Input"]["person_id"] = $newPeopleId;
                     $this->request->data["Input"]["events_registration_type_id"] = $this->request->data["User"]["registration_type_id"];
                     $this->loadModel("Input");
+//                    debug($this->request->data["Input"]);
                     $this->Input->save($this->request->data);
                     $this->Session->setFlash('Registro realizado con exito', 'good');
                 } catch (Exception $exc) {

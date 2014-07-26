@@ -171,7 +171,7 @@ echo $this->Html->css(array('multi-select'));
                             formulario = formulario.replace("$1", event_id);
                             //Datos para almacenar en la tabla inputs
                             formulario += "<input style='display:none' type='text' name='data[Input][events_registration_type_id]' value='-1'></input>";
-                            formulario += "<input style='display:none' type='text' name='data[Input][category_id]' value='-1' id='InputCategoryId'></input>";
+//                            formulario += "<input style='display:none' type='text' name='data[Input][category_id]' value='-1' id='InputCategoryId'></input>";
                             formulario += "<input style='display:none' type='text' name='data[Input][person_id]' value='-1'></input>";
                             $("#formulario").html(formulario);
                         }
