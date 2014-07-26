@@ -8,7 +8,7 @@
 		echo $this->Form->input('esce_nombre');
 		echo $this->Form->input('esce_direccion');
 		echo $this->Form->input('esce_telefono');
-		echo $this->Form->input('esce_mapa');
+                echo $this->Form->input('esce_mapa', array('type' => 'file')); //, 'label' => ''
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
