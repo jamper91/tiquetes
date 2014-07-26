@@ -245,8 +245,9 @@ class UsersController extends AppController {
 
     public function login() {
         if ($this->request->is('post')) {
-            debug($this->Auth->login());
-            if ($this->Auth->login()) {
+            //debug($this->request->data);
+            //debug($this->Auth->login());
+            if ($this->Auth->login() == false) {
                 $this->Session->write('User.username', $this->request->data["User"]["username"]);
                 $options = array(
                     'conditions' => array(
@@ -257,10 +258,12 @@ class UsersController extends AppController {
                     ),
                     'recursive' => -2
                 );
-                $this->Session->setFlash(__('Bienvenido ' . $this->request->data["User"]["username"]));
+                //$this->Session->setFlash(__('Bienvenido ' . $this->request->data["User"]["username"]));
                 $datos = $this->User->find('first', $options);
+                //debug($datos['User']['id']);
                 $this->Session->write('User.id', $datos['User']['id']);
-                return $this->redirect($this->Auth->redirect());
+                //debug();
+                //return $this->redirect($this->Auth->redirect());
             }
             $this->Session->setFlash(__('Invalid username or password, try again'));
         }
@@ -386,8 +389,6 @@ class UsersController extends AppController {
             foreach ($datos as $dato) {
                 while ($value = current($dato)) {
 
-// $nuevo=substr(key($dato),1);
-// debug($nuevo);
 
                     if (key($dato) != 'documento') {
                         $this->loadModel('Data');
@@ -404,6 +405,7 @@ class UsersController extends AppController {
                     next($dato);
                 }
             }
+          return $this->redirect(array('action' => 'elegirEvento'));  
         }
         $this->set('form', $formPersonal);
     }
@@ -414,6 +416,7 @@ class UsersController extends AppController {
 
         $this->loadModel('PersonalDatum');
         $formPersonal =$this->PersonalDatum->find('all');
+        //debug($this->Auth->user('User.username'));
 
 
         if ($this->request->is('post')) {
@@ -492,7 +495,7 @@ class UsersController extends AppController {
                   array_push($datosVista2, $personas2); 
 
               }
-
+                //debug($datosVista);
                
                 $this->set('datosvista', $datosVista);
                 $this->set('datosvista2', $datosVista2);
@@ -608,6 +611,30 @@ class UsersController extends AppController {
                 )
         );
 
+    }
+
+    public function add3(){
+        if ($this->request->is("POST")) {
+            $data = $this->data;
+            $this->loadModel('People');
+            $pers_id = $this->Session->read('User.id');
+            debug($pers_id);
+
+            $datos = $this->request->data;
+            $documento = $datos['user'];
+
+
+            $person_id = $this->People->find("list", array(
+                "conditions"=> array(
+                    'People.pers_documento' => $documento),
+                "fields" => array(
+                    "People.id",
+                )
+            ));
+           
+            //debug($person_id);
+
+        }
     }
 
 }
