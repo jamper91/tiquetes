@@ -70,28 +70,49 @@ class EventsController extends AppController {
 
         //$cities = $this->Stage->City->find('list');
         $this->set(compact('cities'));
-        
+
         $this->set(compact('stages'));
 //        $stages = $this->Event->Stage->find('list');
-        
+
         $eventTypesName = $this->Event->EventType->find('list', array(
             "fields" => array(
                 "EventType.nombre"
             ),
             "recursive" => -2
         ));
+
+
+        $committees = $this->Event->Committee->find('list', array(
+            "fields" => array(
+                "Committee.id",
+                "Committee.nombre"
+            )
+        ));
         
+        $companies = $this->Event->Company->find('list', array(
+            "fields" => array(
+                "Company.id",
+                "Company.empr_nombre"
+            )
+        ));
         
-//        $eventTypes = $this->Event->EventType->find('list');
-        $committees = $this->Event->Committee->find('list');
-        $companies = $this->Event->Company->find('list');
-        $hotels = $this->Event->Hotel->find('list');
-        $payments = $this->Event->Payment->find('list');
+        $hotels = $this->Event->Hotel->find('list', array(
+            "fields" => array(
+                "Hotel.id",
+                "Hotel.hote_nombre"
+            )
+        ));
+        $paymentsName = $this->Event->Payment->find('list', array(
+            "fields" => array(
+                "Payment.id",
+                "Payment.mepa_descripcion"
+            )
+        ));
+
         $registrationTypes = $this->Event->RegistrationType->find('list');
-        $this->set(compact('stages', 'eventTypes', 'committees', 'companies', 'hotels', 'payments', 'registrationTypes'));
-        
+        $this->set(compact('stages', 'eventTypes', 'committees', 'companies', 'hotels', 'paymentsName', 'registrationTypes'));
+
         $this->set("eventTypesName", $eventTypesName);
-        
     }
 
     /**

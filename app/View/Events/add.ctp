@@ -1,3 +1,7 @@
+<?php
+echo $this->Html->script(array('jquery.multi-select'));
+echo $this->Html->css(array('multi-select'));
+?>
 <div class="events form">
     <?php // echo $this->Form->create('Event'); ?>
     <form method="POST" action="add" id="Event" name="Event" enctype="multipart/form-data">
@@ -47,26 +51,88 @@
             echo $this->Form->input('even_palaClave');
             echo $this->Form->input('even_observaciones');
             echo $this->Form->input('even_estado');
-            
+
 //            echo $this->Form->input('even_imagen1');
             echo $this->Form->input('even_imagen1', array('type' => 'file', 'label' => 'Imagen 1'));
 //            echo $this->Form->input('even_imagen2');
             echo $this->Form->input('even_imagen2', array('type' => 'file', 'label' => 'Imagen 2'));
-            
+
             echo $this->Form->input('even_fechInicio');
             echo $this->Form->input('even_fechFinal');
             echo $this->Form->input('even_publicar');
             echo $this->Form->input('even_codigo');
-            echo $this->Form->input('Committee');
-            echo $this->Form->input('Company');
-            echo $this->Form->input('Hotel');
-            echo $this->Form->input('Payment');
+//            echo $this->Form->input('Committee');
+//            echo $this->Form->input('Company');
+//            echo $this->Form->input('Hotel');
+            ?>
+            <!--id="EventsCommittee"-->
+            <div class="control-group" >
+                <label class="control-label">Comites</label>
+                <?php
+                echo $this->Form->input('Committee', array(
+                    "div" => array(
+                        "class" => "controls"
+                    ),
+                    "label" => "",
+                    "options" => $committees,
+                    "multiple" => true
+                ));
+//                    
+                ?>
+            </div>
+            <!--id="EventsCompany"-->
+            <div class="control-group" >
+                <label class="control-label">Empresas</label>
+                <?php
+                echo $this->Form->input('Company', array(
+                    "div" => array(
+                        "class" => "controls"
+                    ),
+                    "label" => "",
+                    "options" => $companies,
+                    "multiple" => true
+                ));
+//                    
+                ?>
+            </div>
+            <!--id="EventsHotel"-->
+            <div class="control-group" >
+                <label class="control-label">Hoteles</label>
+                <?php
+                echo $this->Form->input('Hotel', array(
+                    "div" => array(
+                        "class" => "controls"
+                    ),
+                    "label" => "",
+                    "options" => $hotels,
+                    "multiple" => true
+                ));
+//                    
+                ?>
+            </div>
+            <!--id="EventsPayment"-->
+            <div class="control-group"  >
+                <label class="control-label">Medios de Pago</label>
+                <?php
+                echo $this->Form->input('Payment', array(
+                    "div" => array(
+                        "class" => "controls"
+                    ),
+                    "label" => "",
+                    "options" => $paymentsName,
+                    "multiple" => true
+                ));
+//                    
+                ?>
+            </div>
+            <?php
+//            echo $this->Form->input('Payment');
             echo $this->Form->input('RegistrationType');
             ?>
         </fieldset>
         <input type="submit">
     </form>
-    <?php // echo $this->Form->end(__('Submit')); ?>
+<?php // echo $this->Form->end(__('Submit'));  ?>
 </div>
 <script>
 
@@ -138,5 +204,33 @@
                 });
             });
         });
+    });
+    $('#Payment').multiSelect({
+        afterSelect: function(values) {
+              //  alert("Select value: " + values);
+//            console.log($('#FormPersonalDatumId option[value="' + values + '"]').html());
+            $('#Payment option[value="' + values + '"]').attr("selected", "selected")
+        }
+    });//
+    $('#Committee').multiSelect({
+        afterSelect: function(values) {
+              //  alert("Select value: " + values);
+//            console.log($('#FormPersonalDatumId option[value="' + values + '"]').html());
+            $('#Committee option[value="' + values + '"]').attr("selected", "selected")
+        }
+    });
+    $('#Company').multiSelect({
+        afterSelect: function(values) {
+              //  alert("Select value: " + values);
+//            console.log($('#FormPersonalDatumId option[value="' + values + '"]').html());
+            $('#Company option[value="' + values + '"]').attr("selected", "selected")
+        }
+    });
+    $('#Hotel').multiSelect({
+        afterSelect: function(values) {
+              //  alert("Select value: " + values);
+//            console.log($('#FormPersonalDatumId option[value="' + values + '"]').html());
+            $('#Hotel option[value="' + values + '"]').attr("selected", "selected")
+        }
     });
 </script>

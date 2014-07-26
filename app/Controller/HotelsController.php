@@ -105,4 +105,8 @@ class HotelsController extends AppController {
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
+   
+        public function getHotelsByCity(){
+            
+        }
 }
