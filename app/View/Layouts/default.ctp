@@ -165,23 +165,24 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                 <li class="submenu"  > 
                     <a href="#">
                         <i class="icon icon-th-list"></i> 
-                        <span>Gestionar Escenario</span>
+                        <span>Gestionar Eventos</span>
                     </a>
                     <ul>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Stages", "action" => "add")); ?>">Crear Escenario</a></li>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Stages", "action" => "index")); ?>">Listar Escenarios</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "EventTypes", "action" => "add")); ?>">Crear Tipos de Evento</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Events", "action" => "add")); ?>">Crear Evento</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Locations", "action" => "add")); ?>">Crear Localidad</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Shelves", "action" => "add")); ?>">Crear Grupo de Estan</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Inputs", "action" => "add")); ?>">Crear entradas por Evento</a></li>                        
                     </ul>
                 </li>
                 <li class="submenu"  > 
                     <a href="#">
                         <i class="icon icon-th-list"></i> 
-                        <span>Gestionar Eventos</span>
+                        <span>Gestionar Hoteles</span>
                     </a>
                     <ul>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Locations", "action" => "add")); ?>">Crear Localidad</a></li>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Shelves", "action" => "add")); ?>">Crear Grupo de Estan</a></li>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Inputs", "action" => "add")); ?>">Crear entradas por Evento</a></li>
-                        
+                        <li><a href="<?= $this->Html->url(array("controller" => "Hotels", "action" => "add")); ?>">Crear Hotel</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Hotels", "action" => "index")); ?>">Lista Hoteles</a></li>                        
                     </ul>
                 </li>
             </ul>
