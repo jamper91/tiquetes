@@ -15,6 +15,9 @@ class EventsRegistrationTypeTest extends CakeTestCase {
 	public $fixtures = array(
 		'app.events_registration_type',
 		'app.registration_type',
+		'app.category',
+		'app.entrada',
+		'app.paper',
 		'app.event',
 		'app.stage',
 		'app.city',
@@ -27,12 +30,6 @@ class EventsRegistrationTypeTest extends CakeTestCase {
 		'app.forms_personal_data',
 		'app.input',
 		'app.input_state',
-		'app.category',
-		'app.entrada',
-		'app.paper',
-		'app.shelf',
-		'app.location',
-		'app.paper_input',
 		'app.delivery_method',
 		'app.delivery_methods_input',
 		'app.sale',
@@ -46,6 +43,9 @@ class EventsRegistrationTypeTest extends CakeTestCase {
 		'app.committee',
 		'app.committees_events_person',
 		'app.companies_event',
+		'app.location',
+		'app.shelf',
+		'app.locations_shelf',
 		'app.event_type',
 		'app.form',
 		'app.personal_datum',
@@ -53,7 +53,8 @@ class EventsRegistrationTypeTest extends CakeTestCase {
 		'app.hotel',
 		'app.events_hotel',
 		'app.payment',
-		'app.events_payment'
+		'app.events_payment',
+		'app.paper_input'
 	);
 
 /**

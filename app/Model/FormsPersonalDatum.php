@@ -5,6 +5,7 @@ App::uses('AppModel', 'Model');
  *
  * @property PersonalDatum $PersonalDatum
  * @property Form $Form
+ * @property Data $Data
  */
 class FormsPersonalDatum extends AppModel {
 
@@ -32,4 +33,26 @@ class FormsPersonalDatum extends AppModel {
 			'order' => ''
 		)
 	);
+
+/**
+ * hasMany associations
+ *
+ * @var array
+ */
+	public $hasMany = array(
+		'Data' => array(
+			'className' => 'Data',
+			'foreignKey' => 'forms_personal_datum_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		)
+	);
+
 }

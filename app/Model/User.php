@@ -88,6 +88,6 @@ class User extends AppModel {
 			'offset' => '',
 			'finderQuery' => '',
 		)
-	);     
-       
+	);
+
 }

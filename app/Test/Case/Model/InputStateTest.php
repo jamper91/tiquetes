@@ -29,6 +29,7 @@ class InputStateTest extends CakeTestCase {
 		'app.entrada',
 		'app.category',
 		'app.paper_input',
+		'app.locations_shelf',
 		'app.event_type',
 		'app.form',
 		'app.personal_datum',

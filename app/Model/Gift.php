@@ -3,6 +3,7 @@ App::uses('AppModel', 'Model');
 /**
  * Gift Model
  *
+ * @property Category $Category
  */
 class Gift extends AppModel {
 
@@ -22,5 +23,22 @@ class Gift extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
+	);
+
+	//The Associations below have been created with all possible keys, those that are not needed can be removed
+
+/**
+ * belongsTo associations
+ *
+ * @var array
+ */
+	public $belongsTo = array(
+		'Category' => array(
+			'className' => 'Category',
+			'foreignKey' => 'category_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		)
 	);
 }

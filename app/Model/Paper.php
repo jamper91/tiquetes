@@ -6,7 +6,6 @@ App::uses('AppModel', 'Model');
  * @property Event $Event
  * @property Shelf $Shelf
  * @property Entrada $Entrada
- * @property PaperInput $PaperInput
  */
 class Paper extends AppModel {
 
@@ -130,19 +129,6 @@ class Paper extends AppModel {
 	public $hasMany = array(
 		'Entrada' => array(
 			'className' => 'Entrada',
-			'foreignKey' => 'paper_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
-		'PaperInput' => array(
-			'className' => 'PaperInput',
 			'foreignKey' => 'paper_id',
 			'dependent' => false,
 			'conditions' => '',

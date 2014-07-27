@@ -70,19 +70,28 @@ class Location extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
-		),
+		)
+	);
+
+
+/**
+ * hasAndBelongsToMany associations
+ *
+ * @var array
+ */
+	public $hasAndBelongsToMany = array(
 		'Shelf' => array(
 			'className' => 'Shelf',
+			'joinTable' => 'locations_shelves',
 			'foreignKey' => 'location_id',
-			'dependent' => false,
+			'associationForeignKey' => 'shelf_id',
+			'unique' => 'keepExisting',
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
 			'limit' => '',
 			'offset' => '',
-			'exclusive' => '',
 			'finderQuery' => '',
-			'counterQuery' => ''
 		)
 	);
 

@@ -32,7 +32,7 @@ class SaleFixture extends CakeTestFixture {
 			'sale_id' => '',
 			'cantidad' => 1,
 			'tipo_de_pago' => 'Lorem ipsum dolor sit amet',
-			'fecha' => '2014-07-22'
+			'fecha' => '2014-07-28'
 		),
 	);
 

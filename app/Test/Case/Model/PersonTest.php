@@ -35,6 +35,7 @@ class PersonTest extends CakeTestCase {
 		'app.sale',
 		'app.inputs_sale',
 		'app.paper_input',
+		'app.locations_shelf',
 		'app.event_type',
 		'app.form',
 		'app.personal_datum',

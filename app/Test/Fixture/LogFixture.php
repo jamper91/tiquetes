@@ -24,8 +24,7 @@ class LogFixture extends CakeTestFixture {
 		'descripcion' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id_log', 'unique' => 1),
-			'id_log' => array('column' => 'id_log', 'unique' => 1),
-			'id' => array('column' => 'id', 'unique' => 0)
+			'id_log' => array('column' => 'id_log', 'unique' => 1)
 		),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
@@ -39,7 +38,7 @@ class LogFixture extends CakeTestFixture {
 		array(
 			'id_log' => '',
 			'id' => '',
-			'fecha_realizado' => 1405998746,
+			'fecha_realizado' => 1406503033,
 			'descripcion' => 'Lorem ipsum dolor sit amet'
 		),
 	);

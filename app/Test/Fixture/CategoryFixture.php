@@ -14,6 +14,7 @@ class CategoryFixture extends CakeTestFixture {
 		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
 		'descripcion' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'precio' => array('type' => 'float', 'null' => true, 'default' => null, 'unsigned' => false),
+		'event_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
 			'id' => array('column' => 'id', 'unique' => 1)
@@ -30,7 +31,8 @@ class CategoryFixture extends CakeTestFixture {
 		array(
 			'id' => '',
 			'descripcion' => 'Lorem ipsum dolor sit amet',
-			'precio' => 1
+			'precio' => 1,
+			'event_id' => 1
 		),
 	);
 

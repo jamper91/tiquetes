@@ -33,6 +33,7 @@ class EventTypeTest extends CakeTestCase {
 		'app.paper',
 		'app.shelf',
 		'app.location',
+		'app.locations_shelf',
 		'app.paper_input',
 		'app.delivery_method',
 		'app.delivery_methods_input',

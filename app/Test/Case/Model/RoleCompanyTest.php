@@ -30,6 +30,7 @@ class RoleCompanyTest extends CakeTestCase {
 		'app.paper',
 		'app.shelf',
 		'app.location',
+		'app.locations_shelf',
 		'app.entrada',
 		'app.category',
 		'app.input',

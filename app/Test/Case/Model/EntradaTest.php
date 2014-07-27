@@ -45,6 +45,7 @@ class EntradaTest extends CakeTestCase {
 		'app.companies_event',
 		'app.location',
 		'app.shelf',
+		'app.locations_shelf',
 		'app.event_type',
 		'app.form',
 		'app.personal_datum',
