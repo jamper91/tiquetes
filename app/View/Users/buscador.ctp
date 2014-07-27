@@ -25,7 +25,7 @@
 	 } ?>
 	</tr>
 	<tr>
-			<td >Número de Documento: </td>
+			<td >N&uacute;mero de Documento: </td>
             <td><input type="text" id="PersonalDatum_documento" name="data[PersonalDatum][documento]"/></td>
             <td>
 	          	&nbsp;
@@ -36,9 +36,11 @@
 	  
  </div>
 <?php if(isset($datosvista)){?>
+
   	<div class="widget-box">
         <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-            <h5>Resultado de la búsqueda</h5>
+            <h5>Resultado de la b&uacute;squeda</h5>
+           
         </div>
     	<div class="widget-content nopadding">
             <table class="table table-bordered data-table">
@@ -53,6 +55,7 @@
 	                 
 							<?php } ?>
                         <th>Documento</th>
+                        <th>Opciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -72,8 +75,10 @@
 	                             			if($aux2343==$PersonalDatum_id){
 	                             				echo "<td>".$dato["datas"]["descripcion"]."</td>";
 	                             				$esta=1;
-	                             			}
-	                             		}	
+	                             			} ?>
+	                             				  
+
+	                             		<?php }	
 	                             		if($esta==0)
 	                             		{
 	                             			echo "<td>-</td>";
@@ -81,13 +86,15 @@
 	                 
 								 	} 
 								 ?>
-	                      
-	                        	
-		                       
 	                        	<td><?php $aux1 = $datosvista2[$con];
 	                        			$aux1 = $aux1[0];
 	                        			echo $aux1['people']['pers_documento']; 
 	                        		 ?>
+	                        	</td>
+	                        	<td>
+		                      <?php echo $this->Form->create('User', array('action' => 'add3')); ?>
+	                            <input type='hidden' id='datosUsuario' name='user' value='<?php echo $aux1['people']['pers_documento'];?>'>
+	                           <?php echo $this->Form->end(__('Registrar')); ?>
 	                        	</td>
 		                    </tr>
                     <?php $con ++;
