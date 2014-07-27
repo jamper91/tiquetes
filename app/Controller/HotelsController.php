@@ -107,6 +107,29 @@ class HotelsController extends AppController {
 	}
    
         public function getHotelsByCity(){
-            
-        }
+            $this->layout = "webservices";
+        $city_id = $this->request->data["city_id"]; //State
+        //debug($state_id);
+        $options = array(
+            "conditions" => array(
+                "Hotel.city_id" => $city_id
+            ),
+            "fields" => array(
+                "Hotel.id",
+                "Hotel.hote_nombre"
+            ),
+            "recursive" => 0
+        );
+        
+        $hotels = $this->Hotel->find("all", $options);
+        $log = $this->Hotel->getDataSource()->getLog(false, false);
+        //debug($log);
+//        var_dump($cities);
+        $this->set(
+                array(
+                    "datos" => $hotels,
+                    "_serialize" => array("datos")
+                )
+        );
+    }
 }

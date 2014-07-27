@@ -125,9 +125,23 @@ echo $this->Html->css(array('multi-select'));
 //                    
                 ?>
             </div>
+            <div class="control-group"  >
+                <label class="control-label">Medios de Pago</label>
+                <?php
+                echo $this->Form->input('RegistrationType', array(
+                    "div" => array(
+                        "class" => "controls"
+                    ),
+                    "label" => "",
+                    "options" => $paymentsName,
+                    "multiple" => true
+                ));
+//                    
+                ?>
+            </div>
             <?php
 //            echo $this->Form->input('Payment');
-            echo $this->Form->input('RegistrationType');
+//            echo $this->Form->input('RegistrationType');
             ?>
         </fieldset>
         <input type="submit">

@@ -73,6 +73,7 @@ class EventsController extends AppController {
 
         $this->set(compact('stages'));
 //        $stages = $this->Event->Stage->find('list');
+        $this->set(compact('hotels'));
 
         $eventTypesName = $this->Event->EventType->find('list', array(
             "fields" => array(
@@ -96,12 +97,12 @@ class EventsController extends AppController {
             )
         ));
         
-        $hotels = $this->Event->Hotel->find('list', array(
-            "fields" => array(
-                "Hotel.id",
-                "Hotel.hote_nombre"
-            )
-        ));
+//        $hotels = $this->Event->Hotel->find('list', array(
+//            "fields" => array(
+//                "Hotel.id",
+//                "Hotel.hote_nombre"
+//            )
+//        ));
         $paymentsName = $this->Event->Payment->find('list', array(
             "fields" => array(
                 "Payment.id",
