@@ -44,6 +44,13 @@ class Entrada extends AppModel {
 			'limit' => '',
 			'offset' => '',
 			'finderQuery' => '',
+		),
+            'Categoria' => array(
+			'className' => 'Categoria',
+			'foreignKey' => 'categoria_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
 

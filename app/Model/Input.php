@@ -129,6 +129,13 @@ class Input extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
+            'Categoria' => array(
+			'className' => 'Categoria',
+			'foreignKey' => 'categoria_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
 		'InputState' => array(
 			'className' => 'InputState',
 			'foreignKey' => 'input_state_id',
@@ -157,6 +164,7 @@ class Input extends AppModel {
 			'fields' => '',
 			'order' => ''
 		)
+                
 	);
 
 /**

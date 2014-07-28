@@ -39,12 +39,12 @@
             "label" => "Evento",
             "options" => "Event.even_nombre",
         ));
-        echo $this->Form->input('category_id', array(
+        echo $this->Form->input('categoria_id', array(
             "div" => array(
                 "class" => "controls"
             ),
             "label" => "Tipo de Entrada",
-            "options" => "Category.descripcion"
+            "options" => "Categoria.descripcion"
         ));
         echo $this->Form->input('entr_codigo', array(
             "div" => array(
@@ -66,7 +66,7 @@
           $("#InputAddForm").submit(function(e){
               return false;
           });
-        $("#InputCategoryId").change(function(){            
+        $("#InputCategoriaId").change(function(){            
            document.getElementById("InputEntrCodigo").disabled = false;
         });
         $("input[id='InputEntrCodigo']").on('input', function(e) {
@@ -183,14 +183,14 @@
     });
     
     $("#InputEvenId").change(function() {
-        var url2 = urlbase + "categories/getCategoriesByEvent.xml";
+        var url2 = urlbase + "categorias/getCategoriesByEvent.xml";
         var datos2 = {
             even_id: $(this).val()
         };
         ajax(url2, datos2, function(xml) {       
-            $("#InputCategoryId").html("<option>Seleccione una Categoria</option>");
+            $("#InputCategoriaId").html("<option>Seleccione una Categoria</option>");
             $("datos", xml).each(function() {
-                var obj = $(this).find("Category");
+                var obj = $(this).find("Categoria");
                 var valor, texto;
                 valor = $("id", obj).text();
                 texto = $("name", obj).text();
@@ -198,7 +198,7 @@
                     var html = "<option value='$1'>$2</option>";
                     html = html.replace("$1", valor);
                     html = html.replace("$2", texto);
-                    $("#InputCategoryId").append(html);
+                    $("#InputCategoriaId").append(html);
                 }
             });
         });

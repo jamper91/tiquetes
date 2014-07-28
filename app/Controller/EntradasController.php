@@ -56,7 +56,7 @@ class EntradasController extends AppController {
 			}
 		}
 		$papers = $this->Entrada->Paper->find('list');
-		$categories = $this->Entrada->Category->find('list');
+		$categories = $this->Entrada->Categoria->find('list');
 		$this->set(compact('papers', 'categories'));
 	}
 
