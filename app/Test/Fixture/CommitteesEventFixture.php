@@ -12,13 +12,11 @@ class CommitteesEventFixture extends CakeTestFixture {
  */
 	public $fields = array(
 		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
-		'committee_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'index'),
-		'event_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
+		'committee_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
+		'event_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'id' => array('column' => 'id', 'unique' => 1),
-			'event_id' => array('column' => 'event_id', 'unique' => 0),
-			'committee_id' => array('column' => 'committee_id', 'unique' => 0)
+			'id' => array('column' => 'id', 'unique' => 1)
 		),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);

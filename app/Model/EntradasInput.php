@@ -1,12 +1,12 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * Category Model
+ * EntradasInput Model
  *
  * @property Entrada $Entrada
  * @property Input $Input
  */
-class Category extends AppModel {
+class EntradasInput extends AppModel {
 
 /**
  * Validation rules
@@ -14,9 +14,19 @@ class Category extends AppModel {
  * @var array
  */
 	public $validate = array(
-		'descripcion' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
+		'fecha' => array(
+			'datetime' => array(
+				'rule' => array('datetime'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
+		'ingresos' => array(
+			'numeric' => array(
+				'rule' => array('numeric'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -29,37 +39,24 @@ class Category extends AppModel {
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 /**
- * hasMany associations
+ * belongsTo associations
  *
  * @var array
  */
-	public $hasMany = array(
+	public $belongsTo = array(
 		'Entrada' => array(
 			'className' => 'Entrada',
-			'foreignKey' => 'category_id',
-			'dependent' => false,
+			'foreignKey' => 'entrada_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
+			'order' => ''
 		),
 		'Input' => array(
 			'className' => 'Input',
-			'foreignKey' => 'category_id',
-			'dependent' => false,
+			'foreignKey' => 'input_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
+			'order' => ''
 		)
 	);
-
 }

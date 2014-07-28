@@ -57,14 +57,70 @@ class EventsController extends AppController {
                 $this->Session->setFlash(__('The event could not be saved. Please, try again.'));
             }
         }
-        $stages = $this->Event->Stage->find('list');
-        $eventTypes = $this->Event->EventType->find('list');
-        $committees = $this->Event->Committee->find('list');
-        $companies = $this->Event->Company->find('list');
-        $hotels = $this->Event->Hotel->find('list');
-        $payments = $this->Event->Payment->find('list');
-        $registrationTypes = $this->Event->RegistrationType->find('list');
-        $this->set(compact('stages', 'eventTypes', 'committees', 'companies', 'hotels', 'payments', 'registrationTypes'));
+        $this->loadModel('Country');
+        $countriesName = $this->Country->find('list', array(
+            "fields" => array(
+                "Country.name"
+            ),
+            "recursive" => -2
+        ));
+        $this->set(compact('countriesName'));
+
+        $this->set(compact('state'));
+
+        //$cities = $this->Stage->City->find('list');
+        $this->set(compact('cities'));
+
+        $this->set(compact('stages'));
+//        $stages = $this->Event->Stage->find('list');
+        $this->set(compact('hotels'));
+
+        $eventTypesName = $this->Event->EventType->find('list', array(
+            "fields" => array(
+                "EventType.nombre"
+            ),
+            "recursive" => -2
+        ));
+
+
+        $committees = $this->Event->Committee->find('list', array(
+            "fields" => array(
+                "Committee.id",
+                "Committee.nombre"
+            )
+        ));
+        
+        $companies = $this->Event->Company->find('list', array(
+            "fields" => array(
+                "Company.id",
+                "Company.empr_nombre"
+            )
+        ));
+        
+//        $hotels = $this->Event->Hotel->find('list', array(
+//            "fields" => array(
+//                "Hotel.id",
+//                "Hotel.hote_nombre"
+//            )
+//        ));
+        $paymentsName = $this->Event->Payment->find('list', array(
+            "fields" => array(
+                "Payment.id",
+                "Payment.mepa_descripcion"
+            )
+        ));
+        
+        $registrationTypes = $this->Event->RegistrationType->find('list', array(
+            "fields" => array(
+                "RegistrationType.id",
+                "RegistrationType.nombre"
+            )
+        ));
+        
+//        $registrationTypes = $this->Event->RegistrationType->find('list');
+        $this->set(compact('stages', 'eventTypes', 'committees', 'companies', 'hotels', 'paymentsName', 'registrationTypes'));
+
+        $this->set("eventTypesName", $eventTypesName);
     }
 
     /**
@@ -90,7 +146,7 @@ class EventsController extends AppController {
             $this->request->data = $this->Event->find('first', $options);
         }
         $stages = $this->Event->Stage->find('list');
-        $eventTypes = $this->Event->EventType->find('list');
+//        $eventTypes = $this->Event->EventType->find('list');
         $committees = $this->Event->Committee->find('list');
         $companies = $this->Event->Company->find('list');
         $hotels = $this->Event->Hotel->find('list');

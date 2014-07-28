@@ -4,7 +4,7 @@ App::uses('AppModel', 'Model');
  * Data Model
  *
  * @property Person $Person
- * @property FormsPersonalData $FormsPersonalData
+ * @property FormsPersonalDatum $FormsPersonalDatum
  */
 class Data extends AppModel {
 
@@ -24,9 +24,9 @@ class Data extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'FormsPersonalData' => array(
-			'className' => 'FormsPersonalData',
-			'foreignKey' => 'forms_personal_data_id',
+		'FormsPersonalDatum' => array(
+			'className' => 'FormsPersonalDatum',
+			'foreignKey' => 'forms_personal_datum_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

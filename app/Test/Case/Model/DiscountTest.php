@@ -13,7 +13,8 @@ class DiscountTest extends CakeTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'app.discount'
+		'app.discount',
+		'app.categoria'
 	);
 
 /**

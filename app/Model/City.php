@@ -5,6 +5,7 @@ App::uses('AppModel', 'Model');
  *
  * @property State $State
  * @property Company $Company
+ * @property Hotel $Hotel
  * @property Person $Person
  * @property Stage $Stage
  */
@@ -53,6 +54,19 @@ class City extends AppModel {
 	public $hasMany = array(
 		'Company' => array(
 			'className' => 'Company',
+			'foreignKey' => 'city_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Hotel' => array(
+			'className' => 'Hotel',
 			'foreignKey' => 'city_id',
 			'dependent' => false,
 			'conditions' => '',

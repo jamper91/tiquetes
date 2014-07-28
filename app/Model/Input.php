@@ -6,8 +6,9 @@ App::uses('AppModel', 'Model');
  * @property InputState $InputState
  * @property Person $Person
  * @property EventsRegistrationType $EventsRegistrationType
- * @property Category $Category
+ * @property Shelf $Shelf
  * @property DeliveryMethod $DeliveryMethod
+ * @property Entrada $Entrada
  * @property Sale $Sale
  */
 class Input extends AppModel {
@@ -149,9 +150,9 @@ class Input extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'Category' => array(
-			'className' => 'Category',
-			'foreignKey' => 'category_id',
+		'Shelf' => array(
+			'className' => 'Shelf',
+			'foreignKey' => 'shelf_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
@@ -169,6 +170,19 @@ class Input extends AppModel {
 			'joinTable' => 'delivery_methods_inputs',
 			'foreignKey' => 'input_id',
 			'associationForeignKey' => 'delivery_method_id',
+			'unique' => 'keepExisting',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+		),
+		'Entrada' => array(
+			'className' => 'Entrada',
+			'joinTable' => 'entradas_inputs',
+			'foreignKey' => 'input_id',
+			'associationForeignKey' => 'entrada_id',
 			'unique' => 'keepExisting',
 			'conditions' => '',
 			'fields' => '',
