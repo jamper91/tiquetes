@@ -66,7 +66,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <li><a href="#"><i class="icon-user"></i> Mi Perfil</a></li>
                         <li class="divider"></li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="icon-key"></i> Cerrar Sesion</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "users", "action" => "logout")); ?>"><i class="icon-key"></i> Cerrar Sesion</a></li>
                     </ul>
                 </li>
                 <li class="dropdown" id="menu-messages"><a href="#" data-toggle="dropdown" data-target="#menu-messages" class="dropdown-toggle"><i class="icon icon-envelope"></i> <span class="text">Mensajes</span> <span class="label label-important">5</span> <b class="caret"></b></a>
@@ -81,7 +81,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                     </ul>
                 </li>
                 <li class=""><a title="" href="#"><i class="icon icon-cog"></i> <span class="text">Settings</span></a></li>
-                <li class=""><a title="" href="login.html"><i class="icon icon-share-alt"></i> <span class="text">Cerrar Sesion</span></a></li>
+                <li class=""><a title="" href="<?= $this->Html->url(array("controller" => "users", "action" => "logout")); ?>"><i class="icon icon-share-alt"></i> <span class="text">Cerrar Sesion</span></a></li>
             </ul>
         </div>
         <!--close-top-Header-menu-->
@@ -185,6 +185,38 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <li><a href="<?= $this->Html->url(array("controller" => "Hotels", "action" => "index")); ?>">Lista Hoteles</a></li>                        
                     </ul>
                 </li>
+                <li class="submenu"  > 
+                    <a href="#">
+                        <i class="icon icon-th-list"></i> 
+                        <span>Gestionar Tipos de registro</span>
+                    </a>
+                    <ul>
+                        <li><a href="<?= $this->Html->url(array("controller" => "RegistrationTypes", "action" => "add")); ?>">Crear Tipos de Registro</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "RegistrationTypes", "action" => "index")); ?>">Lista Tipos de Registro</a></li>                        
+                    </ul>
+                </li>
+                <li class="submenu"  > 
+                    <a href="#">
+                        <i class="icon icon-th-list"></i> 
+                        <span>Gestionar Medios de pago</span>
+                    </a>
+                    <ul>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Payments", "action" => "add")); ?>">Crear Medio de pago</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Payments", "action" => "index")); ?>">Lista Medios de Pago</a></li>                        
+                    </ul>
+                </li>
+
+                 <li class="submenu"  > 
+                    <a href="#">
+                        <i class="icon icon-th-list"></i> 
+                        <span>Gestionar Autorizacion</span>
+                    </a>
+                    <ul>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Authorizations", "action" => "add")); ?>">Crear Autorizacion</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Authorizations", "action" => "index")); ?>">Listar Autorizaciones</a></li>
+                        
+                    </ul>
+                </li>
             </ul>
         </div>
         <!--sidebar-menu-->
@@ -206,7 +238,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         <!--Footer-part-->
 
         <div class="row-fluid">
-            <div id="footer" class="span12">  <a href="http://themedesigner.in/">Themedesigner.in</a> </div>
+           <!--  <div id="footer" class="span12">  <a href="http://themedesigner.in/">Themedesigner.in</a> </div> -->
         </div>
 
 
