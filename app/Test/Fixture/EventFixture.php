@@ -12,8 +12,8 @@ class EventFixture extends CakeTestFixture {
  */
 	public $fields = array(
 		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
-		'stage_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
-		'event_type_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
+		'stage_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
+		'event_type_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
 		'even_nombre' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 20, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'even_numeResolucion' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 20, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'even_palaClave' => array('type' => 'text', 'null' => false, 'default' => null, 'length' => 20),
@@ -25,11 +25,11 @@ class EventFixture extends CakeTestFixture {
 		'even_fechFinal' => array('type' => 'date', 'null' => false, 'default' => null),
 		'even_publicar' => array('type' => 'boolean', 'null' => false, 'default' => null),
 		'even_codigo' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 20, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+		'fechainiciopublicacion' => array('type' => 'date', 'null' => true, 'default' => null),
+		'fechafinpublicacion' => array('type' => 'date', 'null' => true, 'default' => null),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'id' => array('column' => 'id', 'unique' => 1),
-			'stage_id' => array('column' => 'stage_id', 'unique' => 0),
-			'event_type_id' => array('column' => 'event_type_id', 'unique' => 0)
+			'id' => array('column' => 'id', 'unique' => 1)
 		),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
@@ -51,10 +51,12 @@ class EventFixture extends CakeTestFixture {
 			'even_estado' => 1,
 			'even_imagen1' => 'Lorem ipsum dolor ',
 			'even_imagen2' => 'Lorem ipsum dolor ',
-			'even_fechInicio' => '2014-07-22',
-			'even_fechFinal' => '2014-07-22',
+			'even_fechInicio' => '2014-07-28',
+			'even_fechFinal' => '2014-07-28',
 			'even_publicar' => 1,
-			'even_codigo' => 'Lorem ipsum dolor '
+			'even_codigo' => 'Lorem ipsum dolor ',
+			'fechainiciopublicacion' => '2014-07-28',
+			'fechafinpublicacion' => '2014-07-28'
 		),
 	);
 

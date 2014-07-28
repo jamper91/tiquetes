@@ -5,6 +5,7 @@ App::uses('AppModel', 'Model');
  *
  * @property Stage $Stage
  * @property EventType $EventType
+ * @property AuthorizationsUser $AuthorizationsUser
  * @property Form $Form
  * @property Paper $Paper
  * @property Committee $Committee
@@ -133,6 +134,19 @@ class Event extends AppModel {
  * @var array
  */
 	public $hasMany = array(
+		'AuthorizationsUser' => array(
+			'className' => 'AuthorizationsUser',
+			'foreignKey' => 'event_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
 		'Form' => array(
 			'className' => 'Form',
 			'foreignKey' => 'event_id',

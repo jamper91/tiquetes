@@ -12,8 +12,8 @@ class CompanyFixture extends CakeTestFixture {
  */
 	public $fields = array(
 		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
-		'person_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
-		'city_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
+		'person_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
+		'city_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
 		'empr_nit' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 20, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'empr_nombre' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'empr_telefono' => array('type' => 'decimal', 'null' => true, 'default' => null, 'length' => 10, 'unsigned' => false),
@@ -23,9 +23,7 @@ class CompanyFixture extends CakeTestFixture {
 		'empr_pagiWeb' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'id' => array('column' => 'id', 'unique' => 1),
-			'person_id' => array('column' => 'person_id', 'unique' => 0),
-			'city_id' => array('column' => 'city_id', 'unique' => 0)
+			'id' => array('column' => 'id', 'unique' => 1)
 		),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);

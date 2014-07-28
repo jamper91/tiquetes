@@ -3,21 +3,25 @@ App::uses('AppModel', 'Model');
 /**
  * Log Model
  *
+ * @property User $User
  */
 class Log extends AppModel {
 
-/**
- * Use table
- *
- * @var mixed False or table name
- */
-	public $useTable = 'log';
+
+	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 /**
- * Primary key field
+ * belongsTo associations
  *
- * @var string
+ * @var array
  */
-	public $primaryKey = 'id_log';
-
+	public $belongsTo = array(
+		'User' => array(
+			'className' => 'User',
+			'foreignKey' => 'user_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		)
+	);
 }

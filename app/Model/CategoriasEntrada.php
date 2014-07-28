@@ -1,12 +1,12 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * LocationsShelf Model
+ * CategoriasEntrada Model
  *
- * @property Location $Location
- * @property Shelf $Shelf
+ * @property Categoria $Categoria
+ * @property Entrada $Entrada
  */
-class LocationsShelf extends AppModel {
+class CategoriasEntrada extends AppModel {
 
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -17,16 +17,16 @@ class LocationsShelf extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Location' => array(
-			'className' => 'Location',
-			'foreignKey' => 'location_id',
+		'Categoria' => array(
+			'className' => 'Categoria',
+			'foreignKey' => 'categoria_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
 		),
-		'Shelf' => array(
-			'className' => 'Shelf',
-			'foreignKey' => 'shelf_id',
+		'Entrada' => array(
+			'className' => 'Entrada',
+			'foreignKey' => 'entrada_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

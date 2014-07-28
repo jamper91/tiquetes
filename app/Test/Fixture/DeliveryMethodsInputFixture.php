@@ -12,13 +12,11 @@ class DeliveryMethodsInputFixture extends CakeTestFixture {
  */
 	public $fields = array(
 		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
-		'delivery_method_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
-		'input_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
+		'delivery_method_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
+		'input_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'id' => array('column' => 'id', 'unique' => 1),
-			'input_id' => array('column' => 'input_id', 'unique' => 0),
-			'delivery_method_id' => array('column' => 'delivery_method_id', 'unique' => 0)
+			'id' => array('column' => 'id', 'unique' => 1)
 		),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);

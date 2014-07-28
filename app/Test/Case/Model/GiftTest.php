@@ -13,7 +13,8 @@ class GiftTest extends CakeTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'app.gift'
+		'app.gift',
+		'app.categoria'
 	);
 
 /**

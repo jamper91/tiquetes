@@ -6,6 +6,7 @@ App::uses('AppModel', 'Model');
  * @property Stage $Stage
  * @property Location $ParentLocation
  * @property Location $ChildLocation
+ * @property Paper $Paper
  * @property Shelf $Shelf
  */
 class Location extends AppModel {
@@ -19,6 +20,16 @@ class Location extends AppModel {
 		'loca_nombre' => array(
 			'notEmpty' => array(
 				'rule' => array('notEmpty'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
+		'cantidad' => array(
+			'numeric' => array(
+				'rule' => array('numeric'),
 				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -61,6 +72,19 @@ class Location extends AppModel {
 		'ChildLocation' => array(
 			'className' => 'Location',
 			'foreignKey' => 'parent_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Paper' => array(
+			'className' => 'Paper',
+			'foreignKey' => 'location_id',
 			'dependent' => false,
 			'conditions' => '',
 			'fields' => '',

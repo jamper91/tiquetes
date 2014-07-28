@@ -16,7 +16,7 @@ class ValidationFixture extends CakeTestFixture {
 		'fechainicio' => array('type' => 'date', 'null' => true, 'default' => null),
 		'fechafin' => array('type' => 'date', 'null' => true, 'default' => null),
 		'cantidad_reingresos' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
-		'categoria' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
+		'categoria_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
 			'id' => array('column' => 'id', 'unique' => 1)
@@ -33,10 +33,10 @@ class ValidationFixture extends CakeTestFixture {
 		array(
 			'id' => '',
 			'descripcion' => 'Lorem ipsum dolor sit amet',
-			'fechainicio' => '2014-07-22',
-			'fechafin' => '2014-07-22',
+			'fechainicio' => '2014-07-28',
+			'fechafin' => '2014-07-28',
 			'cantidad_reingresos' => 1,
-			'categoria' => 1
+			'categoria_id' => 1
 		),
 	);
 

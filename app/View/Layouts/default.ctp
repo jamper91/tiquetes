@@ -137,7 +137,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <span>Gestionar Personas</span>
                     </a>
                     <ul>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "add2")); ?>">Crear Persona</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "elegirEvento")); ?>">Crear Persona</a></li>
                         <li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador")); ?>">Buscar Persona</a></li>
 
                     </ul>

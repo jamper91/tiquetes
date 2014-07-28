@@ -15,18 +15,15 @@ class UserFixture extends CakeTestFixture {
 		'username' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'password' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'estado' => array('type' => 'boolean', 'null' => true, 'default' => null),
-		'person_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
-		'type_user_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'index'),
-		'department_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
+		'person_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
+		'type_user_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
+		'department_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
 		'validodesde' => array('type' => 'date', 'null' => true, 'default' => null),
 		'validohasta' => array('type' => 'date', 'null' => true, 'default' => null),
 		'identificador' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'id' => array('column' => 'id', 'unique' => 1),
-			'person_id' => array('column' => 'person_id', 'unique' => 0),
-			'type_user_id' => array('column' => 'type_user_id', 'unique' => 0),
-			'department_id' => array('column' => 'department_id', 'unique' => 0)
+			'id' => array('column' => 'id', 'unique' => 1)
 		),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
@@ -45,8 +42,8 @@ class UserFixture extends CakeTestFixture {
 			'person_id' => '',
 			'type_user_id' => 1,
 			'department_id' => '',
-			'validodesde' => '2014-07-22',
-			'validohasta' => '2014-07-22',
+			'validodesde' => '2014-07-28',
+			'validohasta' => '2014-07-28',
 			'identificador' => 'Lorem ipsum dolor sit amet'
 		),
 	);

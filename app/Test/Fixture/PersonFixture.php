@@ -12,8 +12,8 @@ class PersonFixture extends CakeTestFixture {
  */
 	public $fields = array(
 		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
-		'document_type_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
-		'city_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
+		'document_type_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
+		'city_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
 		'pers_documento' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 20, 'key' => 'unique', 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'pers_primNombre' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 20, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'pers_segNombre' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
@@ -29,9 +29,7 @@ class PersonFixture extends CakeTestFixture {
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
 			'id' => array('column' => 'id', 'unique' => 1),
-			'pers_documento' => array('column' => 'pers_documento', 'unique' => 1),
-			'document_type_id' => array('column' => 'document_type_id', 'unique' => 0),
-			'city_id' => array('column' => 'city_id', 'unique' => 0)
+			'pers_documento' => array('column' => 'pers_documento', 'unique' => 1)
 		),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
@@ -55,7 +53,7 @@ class PersonFixture extends CakeTestFixture {
 			'pers_barrio' => 'Lorem ipsum dolor ',
 			'pers_telefono' => '',
 			'pers_celular' => '',
-			'pers_fechNacimiento' => '2014-07-22',
+			'pers_fechNacimiento' => '2014-07-28',
 			'pers_tipoSangre' => 'Lorem ipsum dolor ',
 			'pers_mail' => 'Lorem ipsum dolor '
 		),

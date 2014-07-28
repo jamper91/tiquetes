@@ -4,9 +4,8 @@ App::uses('AppModel', 'Model');
  * Paper Model
  *
  * @property Event $Event
- * @property Shelf $Shelf
+ * @property Location $Location
  * @property Entrada $Entrada
- * @property PaperInput $PaperInput
  */
 class Paper extends AppModel {
 
@@ -113,9 +112,9 @@ class Paper extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'Shelf' => array(
-			'className' => 'Shelf',
-			'foreignKey' => 'shelf_id',
+		'Location' => array(
+			'className' => 'Location',
+			'foreignKey' => 'location_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
@@ -130,19 +129,6 @@ class Paper extends AppModel {
 	public $hasMany = array(
 		'Entrada' => array(
 			'className' => 'Entrada',
-			'foreignKey' => 'paper_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
-		'PaperInput' => array(
-			'className' => 'PaperInput',
 			'foreignKey' => 'paper_id',
 			'dependent' => false,
 			'conditions' => '',

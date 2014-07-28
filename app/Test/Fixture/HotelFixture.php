@@ -18,6 +18,7 @@ class HotelFixture extends CakeTestFixture {
 		'hote_telefono' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'hote_email' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'hote_pagiWeb' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+		'city_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
 			'id' => array('column' => 'id', 'unique' => 1)
@@ -38,7 +39,8 @@ class HotelFixture extends CakeTestFixture {
 			'hote_direccion' => 'Lorem ipsum dolor sit amet',
 			'hote_telefono' => 'Lorem ipsum dolor ',
 			'hote_email' => 'Lorem ipsum dolor sit amet',
-			'hote_pagiWeb' => 'Lorem ipsum dolor sit amet'
+			'hote_pagiWeb' => 'Lorem ipsum dolor sit amet',
+			'city_id' => 1
 		),
 	);
 

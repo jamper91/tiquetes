@@ -13,7 +13,8 @@ class LogTest extends CakeTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'app.log'
+		'app.log',
+		'app.user'
 	);
 
 /**

@@ -12,14 +12,12 @@ class EntradaFixture extends CakeTestFixture {
  */
 	public $fields = array(
 		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
-		'paper_id' => array('type' => 'biginteger', 'null' => true, 'default' => null, 'unsigned' => true, 'key' => 'index'),
+		'paper_id' => array('type' => 'biginteger', 'null' => true, 'default' => null, 'unsigned' => true),
 		'descripcion' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
-		'category_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'index'),
+		'nombre' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'id' => array('column' => 'id', 'unique' => 1),
-			'paper_id' => array('column' => 'paper_id', 'unique' => 0),
-			'category_id' => array('column' => 'category_id', 'unique' => 0)
+			'id' => array('column' => 'id', 'unique' => 1)
 		),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
 	);
@@ -34,7 +32,7 @@ class EntradaFixture extends CakeTestFixture {
 			'id' => '',
 			'paper_id' => '',
 			'descripcion' => 'Lorem ipsum dolor sit amet',
-			'category_id' => ''
+			'nombre' => 'Lorem ipsum dolor sit amet'
 		),
 	);
 
