@@ -13,7 +13,6 @@ class PaperFixture extends CakeTestFixture {
 	public $fields = array(
 		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
 		'event_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
-		'shelf_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
 		'func_nombre' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'func_fechInicio' => array('type' => 'date', 'null' => false, 'default' => null),
 		'func_fechFinal' => array('type' => 'date', 'null' => false, 'default' => null),
@@ -24,6 +23,7 @@ class PaperFixture extends CakeTestFixture {
 		'func_cantEntradas' => array('type' => 'decimal', 'null' => false, 'default' => null, 'length' => 10, 'unsigned' => false),
 		'func_cantAlerta' => array('type' => 'decimal', 'null' => false, 'default' => null, 'length' => 10, 'unsigned' => false),
 		'func_codigo' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+		'location_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
 			'id' => array('column' => 'id', 'unique' => 1)
@@ -40,7 +40,6 @@ class PaperFixture extends CakeTestFixture {
 		array(
 			'id' => '',
 			'event_id' => '',
-			'shelf_id' => '',
 			'func_nombre' => 'Lorem ipsum dolor sit amet',
 			'func_fechInicio' => '2014-07-28',
 			'func_fechFinal' => '2014-07-28',
@@ -50,7 +49,8 @@ class PaperFixture extends CakeTestFixture {
 			'func_palaClaves' => 'Lorem ipsum dolor sit amet',
 			'func_cantEntradas' => '',
 			'func_cantAlerta' => '',
-			'func_codigo' => 'Lorem ipsum dolor sit amet'
+			'func_codigo' => 'Lorem ipsum dolor sit amet',
+			'location_id' => ''
 		),
 	);
 

@@ -3,7 +3,7 @@ App::uses('AppModel', 'Model');
 /**
  * Validation Model
  *
- * @property Category $Category
+ * @property Categoria $Categoria
  */
 class Validation extends AppModel {
 
@@ -16,9 +16,9 @@ class Validation extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Category' => array(
-			'className' => 'Category',
-			'foreignKey' => 'category_id',
+		'Categoria' => array(
+			'className' => 'Categoria',
+			'foreignKey' => 'categoria_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

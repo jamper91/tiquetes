@@ -3,7 +3,7 @@ App::uses('AppModel', 'Model');
 /**
  * Gift Model
  *
- * @property Category $Category
+ * @property Categoria $Categoria
  */
 class Gift extends AppModel {
 
@@ -33,9 +33,9 @@ class Gift extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Category' => array(
-			'className' => 'Category',
-			'foreignKey' => 'category_id',
+		'Categoria' => array(
+			'className' => 'Categoria',
+			'foreignKey' => 'categoria_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

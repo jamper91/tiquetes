@@ -4,7 +4,7 @@ App::uses('AppModel', 'Model');
  * Entrada Model
  *
  * @property Paper $Paper
- * @property Category $Category
+ * @property Input $Input
  */
 class Entrada extends AppModel {
 
@@ -23,13 +23,28 @@ class Entrada extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		),
-		'Category' => array(
-			'className' => 'Category',
-			'foreignKey' => 'category_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
 		)
 	);
+
+/**
+ * hasAndBelongsToMany associations
+ *
+ * @var array
+ */
+	public $hasAndBelongsToMany = array(
+		'Input' => array(
+			'className' => 'Input',
+			'joinTable' => 'entradas_inputs',
+			'foreignKey' => 'entrada_id',
+			'associationForeignKey' => 'input_id',
+			'unique' => 'keepExisting',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+		)
+	);
+
 }

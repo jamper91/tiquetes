@@ -3,8 +3,8 @@ App::uses('AppModel', 'Model');
 /**
  * Shelf Model
  *
- * @property Paper $Paper
  * @property Location $Location
+ * @property Input $Input
  */
 class Shelf extends AppModel {
 
@@ -29,13 +29,28 @@ class Shelf extends AppModel {
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 /**
+ * belongsTo associations
+ *
+ * @var array
+ */
+	public $belongsTo = array(
+		'Location' => array(
+			'className' => 'Location',
+			'foreignKey' => 'location_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		)
+	);
+
+/**
  * hasMany associations
  *
  * @var array
  */
 	public $hasMany = array(
-		'Paper' => array(
-			'className' => 'Paper',
+		'Input' => array(
+			'className' => 'Input',
 			'foreignKey' => 'shelf_id',
 			'dependent' => false,
 			'conditions' => '',
@@ -46,28 +61,6 @@ class Shelf extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
-		)
-	);
-
-
-/**
- * hasAndBelongsToMany associations
- *
- * @var array
- */
-	public $hasAndBelongsToMany = array(
-		'Location' => array(
-			'className' => 'Location',
-			'joinTable' => 'locations_shelves',
-			'foreignKey' => 'shelf_id',
-			'associationForeignKey' => 'location_id',
-			'unique' => 'keepExisting',
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'finderQuery' => '',
 		)
 	);
 

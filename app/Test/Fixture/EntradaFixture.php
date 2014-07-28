@@ -14,7 +14,7 @@ class EntradaFixture extends CakeTestFixture {
 		'id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true, 'key' => 'primary'),
 		'paper_id' => array('type' => 'biginteger', 'null' => true, 'default' => null, 'unsigned' => true),
 		'descripcion' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
-		'category_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
+		'nombre' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
 			'id' => array('column' => 'id', 'unique' => 1)
@@ -32,7 +32,7 @@ class EntradaFixture extends CakeTestFixture {
 			'id' => '',
 			'paper_id' => '',
 			'descripcion' => 'Lorem ipsum dolor sit amet',
-			'category_id' => ''
+			'nombre' => 'Lorem ipsum dolor sit amet'
 		),
 	);
 

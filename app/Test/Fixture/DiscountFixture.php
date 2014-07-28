@@ -15,7 +15,7 @@ class DiscountFixture extends CakeTestFixture {
 		'porcentaje' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
 		'fecha_inicio' => array('type' => 'date', 'null' => true, 'default' => null),
 		'fecha_fin' => array('type' => 'date', 'null' => true, 'default' => null),
-		'category_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
+		'categoria_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
 			'id' => array('column' => 'id', 'unique' => 1)
@@ -34,7 +34,7 @@ class DiscountFixture extends CakeTestFixture {
 			'porcentaje' => 1,
 			'fecha_inicio' => '2014-07-28',
 			'fecha_fin' => '2014-07-28',
-			'category_id' => 1
+			'categoria_id' => 1
 		),
 	);
 

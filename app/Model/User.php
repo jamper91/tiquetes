@@ -6,6 +6,7 @@ App::uses('AppModel', 'Model');
  * @property Person $Person
  * @property TypeUser $TypeUser
  * @property Department $Department
+ * @property Log $Log
  * @property Authorization $Authorization
  */
 class User extends AppModel {
@@ -68,6 +69,28 @@ class User extends AppModel {
 			'order' => ''
 		)
 	);
+
+/**
+ * hasMany associations
+ *
+ * @var array
+ */
+	public $hasMany = array(
+		'Log' => array(
+			'className' => 'Log',
+			'foreignKey' => 'user_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		)
+	);
+
 
 /**
  * hasAndBelongsToMany associations

@@ -1,12 +1,12 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * PaperInput Model
+ * EntradasTorniquete Model
  *
- * @property Paper $Paper
- * @property Input $Input
+ * @property Entrada $Entrada
+ * @property Torniquete $Torniquete
  */
-class PaperInput extends AppModel {
+class EntradasTorniquete extends AppModel {
 
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -17,16 +17,16 @@ class PaperInput extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Paper' => array(
-			'className' => 'Paper',
-			'foreignKey' => 'paper_id',
+		'Entrada' => array(
+			'className' => 'Entrada',
+			'foreignKey' => 'entrada_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
 		),
-		'Input' => array(
-			'className' => 'Input',
-			'foreignKey' => 'input_id',
+		'Torniquete' => array(
+			'className' => 'Torniquete',
+			'foreignKey' => 'torniquete_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

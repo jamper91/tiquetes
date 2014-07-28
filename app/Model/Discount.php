@@ -3,7 +3,7 @@ App::uses('AppModel', 'Model');
 /**
  * Discount Model
  *
- * @property Category $Category
+ * @property Categoria $Categoria
  */
 class Discount extends AppModel {
 
@@ -16,9 +16,9 @@ class Discount extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Category' => array(
-			'className' => 'Category',
-			'foreignKey' => 'category_id',
+		'Categoria' => array(
+			'className' => 'Categoria',
+			'foreignKey' => 'categoria_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

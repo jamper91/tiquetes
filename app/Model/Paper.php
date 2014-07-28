@@ -4,7 +4,7 @@ App::uses('AppModel', 'Model');
  * Paper Model
  *
  * @property Event $Event
- * @property Shelf $Shelf
+ * @property Location $Location
  * @property Entrada $Entrada
  */
 class Paper extends AppModel {
@@ -112,9 +112,9 @@ class Paper extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'Shelf' => array(
-			'className' => 'Shelf',
-			'foreignKey' => 'shelf_id',
+		'Location' => array(
+			'className' => 'Location',
+			'foreignKey' => 'location_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

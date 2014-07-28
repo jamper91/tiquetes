@@ -30,8 +30,8 @@ class InputFixture extends CakeTestFixture {
 		'entr_identificador' => array('type' => 'string', 'null' => true, 'default' => null, 'length' => 20, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'entr_impreso' => array('type' => 'boolean', 'null' => true, 'default' => null),
 		'events_registration_type_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
-		'category_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
 		'cantidad_reingresos' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
+		'shelf_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
 			'id' => array('column' => 'id', 'unique' => 1)
@@ -65,8 +65,8 @@ class InputFixture extends CakeTestFixture {
 			'entr_identificador' => 'Lorem ipsum dolor ',
 			'entr_impreso' => 1,
 			'events_registration_type_id' => 1,
-			'category_id' => '',
-			'cantidad_reingresos' => 1
+			'cantidad_reingresos' => 1,
+			'shelf_id' => ''
 		),
 	);
 

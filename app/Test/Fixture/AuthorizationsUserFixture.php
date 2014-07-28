@@ -15,6 +15,7 @@ class AuthorizationsUserFixture extends CakeTestFixture {
 		'user_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
 		'authorization_id' => array('type' => 'biginteger', 'null' => false, 'default' => null, 'unsigned' => true),
 		'estado' => array('type' => 'boolean', 'null' => true, 'default' => null),
+		'event_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
 			'id' => array('column' => 'id', 'unique' => 1)
@@ -32,7 +33,8 @@ class AuthorizationsUserFixture extends CakeTestFixture {
 			'id' => '',
 			'user_id' => '',
 			'authorization_id' => '',
-			'estado' => 1
+			'estado' => 1,
+			'event_id' => 1
 		),
 	);
 
