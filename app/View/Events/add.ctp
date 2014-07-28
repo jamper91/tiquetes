@@ -57,10 +57,10 @@ echo $this->Html->css(array('multi-select'));
 //            echo $this->Form->input('even_imagen2');
             echo $this->Form->input('even_imagen2', array('type' => 'file', 'label' => 'Imagen 2'));
 
-            echo $this->Form->input('even_fechInicio');
-            echo $this->Form->input('even_fechFinal');
-            echo $this->Form->input('even_publicar');
-            echo $this->Form->input('even_codigo');
+            echo $this->Form->input('even_fechInicio', array('label' => 'fecha inicio'));
+            echo $this->Form->input('even_fechFinal', array('label' => 'fecha final'));
+            echo $this->Form->input('even_publicar', array('label' => 'publicar evento'));
+            echo $this->Form->input('even_codigo', array('label' => 'codigo del evento'));
 //            echo $this->Form->input('Committee');
 //            echo $this->Form->input('Company');
 //            echo $this->Form->input('Hotel');
@@ -126,14 +126,14 @@ echo $this->Html->css(array('multi-select'));
                 ?>
             </div>
             <div class="control-group"  >
-                <label class="control-label">Medios de Pago</label>
+                <label class="control-label">Tipos de Registro</label>
                 <?php
                 echo $this->Form->input('RegistrationType', array(
                     "div" => array(
                         "class" => "controls"
                     ),
                     "label" => "",
-                    "options" => $paymentsName,
+                    "options" => $registrationTypes,
                     "multiple" => true
                 ));
 //                    
@@ -245,6 +245,13 @@ echo $this->Html->css(array('multi-select'));
               //  alert("Select value: " + values);
 //            console.log($('#FormPersonalDatumId option[value="' + values + '"]').html());
             $('#Hotel option[value="' + values + '"]').attr("selected", "selected")
+        }
+    });
+    $('#RegistrationType').multiSelect({
+        afterSelect: function(values) {
+              //  alert("Select value: " + values);
+//            console.log($('#FormPersonalDatumId option[value="' + values + '"]').html());
+            $('#RegistrationType option[value="' + values + '"]').attr("selected", "selected")
         }
     });
 </script>

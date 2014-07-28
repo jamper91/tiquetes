@@ -185,6 +185,26 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <li><a href="<?= $this->Html->url(array("controller" => "Hotels", "action" => "index")); ?>">Lista Hoteles</a></li>                        
                     </ul>
                 </li>
+                <li class="submenu"  > 
+                    <a href="#">
+                        <i class="icon icon-th-list"></i> 
+                        <span>Gestionar Tipos de registro</span>
+                    </a>
+                    <ul>
+                        <li><a href="<?= $this->Html->url(array("controller" => "RegistrationTypes", "action" => "add")); ?>">Crear Tipos de Registro</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "RegistrationTypes", "action" => "index")); ?>">Lista Tipos de Registro</a></li>                        
+                    </ul>
+                </li>
+                <li class="submenu"  > 
+                    <a href="#">
+                        <i class="icon icon-th-list"></i> 
+                        <span>Gestionar Medios de pago</span>
+                    </a>
+                    <ul>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Payments", "action" => "add")); ?>">Crear Medio de pago</a></li>
+                        <li><a href="<?= $this->Html->url(array("controller" => "Payments", "action" => "index")); ?>">Lista Medios de Pago</a></li>                        
+                    </ul>
+                </li>
             </ul>
         </div>
         <!--sidebar-menu-->

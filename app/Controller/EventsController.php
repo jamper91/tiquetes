@@ -109,8 +109,15 @@ class EventsController extends AppController {
                 "Payment.mepa_descripcion"
             )
         ));
-
-        $registrationTypes = $this->Event->RegistrationType->find('list');
+        
+        $registrationTypes = $this->Event->RegistrationType->find('list', array(
+            "fields" => array(
+                "RegistrationType.id",
+                "RegistrationType.nombre"
+            )
+        ));
+        
+//        $registrationTypes = $this->Event->RegistrationType->find('list');
         $this->set(compact('stages', 'eventTypes', 'committees', 'companies', 'hotels', 'paymentsName', 'registrationTypes'));
 
         $this->set("eventTypesName", $eventTypesName);

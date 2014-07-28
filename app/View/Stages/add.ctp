@@ -56,7 +56,7 @@
                 <td>
                     <?php
                     echo $this->Form->input('esce_telefono', Array(
-                        'laber'=>''
+                        'label'=>''
                     ));
                     ?>
                 </td>
