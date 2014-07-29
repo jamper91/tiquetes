@@ -11,11 +11,7 @@
 <?php echo $this->Form->end(__('Login')); ?>
         <?php
     
-    echo $this->Html->link(
-    'Registrar',
-    '/users/add',
-    array('class' => 'button', 'target' => '_blank')
-);
+
     
     ?>
 </div>

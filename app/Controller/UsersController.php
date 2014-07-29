@@ -19,7 +19,7 @@ class UsersController extends AppController {
 
     public function beforeFilter() {
         $this->set('authUser', $this->Auth->user());
-//        $this->Auth->allow('add', 'asociartarjeta', 'add2', 'buscador');
+        //$this->Auth->allow('add');
 
         parent:: beforeFilter();
 //        if ($this->Auth->user('role') == 'admin') {
@@ -295,20 +295,24 @@ class UsersController extends AppController {
                     $queryDatos = "select * from authorizations_users JOIN authorizations on authorizations_users.authorization_id=authorizations.id where authorizations_users.user_id=" . $user_id . "";
 
                     $permisos = $this->AuthorizationsUsers->query($queryDatos);
-
+                    //debug($permisos);
                     $controladores = array();
                     $acciones = array();
+                    //$nombres = array();
 
                     foreach ($permisos as $permiso) {
-
-                        array_push($acciones, $permiso['authorizations']['accion']);
+                        //array_push($nombres, $permiso['authorizations']['nombre']);
+                        // array_push($acciones, $permiso['authorizations']['accion']);
                         array_push($controladores, $permiso['authorizations']['controlador']);
                     }
-                    $accion = array_unique($acciones);
-                    $controlador = array_unique($controladores);
-
-                    $this->Session->write('accion', $accion);
+                    // $accion = array_unique($acciones);
+                     $controlador = array_unique($controladores);
+                        //$nombre = array_unique($nombres);
+                     //debug( $controlador);
+                    // $this->Session->write('accion', $accion);
                     $this->Session->write('controlador', $controlador);
+                    //$this->Session->write('nombre', $nombre);
+
                     return $this->redirect($this->Auth->redirect());
                 }
             }
