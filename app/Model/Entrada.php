@@ -19,7 +19,7 @@ class Entrada extends AppModel {
 	public $belongsTo = array(
 		'Stage' => array(
 			'className' => 'Stage',
-			'foreignKey' => 'Stage_id',
+			'foreignKey' => 'stage_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
