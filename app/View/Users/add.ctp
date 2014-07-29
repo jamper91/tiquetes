@@ -131,29 +131,9 @@ echo $this->Html->css(array('multi-select'));
                     ?>
                 </td></tr>
         </table>
-<!--        <table>
-            <tr>
-                <td>Permisos</td>
-                <td><?php
-                    echo $this->Form->input('Authorization', array(
-                        "div" => array(
-                            "class" => "controls"
-                        ),
-                        "label" => "",
-                        "options" => $authorizations,
-                        "multiple" => true
-                    ));
-//                    ?></td>
-            </tr>
-                    //echo $this->Form->input('type_user_id');
-                        //echo $this->Form->input('document_type_id');
-                        //echo $this->Form->input('department_id');                        
-                        //echo $this->Form->input('city_id');
 
-            <?php
-            //echo $this->Form->input('Authorization');
-            ?>
-        </table>-->
+          
+
     </fieldset>
     <?php echo $this->Form->end(__('Crear')); ?>
 </div>
@@ -217,12 +197,6 @@ echo $this->Html->css(array('multi-select'));
         });
     });
     
-    $('#AuthorizationAuthorization').multiSelect({
-        afterSelect: function(values) {
-                //alert("Select value: " + values);
-//            console.log($('#FormPersonalDatumId option[value="' + values + '"]').html());
-            $('#AuthorizationAuthorization option[value="' + values + '"]').attr("selected", "selected")
-        }
-    });
+
 
 </script>

@@ -47,14 +47,65 @@ class AuthorizationsUsersController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
-			$this->AuthorizationsUser->create();
-			if ($this->AuthorizationsUser->save($this->request->data)) {
-				$this->Session->setFlash(__('The authorizations user has been saved.'));
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The authorizations user could not be saved. Please, try again.'));
+			$data = $this->data;
+			$datos = $this->request->data;
+			//debug($datos);
+			
+
+			foreach ($datos as $dato) {
+
+				//debug($dato);
+				$event_id = $dato['event_id'];
+				//debug($event_id);
+				foreach ($dato['user_id'] as $user_id) {
+					//debug($user_id);
+					foreach ($dato['authorization_id'] as $authorization_id) {
+						//debug($authorization_id);
+						$newAuthorizationsUser = $this->AuthorizationsUser->create();
+						$newAuthorizationsUser = array(
+						                'AuthorizationsUser' => array(
+						                    'user_id' => $user_id,
+						                    'authorization_id' =>$authorization_id,
+						                    'event_id' => $event_id
+						                )
+						            );
+						$this->AuthorizationsUser->save($newAuthorizationsUser);
+						//debug($newAuthorizationsUser);
+					}
+				}
 			}
+			// if ($this->AuthorizationsUser->save($this->request->data)) {
+			// 	$this->Session->setFlash(__('The authorizations user has been saved.'));
+			// 	return $this->redirect(array('action' => 'index'));
+			// } else {
+			// 	$this->Session->setFlash(__('The authorizations user could not be saved. Please, try again.'));
+			// }
 		}
+		$this->loadModel('Authorizations');
+		$authorizations = $this->Authorizations->find('list', array(
+            'fields' => array(
+                "Authorizations.nombre"
+            )
+        ));
+
+        $this->loadModel('Users');
+		$users = $this->Users->find('list', array(
+            'fields' => array(
+                "Users.username"
+            )
+        ));
+          $this->loadModel('Events');
+		$events = $this->Events->find('list', array(
+            'fields' => array(
+                "Events.even_nombre"
+            )
+        ));
+
+		//debug($events);
+		  //debug($authorizations);
+		  $this->set('authorizations', $authorizations );
+		  $this->set('users', $users );
+		  $this->set('events', $events );
 	}
 
 /**
