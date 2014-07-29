@@ -245,8 +245,8 @@ class UsersController extends AppController {
 
     public function login() {
         if ($this->request->is('post')) {
-            //debug($this->request->data);
-            //debug($this->Auth->login());
+            // debug($this->request->data);
+            // debug($this->Auth->login());
             if ($this->Auth->login() == false) {
                 $this->Session->write('User.username', $this->request->data["User"]["username"]);
                 $options = array(
@@ -263,7 +263,7 @@ class UsersController extends AppController {
                 //debug($datos['User']['id']);
                 $this->Session->write('User.id', $datos['User']['id']);
                 //debug();
-                //return $this->redirect($this->Auth->redirect());
+                return $this->redirect($this->Auth->redirect());
             }
             $this->Session->setFlash(__('Invalid username or password, try again'));
         }
@@ -331,6 +331,7 @@ class UsersController extends AppController {
          "fields" => array(
                 "Event.even_nombre"
             )));
+        //debug($eventos);
         if ($this->request->is('post')) {
              $data = $this->data;
              //debug($data['User']['event_id']);
@@ -424,7 +425,28 @@ class UsersController extends AppController {
             $this->loadModel('People');
 
             $datos = $this->request->data;
+            $pers_id = $this->Session->read('User.id');
+            //debug($pers_id);
+            $this->loadModel('AuthorizationsUser');
+            $autorizado = $this->AuthorizationsUser->findAllByUserId($pers_id);
+            //ebug($autorizado);
 
+
+            //$event = array();
+
+            foreach ($autorizado as $auth) {
+                $event_id = $auth['AuthorizationsUser']['event_id'];
+                $this->loadModel('Event');
+                $event = $this->Event->find('list',array(
+                        "options"=> array(
+                            "Event.id" => "event_id"),
+                     "fields" => array(
+                            "Event.even_nombre"
+                        )));
+
+                
+            }
+            //debug($event);
 
             $conditions="";
             $conditions2="";
@@ -499,6 +521,8 @@ class UsersController extends AppController {
                
                 $this->set('datosvista', $datosVista);
                 $this->set('datosvista2', $datosVista2);
+                $this->set('autorizado', $autorizado);
+                $this->set('event', $event);
 
             }
 
@@ -525,12 +549,14 @@ class UsersController extends AppController {
            
             $this->set('datosvista', $datosVista);
             $this->set('datosvista2', $datosVista2);
+            $this->set('autorizado', $autorizado);
+            $this->set('event', $event);
+
             
             } 
         }
         
-          
-       //debug($FPD_ids);
+       
         
         $this->set('form', $formPersonal);
 
@@ -615,15 +641,33 @@ class UsersController extends AppController {
     }
 
     public function add3(){
+
         if ($this->request->is("POST")) {
             $data = $this->data;
             $this->loadModel('People');
-            $pers_id = $this->Session->read('User.id');
-            debug($pers_id);
+           
 
             $datos = $this->request->data;
             $documento = $datos['user'];
+            $evento = $datos['event'];
+            $this->loadModel('Forms');
+            $forms = $this->Forms->findAllByEventId($evento);
 
+            if(!Empty($forms))
+            {
+               foreach ($forms as $form) {
+               $form_id = $form['Forms']['event_id'];
+                } 
+                $this->loadModel('FormsPersonalDatum');
+                 $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_data_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=".$person_id."";
+                $formPersonal = $this->FormsPersonalDatum->findAllByFormId($form_id);
+            }
+
+            else{
+                $formPersonal = '';
+            }
+            
+            //debug($formPersonal);
 
             $person_id = $this->People->find("list", array(
                 "conditions"=> array(
@@ -632,8 +676,20 @@ class UsersController extends AppController {
                     "People.id",
                 )
             ));
-           
-            //debug($person_id);
+            $this->loadModel('Datas');
+
+            foreach ($person_id as $value) {
+                
+                $datos_person = $this->Datas->find("all", array(
+                    "conditions" => array(
+                        'Datas.person_id'=>$value))); 
+
+            }
+            //formPersonal->contiene el personalDatum con los campos a pintar
+            //datos_person->contiene los datos que van a ir en cada campo.
+            $this->set('form',$formPersonal);
+            $this->set('documento', $documento);
+            $this->set('datos_person',$datos_person);
 
         }
     }

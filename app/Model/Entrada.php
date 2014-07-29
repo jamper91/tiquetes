@@ -17,9 +17,9 @@ class Entrada extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Paper' => array(
-			'className' => 'Paper',
-			'foreignKey' => 'paper_id',
+		'Stage' => array(
+			'className' => 'Stage',
+			'foreignKey' => 'stage_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
@@ -44,6 +44,13 @@ class Entrada extends AppModel {
 			'limit' => '',
 			'offset' => '',
 			'finderQuery' => '',
+		),
+            'Categoria' => array(
+			'className' => 'Categoria',
+			'foreignKey' => 'categoria_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
 

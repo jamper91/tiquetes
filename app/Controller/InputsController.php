@@ -64,9 +64,9 @@ class InputsController extends AppController {
         $inputStates = $this->Input->InputState->find('list');
         $people = $this->Input->Person->find('list');
         $eventsRegistrationTypes = $this->Input->EventsRegistrationType->find('list');
-        $categories = $this->Input->Category->find('list', array(
+        $categories = $this->Input->Categoria->find('list', array(
             "fields" => array(
-                "Category.descripcion"
+                "Categoria.descripcion"
             )
         ));
         $countriesName = $this->Country->find('list', array(
