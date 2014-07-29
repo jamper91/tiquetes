@@ -15,7 +15,7 @@ class EntradasController extends AppController {
      *
      * @var array
      */
-    public $components = array('Paginator');
+    public $components = array('Paginator', 'RequestHandler');
 
     /**
      * index method
@@ -65,7 +65,7 @@ class EntradasController extends AppController {
         ));
         $papers = $this->Entrada->Stage->find('list');
         $categories = $this->Entrada->Categoria->find('list');
-        $this->set(compact('papers', 'categories','escenario'));
+        $this->set(compact('papers', 'categories', 'escenario'));
     }
 
     /**
@@ -114,6 +114,77 @@ class EntradasController extends AppController {
             $this->Session->setFlash(__('The entrada could not be deleted. Please, try again.'));
         }
         return $this->redirect(array('action' => 'index'));
+    }
+
+    public function getEntradasByStage() {
+        $this->layout = "webservices";
+        $stage_id = $this->request->data["stage_id"];
+        $options = array(
+            "conditions" => array(
+                "Entrada.stage_id" => $stage_id
+            ),
+            "fields" => array(
+                "Entrada.id",
+                "Entrada.name"
+            ),
+            "recursive" => 0
+        );
+        $eventos = $this->Entrada->find("all", $options);
+        $log = $this->Entrada->getDataSource()->getLog(false, false);
+        //debug($log);
+//        var_dump($cities);
+        $this->set(
+                array(
+                    "datos" => $eventos,
+                    "_serialize" => array("datos")
+                )
+        );
+    }
+
+    public function obtenerReporte() {
+        $this->layout = "webservices";
+        $entrada_id = $this->request->data["Entrada"]["entrada_id"];
+//        $entrada_id = 7;
+        $this->Entrada->virtualFields['Cantidad'] = 0;
+        $this->Entrada->virtualFields['Tipo'] = 0;
+        $sql = "select count(l_t.tipo) as Entrada__Cantidad , l_t.tipo as Entrada__Tipo from logs_torniquetes l_t, entradas_torniquetes e_t where l_t.torniquete_id=e_t.torniquete_id and e_t.entrada_id=".$entrada_id." group by l_t.tipo";
+        $datos = $this->Entrada->query($sql);
+//        debug($datos);
+        $this->set(
+                array(
+                    "datos" => $datos,
+                    "_serialize" => array("datos")
+                )
+        );
+    }
+
+    public function reportes() {
+        if ($this->request->is('post')) {
+            //consulto todos los torniquetes que pertenecen a esa entrada
+            $entrada_id = $this->request->data["Entrada"]["entrada_id"];
+//            $torniquetes=$this->EntradaTorniquete->findAllByEntradaId($entrada_id);
+            $sql = "select * from logs_torniquetes, l_t, entradas_torniquetes e_t where l_t.torniquete_id=e_t.torniquete_id and e_t.entrada_id=" . $entrada_id;
+            $datos = $this->Entrada->query($sql);
+            debug($datos);
+        }
+
+        $this->loadModel('Country');
+        $countriesName = $this->Country->find('list', array(
+            "fields" => array(
+                "Country.name"
+            ),
+            "recursive" => -2
+        ));
+        $this->set(compact('countriesName'));
+
+        $this->set(compact('state'));
+
+        //$cities = $this->Stage->City->find('list');
+        $this->set(compact('cities'));
+
+        $this->set(compact('stages'));
+        $entradas = $this->Entrada->find('list');
+        $this->set(compact('categorias', 'entradas'));
     }
 
 }

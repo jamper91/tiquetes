@@ -47,11 +47,18 @@ class Entrada extends AppModel {
 		),
             'Categoria' => array(
 			'className' => 'Categoria',
-			'foreignKey' => 'categoria_id',
+			'joinTable' => 'categorias_entradas',
+			'foreignKey' => 'entrada_id',
+			'associationForeignKey' => 'categoria_id',
+			'unique' => 'keepExisting',
 			'conditions' => '',
 			'fields' => '',
-			'order' => ''
-		)
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+		),
+            
 	);
 
 }

@@ -124,7 +124,7 @@ class EventsRegistrationTypesController extends AppController {
                 "EventsRegistrationType.id",
                 "EventsRegistrationType.registration_type_id",
                 "RegistrationType.nombre",
-                "RegistrationType.category_id"
+                "RegistrationType.categoria_id"
             )
         );
         $RegistrationType = $this->EventsRegistrationType->find("all", $options);
