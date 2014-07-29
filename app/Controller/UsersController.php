@@ -105,10 +105,8 @@ class UsersController extends AppController {
                 );
                 $this->User->save($newUser);
                 //$usuario = $this->User->getLastInsertId();
-
                 //$this->loadModel('AuthorizationsUsers');
                 //$newAutirizationsUser = $this->AuthorizationsUsers->create();
-
                 //$this->Authorization->save($this->request->data);
                 //$data_auth = $this->request->data;
                 //debug($data_auth);
@@ -119,10 +117,7 @@ class UsersController extends AppController {
                 //         {
                 //             debug($value2);
                 //         }
-                        
-                  
                 //     }
-                
                 // }
                 // for ($i = 0; $i < count($this->request->data['authorization_id']); $i++)
                 //     {
@@ -135,8 +130,7 @@ class UsersController extends AppController {
                 //         //debug($newAuthorizationsUser);
                 //     }           
                 return $this->redirect(array('action' => 'index'));
-            } 
-            catch (Exception $ex) {
+            } catch (Exception $ex) {
                 //debug("entre aqui");
                 $error2 = $ex->getCode();
                 if ($error2 == '23000') {
@@ -268,7 +262,7 @@ class UsersController extends AppController {
         if ($this->request->is('post')) {
             // debug($this->request->data);
             // debug($this->Auth->login());
-            if ($this->Auth->login() == false) {
+            if ($this->Auth->login() !== false) {
                 $this->Session->write('User.username', $this->request->data["User"]["username"]);
                 $options = array(
                     'conditions' => array(
@@ -279,18 +273,16 @@ class UsersController extends AppController {
                     ),
                     'recursive' => -2
                 );
-                //$this->Session->setFlash(__('Bienvenido ' . $this->request->data["User"]["username"]));
+                $this->Session->setFlash(__('Bienvenido ' . $this->request->data["User"]["username"]));
                 $datos = $this->User->find('first', $options);
-                if($datos == null)
-                {
-                     $this->Session->setFlash(__('El usuario no está registrado, try again'));
-                }
-                else
-                {
+                if ($datos == null) {
+                    $this->Session->setFlash(__('El usuario no está registrado, intenta nuevamente'));
+                } else {
                     $this->Session->write('User.id', $datos['User']['id']);
+                    $this->Session->write('User.type_user_id', $datos['User']['type_user_id']);                   
                     $user_id = $this->Session->read('User.id');
                     $this->loadModel('AuthorizationsUsers');
-                    $queryDatos = "select * from authorizations_users JOIN authorizations on authorizations_users.authorization_id=authorizations.id where authorizations_users.user_id=".$user_id."";
+                    $queryDatos = "select * from authorizations_users JOIN authorizations on authorizations_users.authorization_id=authorizations.id where authorizations_users.user_id=" . $user_id . "";
 
                     $permisos = $this->AuthorizationsUsers->query($queryDatos);
 
@@ -298,19 +290,17 @@ class UsersController extends AppController {
                     $acciones = array();
 
                     foreach ($permisos as $permiso) {
-                    
-                      array_push($acciones, $permiso['authorizations']['accion']);
-                      array_push($controladores, $permiso['authorizations']['controlador']);
+
+                        array_push($acciones, $permiso['authorizations']['accion']);
+                        array_push($controladores, $permiso['authorizations']['controlador']);
                     }
                     $accion = array_unique($acciones);
                     $controlador = array_unique($controladores);
-                  
+
                     $this->Session->write('accion', $accion);
                     $this->Session->write('controlador', $controlador);
                     return $this->redirect($this->Auth->redirect());
-
                 }
-               
             }
             $this->Session->setFlash(__('el usuario o la clave son incorrectas, intente otra vez'));
         }
@@ -616,19 +606,18 @@ class UsersController extends AppController {
 
 
                     //Agrego la entrada
-                    if($input['Input']["categoria_id"]==$this->request->data['User']['registration_type_id']){
+                    if ($input['Input']["categoria_id"] == $this->request->data['User']['registration_type_id']) {
                         $this->request->data["Input"]["id"] = $input["Input"]["id"];
 
-                    $this->request->data["Input"]["person_id"] = $newPeopleId;
+                        $this->request->data["Input"]["person_id"] = $newPeopleId;
 //                    $this->request->data["Input"]["events_registration_type_id"] = $this->request->data["User"]["registration_type_id"];
-                    $this->loadModel("Input");
+                        $this->loadModel("Input");
 //                    debug($this->request->data["Input"]);
-                    $this->Input->save($this->request->data);
-                    $this->Session->setFlash('Registro realizado con exito', 'good');
-                    } else{
-                       $this->Session->setFlash('La tarjeta no concuerda con la categoria', 'error'); 
+                        $this->Input->save($this->request->data);
+                        $this->Session->setFlash('Registro realizado con exito', 'good');
+                    } else {
+                        $this->Session->setFlash('La tarjeta no concuerda con la categoria', 'error');
                     }
-                    
                 } catch (Exception $exc) {
                     $error2 = $exc->getCode();
                     if ($error2 == '23000') {

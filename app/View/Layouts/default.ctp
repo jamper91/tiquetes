@@ -55,7 +55,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         </div>
         <!--close-Header-part--> 
 
-
+        <?php debug($this->Session->read('Auth.User.type_iser_id'));?>
         <!--top-Header-menu-->
         <div id="user-nav" class="navbar navbar-inverse">
             <ul class="nav">
@@ -100,8 +100,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                 <li> <a href="#"><i class="icon icon-signal"></i> <span>Reportes</span></a> </li>
                 <!--<li> <a href="widgets.html"><i class="icon icon-inbox"></i> <span>Widgets</span></a> </li>-->
                 <li class="submenu"  > 
-                    <a href="#">
-
+                    <a href="#">                        
                         <i class="icon icon-fullscreen"></i> 
                         <span>Gestionar Usuarios</span>
                     </a>
