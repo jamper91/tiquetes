@@ -46,6 +46,13 @@
             "label" => "Tipo de Entrada",
             "options" => "Categoria.descripcion"
         ));
+        echo $this->Form->input('entr_identificador', array(
+            "div" => array(
+                "class" => "controls"
+            ),
+            "label" => "Identificador",
+            "value" => ""
+        ));
         echo $this->Form->input('entr_codigo', array(
             "div" => array(
                 "class" => "controls"

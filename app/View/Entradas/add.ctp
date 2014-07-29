@@ -8,11 +8,11 @@
                      "options" => $escenario,
                         "empty" => "Seleccione un Escenario"
                 ));
-		echo $this->Form->input('esce_nombre', array(
+		echo $this->Form->input('name', array(
                     'label'=>'Nombre'
                 ));		
 	?>
 	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>
+<?php echo $this->Form->end(__('Crear')); ?>
 </div>
 

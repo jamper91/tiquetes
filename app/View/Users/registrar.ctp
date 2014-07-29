@@ -139,7 +139,7 @@ echo $this->Html->css(array('multi-select'));
                                     html += "<div class='controls'>";
                                     html += "<label for='Form$1'>$1</label>";
                                     html += "<input type='$2' name='data[Data][$5][descripcion]'></input>";
-                                    html += "<input style='display:none' type='text' name='data[Data][$5][forms_personal_data_id]' value='$4'></input>";
+                                    html += "<input style='display:none' type='text' name='data[Data][$5][forms_personal_datum_id]' value='$4'></input>";
                                     html += "<input style='display:none' type='text' name='data[Data][$5][person_id]' value='-1'></input>";
                                     html += "</div>";
                                     

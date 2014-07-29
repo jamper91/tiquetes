@@ -15,7 +15,7 @@ class EntradasController extends AppController {
      *
      * @var array
      */
-    public $components = array('Paginator');
+    public $components = array('Paginator', 'RequestHandler');
 
     /**
      * index method
@@ -114,6 +114,31 @@ class EntradasController extends AppController {
             $this->Session->setFlash(__('The entrada could not be deleted. Please, try again.'));
         }
         return $this->redirect(array('action' => 'index'));
+    }
+    
+    public function getEntradasByStage(){
+         $this->layout = "webservices";
+         $stage_id = $this->request->data["stage_id"];    
+        $options = array(
+            "conditions" => array(
+                "Entrada.stage_id" => $stage_id
+            ),
+            "fields" => array(
+                "Entrada.id",
+                "Entrada.name"
+            ),
+            "recursive" => 0
+        );
+        $eventos = $this->Entrada->find("all", $options);
+        $log = $this->Entrada->getDataSource()->getLog(false, false);
+        //debug($log);
+//        var_dump($cities);
+        $this->set(
+                array(
+                    "datos" => $eventos,
+                    "_serialize" => array("datos")
+                )
+        );
     }
 
 }

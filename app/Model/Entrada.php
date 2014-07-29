@@ -19,7 +19,7 @@ class Entrada extends AppModel {
 	public $belongsTo = array(
 		'Stage' => array(
 			'className' => 'Stage',
-			'foreignKey' => 'Stage_id',
+			'foreignKey' => 'stage_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
@@ -47,11 +47,18 @@ class Entrada extends AppModel {
 		),
             'Categoria' => array(
 			'className' => 'Categoria',
-			'foreignKey' => 'categoria_id',
+			'joinTable' => 'categorias_entradas',
+			'foreignKey' => 'entrada_id',
+			'associationForeignKey' => 'categoria_id',
+			'unique' => 'keepExisting',
 			'conditions' => '',
 			'fields' => '',
-			'order' => ''
-		)
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+		),
+            
 	);
 
 }
