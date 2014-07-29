@@ -46,11 +46,11 @@ echo $this->Html->css(array('multi-select'));
                 "empty" => "Seleccione Tipo de Evento"
             ));
 //        echo $this->Form->input('event_type_id');
-            echo $this->Form->input('even_nombre');
-            echo $this->Form->input('even_numeResolucion');
-            echo $this->Form->input('even_palaClave');
-            echo $this->Form->input('even_observaciones');
-            echo $this->Form->input('even_estado');
+            echo $this->Form->input('even_nombre', array('label' => 'Nombre'));
+            echo $this->Form->input('even_numeResolucion', array('label' => 'Numero de Resolucion'));
+            echo $this->Form->input('even_palaClave', array('label' => 'palabra clave'));
+            echo $this->Form->input('even_observaciones', array('label' => 'observaciones'));
+            echo $this->Form->input('even_estado', array('label' => 'estado'));
 
 //            echo $this->Form->input('even_imagen1');
             echo $this->Form->input('even_imagen1', array('type' => 'file', 'label' => 'Imagen 1'));
@@ -125,20 +125,20 @@ echo $this->Html->css(array('multi-select'));
 //                    
                 ?>
             </div>
-            <div class="control-group"  >
+<!--            <div class="control-group"  >
                 <label class="control-label">Tipos de Registro</label>
                 <?php
-                echo $this->Form->input('RegistrationType', array(
-                    "div" => array(
-                        "class" => "controls"
-                    ),
-                    "label" => "",
-                    "options" => $registrationTypes,
-                    "multiple" => true
-                ));
+//                echo $this->Form->input('RegistrationType', array(
+//                    "div" => array(
+//                        "class" => "controls"
+//                    ),
+//                    "label" => "",
+//                    "options" => $registrationTypes,
+//                    "multiple" => true
+//                ));
 //                    
                 ?>
-            </div>
+            </div>-->
             <?php
 //            echo $this->Form->input('Payment');
 //            echo $this->Form->input('RegistrationType');
@@ -217,6 +217,7 @@ echo $this->Html->css(array('multi-select'));
                     }
                 });
             });
+            
         });
     });
     $('#Payment').multiSelect({

@@ -97,7 +97,16 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                 <i class="icon icon-home"></i> Dashboard</a>
             <ul id="menu">
                 <li ><a id="asfsa" href="#"><i class="icon icon-home"></i> <span>Inicio</span></a> </li>
-                <li> <a href="#"><i class="icon icon-signal"></i> <span>Reportes</span></a> </li>
+                <li class="submenu"  > 
+                    <a href="#">
+                        <i class="icon icon-fullscreen"></i> 
+                        <span>Reportes</span>
+                    </a>
+                    <ul>
+                        <!--<li><a href="<?= $this->Html->url(array("controller" => "cities", "action" => "export")); ?>">Ciudades</a></li>-->
+                    </ul>
+                </li>
+                <!--<li> <a href="#"><i class="icon icon-signal"></i> <span>Reportes</span></a> </li>-->
                 <!--<li> <a href="widgets.html"><i class="icon icon-inbox"></i> <span>Widgets</span></a> </li>-->
                 <li class="submenu"  > 
                     <a href="#">                        
