@@ -17,6 +17,11 @@ class EventsRegistrationTypesController extends AppController {
      */
     public $components = array('Paginator', 'RequestHandler');
 
+    public function beforeFilter() {
+        parent::beforeFilter();
+        $this->Auth->allow('getRegistrationTypesByEvent');
+    }
+
     /**
      * index method
      *
@@ -115,19 +120,19 @@ class EventsRegistrationTypesController extends AppController {
      */
     function getRegistrationTypesByEvent() {
         $this->layout = "webservices";
+        $this->loadModel('Categoria');
         $eventId = $this->request->data("event_id");
         $options = array(
             "conditions" => array(
-                "EventsRegistrationType.event_id" => $eventId
+                "Categoria.event_id" => $eventId
             ),
             "fields" => array(
-                "EventsRegistrationType.id",
-                "EventsRegistrationType.registration_type_id",
-                "RegistrationType.nombre",
-                "RegistrationType.categoria_id"
+                "Categoria.id",                
+                "Categoria.descripcion",
+                
             )
         );
-        $RegistrationType = $this->EventsRegistrationType->find("all", $options);
+        $RegistrationType = $this->Categoria->find("all", $options);
         $this->set(
                 array(
                     "datos" => $RegistrationType,

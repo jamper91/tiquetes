@@ -85,6 +85,7 @@
                 valor = $("codigo", this).text();
                 texto = $("mensaje", this).text();
                 $("#InputEntrCodigo").val("");
+                $("#InputEntrIdentificador").val("");
                 $("#mensaje").text(texto);
                 
             });

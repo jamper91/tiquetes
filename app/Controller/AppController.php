@@ -25,12 +25,10 @@ class AppController extends Controller {
     
    public $components = array(
             'Session',
-            'Auth' => array(
-                'authenticate' => array(
-                    'Form' => array(
-                        'fields' => array('username'=>'usuario', 'password'=>'clave')
-                    )
-                )
-            )
+            'Auth' 
     );
+    
+    public function beforeFilter() {
+       $this->set('authUser', $this->Auth->user()); 
+    }
 }

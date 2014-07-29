@@ -87,6 +87,7 @@ echo $this->Html->css(array('multi-select'));
             var datos = {
                 event_id: event_id
             }
+            console.log("url: "+url);
             ajax(url, datos, function(xml)
             {
                 //Elimino lo que contiene este select
@@ -95,17 +96,15 @@ echo $this->Html->css(array('multi-select'));
                 {
                     $("datos", xml).each(function()
                     {
-                        var obj = $(this).find("EventsRegistrationType");
+                        var obj = $(this).find("Categoria");
                         var valor, texto;
                         valor = $("id", obj).text();
-                        obj = $(this).find("RegistrationType");
-                        texto = $("nombre", obj).text();
-                        var category_id = $("category_id", obj).text();
+                        texto = $("descripcion", obj).text();
                         if (valor) {
                             var html = "<option value='$1' categoria='$3'>$2</option>";
                             html = html.replace("$1", valor);
                             html = html.replace("$2", texto);
-                            html = html.replace("$3", category_id);
+                            html = html.replace("$3", valor);
                             $("#UserRegistrationTypeId").append(html);
                         }
                     });
@@ -122,8 +121,8 @@ echo $this->Html->css(array('multi-select'));
                             formulario += "<input id='PeopleDocumento' type='number' name='data[People][pers_documento]'></input>";
                             formulario += "</div>";
 
-                            
-                            var con=0;
+
+                            var con = 0;
                             $("datos", xml2).each(function()
                             {
                                 var obj = $(this).find("PersonalDatum");
@@ -142,7 +141,7 @@ echo $this->Html->css(array('multi-select'));
                                     html += "<input style='display:none' type='text' name='data[Data][$5][forms_personal_datum_id]' value='$4'></input>";
                                     html += "<input style='display:none' type='text' name='data[Data][$5][person_id]' value='-1'></input>";
                                     html += "</div>";
-                                    
+
                                     html = html.replace("$1", descripcion);
                                     html = html.replace("$1", descripcion);
                                     html = html.replace("$2", tipo);
@@ -160,14 +159,14 @@ echo $this->Html->css(array('multi-select'));
                             formulario += "<div class='controls'>";
                             formulario += "<label for='PersonDocumento'>Tarjeta</label>";
                             formulario += "<input id='PersonDocumento' type='password' name='data[Input][entr_codigo]'></input>";
-                            
+
                             formulario += "</div>";
-                            
+
                             //Datos para almacenar en la tabla events_registration_types
                             formulario += "<input style='display:none' type='text' name='data[EventsRegistrationType][registration_type_id]'  value='-1' id='EventsRegistrationTypesRegistrationTypeId'></input>";
                             formulario += "<input style='display:none' type='text' name='data[EventsRegistrationType][event_id]' value='$1'></input>";
-                            console.log('formulario: '+formulario);
-                            
+                            console.log('formulario: ' + formulario);
+
                             formulario = formulario.replace("$1", event_id);
                             //Datos para almacenar en la tabla inputs
                             formulario += "<input style='display:none' type='text' name='data[Input][events_registration_type_id]' value='-1'></input>";

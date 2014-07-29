@@ -155,7 +155,7 @@ class InputsController extends AppController {
                 if ($error2 === '23000'){
                     $datos = array(
                       "codigo"=>"-2",
-                      "mensaje"=>"Error la tarjeta ya fue registrada en la base de datos"
+                      "mensaje"=>"Error la tarjeta o el identificador ya fueron registrados en la base de datos"
                     );
                 }
             }

@@ -37,7 +37,12 @@ class PagesController extends AppController {
  */
 	public $uses = array();
 
-/**
+//        public function beforeFilter() {
+//            parent::beforeFilter();
+//            $this->set('authUser', $this->Auth->user());
+//        }
+
+        /**
  * Displays a view
  *
  * @param mixed What page to display

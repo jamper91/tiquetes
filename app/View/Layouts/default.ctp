@@ -55,7 +55,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         </div>
         <!--close-Header-part--> 
 
-        <?php debug($this->Session->read('Auth.User.type_iser_id'));?>
+        <?php //  debug($this->Session->read('User.type_user_id')); ?>
         <!--top-Header-menu-->
         <div id="user-nav" class="navbar navbar-inverse">
             <ul class="nav">
@@ -93,33 +93,42 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         <!--close-top-serch-->
         <!--sidebar-menu-->
         <div id="sidebar">
+            <?php if($authUser)
+                { ?>
             <a href="#" class="visible-phone">
                 <i class="icon icon-home"></i> Dashboard</a>
+
             <ul id="menu">
                 <li ><a id="asfsa" href="#"><i class="icon icon-home"></i> <span>Inicio</span></a> </li>
-                <li class="submenu"  > 
-                    <a href="#">
-                        <i class="icon icon-fullscreen"></i> 
-                        <span>Reportes</span>
-                    </a>
-                    <ul>
-                        <!--<li><a href="<?= $this->Html->url(array("controller" => "cities", "action" => "export")); ?>">Ciudades</a></li>-->
-                    </ul>
-                </li>
-                <!--<li> <a href="#"><i class="icon icon-signal"></i> <span>Reportes</span></a> </li>-->
-                <!--<li> <a href="widgets.html"><i class="icon icon-inbox"></i> <span>Widgets</span></a> </li>-->
+                <?php
+                
+                if ((in_array('add', $this->Session->read('accion')) and in_array('users', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) {
+                    ?>
+                    <li class="submenu"  > 
+                        <a href="#">
+                            <i class="icon icon-fullscreen"></i> 
+                            <span>Reportes</span>
+                        </a>
+                        <ul>
+                            <li><a href="<?= $this->Html->url(array("controller" => "entradas", "action" => "reportes")); ?>">Reportes de Ingreso</a></li>
+                        </ul>
+                    </li>
+                <?php }
+                ?>
+        <!--<li> <a href="#"><i class="icon icon-signal"></i> <span>Reportes</span></a> </li>-->
+        <!--<li> <a href="widgets.html"><i class="icon icon-inbox"></i> <span>Widgets</span></a> </li>-->
                 <li class="submenu"  > 
                     <a href="#">                        
                         <i class="icon icon-fullscreen"></i> 
                         <span>Gestionar Usuarios</span>
                     </a>
                     <ul>
-                        <?php if(in_array('add', $this->Session->read('accion')) and in_array('users', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "users", "action" => "add")); ?>">Crear Usuario</a></li>
-                        <?php }?>
-                        <?php if(in_array('index', $this->Session->read('accion')) and in_array('users', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "users", "action" => "index")); ?>">Listar Usuario</a></li>
-                        <?php }?>
+                        <?php if ((in_array('add', $this->Session->read('accion')) and in_array('users', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "users", "action" => "add")); ?>">Crear Usuario</a></li>
+                        <?php } ?>
+                        <?php if ((in_array('index', $this->Session->read('accion')) and in_array('users', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "users", "action" => "index")); ?>">Listar Usuario</a></li>
+                        <?php } ?>
                     </ul>
                 </li>
                 <!--<li><a href="grid.html"><i class="icon icon-fullscreen"></i> <span>Geografia</span></a></li>-->
@@ -129,15 +138,15 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <span>Geografia</span>
                     </a>
                     <ul>
-                         <?php if(in_array('add', $this->Session->read('accion')) and in_array('countries', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "countries", "action" => "add")); ?>">Paises</a></li>
-                        <?php }?>
-                         <?php if(in_array('add', $this->Session->read('accion')) and in_array('states', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "states", "action" => "add")); ?>">Departamentos</a></li>
-                        <?php }?>
-                        <?php if(in_array('add', $this->Session->read('accion')) and in_array('cities', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "cities", "action" => "add")); ?>">Ciudades</a></li>
-                        <?php }?>
+                        <?php if ((in_array('add', $this->Session->read('accion')) and in_array('countries', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "countries", "action" => "add")); ?>">Paises</a></li>
+                        <?php } ?>
+                        <?php if ((in_array('add', $this->Session->read('accion')) and in_array('states', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "states", "action" => "add")); ?>">Departamentos</a></li>
+                        <?php } ?>
+                        <?php if ((in_array('add', $this->Session->read('accion')) and in_array('cities', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "cities", "action" => "add")); ?>">Ciudades</a></li>
+                        <?php } ?>
                     </ul>
                 </li>
                 <li class="submenu"  > 
@@ -146,12 +155,12 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <span>Formularios</span>
                     </a>
                     <ul>
-                        <?php if(in_array('add', $this->Session->read('accion')) and in_array('personalData', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "PersonalData", "action" => "add")); ?>">Crear Campos</a></li>
-                        <?php }?>
-                        <?php if(in_array('add', $this->Session->read('accion')) and in_array('forms', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "forms", "action" => "add")); ?>">Formularios</a></li>
-                        <?php }?>
+                        <?php if ((in_array('add', $this->Session->read('accion')) and in_array('personalData', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "PersonalData", "action" => "add")); ?>">Crear Campos</a></li>
+                        <?php } ?>
+                        <?php if ((in_array('add', $this->Session->read('accion')) and in_array('forms', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "forms", "action" => "add")); ?>">Formularios</a></li>
+                        <?php } ?>
                     </ul>
                 </li>
                 <li class="submenu"  > 
@@ -160,12 +169,12 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <span>Gestionar Personas</span>
                     </a>
                     <ul>
-                         <?php if(in_array('elegirEvento', $this->Session->read('accion')) and in_array('users', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "elegirEvento")); ?>">Crear Persona</a></li>
-                        <?php }?>
-                        <?php if(in_array('buscador', $this->Session->read('accion')) and in_array('users', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador")); ?>">Buscar Persona</a></li>
-                        <?php }?>
+                        <?php if ((in_array('elegirEvento', $this->Session->read('accion')) and in_array('users', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "elegirEvento")); ?>">Crear Persona</a></li>
+                        <?php } ?>
+                        <?php if ((in_array('buscador', $this->Session->read('accion')) and in_array('users', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador")); ?>">Buscar Persona</a></li>
+                        <?php } ?>
 
                     </ul>
                 </li>
@@ -175,12 +184,12 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <span>Gestionar Tipos de Usuario</span>
                     </a>
                     <ul>
-                        <?php if(in_array('add', $this->Session->read('accion')) and in_array('typeUsers', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "TypeUsers", "action" => "add")); ?>">Crear Tipo de Usuario</a></li>
-                         <?php }?>
-                         <?php if(in_array('index', $this->Session->read('accion')) and in_array('typeUsers', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "TypeUsers", "action" => "index")); ?>">Listar Tipos de Usuario</a></li>
-                        <?php }?>
+                        <?php if ((in_array('add', $this->Session->read('accion')) and in_array('typeUsers', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "TypeUsers", "action" => "add")); ?>">Crear Tipo de Usuario</a></li>
+                        <?php } ?>
+                        <?php if ((in_array('index', $this->Session->read('accion')) and in_array('typeUsers', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "TypeUsers", "action" => "index")); ?>">Listar Tipos de Usuario</a></li>
+                        <?php } ?>
                     </ul>
                 </li>
                 <li class="submenu"  > 
@@ -189,12 +198,12 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <span>Gestionar Escenario</span>
                     </a>
                     <ul>
-                        <?php if(in_array('add', $this->Session->read('accion')) and in_array('stages', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Stages", "action" => "add")); ?>">Crear Escenario</a></li>
-                        <?php }?>
-                        <?php if(in_array('index', $this->Session->read('accion')) and in_array('stages', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Stages", "action" => "index")); ?>">Listar Escenarios</a></li>
-                        <?php }?>
+                        <?php if ((in_array('add', $this->Session->read('accion')) and in_array('stages', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "Stages", "action" => "add")); ?>">Crear Escenario</a></li>
+                        <?php } ?>
+                        <?php if ((in_array('index', $this->Session->read('accion')) and in_array('stages', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "Stages", "action" => "index")); ?>">Listar Escenarios</a></li>
+                        <?php } ?>
                     </ul>
                 </li>
                 <li class="submenu"  > 
@@ -203,21 +212,21 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <span>Gestionar Eventos</span>
                     </a>
                     <ul>
-                        <?php if(in_array('add', $this->Session->read('accion')) and in_array('eventTypes', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "EventTypes", "action" => "add")); ?>">Crear Tipos de Evento</a></li>
-                        <?php }?>
-                        <?php if(in_array('add', $this->Session->read('accion')) and in_array('events', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Events", "action" => "add")); ?>">Crear Evento</a></li>
-                        <?php }?>
-                         <?php if(in_array('add', $this->Session->read('accion')) and in_array('locations', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Locations", "action" => "add")); ?>">Crear Localidad</a></li>
-                        <?php }?>
-                        <?php if(in_array('add', $this->Session->read('accion')) and in_array('shelves', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Shelves", "action" => "add")); ?>">Crear Grupo de Estan</a></li>
-                        <?php }?>
-                        <?php if(in_array('add', $this->Session->read('accion')) and in_array('inputs', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Inputs", "action" => "add")); ?>">Crear entradas por Evento</a></li> 
-                        <?php }?>                       
+                        <?php if ((in_array('add', $this->Session->read('accion')) and in_array('eventTypes', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "EventTypes", "action" => "add")); ?>">Crear Tipos de Evento</a></li>
+                        <?php } ?>
+                        <?php if ((in_array('add', $this->Session->read('accion')) and in_array('events', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "Events", "action" => "add")); ?>">Crear Evento</a></li>
+                        <?php } ?>
+                        <?php if ((in_array('add', $this->Session->read('accion')) and in_array('locations', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "Locations", "action" => "add")); ?>">Crear Localidad</a></li>
+                        <?php } ?>
+                        <?php if ((in_array('add', $this->Session->read('accion')) and in_array('shelves', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "Shelves", "action" => "add")); ?>">Crear Grupo de Estan</a></li>
+                        <?php } ?>
+                        <?php if ((in_array('add', $this->Session->read('accion')) and in_array('inputs', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "Inputs", "action" => "add")); ?>">Crear entradas por Evento</a></li> 
+                        <?php } ?>                       
                     </ul>
                 </li>
                 <li class="submenu"  > 
@@ -226,12 +235,12 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <span>Gestionar Hoteles</span>
                     </a>
                     <ul>
-                        <?php if(in_array('add', $this->Session->read('accion')) and in_array('hotels', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Hotels", "action" => "add")); ?>">Crear Hotel</a></li>
-                        <?php }?> 
-                        <?php if(in_array('index', $this->Session->read('accion')) and in_array('hotels', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Hotels", "action" => "index")); ?>">Lista Hoteles</a></li>  
-                        <?php }?>                       
+                        <?php if ((in_array('add', $this->Session->read('accion')) and in_array('hotels', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "Hotels", "action" => "add")); ?>">Crear Hotel</a></li>
+                        <?php } ?> 
+                        <?php if ((in_array('index', $this->Session->read('accion')) and in_array('hotels', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "Hotels", "action" => "index")); ?>">Lista Hoteles</a></li>  
+                        <?php } ?>                       
                     </ul>
                 </li>
                 <li class="submenu"  > 
@@ -240,12 +249,12 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <span>Gestionar Tipos de registro</span>
                     </a>
                     <ul>
-                        <?php if(in_array('add', $this->Session->read('accion')) and in_array('registrationTypes', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "RegistrationTypes", "action" => "add")); ?>">Crear Tipos de Registro</a></li>
-                        <?php }?> 
-                        <?php if(in_array('index', $this->Session->read('accion')) and in_array('registrationTypes', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "RegistrationTypes", "action" => "index")); ?>">Lista Tipos de Registro</a></li> 
-                        <?php }?>                        
+                        <?php if ((in_array('add', $this->Session->read('accion')) and in_array('registrationTypes', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "RegistrationTypes", "action" => "add")); ?>">Crear Tipos de Registro</a></li>
+                        <?php } ?> 
+                        <?php if ((in_array('index', $this->Session->read('accion')) and in_array('registrationTypes', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "RegistrationTypes", "action" => "index")); ?>">Lista Tipos de Registro</a></li> 
+                        <?php } ?>                        
                     </ul>
                 </li>
                 <li class="submenu"  > 
@@ -254,27 +263,28 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <span>Gestionar Medios de pago</span>
                     </a>
                     <ul>
-                        <?php if(in_array('add', $this->Session->read('accion')) and in_array('payments', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Payments", "action" => "add")); ?>">Crear Medio de pago</a></li>
-                        <?php }?> 
-                         <?php if(in_array('index', $this->Session->read('accion')) and in_array('payments', $this->Session->read('controlador'))){?>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Payments", "action" => "index")); ?>">Lista Medios de Pago</a></li> 
-                        <?php }?>                        
+                        <?php if ((in_array('add', $this->Session->read('accion')) and in_array('payments', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "Payments", "action" => "add")); ?>">Crear Medio de pago</a></li>
+                        <?php } ?> 
+                        <?php if ((in_array('index', $this->Session->read('accion')) and in_array('payments', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                            <li><a href="<?= $this->Html->url(array("controller" => "Payments", "action" => "index")); ?>">Lista Medios de Pago</a></li> 
+                        <?php } ?>                        
                     </ul>
                 </li>
-                <?php if(in_array('add', $this->Session->read('accion')) and in_array('authorizationsUsers', $this->Session->read('controlador'))){?>
-                 <li class="submenu"  > 
-                    <a href="#">
-                        <i class="icon icon-th-list"></i> 
-                        <span>Gestionar Autorizacion</span>
-                    </a>
-                    <ul>
-                        <li><a href="<?= $this->Html->url(array("controller" => "AuthorizationsUsers", "action" => "add")); ?>">Autorizar Usuarios</a></li>
-                        
-                    </ul>
-                </li>
-                <?php }?> 
+                <?php if ((in_array('add', $this->Session->read('accion')) and in_array('authorizationsUsers', $this->Session->read('controlador'))) || $this->Session->read('User.type_user_id') == 1) { ?>
+                    <li class="submenu"  > 
+                        <a href="#">
+                            <i class="icon icon-th-list"></i> 
+                            <span>Gestionar Autorizacion</span>
+                        </a>
+                        <ul>
+                            <li><a href="<?= $this->Html->url(array("controller" => "AuthorizationsUsers", "action" => "add")); ?>">Autorizar Usuarios</a></li>
+
+                        </ul>
+                    </li>
+                <?php } ?> 
             </ul>
+            <?php  }  ?> 
         </div>
         <!--sidebar-menu-->
 
@@ -295,7 +305,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         <!--Footer-part-->
 
         <div class="row-fluid">
-           <!--  <div id="footer" class="span12">  <a href="http://themedesigner.in/">Themedesigner.in</a> </div> -->
+            <!--  <div id="footer" class="span12">  <a href="http://themedesigner.in/">Themedesigner.in</a> </div> -->
         </div>
 
 

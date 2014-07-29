@@ -18,15 +18,15 @@ class UsersController extends AppController {
     public $components = array('Paginator', 'Auth', 'Session', 'RequestHandler');
 
     public function beforeFilter() {
-
-        $this->Auth->allow('add', 'asociartarjeta', 'add2', 'buscador');
+        $this->set('authUser', $this->Auth->user());
+//        $this->Auth->allow('add', 'asociartarjeta', 'add2', 'buscador');
 
         parent:: beforeFilter();
-        if ($this->Auth->user('role') == 'admin') {
-            $this->Auth->allow('add', 'asociartarjeta', 'add2');
-        } else {
-            $this->Auth->allow();
-        }
+//        if ($this->Auth->user('role') == 'admin') {
+//            $this->Auth->allow('add', 'asociartarjeta', 'add2');
+//        } else {
+//            $this->Auth->allow();
+//        }
     }
 
     /**
@@ -259,27 +259,37 @@ class UsersController extends AppController {
     }
 
     public function login() {
+        
+        $this->Session->destroy();
         if ($this->request->is('post')) {
-            // debug($this->request->data);
-            // debug($this->Auth->login());
-            if ($this->Auth->login() !== false) {
+             //debug($this->request->data);
+//            debug($this->Auth->login());
+//            debug($this->request->data);
+            if ($this->Auth->login() == true) {
                 $this->Session->write('User.username', $this->request->data["User"]["username"]);
+                $this->Session->write('User.password', $this->request->data["User"]["password"]);
+//                debug($this->Auth->user());
                 $options = array(
                     'conditions' => array(
-                        "User.username" => $this->request->data["User"]["username"]
+                        "User.id" => $this->Auth->user('id')
+//                        "User.password" => $this->request->data["User"]["password"]
                     ),
                     'fields' => array(
-                        "User.id"
+                        "User.id",
+                        "User.type_user_id"
                     ),
                     'recursive' => -2
                 );
+//                debug($options);
                 $this->Session->setFlash(__('Bienvenido ' . $this->request->data["User"]["username"]));
                 $datos = $this->User->find('first', $options);
-                if ($datos == null) {
+//                debug($datos);
+                if ($datos === null) {
                     $this->Session->setFlash(__('El usuario no está registrado, intenta nuevamente'));
                 } else {
                     $this->Session->write('User.id', $datos['User']['id']);
-                    $this->Session->write('User.type_user_id', $datos['User']['type_user_id']);                   
+                    $this->Session->write('User.type_user_id', $datos['User']['type_user_id']);
+                                      
                     $user_id = $this->Session->read('User.id');
                     $this->loadModel('AuthorizationsUsers');
                     $queryDatos = "select * from authorizations_users JOIN authorizations on authorizations_users.authorization_id=authorizations.id where authorizations_users.user_id=" . $user_id . "";
@@ -307,7 +317,7 @@ class UsersController extends AppController {
     }
 
     public function logout() {
-        return $this->redirect($this->Auth->logout());
+       return $this->redirect($this->Auth->logout());
     }
 
     public function asociartarjeta() {
