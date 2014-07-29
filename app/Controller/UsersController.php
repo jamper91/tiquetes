@@ -310,7 +310,7 @@ class UsersController extends AppController {
                   
                   $this->Session->write('accion', $accion);
                   $this->Session->write('controlador', $controlador);
-                 debug($this->Session->read('controlador'));
+                 //debug($this->Session->read('controlador'));
                   // debug($acciones);
                   // debug($controladores);
                 //return $this->redirect($this->Auth->redirect());

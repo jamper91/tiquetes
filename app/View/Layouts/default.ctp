@@ -254,7 +254,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <?php }?>                        
                     </ul>
                 </li>
-                <?php if(in_array('index', $this->Session->read('accion')) and in_array('payments', $this->Session->read('controlador')) and $this->Session->read('User.id') == 'admin'){?>
+                <?php if(in_array('add', $this->Session->read('accion')) and in_array('authorizationsUsers', $this->Session->read('controlador'))){?>
                  <li class="submenu"  > 
                     <a href="#">
                         <i class="icon icon-th-list"></i> 
