@@ -89,6 +89,7 @@ class UsersController extends AppController {
                 $newPeopleId = $this->People->getLastInsertId();
 
                 $newUser = $this->User->create();
+
                 $newUser = array(
                     'User' => array(
                         'person_id' => $newPeopleId,
@@ -280,41 +281,38 @@ class UsersController extends AppController {
                 );
                 //$this->Session->setFlash(__('Bienvenido ' . $this->request->data["User"]["username"]));
                 $datos = $this->User->find('first', $options);
-                //debug($datos['User']['id']);
-                $this->Session->write('User.id', $datos['User']['id']);
-                $user_id = $this->Session->read('User.id');
-                //debug($user_id);
-                $this->loadModel('AuthorizationsUsers');
-                // $autorizado = $this->AuthorizationsUsers->find('list', array(
-                //     "conditions"=>array(
-                //         "AuthorizationsUsers.user_id"=>$user_id),
-                //     "fields"=>array(
-                //         "AuthorizationsUsers.")));
-                //debug();
-                $queryDatos = "select * from authorizations_users JOIN authorizations on authorizations_users.authorization_id=authorizations.id where authorizations_users.user_id=".$user_id."";
-                
+                if($datos == null)
+                {
+                     $this->Session->setFlash(__('El usuario no está registrado, try again'));
+                }
+                else
+                {
+                    $this->Session->write('User.id', $datos['User']['id']);
+                    $user_id = $this->Session->read('User.id');
+                    $this->loadModel('AuthorizationsUsers');
+                    $queryDatos = "select * from authorizations_users JOIN authorizations on authorizations_users.authorization_id=authorizations.id where authorizations_users.user_id=".$user_id."";
 
-                  $permisos = $this->AuthorizationsUsers->query($queryDatos);
+                    $permisos = $this->AuthorizationsUsers->query($queryDatos);
 
-                  $controladores = array();
-                  $acciones = array();
+                    $controladores = array();
+                    $acciones = array();
 
-                  foreach ($permisos as $permiso) {
+                    foreach ($permisos as $permiso) {
                     
                       array_push($acciones, $permiso['authorizations']['accion']);
                       array_push($controladores, $permiso['authorizations']['controlador']);
-                  }
-                  $accion = array_unique($acciones);
-                  $controlador = array_unique($controladores);
+                    }
+                    $accion = array_unique($acciones);
+                    $controlador = array_unique($controladores);
                   
-                  $this->Session->write('accion', $accion);
-                  $this->Session->write('controlador', $controlador);
-                 //debug($this->Session->read('controlador'));
-                  // debug($acciones);
-                  // debug($controladores);
-                //return $this->redirect($this->Auth->redirect());
+                    $this->Session->write('accion', $accion);
+                    $this->Session->write('controlador', $controlador);
+                    return $this->redirect($this->Auth->redirect());
+
+                }
+               
             }
-            $this->Session->setFlash(__('Invalid username or password, try again'));
+            $this->Session->setFlash(__('el usuario o la clave son incorrectas, intente otra vez'));
         }
     }
 
