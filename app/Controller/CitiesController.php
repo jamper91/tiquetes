@@ -16,6 +16,7 @@ class CitiesController extends AppController {
      * @var array
      */
     public $components = array('Paginator', 'RequestHandler');
+//    var $helpers = array('xls');
 
     /**
      * index method
@@ -147,7 +148,7 @@ class CitiesController extends AppController {
             ),
             "recursive" => 0
         );
-        
+
         $cities = $this->City->find("all", $options);
         $log = $this->City->getDataSource()->getLog(false, false);
         //debug($log);
@@ -158,6 +159,11 @@ class CitiesController extends AppController {
                     "_serialize" => array("datos")
                 )
         );
+    }
+
+    function export() {
+        $data = $this->City->find('all');
+        $this->set('cities', $data);
     }
 
 }

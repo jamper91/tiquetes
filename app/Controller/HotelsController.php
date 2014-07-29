@@ -76,7 +76,7 @@ class HotelsController extends AppController {
         //$cities = $this->Stage->City->find('list');
         $this->set(compact('cities'));
         
-//        $this->set(compact('events'));
+        $this->set(compact('hotels'));
     }
 
     /**
