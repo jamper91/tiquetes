@@ -104,19 +104,40 @@ class UsersController extends AppController {
                     )
                 );
                 $this->User->save($newUser);
-                $usuario = $this->User->getLastInsertId();
-                $this->loadModel('Authorization');
-                $newAutirizationsUser = $this->Authorization->create();
-                $this->Authorization->save($this->request->data);
-                debug($this->request->data("data[User][Autorization][]"));
-                for ($i = 0; $i < sizeof($this->request->data("data[User][Autorization][]")); $i++)
-                    $newAutirizationsUser = array(
-                        'AutorizartionUser' => array(
-                            $this
-                        )
-                    );
+                //$usuario = $this->User->getLastInsertId();
+
+                //$this->loadModel('AuthorizationsUsers');
+                //$newAutirizationsUser = $this->AuthorizationsUsers->create();
+
+                //$this->Authorization->save($this->request->data);
+                //$data_auth = $this->request->data;
+                //debug($data_auth);
+                // foreach ($data_auth as $value) {
+                //         $authorizations = $value['authorization_id'];
+                //         foreach($authorizations as $value2){
+                //         if($value2 != '')
+                //         {
+                //             debug($value2);
+                //         }
+                        
+                  
+                //     }
+                
+                // }
+                // for ($i = 0; $i < count($this->request->data['authorization_id']); $i++)
+                //     {
+                //         $newAuthorizationsUser = array(
+                //         'AutorizartionUser' => array(
+                //             'authorization_id' => $data("data[User][Autorization][$i]"),
+                //             'user_id'=>$usuario
+                //             )
+                //         );
+                //         //debug($newAuthorizationsUser);
+                //     }           
                 return $this->redirect(array('action' => 'index'));
-            } catch (Exception $ex) {
+            } 
+            catch (Exception $ex) {
+                //debug("entre aqui");
                 $error2 = $ex->getCode();
                 if ($error2 == '23000') {
                     $this->Session->setFlash('Error ya hay una persona con el mismo documento en la base de datos', 'error');
@@ -262,8 +283,37 @@ class UsersController extends AppController {
                 $datos = $this->User->find('first', $options);
                 //debug($datos['User']['id']);
                 $this->Session->write('User.id', $datos['User']['id']);
+                $user_id = $this->Session->read('User.id');
+                //debug($user_id);
+                $this->loadModel('AuthorizationsUsers');
+                // $autorizado = $this->AuthorizationsUsers->find('list', array(
+                //     "conditions"=>array(
+                //         "AuthorizationsUsers.user_id"=>$user_id),
+                //     "fields"=>array(
+                //         "AuthorizationsUsers.")));
                 //debug();
-                return $this->redirect($this->Auth->redirect());
+                $queryDatos = "select * from authorizations_users JOIN authorizations on authorizations_users.authorization_id=authorizations.id where authorizations_users.user_id=".$user_id."";
+                
+
+                  $permisos = $this->AuthorizationsUsers->query($queryDatos);
+
+                  $controladores = array();
+                  $acciones = array();
+
+                  foreach ($permisos as $permiso) {
+                    
+                      array_push($acciones, $permiso['authorizations']['accion']);
+                      array_push($controladores, $permiso['authorizations']['controlador']);
+                  }
+                  $accion = array_unique($acciones);
+                  $controlador = array_unique($controladores);
+                  
+                  $this->Session->write('accion', $accion);
+                  $this->Session->write('controlador', $controlador);
+                 debug($this->Session->read('controlador'));
+                  // debug($acciones);
+                  // debug($controladores);
+                //return $this->redirect($this->Auth->redirect());
             }
             $this->Session->setFlash(__('Invalid username or password, try again'));
         }
