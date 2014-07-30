@@ -78,9 +78,9 @@ class UsersController extends AppController {
                     'pers_documento' => $data['People']['pers_documento'],
                     'pers_direccion' => $data['People']['pers_direccion'],
                     'pers_telefono' => $data['People']['pers_telefono'],
-                   // 'pers_celular' => $data['People']['pers_celular'],
+                    // 'pers_celular' => $data['People']['pers_celular'],
                     'pers_fechNacimiento' => $data['People']['pers_fechNacimiento'],
-                   // 'pers_tipoSangre' => $data['People']['pers_tipoSangre'],
+                    // 'pers_tipoSangre' => $data['People']['pers_tipoSangre'],
                     'pers_mail' => $data['People']['pers_mail']
                 )
             );
@@ -341,12 +341,12 @@ class UsersController extends AppController {
             if ($input) {
                 try {
                     if ($input["Input"]["person_id"] == 0) {
-                        
+
                         $this->Input->id = $input["Input"]["id"];
                         $this->Input->set('person_id', $this->request->data("person_id"));
                         $this->Input->save();
                         $mensaje = "Proceso realizado con exito!!";
-                    }else{
+                    } else {
                         $mensaje = "Ya se asocio una persona a esa tarjeta";
                     }
                 } catch (Exception $exc) {
@@ -768,14 +768,24 @@ class UsersController extends AppController {
                     "Input.entr_codigo" => $this->request->data["Input"]["entr_codigo"]
                 )
             ));
-            if ($input) {
+            if (!$input) {
+
+                $newInput = $this->Input->create();
+                $newInput = array(
+                    'Input' => array(
+                        'entr_identificador' => $data['Input']['entr_identificador'],
+                        'entr_codigo' => $data['Input']['entr_codigo'],
+                        'categoria_id' => 2,
+                    )
+                );
 
                 try {
+                    $this->Input->save($newInput);
+                    $newInputId = $this->Input->getLastInsertId();
 
 
-
-                    //Agrego la entrada
-                    if ($input['Input']["categoria_id"] == $this->request->data['User']['registration_type_id']) {
+//                    //Agrego la entrada
+//                    if ($input['Input']["categoria_id"] == $this->request->data['User']['registration_type_id']) {
                         $this->loadModel('People');
 
                         //Creo y almaceno a la persona
@@ -791,7 +801,7 @@ class UsersController extends AppController {
                             $cont++;
                         }
                         $this->Data->saveAll($this->request->data['Data']);
-                        $this->request->data["Input"]["id"] = $input["Input"]["id"];
+                        $this->request->data["Input"]["id"] = $newInputId;
 
                         $this->request->data["Input"]["person_id"] = $newPeopleId;
 //                    $this->request->data["Input"]["events_registration_type_id"] = $this->request->data["User"]["registration_type_id"];
@@ -800,10 +810,10 @@ class UsersController extends AppController {
                         $this->Input->save($this->request->data);
 //                        $this->Session->setFlash('Registro realizado con exito', 'good');
                         $mensaje = "Registro realizado con exito";
-                    } else {
-//                        $this->Session->setFlash('La tarjeta no concuerda con la categoria', 'error');
-                        $mensaje = "La tarjeta no concuerda con la categoria";
-                    }
+//                    } else {
+////                        $this->Session->setFlash('La tarjeta no concuerda con la categoria', 'error');
+//                        $mensaje = "La tarjeta no concuerda con la categoria";
+//                    }
                 } catch (Exception $exc) {
                     $error2 = $exc->getCode();
                     if ($error2 == '23000') {
@@ -813,7 +823,7 @@ class UsersController extends AppController {
                 }
             } else {
 //                $this->Session->setFlash('Tarjeta no esta registrada en el sistema', 'Error');
-                $mensaje = "Tarjeta no esta registrada en el sistema";
+                $mensaje = "Tarjeta ya esta registrada";
             }
         }
         $this->set(
