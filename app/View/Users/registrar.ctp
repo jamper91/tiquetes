@@ -77,7 +77,7 @@ echo $this->Html->css(array('multi-select'));
         });
         $("input[type='submit']").click(function()
         {
-            $("#UserRegistrationTypeId").val(2);
+            $("#UserRegistrationTypeId").val(1);
            //Envio le formulario por ajax
            var url='<?=$this->Html->url('registrar2.xml')?>';
            ajax(url, $('#UserRegistrarForm').serialize(), function(xml) {

@@ -60,15 +60,9 @@ echo $this->Html->css(array('multi-select'));
             <tr>
                 <td>Teléfono</td>
                 <td><input type="text" id="PeoplePers_telefono" name="data[People][pers_telefono]"/></td>
-                <td>Celular</td>
-                <td><input type="text" id="PeoplePers_celular" name="data[People][pers_celular]"/></td>
-            </tr>
-            <tr>
                 <td>Fecha de Nacimiento</td>
                 <td><input type="text" id="PeoplePers_fechNacimiento" name="data[People][pers_fechNacimiento]"/></td>
-                <td>Tipo de Sangre</td>
-                <td><input type="text" id="PeoplePers_tipoSangre" name="data[People][pers_tipoSangre]"/></td>
-            </tr>
+            </tr>            
             <tr>
                 <td>Email</td>
                 <td><input type="email" id="PeoplePers_mail" name="data[People][pers_mail]"/></td>
