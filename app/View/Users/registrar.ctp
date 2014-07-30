@@ -77,6 +77,7 @@ echo $this->Html->css(array('multi-select'));
         });
         $("input[type='submit']").click(function()
         {
+            $("#UserRegistrationTypeId").val(2);
            //Envio le formulario por ajax
            var url='<?=$this->Html->url('registrar2.xml')?>';
            ajax(url, $('#UserRegistrarForm').serialize(), function(xml) {
@@ -93,7 +94,7 @@ echo $this->Html->css(array('multi-select'));
             var event_id = 1;
             //Coloco el valor al input de evento
             $("#UserEventId").val(1);
-            $("#UserRegistrationTypeId").val(2);
+            
             //Obtengo los tipos de usuarios
             var url = urlbase + "events_registration_types/getRegistrationTypesByEvent.xml";
             var datos = {

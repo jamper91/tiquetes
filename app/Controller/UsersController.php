@@ -475,9 +475,9 @@ class UsersController extends AppController {
 
             $this->loadModel('Event');
             $autorizado = $this->Event->find("list", array(
-                "fields"=>array(
+                "fields" => array(
                     "Event.even_nombre")));
-            
+
             //$event = array();
 
             foreach ($autorizado as $auth) {
@@ -594,8 +594,8 @@ class UsersController extends AppController {
     }
 
     public function registrar2() {
-        $mensaje="";
-        $this->layout="webservice";
+        $mensaje = "";
+        $this->layout = "webservice";
         if ($this->request->is("POST")) {
 
             //Primero determino si la tarjeta esta registrada en el sistema
@@ -608,25 +608,26 @@ class UsersController extends AppController {
             if ($input) {
 
                 try {
-                    $this->loadModel('People');
 
-                    //Creo y almaceno a la persona
-                    $newPeole = $this->People->create();
-                    $this->People->save($this->request->data);
-                    $newPeopleId = $this->People->getLastInsertId();
-
-//            Almaceno la informacion de la persona
-                    $this->loadModel('Data');
-                    $cont = 0;
-                    foreach ($this->request->data["Data"] as $value) {
-                        $this->request->data["Data"][$cont]["person_id"] = $newPeopleId;
-                        $cont++;
-                    }
-                    $this->Data->saveAll($this->request->data['Data']);
 
 
                     //Agrego la entrada
                     if ($input['Input']["categoria_id"] == $this->request->data['User']['registration_type_id']) {
+                        $this->loadModel('People');
+
+                        //Creo y almaceno a la persona
+                        $newPeole = $this->People->create();
+                        $this->People->save($this->request->data);
+                        $newPeopleId = $this->People->getLastInsertId();
+
+                        //Almaceno la informacion de la persona
+                        $this->loadModel('Data');
+                        $cont = 0;
+                        foreach ($this->request->data["Data"] as $value) {
+                            $this->request->data["Data"][$cont]["person_id"] = $newPeopleId;
+                            $cont++;
+                        }
+                        $this->Data->saveAll($this->request->data['Data']);
                         $this->request->data["Input"]["id"] = $input["Input"]["id"];
 
                         $this->request->data["Input"]["person_id"] = $newPeopleId;
@@ -635,22 +636,21 @@ class UsersController extends AppController {
 //                    debug($this->request->data["Input"]);
                         $this->Input->save($this->request->data);
 //                        $this->Session->setFlash('Registro realizado con exito', 'good');
-                        $mensaje="Registro realizado con exito";
+                        $mensaje = "Registro realizado con exito";
                     } else {
 //                        $this->Session->setFlash('La tarjeta no concuerda con la categoria', 'error');
-                        $mensaje="La tarjeta no concuerda con la categoria";
+                        $mensaje = "La tarjeta no concuerda con la categoria";
                     }
                 } catch (Exception $exc) {
                     $error2 = $exc->getCode();
                     if ($error2 == '23000') {
 //                        $this->Session->setFlash('Ya existe un usuario con ese documento', 'error');
-                        $mensaje="Ya existe un usuario con ese documento";
+                        $mensaje = "Ya existe un usuario con ese documento";
                     }
                 }
             } else {
 //                $this->Session->setFlash('Tarjeta no esta registrada en el sistema', 'Error');
-                $mensaje="Tarjeta no esta registrada en el sistema";
-                
+                $mensaje = "Tarjeta no esta registrada en el sistema";
             }
         }
         $this->set(
