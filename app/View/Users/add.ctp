@@ -117,13 +117,8 @@ echo $this->Html->css(array('multi-select'));
                 
             </tr>
             <tr><td>Indentificador</td>
-                <td>
-                    <?php
-                    echo $this->Form->input('Identificador', array(
-                        'label' => ''
-                    ));
-                    ?>
-                </td></tr>
+                <td><input name="data[User][Identificador]" required="true" id="UserIdentificador" type="text"></td>
+            </tr>
         </table>
 
           
