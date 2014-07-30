@@ -73,10 +73,11 @@ echo $this->Html->css(array('multi-select'));
 </div>
 <script>
     $('#PersonalDatumPersonalDatum').multiSelect({
+        keepOrder: true,
         afterSelect: function(values) {
-              //  alert("Select value: " + values);
+//                alert("Select value: " + values);
 //            console.log($('#FormPersonalDatumId option[value="' + values + '"]').html());
-            $('#PersonalDatumPersonalDatum option[value="' + values + '"]').attr("selected", "selected")
+//            $('#PersonalDatumPersonalDatum option[value="' + values + '"]').attr("selected", "selected")
         }
     });
 </script>

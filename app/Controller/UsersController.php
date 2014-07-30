@@ -74,7 +74,7 @@ class UsersController extends AppController {
                     'pers_primNombre' => $data['People']['pers_primNombre'],
                     'pers_primApellido' => $data['People']['pers_primApellido'],
                     'document_type_id' => $data['User']['document_type_id'],
-                    'city_id' => $data['User']['city_id'],
+                    //'city_id' => $data['User']['city_id'],
                     'pers_documento' => $data['People']['pers_documento'],
                     'pers_direccion' => $data['People']['pers_direccion'],
                     'pers_telefono' => $data['People']['pers_telefono'],
@@ -131,7 +131,7 @@ class UsersController extends AppController {
                 //     }           
                 return $this->redirect(array('action' => 'index'));
             } catch (Exception $ex) {
-                //debug("entre aqui");
+                //debug($ex->getMessage());
                 $error2 = $ex->getCode();
                 if ($error2 == '23000') {
                     $this->Session->setFlash('Error ya hay una persona con el mismo documento en la base de datos', 'error');
@@ -464,7 +464,7 @@ class UsersController extends AppController {
                         $newData = array(
                             'Data' => array(
                                 'descripcion' => $value,
-                                'forms_personal_data_id' => key($dato),
+                                'forms_personal_datum_id' => key($dato),
                                 'person_id' => $newPeopleId,
                             )
                         );
@@ -641,7 +641,7 @@ class UsersController extends AppController {
 
             foreach ($autorizado as $auth) {
                 $event_id = $auth;
-                debug($event_id);
+                //debug($event_id);
                 $this->loadModel('Event');
                 $event = $this->Event->find('list', array(
                     "options" => array(
