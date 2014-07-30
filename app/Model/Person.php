@@ -61,14 +61,14 @@ class Person extends AppModel {
 	public $belongsTo = array(
 		'DocumentType' => array(
 			'className' => 'DocumentType',
-			'foreignKey' => 'document_type_id',
+//			'foreignKey' => 'document_type_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
 		),
 		'City' => array(
 			'className' => 'City',
-			'foreignKey' => 'city_id',
+//			'foreignKey' => 'city_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

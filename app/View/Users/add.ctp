@@ -11,7 +11,7 @@ echo $this->Html->css(array('multi-select'));
                 <td>Nombres</td>
                 <td><input type="text" required="true" id="PeoplePers_primNombre" name="data[People][pers_primNombre]"/></td>
                 <td>Apellidos</td>
-                <td><input type="text" id="PeoplePers_primApellido" name="data[People][pers_primApellido]"/></td>
+                <td><input type="text" id="PeoplePers_primApellido" required="true" name="data[People][pers_primApellido]"/></td>
             </tr>
             <tr>
                 <td><?php echo 'Tipo de Documento'; ?></td>
@@ -24,7 +24,7 @@ echo $this->Html->css(array('multi-select'));
                     ?>
                 </td>
                 <td>Número de Documento: </td>
-                <td><input type="text" id="PeoplePers_documento" name="data[People][pers_documento]"/></td>
+                <td><input type="text" required="true" id="PeoplePers_documento" name="data[People][pers_documento]"/></td>
             </tr>
             <tr>
                 <td><?php echo 'País' ?></td>
@@ -87,15 +87,15 @@ echo $this->Html->css(array('multi-select'));
                     ));
                     ?></td>
                 <td>Nombre de Usuario</td>
-                <td><input name="data[User][username]" maxlength="20" id="UserUsuario" type="text"></td>
+                <td><input name="data[User][username]" required="true" maxlength="20" id="UserUsuario" type="text"></td>
                 
 
             </tr>
             <tr>
                 <td>Contraseña</td>
-                <td><input name="data[User][password]" id="UserPassword" type="password"></td>
+                <td><input name="data[User][password]" required="true" id="UserPassword" type="password"></td>
                 <td>Confirmar Contraseña</td>
-                <td><input name="data[User][passwordConfirm]" id="UserPasswordConfirm" type="password"></td> 
+                <td><input name="data[User][passwordConfirm]" required="true" id="UserPasswordConfirm" type="password"></td> 
                                 
             </tr>
             <tr><td>Valido Desde</td>                

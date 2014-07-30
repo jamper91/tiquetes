@@ -57,14 +57,14 @@ class User extends AppModel {
 		),
 		'TypeUser' => array(
 			'className' => 'TypeUser',
-			'foreignKey' => 'type_user_id',
+//			'foreignKey' => 'type_user_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
 		),
 		'Department' => array(
 			'className' => 'Department',
-			'foreignKey' => 'department_id',
+//			'foreignKey' => 'department_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
