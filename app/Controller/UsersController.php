@@ -418,7 +418,8 @@ class UsersController extends AppController {
         // $this->layout = "webservices";
         //$event_id = $this->request->query["event_id"];
         // debug(implode("','",$event_id));
-        $event_id = $this->request->query["event_id"];
+//        $event_id = $this->request->query["event_id"];
+        $event_id = 1;
         //debug($event_id);
 
 
@@ -428,7 +429,7 @@ class UsersController extends AppController {
         //debug(!Empty($forms));
         if (!Empty($forms)) {
             foreach ($forms as $form) {
-                $form_id = $form['Forms']['event_id'];
+                $form_id = $form['Forms']['id'];
             }
             $this->loadModel('FormsPersonalDatum');
             $formPersonal = $this->FormsPersonalDatum->findAllByFormId($form_id);
