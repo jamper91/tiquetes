@@ -230,11 +230,11 @@ class UsersController extends AppController {
             )
         ));
 
-        $authorizations = $this->User->Authorization->find('list', array(
-            "fields" => array(
-                "Autorization.nombre"
-        )));
-        $this->set(compact('people', 'typeUsers', 'departments', 'authorizations'));
+//        $authorizations = $this->User->Authorization->find('list', array(
+//            "fields" => array(
+//                "Autorization.nombre"
+//        )));
+        $this->set(compact('people', 'typeUsers', 'departments'/*, 'authorizations'*/));
     }
 
     /**
