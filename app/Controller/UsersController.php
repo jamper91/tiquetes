@@ -131,7 +131,7 @@ class UsersController extends AppController {
                 //     }           
                 return $this->redirect(array('action' => 'index'));
             } catch (Exception $ex) {
-                debug($ex->getMessage());
+                //debug($ex->getMessage());
                 $error2 = $ex->getCode();
                 if ($error2 == '23000') {
                     $this->Session->setFlash('Error ya hay una persona con el mismo documento en la base de datos', 'error');
