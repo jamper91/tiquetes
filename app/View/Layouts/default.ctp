@@ -43,9 +43,11 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         echo $this->fetch('meta');
         echo $this->fetch('css');
         echo $this->fetch('script');
+           echo $this->Html->script(array('jquery.form', 'jquery-1.11.0.min'));     
+
         ?>
-        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-        <script src="http://malsup.github.com/jquery.form.js"></script> 
+<!--        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="http://malsup.github.com/jquery.form.js"></script> -->
     </head>
 
     <body>
