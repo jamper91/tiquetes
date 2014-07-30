@@ -234,7 +234,7 @@ class UsersController extends AppController {
 //            "fields" => array(
 //                "Autorization.nombre"
 //        )));
-        $this->set(compact('people', 'typeUsers', 'departments'/*, 'authorizations'*/));
+        $this->set(compact('people', 'typeUsers', 'departments'/* , 'authorizations' */));
     }
 
     /**
@@ -340,12 +340,15 @@ class UsersController extends AppController {
             ));
             if ($input) {
                 try {
-                    $this->Input->id=$input["Input"]["id"];
-                    $this->Input->set('person_id',  $this->request->data("person_id"));
-                    $this->Input->save();
-
-
-                    $mensaje = "Proceso realizado con exito!!";
+                    if ($input["Input"]["person_id"] == 0) {
+                        
+                        $this->Input->id = $input["Input"]["id"];
+                        $this->Input->set('person_id', $this->request->data("person_id"));
+                        $this->Input->save();
+                        $mensaje = "Proceso realizado con exito!!";
+                    }else{
+                        $mensaje = "Ya se asocio una persona a esa tarjeta";
+                    }
                 } catch (Exception $exc) {
                     $error2 = $exc->getCode();
                     if ($error2 == '23000') {
@@ -609,6 +612,10 @@ class UsersController extends AppController {
         $this->set('form', $formPersonal);
     }
 
+    /**
+     * Esta funcion se encarga de buscar usuarios comunes en la base de datos
+     * para luego asociarles una tarjeta
+     */
     public function buscador2() {
 
         $this->loadModel('PersonalDatum');
@@ -744,6 +751,10 @@ class UsersController extends AppController {
         $this->set('form', $formPersonal);
     }
 
+    /**
+     * Este es el servicio web que guarda la informacion que se envia desde la accion
+     * registrar
+     */
     public function registrar2() {
         $mensaje = "";
         $this->layout = "webservice";
