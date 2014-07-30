@@ -641,7 +641,7 @@ class UsersController extends AppController {
 
             foreach ($autorizado as $auth) {
                 $event_id = $auth;
-                debug($event_id);
+                //debug($event_id);
                 $this->loadModel('Event');
                 $event = $this->Event->find('list', array(
                     "options" => array(
