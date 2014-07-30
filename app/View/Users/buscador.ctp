@@ -2,6 +2,13 @@
 	<legend><?php echo __('Buscador'); ?></legend>
 	<?php echo $this->Form->create('User', array('action' => 'buscador')); ?>
   	<table>
+  		<tr>
+			<td >N&uacute;mero de Documento: </td>
+            <td><input type="text" id="PersonalDatum_documento" name="data[PersonalDatum][documento]"/></td>
+            <td>
+	          	&nbsp;
+	        </td> 
+	</tr>
          <tr>             
             
 	<?php 
@@ -24,13 +31,7 @@
      $count ++;          
 	 } ?>
 	</tr>
-	<tr>
-			<td >N&uacute;mero de Documento: </td>
-            <td><input type="text" id="PersonalDatum_documento" name="data[PersonalDatum][documento]"/></td>
-            <td>
-	          	&nbsp;
-	        </td> 
-	</tr>
+	
 	</table>
 	   <?php echo $this->Form->end(__('Enviar')); ?>
 	  
@@ -92,15 +93,15 @@
 	                        			echo $aux1['people']['pers_documento']; 
 	                        		 ?>
 	                        	</td>
-	                        	<!-- <td>
+	                        	<td>
 	                        		<?php $reg = 0;?>
-	                        		<?php //foreach ($autorizado as $auth) {
-	                        			//if($reg == 0){
-	                        				//if($auth['Authorization']['nombre'] == 'registro'){ ?>
-	                        					<a type="button" class="btn btn-primary" id="compartir-modal" data-toggle="modal" data-target="#myModal">Registrar</a>
-	                        					<?php //$reg = 1; ?>
+	                        		<?php foreach ($autorizado as $auth) {
+	                        			if($reg == 0){
+	                        				if($auth['Authorization']['nombre'] == 'registro'){ ?>
+	                        					<button type="button" class="btn btn-danger pull-left cerrar_modal" data-dismiss="modal">Editar</button>
+	                        					<?php $reg = 1; ?>
 
-	                        		<?php// }	
+	                        		<?php}	
 	                        			}
 	                        		}?>
 	                           	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -125,8 +126,8 @@
 
 			                          <button type="button" class="btn btn-danger pull-left cerrar_modal" data-dismiss="modal">Cerrar</button>
 
-				                        <?php //echo $this->Form->create('User', array('action' => 'add3')); ?>
-		<input type='text' id='datosUsuario' name='user' value=<?php //echo $aux1['people']['pers_documento'];?>>
+				                        <?php echo $this->Form->create('User', array('action' => 'add3')); ?>
+										<input type='text' id='datosUsuario' name='user' value=<?php echo $aux1['people']['pers_documento'];?>>
 				                            <input type='text' id='datosEvent' name='event' value=''>
 				                            <button  id="enviar-usu-proy" class="btn btn-primary pull-right"> Enviar</button>
 				                          
@@ -138,7 +139,7 @@
                     		</div>
                    /.modal-dialog 
           				</div>
-	                        	</td> -->
+	                        	</td> 
 		                    </tr>
                     <?php $con ++;
                      	} ?>

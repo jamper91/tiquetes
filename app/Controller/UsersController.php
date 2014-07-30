@@ -471,14 +471,18 @@ class UsersController extends AppController {
 
             $datos = $this->request->data;
             $pers_id = $this->Session->read('User.id');
-            //debug($pers_id);
-            $this->loadModel('AuthorizationsUser');
-            $autorizado = $this->AuthorizationsUser->findAllByUserId($pers_id);
-            //ebug($autorizado);
+            // debug($pers_id);
+
+            $this->loadModel('Event');
+            $autorizado = $this->Event->find("list", array(
+                "fields"=>array(
+                    "Event.even_nombre")));
+            
             //$event = array();
 
             foreach ($autorizado as $auth) {
-                $event_id = $auth['AuthorizationsUser']['event_id'];
+                $event_id = $auth;
+                debug($event_id);
                 $this->loadModel('Event');
                 $event = $this->Event->find('list', array(
                     "options" => array(
@@ -506,12 +510,12 @@ class UsersController extends AppController {
                                 $value = "=" . $value;
                             if ($conditions != "") {
 
-                                $conditions.=" or " . 'and d.forms_personal_data_id=fp.id and fp.personal_datum_id=' . key($dato);
+                                $conditions.=" or " . 'and d.forms_personal_datum_id=fp.id and fp.personal_datum_id=' . key($dato);
 
                                 $conditions.=" and " . 'd.descripcion ' . $value;
                             } else {
 
-                                $conditions.='  d.forms_personal_data_id=fp.id and fp.personal_datum_id=' . key($dato);
+                                $conditions.='  d.forms_personal_datum_id=fp.id and fp.personal_datum_id=' . key($dato);
                                 $conditions.='  and d.descripcion ' . $value;
                             }
                         } else {
@@ -523,7 +527,7 @@ class UsersController extends AppController {
             }
 
             if ($conditions != '')
-                $conditions = "select * from datas d,forms_personal_data fp where " . $conditions;
+                $conditions = "select * from datas d, forms_personal_data fp where " . $conditions;
 
 
             if ($conditions2 != '')
@@ -540,7 +544,7 @@ class UsersController extends AppController {
                     //debug($data);
                     $person_id = $data['d']['person_id'];
 
-                    $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_data_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
+                    $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_datum_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
 
 
                     $personas = $this->Data->query($queryDatos);
@@ -566,7 +570,7 @@ class UsersController extends AppController {
                 $datosVista2 = array();
                 foreach ($people as $value) {
                     $person_id = $value['people']['id'];
-                    $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_data_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
+                    $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_datum_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
                     //datos para ser enviados a la vista.
                     $personas = $this->Data->query($queryDatos);
                     array_push($datosVista, $personas);
