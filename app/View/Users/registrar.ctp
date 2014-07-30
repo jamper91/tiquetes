@@ -14,38 +14,41 @@ echo $this->Html->css(array('multi-select'));
             <div class="widget-content nopadding">
                 <?php
                 echo $this->Form->create('User', array(
-                    "class" => "form-horizontal",
+                    "class" => "form-horizontal"
                 ));
                 ?>
-                <div class="control-group">
-                    <label class="control-label">Evento</label>
-                    <?php
-                    echo $this->Form->input('event_id', array(
-                        "div" => array(
-                            "class" => "controls"
-                        ),
-                        "label" => "",
-                        "options" => $events,
-                        "empty" => "Seleccione"
-                    ));
-                    ?>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">Tipo Usuario</label>
-                    <?php
-                    echo $this->Form->input('registration_type_id', array(
-                        "div" => array(
-                            "class" => "controls"
-                        ),
-                        "label" => "",
-                        "empty" => "Seleccione"
-                    ));
-                    ?>
-                </div>
+                <?php
+                echo $this->Form->input('event_id', array(
+                    "div" => array(
+                        "class" => "controls"
+                    ),
+                    "label" => "",
+                    "options" => $events,
+                    "empty" => "Seleccione",
+                    "style" => array(
+                        "display:none"
+                    )
+                ));
+                ?>
+                <?php
+                echo $this->Form->input('registration_type_id', array(
+                    "div" => array(
+                        "class" => "controls"
+                    ),
+                    "label" => "",
+                    "empty" => "Seleccione",
+                    "style" => array(
+                        "display:none"
+                    )
+                ));
+                ?>
 
 
-                <div id="formulario">
-
+                <div id="formulario" >
+                    <label style="text-align: center">
+                        Cargando
+                    </label>
+                    
                 </div>
                 <?php
                 echo $this->Form->end(array(
@@ -62,32 +65,41 @@ echo $this->Html->css(array('multi-select'));
 
     </div>
 </div>
+<div id="mensaje">
+    
+</div>
 <script>
     $(document).ready(function()
     {
-//        $("#UserRegistrationTypeId").change(function()
-//        {
-//            var categoria=$("#UserRegistrationTypeId :selected").attr("categoria");
-//            console.log("categoria: "+categoria);
-//            $("#formulario").on("#InputCategoryId",function()
-//            {
-//                console.log("Entre");
-//                $(this).val(categoria);
-//            });
-//            $("#formulario #EventsRegistrationTypesRegistrationTypeId").val($(this).val());
-//        });
-        $('#UserEventId').change(function()
+        $("#UserRegistrarForm").submit(function()
         {
-            $("#UserRegistrationTypeId").html("<option>Cargando</option>");
-            $("#formulario").html("Cargando Formulario..");
-            var event_id = $(this).val();
+            return false;
+        });
+        $("input[type='submit']").click(function()
+        {
+           //Envio le formulario por ajax
+           var url='<?=$this->Html->url('registrar2.xml')?>';
+           ajax(url, $('#UserRegistrarForm').serialize(), function(xml) {
+            $("datos", xml).each(function() {
+                var texto;                
+                texto = $(this).text();                
+                alert(texto);
 
+            });
+        });
+        });
+        (function()
+        {
+            var event_id = 1;
+            //Coloco el valor al input de evento
+            $("#UserEventId").val(1);
+            $("#UserRegistrationTypeId").val(2);
             //Obtengo los tipos de usuarios
             var url = urlbase + "events_registration_types/getRegistrationTypesByEvent.xml";
             var datos = {
                 event_id: event_id
             }
-            console.log("url: "+url);
+            console.log("url: " + url);
             ajax(url, datos, function(xml)
             {
                 //Elimino lo que contiene este select
@@ -177,7 +189,8 @@ echo $this->Html->css(array('multi-select'));
                     });
                 }
             });
-        });
+        })();
+
     });
 
 </script>

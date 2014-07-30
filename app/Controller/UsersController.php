@@ -259,10 +259,10 @@ class UsersController extends AppController {
     }
 
     public function login() {
-        
+
         $this->Session->destroy();
         if ($this->request->is('post')) {
-             //debug($this->request->data);
+            //debug($this->request->data);
 //            debug($this->Auth->login());
 //            debug($this->request->data);
             if ($this->Auth->login() == true) {
@@ -289,7 +289,7 @@ class UsersController extends AppController {
                 } else {
                     $this->Session->write('User.id', $datos['User']['id']);
                     $this->Session->write('User.type_user_id', $datos['User']['type_user_id']);
-                                      
+
                     $user_id = $this->Session->read('User.id');
                     $this->loadModel('AuthorizationsUsers');
                     $queryDatos = "select * from authorizations_users JOIN authorizations on authorizations_users.authorization_id=authorizations.id where authorizations_users.user_id=" . $user_id . "";
@@ -306,9 +306,9 @@ class UsersController extends AppController {
                         array_push($controladores, $permiso['authorizations']['controlador']);
                     }
                     // $accion = array_unique($acciones);
-                     $controlador = array_unique($controladores);
-                        //$nombre = array_unique($nombres);
-                     //debug( $controlador);
+                    $controlador = array_unique($controladores);
+                    //$nombre = array_unique($nombres);
+                    //debug( $controlador);
                     // $this->Session->write('accion', $accion);
                     $this->Session->write('controlador', $controlador);
                     //$this->Session->write('nombre', $nombre);
@@ -321,7 +321,7 @@ class UsersController extends AppController {
     }
 
     public function logout() {
-       return $this->redirect($this->Auth->logout());
+        return $this->redirect($this->Auth->logout());
     }
 
     public function asociartarjeta() {
@@ -540,7 +540,7 @@ class UsersController extends AppController {
                     //debug($data);
                     $person_id = $data['d']['person_id'];
 
-                    $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_data_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
+                    $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_datum_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
 
 
                     $personas = $this->Data->query($queryDatos);
@@ -566,7 +566,7 @@ class UsersController extends AppController {
                 $datosVista2 = array();
                 foreach ($people as $value) {
                     $person_id = $value['people']['id'];
-                    $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_data_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
+                    $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_datum_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
                     //datos para ser enviados a la vista.
                     $personas = $this->Data->query($queryDatos);
                     array_push($datosVista, $personas);
@@ -589,7 +589,9 @@ class UsersController extends AppController {
         $this->set('form', $formPersonal);
     }
 
-    public function registrar() {
+    public function registrar2() {
+        $mensaje="";
+        $this->layout="webservice";
         if ($this->request->is("POST")) {
 
             //Primero determino si la tarjeta esta registrada en el sistema
@@ -628,20 +630,34 @@ class UsersController extends AppController {
                         $this->loadModel("Input");
 //                    debug($this->request->data["Input"]);
                         $this->Input->save($this->request->data);
-                        $this->Session->setFlash('Registro realizado con exito', 'good');
+//                        $this->Session->setFlash('Registro realizado con exito', 'good');
+                        $mensaje="Registro realizado con exito";
                     } else {
-                        $this->Session->setFlash('La tarjeta no concuerda con la categoria', 'error');
+//                        $this->Session->setFlash('La tarjeta no concuerda con la categoria', 'error');
+                        $mensaje="La tarjeta no concuerda con la categoria";
                     }
                 } catch (Exception $exc) {
                     $error2 = $exc->getCode();
                     if ($error2 == '23000') {
-                        $this->Session->setFlash('Ya existe un usuario con ese documento', 'error');
+//                        $this->Session->setFlash('Ya existe un usuario con ese documento', 'error');
+                        $mensaje="Ya existe un usuario con ese documento";
                     }
                 }
             } else {
-                $this->Session->setFlash('Tarjeta no esta registrada en el sistema', 'Error');
+//                $this->Session->setFlash('Tarjeta no esta registrada en el sistema', 'Error');
+                $mensaje="Tarjeta no esta registrada en el sistema";
+                
             }
         }
+        $this->set(
+                array(
+                    "datos" => $mensaje,
+                    "_serialize" => array("datos")
+                )
+        );
+    }
+
+    public function registrar() {
 
         //Listo los eventos
         $this->loadModel("Event");
@@ -687,7 +703,7 @@ class UsersController extends AppController {
                     $form_id = $form['Forms']['event_id'];
                 }
                 $this->loadModel('FormsPersonalDatum');
-                $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_data_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
+                $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_datum_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
                 $formPersonal = $this->FormsPersonalDatum->findAllByFormId($form_id);
             } else {
                 $formPersonal = '';
