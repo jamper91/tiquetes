@@ -143,8 +143,8 @@ class EntradasController extends AppController {
 
     public function obtenerReporte() {
         $this->layout = "webservices";
-        $entrada_id = $this->request->data["Entrada"]["entrada_id"];
-//        $entrada_id = 7;
+//        $entrada_id = $this->request->data["Entrada"]["entrada_id"];
+        $entrada_id = 1;
         $this->Entrada->virtualFields['Cantidad'] = 0;
         $this->Entrada->virtualFields['Tipo'] = 0;
         $sql = "select count(l_t.tipo) as Entrada__Cantidad , l_t.tipo as Entrada__Tipo from logs_torniquetes l_t, entradas_torniquetes e_t where l_t.torniquete_id=e_t.torniquete_id and e_t.entrada_id=".$entrada_id." group by l_t.tipo";
@@ -161,11 +161,12 @@ class EntradasController extends AppController {
     public function reportes() {
         if ($this->request->is('post')) {
             //consulto todos los torniquetes que pertenecen a esa entrada
-            $entrada_id = $this->request->data["Entrada"]["entrada_id"];
+//            $entrada_id = $this->request->data["Entrada"]["entrada_id"];
+            $entrada_id = 1;
 //            $torniquetes=$this->EntradaTorniquete->findAllByEntradaId($entrada_id);
             $sql = "select * from logs_torniquetes, l_t, entradas_torniquetes e_t where l_t.torniquete_id=e_t.torniquete_id and e_t.entrada_id=" . $entrada_id;
             $datos = $this->Entrada->query($sql);
-            debug($datos);
+//            debug($datos);
         }
 
         $this->loadModel('Country');

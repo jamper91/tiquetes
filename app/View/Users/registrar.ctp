@@ -170,7 +170,13 @@ echo $this->Html->css(array('multi-select'));
                             });
                             //Agrego el campo de la tarjeta
                             formulario += "<div class='controls'>";
-                            formulario += "<label for='PersonDocumento'>Tarjeta</label>";
+                            formulario += "<label for='PersonDocumento'>Identificador Tarjeta</label>";
+                            formulario += "<input id='PersonDocumento' type='password' name='data[Input][entr_identificador]'></input>";
+                            formulario += "</div>";
+                            
+                            //Agrego el campo de la tarjeta
+                            formulario += "<div class='controls'>";
+                            formulario += "<label for='PersonDocumento'>Codigo Tarjeta</label>";
                             formulario += "<input id='PersonDocumento' type='password' name='data[Input][entr_codigo]'></input>";
 
                             formulario += "</div>";

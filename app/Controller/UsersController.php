@@ -74,13 +74,15 @@ class UsersController extends AppController {
                     'pers_primNombre' => $data['People']['pers_primNombre'],
                     'pers_primApellido' => $data['People']['pers_primApellido'],
                     'document_type_id' => $data['User']['document_type_id'],
-                    'city_id' => $data['User']['city_id'],
+                    //'city_id' => $data['User']['city_id'],
                     'pers_documento' => $data['People']['pers_documento'],
                     'pers_direccion' => $data['People']['pers_direccion'],
                     'pers_telefono' => $data['People']['pers_telefono'],
-                    'pers_celular' => $data['People']['pers_celular'],
+
+                    // 'pers_celular' => $data['People']['pers_celular'],
                     'pers_fechNacimiento' => $data['People']['pers_fechNacimiento'],
-                    'pers_tipoSangre' => $data['People']['pers_tipoSangre'],
+                    // 'pers_tipoSangre' => $data['People']['pers_tipoSangre'],
+
                     'pers_mail' => $data['People']['pers_mail']
                 )
             );
@@ -131,7 +133,7 @@ class UsersController extends AppController {
                 //     }           
                 return $this->redirect(array('action' => 'index'));
             } catch (Exception $ex) {
-                //debug("entre aqui");
+                //debug($ex->getMessage());
                 $error2 = $ex->getCode();
                 if ($error2 == '23000') {
                     $this->Session->setFlash('Error ya hay una persona con el mismo documento en la base de datos', 'error');
@@ -326,27 +328,42 @@ class UsersController extends AppController {
 
     public function asociartarjeta() {
 
-        $this->loadModel('Entrada');
+        //$this->loadModel('Entrada');
         if ($this->request->is('post')) {
-            $datos = $this->data;
+            //$datos = $this->data;
 
 
-            $newUser = $this->User->create();
-            $newUser = array(
-                'User' => array(
-                    'nombre' => $datos['User']['nombre']));
-            $this->User->save($datos);
-            $newUserId = $this->User->getLastInsertId();
+            //Primero determino si la tarjeta esta registrada en el sistema
+            $this->loadModel("Input");
+            $input = $this->Input->find('first', array(
+                "conditions" => array(
+                    "Input.entr_codigo" => $this->request->data("codigo")
+                ),
+                "recursive" => -1
+            ));
+            if ($input) {
+                try {
+                    if ($input["Input"]["person_id"] == 0) {
 
-            $newEntrada = $this->Entrada->create();
-            $newEntrada = array(
-                'Entrada' => array(
-                    'usuario_id' => $newUserId,
-                    'tarjeta' => $datos['Entrada']['tarjeta']));
+                        $this->Input->id = $input["Input"]["id"];
+                        $this->Input->set('person_id', $this->request->data("person_id"));
+                        $this->Input->save();
+                        $mensaje = "Proceso realizado con exito!!";
+                    } else {
+                        $mensaje = "Ya se asocio una persona a esa tarjeta";
+                    }
+                } catch (Exception $exc) {
+                    $error2 = $exc->getCode();
+                    if ($error2 == '23000') {
+//                        $this->Session->setFlash('Ya existe un usuario con ese documento', 'error');
+                        $mensaje = "Ya existe un usuario con ese documento";
+                    }
+                }
+            } else {
+//                $this->Session->setFlash('Tarjeta no esta registrada en el sistema', 'Error');
+                $mensaje = "Tarjeta no esta registrada en el sistema";
+            }
 
-            $this->Session->setFlash("Operacion realizada con exito");
-            $this->Entrada->save($newEntrada);
-            $this->redirect(array('action' => 'asociartarjeta'));
         }
     }
 
@@ -399,7 +416,8 @@ class UsersController extends AppController {
         // $this->layout = "webservices";
         //$event_id = $this->request->query["event_id"];
         // debug(implode("','",$event_id));
-        $event_id = $this->request->query["event_id"];
+//        $event_id = $this->request->query["event_id"];
+        $event_id = 1;
         //debug($event_id);
 
 
@@ -409,7 +427,7 @@ class UsersController extends AppController {
         //debug(!Empty($forms));
         if (!Empty($forms)) {
             foreach ($forms as $form) {
-                $form_id = $form['Forms']['event_id'];
+                $form_id = $form['Forms']['id'];
             }
             $this->loadModel('FormsPersonalDatum');
             $formPersonal = $this->FormsPersonalDatum->findAllByFormId($form_id);
@@ -444,7 +462,7 @@ class UsersController extends AppController {
                         $newData = array(
                             'Data' => array(
                                 'descripcion' => $value,
-                                'forms_personal_data_id' => key($dato),
+                                'forms_personal_datum_id' => key($dato),
                                 'person_id' => $newPeopleId,
                             )
                         );
@@ -484,7 +502,15 @@ class UsersController extends AppController {
             foreach ($autorizado as $auth) {
                 $event_id = $auth;
                 //debug($event_id);
-             
+
+                // $this->loadModel('Event');
+                // $event = $this->Event->find('list', array(
+                //     "options" => array(
+                //         "Event.id" => "event_id"),
+                //     "fields" => array(
+                //         "Event.even_nombre"
+                // )));
+
             }
             //debug($event);
 
@@ -589,58 +615,83 @@ class UsersController extends AppController {
     }
 
     public function registrar() {
-        if ($this->request->is("POST")) {
+//         if ($this->request->is("POST")) {
 
-            //Primero determino si la tarjeta esta registrada en el sistema
-            $this->loadModel("Input");
-            $input = $this->Input->find('first', array(
-                "conditions" => array(
-                    "Input.entr_codigo" => $this->request->data["Input"]["entr_codigo"]
-                )
-            ));
-            if ($input) {
+//             //Primero determino si la tarjeta esta registrada en el sistema
+//             $this->loadModel("Input");
+//             $input = $this->Input->find('first', array(
+//                 "conditions" => array(
+//                     "Input.entr_codigo" => $this->request->data["Input"]["entr_codigo"]
+//                 )
+//             ));
+//             if (!$input) {
 
-                try {
-                    $this->loadModel('People');
+//                 $newInput = $this->Input->create();
+//                 $newInput = array(
+//                     'Input' => array(
+//                         'entr_identificador' => $data['Input']['entr_identificador'],
+//                         'entr_codigo' => $data['Input']['entr_codigo'],
+//                         'categoria_id' => 2,
+//                     )
+//                 );
 
-                    //Creo y almaceno a la persona
-                    $newPeole = $this->People->create();
-                    $this->People->save($this->request->data);
-                    $newPeopleId = $this->People->getLastInsertId();
+//                 try {
 
-//            Almaceno la informacion de la persona
-                    $this->loadModel('Data');
-                    $cont = 0;
-                    foreach ($this->request->data["Data"] as $value) {
-                        $this->request->data["Data"][$cont]["person_id"] = $newPeopleId;
-                        $cont++;
-                    }
-                    $this->Data->saveAll($this->request->data['Data']);
+//                     $this->Input->save($newInput);
+//                     $newInputId = $this->Input->getLastInsertId();
 
 
-                    //Agrego la entrada
-                    if ($input['Input']["categoria_id"] == $this->request->data['User']['registration_type_id']) {
-                        $this->request->data["Input"]["id"] = $input["Input"]["id"];
+// //                    //Agrego la entrada
+// //                    if ($input['Input']["categoria_id"] == $this->request->data['User']['registration_type_id']) {
+//                         $this->loadModel('People');
 
-                        $this->request->data["Input"]["person_id"] = $newPeopleId;
-//                    $this->request->data["Input"]["events_registration_type_id"] = $this->request->data["User"]["registration_type_id"];
-                        $this->loadModel("Input");
-//                    debug($this->request->data["Input"]);
-                        $this->Input->save($this->request->data);
-                        $this->Session->setFlash('Registro realizado con exito', 'good');
-                    } else {
-                        $this->Session->setFlash('La tarjeta no concuerda con la categoria', 'error');
-                    }
-                } catch (Exception $exc) {
-                    $error2 = $exc->getCode();
-                    if ($error2 == '23000') {
-                        $this->Session->setFlash('Ya existe un usuario con ese documento', 'error');
-                    }
-                }
-            } else {
-                $this->Session->setFlash('Tarjeta no esta registrada en el sistema', 'Error');
-            }
-        }
+//                         //Creo y almaceno a la persona
+//                         $newPeole = $this->People->create();
+//                         $this->People->save($this->request->data);
+//                         $newPeopleId = $this->People->getLastInsertId();
+
+//                         //Almaceno la informacion de la persona
+//                         $this->loadModel('Data');
+//                         $cont = 0;
+//                         foreach ($this->request->data["Data"] as $value) {
+//                             $this->request->data["Data"][$cont]["person_id"] = $newPeopleId;
+//                             $cont++;
+//                         }
+//                         $this->Data->saveAll($this->request->data['Data']);
+//                         $this->request->data["Input"]["id"] = $newInputId;
+
+
+//                         $this->request->data["Input"]["person_id"] = $newPeopleId;
+// //                    $this->request->data["Input"]["events_registration_type_id"] = $this->request->data["User"]["registration_type_id"];
+//                         $this->loadModel("Input");
+// //                    debug($this->request->data["Input"]);
+//                         $this->Input->save($this->request->data);
+
+//                         $this->Session->setFlash('Registro realizado con exito', 'good');
+//                     } else {
+//                         $this->Session->setFlash('La tarjeta no concuerda con la categoria', 'error');
+//                     }
+
+// //                        $this->Session->setFlash('Registro realizado con exito', 'good');
+//                         $mensaje = "Registro realizado con exito";
+// //                    } else {
+// ////                        $this->Session->setFlash('La tarjeta no concuerda con la categoria', 'error');
+// //                        $mensaje = "La tarjeta no concuerda con la categoria";
+// //                    }
+
+//                 } catch (Exception $exc) {
+//                     $error2 = $exc->getCode();
+//                     if ($error2 == '23000') {
+//                         $this->Session->setFlash('Ya existe un usuario con ese documento', 'error');
+//                     }
+//                 }
+//             } else {
+
+// //                $this->Session->setFlash('Tarjeta no esta registrada en el sistema', 'Error');
+//                 $mensaje = "Tarjeta ya esta registrada";
+
+//             }
+//         }
 
         //Listo los eventos
         $this->loadModel("Event");
