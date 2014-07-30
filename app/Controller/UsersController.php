@@ -326,28 +326,44 @@ class UsersController extends AppController {
 
     public function asociartarjeta() {
 
-        $this->loadModel('Entrada');
-        if ($this->request->is('post')) {
-            $datos = $this->data;
+        $mensaje = "";
+        $this->layout = "webservice";
+        if ($this->request->is("POST")) {
+
+            //Primero determino si la tarjeta esta registrada en el sistema
+            $this->loadModel("Input");
+            $input = $this->Input->find('first', array(
+                "conditions" => array(
+                    "Input.entr_codigo" => $this->request->data("codigo")
+                ),
+                "recursive" => -1
+            ));
+            if ($input) {
+                try {
+                    $this->Input->id=$input["Input"]["id"];
+                    $this->Input->set('person_id',  $this->request->data("person_id"));
+                    $this->Input->save();
 
 
-            $newUser = $this->User->create();
-            $newUser = array(
-                'User' => array(
-                    'nombre' => $datos['User']['nombre']));
-            $this->User->save($datos);
-            $newUserId = $this->User->getLastInsertId();
-
-            $newEntrada = $this->Entrada->create();
-            $newEntrada = array(
-                'Entrada' => array(
-                    'usuario_id' => $newUserId,
-                    'tarjeta' => $datos['Entrada']['tarjeta']));
-
-            $this->Session->setFlash("Operacion realizada con exito");
-            $this->Entrada->save($newEntrada);
-            $this->redirect(array('action' => 'asociartarjeta'));
+                    $mensaje = "Proceso realizado con exito!!";
+                } catch (Exception $exc) {
+                    $error2 = $exc->getCode();
+                    if ($error2 == '23000') {
+//                        $this->Session->setFlash('Ya existe un usuario con ese documento', 'error');
+                        $mensaje = "Ya existe un usuario con ese documento";
+                    }
+                }
+            } else {
+//                $this->Session->setFlash('Tarjeta no esta registrada en el sistema', 'Error');
+                $mensaje = "Tarjeta no esta registrada en el sistema";
+            }
         }
+        $this->set(
+                array(
+                    "datos" => $mensaje,
+                    "_serialize" => array("datos")
+                )
+        );
     }
 
     public function asociar() {
@@ -459,6 +475,141 @@ class UsersController extends AppController {
     }
 
     public function buscador() {
+
+        $this->loadModel('PersonalDatum');
+        $formPersonal = $this->PersonalDatum->find('all');
+        //debug($this->Auth->user('User.username'));
+
+
+        if ($this->request->is('post')) {
+            $data = $this->data;
+            $this->loadModel('People');
+
+            $datos = $this->request->data;
+            $pers_id = $this->Session->read('User.id');
+            // debug($pers_id);
+
+            $this->loadModel('Event');
+            $autorizado = $this->Event->find("list", array(
+                "fields" => array(
+                    "Event.even_nombre")));
+
+            //$event = array();
+
+            foreach ($autorizado as $auth) {
+                $event_id = $auth;
+                debug($event_id);
+                $this->loadModel('Event');
+                $event = $this->Event->find('list', array(
+                    "options" => array(
+                        "Event.id" => "event_id"),
+                    "fields" => array(
+                        "Event.even_nombre"
+                )));
+            }
+            //debug($event);
+
+            $conditions = "";
+            $conditions2 = "";
+
+            foreach ($datos as $dato) {
+                while ($value = key($dato)) {
+
+                    $value = current($dato);
+                    if ($value != '') {
+
+                        if (key($dato) != "documento") {
+
+                            if (!is_int($value))
+                                $value = "like '%" . $value . "%'";
+                            else
+                                $value = "=" . $value;
+                            if ($conditions != "") {
+
+                                $conditions.=" or " . 'and d.forms_personal_datum_id=fp.id and fp.personal_datum_id=' . key($dato);
+
+                                $conditions.=" and " . 'd.descripcion ' . $value;
+                            } else {
+
+                                $conditions.='  d.forms_personal_datum_id=fp.id and fp.personal_datum_id=' . key($dato);
+                                $conditions.='  and d.descripcion ' . $value;
+                            }
+                        } else {
+                            $conditions2.=' pers_documento =' . $value;
+                        }
+                    }
+                    next($dato);
+                }
+            }
+
+            if ($conditions != '')
+                $conditions = "select * from datas d, forms_personal_data fp where " . $conditions;
+
+
+            if ($conditions2 != '')
+                $conditions2 = "select * from people where " . $conditions2;
+
+
+            $this->loadModel('Data');
+
+            if ($conditions != '') {
+                $datas = $this->Data->query($conditions);
+                $datosVista = array();
+                $datosVista2 = array();
+                foreach ($datas as $data) {
+                    //debug($data);
+                    $person_id = $data['d']['person_id'];
+
+                    $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_datum_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
+
+
+                    $personas = $this->Data->query($queryDatos);
+                    array_push($datosVista, $personas);
+                    $queryPersona = "select * from people where id=" . $person_id;
+                    $personas2 = $this->People->query($queryPersona);
+                    array_push($datosVista2, $personas2);
+                }
+                //debug($datosVista);
+
+                $this->set('datosvista', $datosVista);
+                $this->set('datosvista2', $datosVista2);
+                $this->set('autorizado', $autorizado);
+                $this->set('event', $event);
+            }
+
+
+
+
+            if ($conditions2 != '') {
+                $people = $this->Data->query($conditions2);
+                $datosVista = array();
+                $datosVista2 = array();
+                foreach ($people as $value) {
+                    $person_id = $value['people']['id'];
+                    $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_datum_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
+                    //datos para ser enviados a la vista.
+                    $personas = $this->Data->query($queryDatos);
+                    array_push($datosVista, $personas);
+                    $queryPersona = "select * from people where id=" . $person_id;
+                    $personas2 = $this->People->query($queryPersona);
+                    array_push($datosVista2, $personas2);
+                }
+
+
+
+                $this->set('datosvista', $datosVista);
+                $this->set('datosvista2', $datosVista2);
+                $this->set('autorizado', $autorizado);
+                $this->set('event', $event);
+            }
+        }
+
+
+
+        $this->set('form', $formPersonal);
+    }
+
+    public function buscador2() {
 
         $this->loadModel('PersonalDatum');
         $formPersonal = $this->PersonalDatum->find('all');

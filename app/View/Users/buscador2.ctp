@@ -1,6 +1,6 @@
 <div class="users form"> 
     <legend><?php echo __('Buscador'); ?></legend>
-    <?php echo $this->Form->create('User', array('action' => 'buscador')); ?>
+    <?php echo $this->Form->create('User', array('action' => 'buscador2')); ?>
     <table>
         <tr>
             <td >N&uacute;mero de Documento: </td>
@@ -34,7 +34,7 @@
         </tr>
 
     </table>
-<?php echo $this->Form->end(__('Enviar')); ?>
+    <?php echo $this->Form->end(__('Enviar')); ?>
 
 </div>
 <?php if (isset($datosvista)) { ?>
@@ -56,11 +56,15 @@
 
                         <?php } ?>
                         <th>Documento</th>
+                        <th>
+                            Accion
+                        </th>
 
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $con = 0;
+                    <?php
+                    $con = 0;
 
                     foreach ($datosvista as $datovista) {
                         ?>
@@ -80,7 +84,7 @@
                                     ?>
 
 
-                                <?php
+                                    <?php
                                 }
                                 if ($esta == 0) {
                                     echo "<td>-</td>";
@@ -88,84 +92,82 @@
                             }
                             ?>
                             <td><?php
-                    $aux1 = $datosvista2[$con];
-                    $aux1 = $aux1[0];
-                    echo $aux1['people']['pers_documento'];
-                            ?>
+                                $aux1 = $datosvista2[$con];
+                                $aux1 = $aux1[0];
+                                echo $aux1['people']['pers_documento'];
+                                ?>
                             </td>
                             <td>
-                                <?php $reg = 0; ?>
-                                <?php
-                                foreach ($autorizado as $auth) {
-                                    if ($reg == 0) {
-                                        if ($auth['Authorization']['nombre'] == 'registro') {
-                                            ?>
-                                            <button type="button" class="btn btn-danger pull-left cerrar_modal" data-dismiss="modal">Editar</button>
-                                            <?php $reg = 1; ?>
+                                <div onclick="asociarTarjeta(<?= $aux1['people']['id'] ?>)">
+                                    <label id="lbl<?= $aux1['people']['id'] ?>" href="#" >
+                                        Asociar Tarjeta
+                                    </label>
+                                    <input id="input<?= $aux1['people']['id'] ?>" type="password" style="display: none" />
+                                    <a id="lnk<?= $aux1['people']['id'] ?>" onclick="asociarTarjeta2(<?= $aux1['people']['id'] ?>)" style="display: none">
+                                        Asociar
+                                    </a>
+                                </div>
 
-                                            <?php
-                                            }
-                                            }
-                                            }
-                                            ?>
-                                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 id="myModalLabel" class="semi-bold">Elegir evento</h4>
-                                                            <p class="no-margin">Elija el evento para registrar el participante</p>
-                                                            <br>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="preloader"></div>
-                                                            <?php
-                                                            // echo $this->Form->input('event_id', array(
-                                                            //     'label' => '',
-                                                            //     "options" => $event,
-                                                            //     "empty" => "Seleccione un evento"
-                                                            // ));
-                                                            ?>
-                                                        </div>
-                                                        <div class="modal-footer">
-
-                                                            <button type="button" class="btn btn-danger pull-left cerrar_modal" data-dismiss="modal">Cerrar</button>
-
-                    <?php echo $this->Form->create('User', array('action' => 'add3')); ?>
-                                                            <input type='text' id='datosUsuario' name='user' value=<?php echo $aux1['people']['pers_documento']; ?>>
-                                                            <input type='text' id='datosEvent' name='event' value=''>
-                                                            <button  id="enviar-usu-proy" class="btn btn-primary pull-right"> Enviar</button>
-
-                                                            </form>
-
-                                                        </div>
-                                                    </div>
-                                                    /.modal-content 
-                                                </div>
-                                                /.modal-dialog 
-                                            </div>
-                                        </td> 
-                                    </tr>
-                    <?php $con ++;
-                }
-                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            <?php } ?>
+                            </td>
+                        </tr>
+                        <?php
+                        $con ++;
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<?php } ?>
 
 <script>
-    $(function() {
-        $("#event_id").change(function() {
-            var event_id = $(this).val();
-            alert(event_id);
-            $("#enviar-usu-proy").click(function() {
-                //$("#datosUsuario").val('algo');
-                $("#datosEvent").val(event_id);
-                $("#formpdf").submit();
+    $(document).ready(
+            function()
+            {
+                $("#event_id").change(function() {
+                    var event_id = $(this).val();
+                    alert(event_id);
+                    $("#enviar-usu-proy").click(function() {
+                        //$("#datosUsuario").val('algo');
+                        $("#datosEvent").val(event_id);
+                        $("#formpdf").submit();
+                    });
+                });
+
+
             });
-        });
+    function asociarTarjeta(id)
+    {
+        $("#lbl" + id).css("display", "none");
+        $("#input" + id).css("display", "block");
+        $("#lnk" + id).css("display", "block");
+        $("#input" + id).focus();
 
 
-    });
+    }
+    function asociarTarjeta2(id)
+    {
+        var url = '<?= $this->Html->url(array("controller" => "users", "action" => "asociartarjeta.xml")) ?>';
+        //Tomo el codigo
+        var codigo = $("#input" + id).val();
+        if (codigo != "")
+        {
+            var datos = {
+                person_id: id,
+                codigo:codigo
+            }
+            ajax(url, datos, function(xml)
+            {
+                $("datos", xml).each(function() {
+                    var texto;
+                    texto = $(this).text();
+                    alert(texto);
+
+                });
+            });
+        }
+
+
+    }
+
 </script>
