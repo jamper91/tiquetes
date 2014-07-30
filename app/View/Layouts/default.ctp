@@ -53,9 +53,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         <div id="header">
             <h1><a href="dashboard.html">Matrix Admin</a></h1>
         </div>
-        <!--close-Header-part--> 
-
-        <?php //  debug($this->Session->read('User.type_user_id')); ?>
+        <!--close-Header-part-->         
         <!--top-Header-menu-->
         <div id="user-nav" class="navbar navbar-inverse">
             <ul class="nav">
