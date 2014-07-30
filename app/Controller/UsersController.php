@@ -476,20 +476,15 @@ class UsersController extends AppController {
             $this->loadModel('Event');
             $autorizado = $this->Event->find("list", array(
                 "fields"=>array(
-                    "Event.even_nombre")));
+                    "Event.id"
+                    )));
             
             //$event = array();
-
+            //debug($autorizado);
             foreach ($autorizado as $auth) {
                 $event_id = $auth;
-                debug($event_id);
-                $this->loadModel('Event');
-                $event = $this->Event->find('list', array(
-                    "options" => array(
-                        "Event.id" => "event_id"),
-                    "fields" => array(
-                        "Event.even_nombre"
-                )));
+                //debug($event_id);
+             
             }
             //debug($event);
 
@@ -557,8 +552,8 @@ class UsersController extends AppController {
 
                 $this->set('datosvista', $datosVista);
                 $this->set('datosvista2', $datosVista2);
-                $this->set('autorizado', $autorizado);
-                $this->set('event', $event);
+                //$this->set('autorizado', $autorizado);
+                $this->set('event_id', $event_id);
             }
 
 
@@ -583,8 +578,8 @@ class UsersController extends AppController {
 
                 $this->set('datosvista', $datosVista);
                 $this->set('datosvista2', $datosVista2);
-                $this->set('autorizado', $autorizado);
-                $this->set('event', $event);
+                //$this->set('autorizado', $autorizado);
+                $this->set('event_id', $event_id);
             }
         }
 
