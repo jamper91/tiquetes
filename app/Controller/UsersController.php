@@ -208,9 +208,10 @@ class UsersController extends AppController {
             throw new NotFoundException(__('Invalid user'));
         }
         if ($this->request->is(array('post', 'put'))) {
+            debug($this->request->data);
             if ($this->User->save($this->request->data)) {
                 $this->Session->setFlash(__('The user has been saved.'));
-                return $this->redirect(array('action' => 'index'));
+                //return $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash(__('The user could not be saved. Please, try again.'));
             }
@@ -230,11 +231,11 @@ class UsersController extends AppController {
             )
         ));
 
-        $authorizations = $this->User->Authorization->find('list', array(
-            "fields" => array(
-                "Autorization.nombre"
-        )));
-        $this->set(compact('people', 'typeUsers', 'departments', 'authorizations'));
+//        $authorizations = $this->User->Authorization->find('list', array(
+//            "fields" => array(
+//                "Autorization.nombre"
+//        )));
+        $this->set(compact('people', 'typeUsers', 'departments' /*, 'authorizations'*/));
     }
 
     /**
