@@ -208,10 +208,9 @@ class UsersController extends AppController {
             throw new NotFoundException(__('Invalid user'));
         }
         if ($this->request->is(array('post', 'put'))) {
-            debug($this->request->data);
             if ($this->User->save($this->request->data)) {
                 $this->Session->setFlash(__('The user has been saved.'));
-                //return $this->redirect(array('action' => 'index'));
+                return $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash(__('The user could not be saved. Please, try again.'));
             }
@@ -231,11 +230,11 @@ class UsersController extends AppController {
             )
         ));
 
-//        $authorizations = $this->User->Authorization->find('list', array(
-//            "fields" => array(
-//                "Autorization.nombre"
-//        )));
-        $this->set(compact('people', 'typeUsers', 'departments' /*, 'authorizations'*/));
+        $authorizations = $this->User->Authorization->find('list', array(
+            "fields" => array(
+                "Autorization.nombre"
+        )));
+        $this->set(compact('people', 'typeUsers', 'departments', 'authorizations'));
     }
 
     /**
@@ -260,10 +259,10 @@ class UsersController extends AppController {
     }
 
     public function login() {
-
+        
         $this->Session->destroy();
         if ($this->request->is('post')) {
-            //debug($this->request->data);
+             //debug($this->request->data);
 //            debug($this->Auth->login());
 //            debug($this->request->data);
             if ($this->Auth->login() == true) {
@@ -290,7 +289,7 @@ class UsersController extends AppController {
                 } else {
                     $this->Session->write('User.id', $datos['User']['id']);
                     $this->Session->write('User.type_user_id', $datos['User']['type_user_id']);
-
+                                      
                     $user_id = $this->Session->read('User.id');
                     $this->loadModel('AuthorizationsUsers');
                     $queryDatos = "select * from authorizations_users JOIN authorizations on authorizations_users.authorization_id=authorizations.id where authorizations_users.user_id=" . $user_id . "";
@@ -307,9 +306,9 @@ class UsersController extends AppController {
                         array_push($controladores, $permiso['authorizations']['controlador']);
                     }
                     // $accion = array_unique($acciones);
-                    $controlador = array_unique($controladores);
-                    //$nombre = array_unique($nombres);
-                    //debug( $controlador);
+                     $controlador = array_unique($controladores);
+                        //$nombre = array_unique($nombres);
+                     //debug( $controlador);
                     // $this->Session->write('accion', $accion);
                     $this->Session->write('controlador', $controlador);
                     //$this->Session->write('nombre', $nombre);
@@ -322,7 +321,7 @@ class UsersController extends AppController {
     }
 
     public function logout() {
-        return $this->redirect($this->Auth->logout());
+       return $this->redirect($this->Auth->logout());
     }
 
     public function asociartarjeta() {
@@ -589,9 +588,7 @@ class UsersController extends AppController {
         $this->set('form', $formPersonal);
     }
 
-    public function registrar2() {
-        $mensaje="";
-        $this->layout="webservice";
+    public function registrar() {
         if ($this->request->is("POST")) {
 
             //Primero determino si la tarjeta esta registrada en el sistema
@@ -630,34 +627,20 @@ class UsersController extends AppController {
                         $this->loadModel("Input");
 //                    debug($this->request->data["Input"]);
                         $this->Input->save($this->request->data);
-//                        $this->Session->setFlash('Registro realizado con exito', 'good');
-                        $mensaje="Registro realizado con exito";
+                        $this->Session->setFlash('Registro realizado con exito', 'good');
                     } else {
-//                        $this->Session->setFlash('La tarjeta no concuerda con la categoria', 'error');
-                        $mensaje="La tarjeta no concuerda con la categoria";
+                        $this->Session->setFlash('La tarjeta no concuerda con la categoria', 'error');
                     }
                 } catch (Exception $exc) {
                     $error2 = $exc->getCode();
                     if ($error2 == '23000') {
-//                        $this->Session->setFlash('Ya existe un usuario con ese documento', 'error');
-                        $mensaje="Ya existe un usuario con ese documento";
+                        $this->Session->setFlash('Ya existe un usuario con ese documento', 'error');
                     }
                 }
             } else {
-//                $this->Session->setFlash('Tarjeta no esta registrada en el sistema', 'Error');
-                $mensaje="Tarjeta no esta registrada en el sistema";
-                
+                $this->Session->setFlash('Tarjeta no esta registrada en el sistema', 'Error');
             }
         }
-        $this->set(
-                array(
-                    "datos" => $mensaje,
-                    "_serialize" => array("datos")
-                )
-        );
-    }
-
-    public function registrar() {
 
         //Listo los eventos
         $this->loadModel("Event");
@@ -691,47 +674,72 @@ class UsersController extends AppController {
             $data = $this->data;
             $this->loadModel('People');
 
-
             $datos = $this->request->data;
             $documento = $datos['user'];
             $evento = $datos['event'];
+
             $this->loadModel('Forms');
             $forms = $this->Forms->findAllByEventId($evento);
-
-            if (!Empty($forms)) {
-                foreach ($forms as $form) {
-                    $form_id = $form['Forms']['event_id'];
-                }
-                $this->loadModel('FormsPersonalDatum');
-                $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_datum_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
-                $formPersonal = $this->FormsPersonalDatum->findAllByFormId($form_id);
-            } else {
-                $formPersonal = '';
-            }
-
-            //debug($formPersonal);
-
-            $person_id = $this->People->find("list", array(
+             $person_id = $this->People->find("list", array(
                 "conditions" => array(
                     'People.pers_documento' => $documento),
                 "fields" => array(
                     "People.id",
                 )
             ));
-            $this->loadModel('Datas');
+                $this->loadModel('Datas');
+                $this->loadModel('FormsPersonalDatum');
 
             foreach ($person_id as $value) {
-
-                $datos_person = $this->Datas->find("all", array(
-                    "conditions" => array(
-                        'Datas.person_id' => $value)));
+                $queryDatos = "select * from datas JOIN forms_personal_data on datas.forms_personal_datum_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $value . "";
+                
+                $datos_person = $this->Datas->query($queryDatos);
+                debug($datos_person);
+                
+                // $this->Session->write('person_id', $value);
+                //$this->set('person_id', $value);
             }
-            //formPersonal->contiene el personalDatum con los campos a pintar
-            //datos_person->contiene los datos que van a ir en cada campo.
-            $this->set('form', $formPersonal);
+             // foreach ($datos_person as $dato_per) {
+             //     debug($dato_per["datas"]["id"]);
+             // }
+
+            $this->set('form', $datos_person);
             $this->set('documento', $documento);
-            $this->set('datos_person', $datos_person);
+
         }
+    }
+
+    public function edit2(){
+         if ($this->request->is("POST")){
+            $data = $this->data;
+            $datos = $this->request->data;
+            //debug($datos);
+            $this->loadModel("Data");
+            foreach ($datos as $dato) {
+                while ($value = key($dato)) {
+
+                    $value = current($dato);
+                    //debug(key($dato));
+                    
+                    if ($value != '') {
+
+                        if (key($dato) != "documento") {
+                            //debug(key($dato));
+                             $conditions = "select * from datas where id=".key($dato);
+                             $datas = $this->Data->query($conditions);
+                             //debug($datas);
+                             foreach ($datas as $data2) {
+                                debug($data2);
+                             }
+                        }
+                    }
+                    next($dato);
+                }
+            }
+            
+
+
+         }
     }
 
 }
