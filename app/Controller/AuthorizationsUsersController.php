@@ -57,8 +57,8 @@ class AuthorizationsUsersController extends AppController {
                 foreach ($datos as $dato) {
 
                 //debug($dato);
-                $event_id = $dato['event_id'];
-                //debug($event_id);
+               // $event_id = $dato['event_id'];
+                //debug($dato);
                 foreach ($dato['user_id'] as $user_id) {
                     //debug($user_id);
                     foreach ($dato['authorization_id'] as $authorization_id) {
@@ -68,7 +68,7 @@ class AuthorizationsUsersController extends AppController {
                             'AuthorizationsUser' => array(
                                 'user_id' => $user_id,
                                 'authorization_id' => $authorization_id,
-                                'event_id' => $event_id
+                                //'event_id' => $event_id
                             )
                         );
                         $this->AuthorizationsUser->save($newAuthorizationsUser);

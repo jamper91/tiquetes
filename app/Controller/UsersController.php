@@ -78,9 +78,9 @@ class UsersController extends AppController {
                     'pers_documento' => $data['People']['pers_documento'],
                     'pers_direccion' => $data['People']['pers_direccion'],
                     'pers_telefono' => $data['People']['pers_telefono'],
-                    'pers_celular' => $data['People']['pers_celular'],
+                   // 'pers_celular' => $data['People']['pers_celular'],
                     'pers_fechNacimiento' => $data['People']['pers_fechNacimiento'],
-                    'pers_tipoSangre' => $data['People']['pers_tipoSangre'],
+                   // 'pers_tipoSangre' => $data['People']['pers_tipoSangre'],
                     'pers_mail' => $data['People']['pers_mail']
                 )
             );
