@@ -471,14 +471,18 @@ class UsersController extends AppController {
 
             $datos = $this->request->data;
             $pers_id = $this->Session->read('User.id');
-            //debug($pers_id);
-            $this->loadModel('AuthorizationsUser');
-            $autorizado = $this->AuthorizationsUser->findAllByUserId($pers_id);
-            //ebug($autorizado);
+            // debug($pers_id);
+
+            $this->loadModel('Event');
+            $autorizado = $this->Event->find("list", array(
+                "fields"=>array(
+                    "Event.even_nombre")));
+            
             //$event = array();
 
             foreach ($autorizado as $auth) {
-                $event_id = $auth['AuthorizationsUser']['event_id'];
+                $event_id = $auth;
+                debug($event_id);
                 $this->loadModel('Event');
                 $event = $this->Event->find('list', array(
                     "options" => array(
@@ -506,12 +510,12 @@ class UsersController extends AppController {
                                 $value = "=" . $value;
                             if ($conditions != "") {
 
-                                $conditions.=" or " . 'and d.forms_personal_data_id=fp.id and fp.personal_datum_id=' . key($dato);
+                                $conditions.=" or " . 'and d.forms_personal_datum_id=fp.id and fp.personal_datum_id=' . key($dato);
 
                                 $conditions.=" and " . 'd.descripcion ' . $value;
                             } else {
 
-                                $conditions.='  d.forms_personal_data_id=fp.id and fp.personal_datum_id=' . key($dato);
+                                $conditions.='  d.forms_personal_datum_id=fp.id and fp.personal_datum_id=' . key($dato);
                                 $conditions.='  and d.descripcion ' . $value;
                             }
                         } else {
@@ -523,7 +527,7 @@ class UsersController extends AppController {
             }
 
             if ($conditions != '')
-                $conditions = "select * from datas d,forms_personal_data fp where " . $conditions;
+                $conditions = "select * from datas d, forms_personal_data fp where " . $conditions;
 
 
             if ($conditions2 != '')
