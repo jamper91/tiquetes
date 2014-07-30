@@ -2,77 +2,77 @@
     <?php echo $this->Form->create('Entrada'); ?>
     <fieldset>
         <legend><?php echo __('Reportes'); ?></legend>
-        <table>
+<!--        <table>
             <tr>
                 <td>
                     <?php
-                    echo $this->Form->input('country_id', array(
-                        "div" => array(
-                            "class" => "controls"
-                        ),
-                        'label' => 'País',
-                        "options" => $countriesName,
-                        "empty" => "Seleccione un País"
-                    ));
+//                    echo $this->Form->input('country_id', array(
+//                        "div" => array(
+//                            "class" => "controls"
+//                        ),
+//                        'label' => 'País',
+//                        "options" => $countriesName,
+//                        "empty" => "Seleccione un País"
+//                    ));
                     ?>
                 </td>
                 <td>
                     <?php
-                    echo $this->Form->input('state_id', array(
-                        "div" => array(
-                            "class" => "controls"
-                        ),
-                        "label" => "Departamento",
-                        "empty" => "seleccione un Departamento"
-                    ));
+//                    echo $this->Form->input('state_id', array(
+//                        "div" => array(
+//                            "class" => "controls"
+//                        ),
+//                        "label" => "Departamento",
+//                        "empty" => "seleccione un Departamento"
+//                    ));
                     ?>
                 </td>
                 <td>
                     <?php
-                    echo $this->Form->input('city_id', array(
-                        "div" => array(
-                            "class" => "controls"
-                        ),
-                        "label" => "Ciudad",
-                        "empty" => "seleccione una ciudad"
-                    ));
+//                    echo $this->Form->input('city_id', array(
+//                        "div" => array(
+//                            "class" => "controls"
+//                        ),
+//                        "label" => "Ciudad",
+//                        "empty" => "seleccione una ciudad"
+//                    ));
                     ?>
                 </td>
             </tr>
             <tr>
                 <td>
                     <?php
-                    echo $this->Form->input('stage_id', array(
-                        "div" => array(
-                            "class" => "controls"
-                        ),
-                        "label" => "Escenario",
-                        "options" => "Stage.esce_nombre",
-                    ));
+//                    echo $this->Form->input('stage_id', array(
+//                        "div" => array(
+//                            "class" => "controls"
+//                        ),
+//                        "label" => "Escenario",
+//                        "options" => "Stage.esce_nombre",
+//                    ));
                     ?>
                 </td>
                 <td>
                     <?php
-                    echo $this->Form->input('event_id', array(
-                        "div" => array(
-                            "class" => "controls"
-                        ),
-                        "label" => "Evento",
-                        "options" => "event.even_nombre",
-                    ));
+//                    echo $this->Form->input('event_id', array(
+//                        "div" => array(
+//                            "class" => "controls"
+//                        ),
+//                        "label" => "Evento",
+//                        "options" => "event.even_nombre",
+//                    ));
                     ?>
                 </td>
                 <td>
                     <?php
-                        echo $this->Form->input('entrada_id');
+//                        echo $this->Form->input('entrada_id');
                     ?>
                 </td>
             </tr>
-        </table>
+        </table>-->
 
         <label id="mensaje"></label>
     </fieldset>
-    <input type="button" id="consultar" name="registrar" value="Consultar">
+    <!--<input type="button" id="consultar" name="registrar" value="Consultar">-->
 </div>
 <div class="mensaje"></div>
 <script>
@@ -180,6 +180,46 @@
             });
         });
     });
+    (function()
+    {
+        var url = "<?= $this->Html->url(array("action" => "obtenerReporte.xml")) ?>";
+        var html = '<div class="widget-box">' +
+                '<div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>' +
+                '    <h5>Estadisticas</h5>' +
+                '</div>' +
+                '<div class="widget-content nopadding">' +
+                '    <table class="table table-bordered data-table">' +
+                '        <thead>' +
+                '            <tr>' +
+                '                <th>Cantidad</th>' +
+                '                <th>Tipo</th>' +
+                '            </tr>' +
+                '        </thead>' +
+                '        <tbody>';
+        ajax(url, $('#EntradaReportesForm').serialize(), function(xml) {
+            $("datos", xml).each(function() {
+
+                var obj = $(this).find("Entrada");
+                var cantidad, tipo;
+                cantidad = $("Cantidad", obj).text();
+                tipo = $("Tipo", obj).text();
+                html += "<tr>";
+                html += "<td>";
+                html += cantidad;
+                html += "</td>";
+                html += "<td>";
+                html += tipo;
+                html += "</td>";
+                html += "</tr>";
+                console.log("html: " + html);
+
+            });
+            html += "</tbody></table>";
+            $("#mensaje").html(html);
+        });
+
+        //$.post(url, $('#InputAddForm').serialize());
+    })();
     $("input[id='consultar']").on('click', function(e) {
         var url = "<?= $this->Html->url(array("action" => "obtenerReporte.xml")) ?>";
         var html = '<div class="widget-box">' +

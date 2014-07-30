@@ -46,7 +46,9 @@ class ValidationsController extends AppController {
  * @return void
  */
 	public function add() {
+            
 		if ($this->request->is('post')) {
+                    $this->request->data["Validation"]["categoria_id"]=2;
 			$this->Validation->create();
 			if ($this->Validation->save($this->request->data)) {
 				$this->Session->setFlash(__('The validation has been saved.'));
