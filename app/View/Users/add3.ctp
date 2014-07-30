@@ -7,8 +7,10 @@
 
 
           	<td >Número de Documento: </td>
-            <td><input type="text" id="PersonalDatum_documento" name="data[PersonalDatum][documento]" value="<?php echo $documento ?>"/></td>
+          	<?php foreach ($person_id as $value){?>
+            <td><input type="text" id="PersonalDatum_documento" name="data[PersonalDatum][documento][<?php echo $value?>]" value="<?php echo $documento ?>"/></td>
             <td>
+            	<?php }?>
 	          	&nbsp;
 	        </td>            
             
@@ -17,7 +19,7 @@
 	{
 			$count = 0;
 	foreach ($form as $value) { ?>
-	<?php debug($value);?>
+	<?php //debug($value);?>
 			<?php if($count%2 == 0){ ?>
 			</tr>
 			<tr>
