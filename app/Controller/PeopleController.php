@@ -114,7 +114,7 @@ class PeopleController extends AppController {
 
     public function buscar() {
         if ($this->request->is("POST")) {
-            debug($this->request->data);
+           // debug($this->request->data);
             //REcorro todos los campos para determinar cuales voy agregar a la consulta
             $conditions="";
             foreach ($this->request->data as $dato) {
@@ -143,7 +143,7 @@ class PeopleController extends AppController {
             
             $datos=  $this->Person->query($conditions);
             $this->set("datos",$datos);
-            debug($datos);
+            //debug($datos);
         }
     }
 
