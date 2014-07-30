@@ -463,7 +463,7 @@ class UsersController extends AppController {
                         $newData = array(
                             'Data' => array(
                                 'descripcion' => $value,
-                                'forms_personal_data_id' => key($dato),
+                                'forms_personal_datum_id' => key($dato),
                                 'person_id' => $newPeopleId,
                             )
                         );
