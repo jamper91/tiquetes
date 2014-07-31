@@ -82,7 +82,8 @@ echo $this->Html->css(array('multi-select'));
     {
         $("#btnNuevo").click(function()
         {
-            actualizar = 0;
+            actualizar = 0;            
+            $("#PeopleDocumento").val("");            
             $("input[type='submit']").attr("value", "Registrar");
             $("#btnNuevo").css("display", "none");
         })
