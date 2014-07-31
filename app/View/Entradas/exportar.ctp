@@ -43,5 +43,5 @@ $this->PhpExcel->addTableRow(array(
 ));
 
 $this->PhpExcel->addTableFooter();
-$this->PhpExcel->output("Reporte General Feria de las Florez");
+$this->PhpExcel->output("Reporte General Fondas de mi Pueblo");
 ?>
