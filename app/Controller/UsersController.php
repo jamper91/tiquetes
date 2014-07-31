@@ -847,9 +847,9 @@ class UsersController extends AppController {
             $this->loadModel("Data");
             $this->loadModel("People");
             foreach ($datos as $dato) {
-                //debug($dato);
+                
                 while ($value = key($dato)) {
-                    
+                    debug(key($dato));
                     $value = current($dato);
                     //debug(key($dato));
                     //$array_id = array();
@@ -880,7 +880,7 @@ class UsersController extends AppController {
                                 }
                                
                              }
-                             return $this->redirect(array('action' => 'buscador'));
+                           
                         }
                         else{
                             //debug($datos["PersonalDatum"]["documento"]);
@@ -903,16 +903,16 @@ class UsersController extends AppController {
                                     $this->People->save($updatePeople);
                                     }
                                 
-                               return $this->redirect(array('action' => 'buscador')); 
+                               
                             }
                         }
                     }
                     next($dato);
                 }
             }
-
+             return $this->redirect(array('action' => 'buscador'));
          }
-
+        
     }
 
 }
