@@ -928,7 +928,7 @@ class UsersController extends AppController {
             $this->loadModel("Data");
             $this->loadModel("People");
             foreach ($datos as $dato) {
-                //debug($dato);
+                
                 while ($value = key($dato)) {
 
                     $value = current($dato);
@@ -958,9 +958,11 @@ class UsersController extends AppController {
                                     $this->Data->save($updateData);
                                     //debug($updateData);
                                 }
-                            }
-                            return $this->redirect(array('action' => 'buscador'));
-                        } else {
+                               
+                             }
+                           
+                        }
+                        else{
                             //debug($datos["PersonalDatum"]["documento"]);
                             $personas = $datos["PersonalDatum"]["documento"];
 
@@ -979,16 +981,18 @@ class UsersController extends AppController {
                                             'pers_documento' => $datos["PersonalDatum"]["documento"][key($personas)]));
 
                                     $this->People->save($updatePeople);
-                                }
-
-                                return $this->redirect(array('action' => 'buscador'));
+                                    }
+                                
+                               
                             }
                         }
                     }
                     next($dato);
                 }
             }
-        }
+             return $this->redirect(array('action' => 'buscador'));
+         }
+        
     }
 
 }
