@@ -496,10 +496,6 @@ class UsersController extends AppController {
             
             foreach ($autorizado as $auth) {
                 $event_id = $auth;
-<<<<<<< HEAD
-=======
-                //debug($event_id);
->>>>>>> 5160d2bf72f7d70b62fa0803841facbeda81e629
             }
 
             $conditions = "";
@@ -602,27 +598,19 @@ class UsersController extends AppController {
             }
 
             if($conditions3 != ''){
-<<<<<<< HEAD
+
                 $people = $this->Input->query($conditions3);
-=======
-                $people = $this->Data->query($conditions3);
-                //debug($people);
->>>>>>> 5160d2bf72f7d70b62fa0803841facbeda81e629
+
                 $datosVista = array();
                 $datosVista2 = array();
                 $datosVista3 = array();
 
                 foreach ($people as $value) {
-<<<<<<< HEAD
+
 
                     $person_id = $value['inputs']['person_id'];
                     $queryDatos = "select * from datas JOIN forms_personal_data on datas.forms_personal_datum_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
 
-=======
-                    $person_id = $value['inputs']['person_id'];
-                    $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_datum_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
-                    //datos para ser enviados a la vista.
->>>>>>> 5160d2bf72f7d70b62fa0803841facbeda81e629
                     $personas = $this->Data->query($queryDatos);
 
                     array_push($datosVista, $personas);
