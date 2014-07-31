@@ -4,7 +4,15 @@
 <div class="categoriasEntradas form">
     <?php echo $this->Form->create('Entrada'); ?>
     <fieldset>
-        <legend><?php echo __('Reportes'); ?></legend>
+        <legend><?php echo __('Reportes'); ?></legend><br>
+        
+        <div class="btn-group">
+              <button data-toggle="dropdown" class="btn btn-success dropdown-toggle">Exportar <span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                  <li><a href="<?=$this->Html->url("exportar")?>">Reportes Generales</a></li>
+                <li><a href="<?=$this->Html->url("exportar2")?>">Reportes Usuarios</a></li>
+              </ul>
+            </div>
 <!--        <table>
             <tr>
                 <td>
