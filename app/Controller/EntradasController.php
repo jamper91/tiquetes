@@ -16,6 +16,7 @@ class EntradasController extends AppController {
      * @var array
      */
     public $components = array('Paginator', 'RequestHandler');
+    public $helpers = array('PhpExcel');
 
     /**
      * index method
@@ -147,7 +148,7 @@ class EntradasController extends AppController {
         $entrada_id = 1;
         $this->Entrada->virtualFields['Cantidad'] = 0;
         $this->Entrada->virtualFields['Tipo'] = 0;
-        $sql = "select count(l_t.tipo) as Entrada__Cantidad , l_t.tipo as Entrada__Tipo from logs_torniquetes l_t, entradas_torniquetes e_t where l_t.torniquete_id=e_t.torniquete_id and e_t.entrada_id=".$entrada_id." group by l_t.tipo";
+        $sql = "select count(l_t.tipo) as Entrada__Cantidad , l_t.tipo as Entrada__Tipo from logs_torniquetes l_t, entradas_torniquetes e_t where l_t.torniquete_id=e_t.torniquete_id and e_t.entrada_id=" . $entrada_id . " group by l_t.tipo";
         $datos = $this->Entrada->query($sql);
 //        debug($datos);
         $this->set(
@@ -158,17 +159,260 @@ class EntradasController extends AppController {
         );
     }
 
-    public function reportes() {
-        if ($this->request->is('post')) {
-            //consulto todos los torniquetes que pertenecen a esa entrada
-//            $entrada_id = $this->request->data["Entrada"]["entrada_id"];
-            $entrada_id = 1;
-//            $torniquetes=$this->EntradaTorniquete->findAllByEntradaId($entrada_id);
-            $sql = "select * from logs_torniquetes, l_t, entradas_torniquetes e_t where l_t.torniquete_id=e_t.torniquete_id and e_t.entrada_id=" . $entrada_id;
-            $datos = $this->Entrada->query($sql);
+    public function obtenerReporteByFecha() {
+        $this->layout = "webservices";
+//        $entrada_id = $this->request->data["Entrada"]["entrada_id"];
+        $entrada_id = 1;
+        $this->Entrada->virtualFields['Cantidad'] = 0;
+        $this->Entrada->virtualFields['Tipo'] = 0;
+        $sql = "select count(l_t.tipo) as Entrada__Cantidad , CONCAT(EXTRACT(MONTH from l_t.fecha),'-',EXTRACT(DAY from l_t.fecha),'-',l_t.tipo) as Entrada__Tipo from logs_torniquetes l_t, entradas_torniquetes e_t where l_t.torniquete_id=e_t.torniquete_id and e_t.entrada_id=" . $entrada_id . " group by (Entrada__Tipo) order by Entrada__tipo";
+        $datos = $this->Entrada->query($sql);
+//        debug($datos);
+        $this->set(
+                array(
+                    "datos" => $datos,
+                    "_serialize" => array("datos")
+                )
+        );
+    }
+
+    public function exportar() {
+        $entrada_id = 1;
+        $this->Entrada->virtualFields['Cantidad'] = 0;
+        $this->Entrada->virtualFields['Tipo'] = 0;
+        $sql = "select count(l_t.tipo) as Entrada__Cantidad , l_t.tipo as Entrada__Tipo from logs_torniquetes l_t, entradas_torniquetes e_t where l_t.torniquete_id=e_t.torniquete_id and e_t.entrada_id=" . $entrada_id . " group by l_t.tipo";
+        $datos = $this->Entrada->query($sql);
+//        debug($datos);
+        $this->set("datos", $datos);
+
+        $entrada_id = 1;
+        $this->Entrada->virtualFields['Cantidad'] = 0;
+        $this->Entrada->virtualFields['formato'] = 0;
+        $this->Entrada->virtualFields['Tipo'] = 0;
+        $this->Entrada->virtualFields['Fecha'] = 0;
+        $sql = "select count(l_t.tipo) as Entrada__Cantidad , CONCAT(EXTRACT(MONTH from l_t.fecha),'-',EXTRACT(DAY from l_t.fecha),'-',l_t.tipo) as Entrada__formato, CONCAT(EXTRACT(MONTH from l_t.fecha),'-',EXTRACT(DAY from l_t.fecha)) as Entrada__Fecha, l_t.tipo as Entrada__Tipo from logs_torniquetes l_t, entradas_torniquetes e_t where l_t.torniquete_id=e_t.torniquete_id and e_t.entrada_id=" . $entrada_id . " group by (Entrada__formato) order by Entrada__formato";
+        $datos1 = $this->Entrada->query($sql);
 //            debug($datos);
+        $pos = 0;
+        $datos3=array();
+        for ($index = 0; $index < count($datos1); $index++) {
+            $dato = $datos1[$index];
+            //Tomo la fecha y el tipo
+            $fecha = $dato["Entrada"]["Fecha"];
+            $tipo = $dato["Entrada"]["Tipo"];
+
+            $cantidadI = 0;
+            $cantidadR = 0;
+            switch ($tipo) {
+                case "RECHAZO":
+                    $tipo = "INGRESO";
+                    $cantidadR = $dato["Entrada"]["Cantidad"];
+                    break;
+                case "INGRESO":
+                    $tipo = "RECHAZO";
+                    $cantidadI = $dato["Entrada"]["Cantidad"];
+                    break;
+            }
+
+            //Ahora busco el opuesto de este
+            $esta = false;
+            for ($index1 = $index + 1; $index1 < count($datos1); $index1++) {
+                $d = $datos1[$index1];
+//                debug($d);
+                $fecha1 = $d["Entrada"]["Fecha"];
+                $tipo1 = $d["Entrada"]["Tipo"];
+                if ($tipo1 == $tipo && $fecha1 == $fecha) {
+                    $esta = true;
+                    $index++;
+                    switch ($tipo1) {
+                        case "RECHAZO":
+                            $cantidadR = $d["Entrada"]["Cantidad"];
+                            break;
+                        case "INGRESO":
+                            $cantidadI = $d["Entrada"]["Cantidad"];
+                            break;
+                    }
+                    break;
+                }
+            }
+            if (!$esta) {
+                switch ($tipo) {
+                    case "RECHAZO":
+                        $cantidadR = 0;
+                        break;
+                    case "INGRESO":
+                        $cantidadI = 0;
+                        break;
+                }
+            }
+            $fecha2 = explode("-", $fecha);
+            $mons = array(1 => "Jan", 2 => "Feb", 3 => "Mar", 4 => "Apr", 5 => "May", 6 => "Jun", 7 => "Jul", 8 => "Aug", 9 => "Sep", 10 => "Oct", 11 => "Nov", 12 => "Dec");
+            $fecha = $mons[$fecha2[0]] . " - " . $fecha2[1];
+            
+            $aux=array(
+                "Fecha"=>$fecha,
+                "Validos"=>$cantidadI,
+                "Invalidos"=>$cantidadR
+            );
+            $datos3[$pos]=$aux;
+            $pos++;
         }
 
+
+        $this->set("datos1", $datos1);
+        $this->set("datos3", $datos3);
+    }
+
+    public function exportar2() {
+        $sql = "Select * 
+                from 
+                        logs_torniquetes  l_t 
+                LEFT JOIN 
+                        inputs nput 
+                on 
+                        input.id=l_t.input_iD
+                LEFT JOIN
+                        people person 
+                on 
+                        person.id=input.person_id
+                INNER  JOIN
+                        datas data
+                on
+                        data.person_id=person.id";
+        $sql = "Select * 
+                from 
+                        logs_torniquetes  l_t 
+                LEFT JOIN 
+                        inputs input 
+                on 
+                        input.id=l_t.input_iD
+                LEFT JOIN
+                        people person 
+                on 
+                        person.id=input.person_id
+                ORDER BY
+                        person.id,
+                        l_t.fecha
+                ";
+        $datos = $this->Entrada->query($sql);
+
+        $datos2 = array();
+        $i = 0;
+        foreach ($datos as $dato) {
+            //Busco el nombre de la persona
+            $options = array(
+                "fields" => array(
+                    "descripcion"
+                ),
+                "conditions" => array(
+                    "Data.person_id" => $dato["person"]["id"],
+                    "Data.forms_personal_datum_id" => 13
+                ),
+                "recursive" => -1
+            );
+            $this->loadModel("Data");
+            $nombre = $this->Data->find("all", $options);
+//            debug($nombre);
+            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
+            if (empty($nombre)) {
+                $nombre = $dato["person"]["pers_primNombre"];
+            } else {
+                $nombre = $nombre[0];
+                $nombre = $nombre["Data"]["descripcion"];
+            }
+
+            //Busco el apellido de la persona
+            $options = array(
+                "fields" => array(
+                    "descripcion"
+                ),
+                "conditions" => array(
+                    "Data.person_id" => $dato["person"]["id"],
+                    "Data.forms_personal_datum_id" => 12
+                ),
+                "recursive" => -1
+            );
+            $this->loadModel("Data");
+            $apellido = $this->Data->find("all", $options);
+//            debug($apellido);
+            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
+            if (empty($apellido)) {
+                $apellido = $dato["person"]["pers_primApellido"];
+            } else {
+                $apellido = $apellido[0];
+                $apellido = $apellido["Data"]["descripcion"];
+            }
+
+            //Busco la empresa de la persona
+            $options = array(
+                "fields" => array(
+                    "descripcion"
+                ),
+                "conditions" => array(
+                    "Data.person_id" => $dato["person"]["id"],
+                    "Data.forms_personal_datum_id" => 11
+                ),
+                "recursive" => -1
+            );
+            $this->loadModel("Data");
+            $empresa = $this->Data->find("all", $options);
+
+            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
+            if (empty($empresa)) {
+                $empresa = $dato["person"]["pers_primApellido"];
+            } else {
+                $empresa = $empresa[0];
+                $empresa = $empresa["Data"]["descripcion"];
+            }
+
+
+            $estado = "";
+            switch ($dato["l_t"]["tipo"]) {
+                case "RECHAZO":
+                    $estado = "RECHAZADO";
+                    break;
+                case "INGRESO":
+                    $estado = "VALIDO";
+                    BREAK;
+            }
+            $datetimearray = explode(" ", $dato["l_t"]["fecha"]);
+            $time = $datetimearray[1];
+            $aux = array(
+                "Cedula" => $dato["person"]["pers_documento"],
+                "Nombre" => $nombre,
+                "Apellido" => $apellido,
+                "Empresa" => $empresa,
+                "Manilla" => $dato["input"]["entr_identificador"],
+                "Chip" => $dato["input"]["entr_codigo"],
+                "Hora" => $time,
+                "Estado" => $estado
+            );
+            $datos2[$i] = $aux;
+            $i++;
+        }
+//        debug($datos2);
+        $this->set("datos2", $datos2);
+    }
+
+    public function reportes() {
+        if ($this->request->is('post')) {
+            
+        }
+        $entrada_id = 1;
+        $this->Entrada->virtualFields['Cantidad'] = 0;
+        $this->Entrada->virtualFields['formato'] = 0;
+        $this->Entrada->virtualFields['Tipo'] = 0;
+        $this->Entrada->virtualFields['Fecha'] = 0;
+        $sql = "select count(l_t.tipo) as Entrada__Cantidad , CONCAT(EXTRACT(MONTH from l_t.fecha),'-',EXTRACT(DAY from l_t.fecha),'-',l_t.tipo) as Entrada__formato, CONCAT(EXTRACT(MONTH from l_t.fecha),'-',EXTRACT(DAY from l_t.fecha)) as Entrada__Fecha, l_t.tipo as Entrada__Tipo from logs_torniquetes l_t, entradas_torniquetes e_t where l_t.torniquete_id=e_t.torniquete_id and e_t.entrada_id=" . $entrada_id . " group by (Entrada__formato) order by Entrada__formato";
+        $datos = $this->Entrada->query($sql);
+//            debug($datos);
+        $this->set("datos", $datos);
+//            $this->set(
+//                    array(
+//                        "datos" => $datos,
+//                        "_serialize" => array("datos")
+//                    )
+//            );
         $this->loadModel('Country');
         $countriesName = $this->Country->find('list', array(
             "fields" => array(
