@@ -5,7 +5,7 @@
   		<tr>
 			<td >N&uacute;mero de Documento: </td>
             <td><input type="text" id="PersonalDatum_documento" name="data[PersonalDatum][documento]"/></td>
-            <td>Codigo de manilla</td>
+            <td>Identificador manilla</td>
 	        <td>
 	        	<input type="text" id="PersonalDatum_cm" name="data[PersonalDatum][cm]"/></td>
 	        </td> 
@@ -90,13 +90,32 @@
 								 	} 
 								 ?>
 	                        	<td><?php $aux1 = $datosvista2[$con];
+	                        				
+	                        				if(!empty($datosvista3[$con]))
+	                        				{
+	                        					$aux2 = $datosvista3[$con];
+	                        					$aux2 = $aux2[0];
+	                        				}
+	                        				if(empty($datosvista3[$con]))
+	                        				{
+	                        					$aux2 = $datosvista3[$con];
+	                        				}
+
+	                        			
+	                        				
 	                        			$aux1 = $aux1[0];
+	                        			
+
 	                        			echo $aux1['people']['pers_documento']; 
 	                        		 ?>
 	                        	</td>
 	                        	<td>
                     	             <?php echo $this->Form->create('User', array('action' => 'add3')); ?>
 									<input type='hidden' id='datosUsuario' name='user' value=<?php echo $aux1['people']['pers_documento'];?>>
+									<input type='hidden' id='datosInput' name='input' 
+									value=<?php if(!empty($aux2)){
+										echo $aux2['inputs']['entr_identificador'];
+									}else echo "";?>>
 		                            <input type='hidden' id='datosEvent' name='event' value=<?php echo $event_id; ?>>
 		                            <button  id="enviar-usu-proy" class="btn btn-primary pull-right"> Editar</button>
 		                          
