@@ -5,8 +5,9 @@
   		<tr>
 			<td >N&uacute;mero de Documento: </td>
             <td><input type="text" id="PersonalDatum_documento" name="data[PersonalDatum][documento]"/></td>
-            <td>
-	          	&nbsp;
+            <td>Codigo de manilla</td>
+	        <td>
+	        	<input type="text" id="PersonalDatum_cm" name="data[PersonalDatum][cm]"/></td>
 	        </td> 
 	</tr>
          <tr>             

@@ -475,21 +475,26 @@ class UsersController extends AppController {
 
         $this->loadModel('PersonalDatum');
         $formPersonal = $this->PersonalDatum->find('all');
-        //debug($this->Auth->user('User.username'));
-
 
         if ($this->request->is('post')) {
             $data = $this->data;
             $this->loadModel('People');
+            $this->loadModel('Input');
 
             $datos = $this->request->data;
             $pers_id = $this->Session->read('User.id');
-            // debug($pers_id);
-
             $this->loadModel('Event');
             $autorizado = $this->Event->find("list", array(
                 "fields" => array(
                     "Event.id"
+<<<<<<< HEAD
+                    )));
+            
+            foreach ($autorizado as $auth) {
+                $event_id = $auth;
+                //debug($event_id);
+
+=======
             )));
 
             //$event = array();
@@ -504,19 +509,20 @@ class UsersController extends AppController {
                 //     "fields" => array(
                 //         "Event.even_nombre"
                 // )));
+>>>>>>> 45129db8b33738c718ec93483218f71703c0e221
             }
-            //debug($event);
 
             $conditions = "";
             $conditions2 = "";
+            $conditions3 = "";
 
             foreach ($datos as $dato) {
                 while ($value = key($dato)) {
-
+                    debug(key($dato));
                     $value = current($dato);
                     if ($value != '') {
 
-                        if (key($dato) != "documento") {
+                        if (key($dato) != "documento" and key($dato) != "cm") {
 
                             if (!is_int($value))
                                 $value = "like '%" . $value . "%'";
@@ -532,8 +538,11 @@ class UsersController extends AppController {
                                 $conditions.='  d.forms_personal_datum_id=fp.id and fp.personal_datum_id=' . key($dato);
                                 $conditions.='  and d.descripcion ' . $value;
                             }
-                        } else {
+                        } elseif(key($dato) == "documento") {
                             $conditions2.=' pers_documento =' . $value;
+                        }
+                        elseif(key($dato) == "cm"){
+                            $conditions3.='entr_codigo =' . $value;
                         }
                     }
                     next($dato);
@@ -547,6 +556,9 @@ class UsersController extends AppController {
             if ($conditions2 != '')
                 $conditions2 = "select * from people where " . $conditions2;
 
+           
+            if($conditions3 != '')
+                $conditions3 = "select * from inputs where " . $conditions3;
 
             $this->loadModel('Data');
 
@@ -575,9 +587,6 @@ class UsersController extends AppController {
                 $this->set('event_id', $event_id);
             }
 
-
-
-
             if ($conditions2 != '') {
                 $people = $this->Data->query($conditions2);
                 $datosVista = array();
@@ -593,14 +602,33 @@ class UsersController extends AppController {
                     array_push($datosVista2, $personas2);
                 }
 
+                $this->set('datosvista', $datosVista);
+                $this->set('datosvista2', $datosVista2);
+                //$this->set('autorizado', $autorizado); 
+                $this->set('event_id', $event_id);
+            }
 
+            if($conditions3 != ''){
+                $people = $this->Data->query($conditions3);
+                $datosVista = array();
+                $datosVista2 = array();
+                foreach ($people as $value) {
+                    $person_id = $value['people']['id'];
+                    $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_datum_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
+                    //datos para ser enviados a la vista.
+                    $personas = $this->Data->query($queryDatos);
+                    array_push($datosVista, $personas);
+                    $queryPersona = "select * from inputs where person_id=" . $person_id;
+                    $personas2 = $this->People->query($queryPersona);
+                    array_push($datosVista2, $personas2);
+                }
 
                 $this->set('datosvista', $datosVista);
                 $this->set('datosvista2', $datosVista2);
-                //$this->set('autorizado', $autorizado);
+                //$this->set('autorizado', $autorizado); 
                 $this->set('event_id', $event_id);
             }
-        }
+        } 
 
 
 
@@ -992,7 +1020,7 @@ class UsersController extends AppController {
             }
              return $this->redirect(array('action' => 'buscador'));
          }
-        
+
     }
 
 }
