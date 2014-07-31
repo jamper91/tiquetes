@@ -17,6 +17,10 @@ echo $this->Html->css(array('multi-select'));
                     "class" => "form-horizontal"
                 ));
                 ?>
+                <input style='display:none' type='text' name='data[Informacion][actualizar]' id='inputActualizar' value='0'></input>
+                <input style='display:none' type='text' name='data[Informacion][person_id]' id='inputPersonId' value='0'></input>
+                <input style='display:none' type='text' name='data[Informacion][input_id]' id='inputInputId' value='0'></input>
+
                 <?php
                 echo $this->Form->input('event_id', array(
                     "div" => array(
@@ -48,8 +52,9 @@ echo $this->Html->css(array('multi-select'));
                     <label style="text-align: center">
                         Cargando
                     </label>
-                    
+
                 </div>
+                <input type="button" id="btnNuevo" class="btn btn-success" value="Registrar Nuevo" id="btnLimpiar" style="display:none"> 
                 <?php
                 echo $this->Form->end(array(
                     "div" => array(
@@ -59,6 +64,9 @@ echo $this->Html->css(array('multi-select'));
                     "label" => "Registrar"
                 ));
                 ?>
+                <!--<div class="form-actions">-->
+
+                <!--</div>-->
             </div>
 
         </div>
@@ -66,11 +74,18 @@ echo $this->Html->css(array('multi-select'));
     </div>
 </div>
 <div id="mensaje">
-    
+
 </div>
 <script>
+    var actualizar = 0,inputId=0,personId=0;
     $(document).ready(function()
     {
+        $("#btnNuevo").click(function()
+        {
+            actualizar = 0;
+            $("input[type='submit']").attr("value", "Registrar");
+            $("#btnNuevo").css("display", "none");
+        })
         $("#UserRegistrarForm").submit(function()
         {
             return false;
@@ -78,23 +93,38 @@ echo $this->Html->css(array('multi-select'));
         $("input[type='submit']").click(function()
         {
             $("#UserRegistrationTypeId").val(1);
-           //Envio le formulario por ajax
-           var url='<?=$this->Html->url('registrar2.xml')?>';
-           ajax(url, $('#UserRegistrarForm').serialize(), function(xml) {
-            $("datos", xml).each(function() {
-                var texto;                
-                texto = $(this).text();                
-                alert(texto);
+            //Envio le formulario por ajax
+            var url = '<?= $this->Html->url('registrar2.xml') ?>';
+            
+            $("#inputActualizar").val(actualizar);
+            $("#inputInputId").val(inputId);
+            $("#inputPersonId").val(personId);
+            var datos = $('#UserRegistrarForm').serialize();
+            ajax(url, datos, function(xml) {
+                $("datos", xml).each(function() {
+                    var codigo,mensaje;
+                    codigo = $("codigo",this).text();
+                    mensaje = $("mensaje",this).text();
+                   
+                    alert(mensaje);
+                    if (mensaje == "Registro realizado con exito") 
+                    {
+                         personId = $("person_id",this).text();
+                         inputId = $("input_id",this).text();
+                        actualizar = 1;
+                        $("input[type='submit']").attr("value", "Actualizar");
+                        $("#btnNuevo").css("display", "block");
+                    }
 
+                });
             });
-        });
         });
         (function()
         {
             var event_id = 1;
             //Coloco el valor al input de evento
             $("#UserEventId").val(1);
-            
+
             //Obtengo los tipos de usuarios
             var url = urlbase + "events_registration_types/getRegistrationTypesByEvent.xml";
             var datos = {
@@ -173,18 +203,17 @@ echo $this->Html->css(array('multi-select'));
                             formulario += "<label for='PersonDocumento'>Identificador Manilla</label>";
                             formulario += "<input id='PersonDocumento' type='text' name='data[Input][entr_identificador]'></input>";
                             formulario += "</div>";
-                            
+
                             //Agrego el campo de la tarjeta
                             formulario += "<div class='controls'>";
                             formulario += "<label for='PersonDocumento'>Codigo Manilla</label>";
                             formulario += "<input id='PersonDocumento' type='password' name='data[Input][entr_codigo]'></input>";
-
                             formulario += "</div>";
 
+                            
                             //Datos para almacenar en la tabla events_registration_types
                             formulario += "<input style='display:none' type='text' name='data[EventsRegistrationType][registration_type_id]'  value='-1' id='EventsRegistrationTypesRegistrationTypeId'></input>";
                             formulario += "<input style='display:none' type='text' name='data[EventsRegistrationType][event_id]' value='$1'></input>";
-                            console.log('formulario: ' + formulario);
 
                             formulario = formulario.replace("$1", event_id);
                             //Datos para almacenar en la tabla inputs
