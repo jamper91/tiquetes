@@ -191,8 +191,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                        
                             <li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "registrar")); ?>">Crear Persona</a></li>
                             <!--<li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador2")); ?>">Asociar Tarjeta a Persona</a></li>-->
-                            <!--<li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador")); ?>">Buscar Persona</a></li>-->
-                            <!--<li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "buscar")); ?>">Asociar Tarjeta a Usuario</a></li>-->
+                            <li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador")); ?>">Buscar Persona</a></li>
+                            <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "buscar")); ?>">Asociar Tarjeta a Usuario</a></li>
                        
 
                     </ul>
