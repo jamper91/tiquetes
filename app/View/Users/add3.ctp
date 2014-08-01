@@ -8,11 +8,39 @@
 
           	<td >Número de Documento: </td>
           	<?php foreach ($person_id as $value){?>
-            <td><input type="text" id="PersonalDatum_documento" name="data[PersonalDatum][documento][<?php echo $value?>]" value="<?php echo $documento ?>"/></td>
-            <td>
-            	<?php }?>
-	          	&nbsp;
-	        </td>            
+            <td><input type="text" id="PersonalDatum_documento" name="data[PersonalDatum][documento][<?php echo $value?>]" value="<?php echo $documento ?>"/>
+            </td>
+            <?php }?>
+            <td>Codigo manilla</td>
+            	<?php if(!empty($codigos)){?>
+            	<?php foreach ($codigos as $codigo) { ?>
+            	<td>
+            		<input type="text" id="PersonalDatum_codigo" name="data[PersonalDatum][codigo][<?php echo $codigo?>]" value="<?php echo $codigo ?>"/>
+            	</td>
+            	<?php }
+            		}	
+            		else{?>
+            		<td>
+            		<input type="password" id="PersonalDatum_codigo" name="data[PersonalDatum][codigoNuevo]" value=""/>
+            	</td>
+            		<?php }?>
+
+            	<td>Identificador manilla</td>
+            	<?php if(!empty($identificador)){?>
+            	
+            	<td>
+            		<input type="text" required="true" id="PersonalDatum_codigo" name="data[PersonalDatum][identificador][<?php echo $identificador?>]" value="<?php echo $identificador ?>"/>
+            	</td>
+            	<?php 
+            		}	
+            		else{?>
+            		<td>
+            		<input type="password" required="true" id="PersonalDatum_codigo" name="data[PersonalDatum][identificadorNuevo]" value=""/>
+            	</td>
+            		<?php }?>
+
+            	
+	                    
             
 	<?php 
 	if($form != '')

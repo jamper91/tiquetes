@@ -496,7 +496,6 @@ class UsersController extends AppController {
             
             foreach ($autorizado as $auth) {
                 $event_id = $auth;
-                //debug($event_id);
             }
 
             $conditions = "";
@@ -505,7 +504,6 @@ class UsersController extends AppController {
 
             foreach ($datos as $dato) {
                 while ($value = key($dato)) {
-                    debug(key($dato));
                     $value = current($dato);
                     if ($value != '') {
 
@@ -529,7 +527,7 @@ class UsersController extends AppController {
                             $conditions2.=' pers_documento =' . $value;
                         }
                         elseif(key($dato) == "cm"){
-                            $conditions3.='entr_codigo =' . $value;
+                            $conditions3.='entr_identificador =' . $value;
                         }
                     }
                     next($dato);
@@ -553,24 +551,24 @@ class UsersController extends AppController {
                 $datas = $this->Data->query($conditions);
                 $datosVista = array();
                 $datosVista2 = array();
+                $datosVista3 = array();
                 foreach ($datas as $data) {
-                    //debug($data);
                     $person_id = $data['d']['person_id'];
-
                     $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_datum_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
-
 
                     $personas = $this->Data->query($queryDatos);
                     array_push($datosVista, $personas);
                     $queryPersona = "select * from people where id=" . $person_id;
                     $personas2 = $this->People->query($queryPersona);
                     array_push($datosVista2, $personas2);
+                    $queryEntrada = "select * from inputs where person_id=".$person_id;
+                    $entrada = $this->Input->query($queryEntrada);
+                    array_push($datosVista3, $entrada);
                 }
-                //debug($datosVista);
 
                 $this->set('datosvista', $datosVista);
                 $this->set('datosvista2', $datosVista2);
-                //$this->set('autorizado', $autorizado);
+                $this->set('datosvista3', $datosVista3);
                 $this->set('event_id', $event_id);
             }
 
@@ -578,6 +576,7 @@ class UsersController extends AppController {
                 $people = $this->Data->query($conditions2);
                 $datosVista = array();
                 $datosVista2 = array();
+                $datosVista3 = array();
                 foreach ($people as $value) {
                     $person_id = $value['people']['id'];
                     $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_datum_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
@@ -587,37 +586,48 @@ class UsersController extends AppController {
                     $queryPersona = "select * from people where id=" . $person_id;
                     $personas2 = $this->People->query($queryPersona);
                     array_push($datosVista2, $personas2);
+                    $queryEntrada = "select * from inputs where person_id=".$person_id;
+                    $entrada = $this->Input->query($queryEntrada);
+                    array_push($datosVista3, $entrada);
                 }
-
+               
                 $this->set('datosvista', $datosVista);
                 $this->set('datosvista2', $datosVista2);
-                //$this->set('autorizado', $autorizado); 
+                $this->set('datosvista3', $datosVista3); 
                 $this->set('event_id', $event_id);
             }
 
             if($conditions3 != ''){
-                $people = $this->Data->query($conditions3);
-                //debug($people);
+
+                $people = $this->Input->query($conditions3);
+
                 $datosVista = array();
                 $datosVista2 = array();
+                $datosVista3 = array();
+
                 foreach ($people as $value) {
+
+
                     $person_id = $value['inputs']['person_id'];
-                    $queryDatos = "select * from datas  JOIN forms_personal_data on datas.forms_personal_datum_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
-                    //datos para ser enviados a la vista.
+                    $queryDatos = "select * from datas JOIN forms_personal_data on datas.forms_personal_datum_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $person_id . "";
+
                     $personas = $this->Data->query($queryDatos);
+
                     array_push($datosVista, $personas);
-                    $queryPersona = "select * from inputs where person_id=" . $person_id;
+                    $queryPersona = "select * from people where id=" . $person_id;
                     $personas2 = $this->People->query($queryPersona);
                     array_push($datosVista2, $personas2);
-                }
 
+                    $queryEntrada = "select * from inputs where person_id=".$person_id;
+                    $entrada = $this->Input->query($queryEntrada);
+                    array_push($datosVista3, $entrada);
+                }
                 $this->set('datosvista', $datosVista);
                 $this->set('datosvista2', $datosVista2);
-                //$this->set('autorizado', $autorizado); 
+                $this->set('datosvista3', $datosVista3);
                 $this->set('event_id', $event_id);
             }
         } 
-
 
 
         $this->set('form', $formPersonal);
@@ -719,8 +729,17 @@ class UsersController extends AppController {
             $this->loadModel('People');
 
             $datos = $this->request->data;
+            
             $documento = $datos['user'];
             $evento = $datos['event'];
+            $input = $datos['input'];
+
+            $this->loadModel('Input');
+            $codigos = $this->Input->find("list", array(
+                "conditions"=>array(
+                    'entr_identificador'=>$input),
+                "fields"=>array(
+                    "Input.entr_codigo")));
 
             $this->loadModel('Forms');
             $forms = $this->Forms->findAllByEventId($evento);
@@ -738,14 +757,11 @@ class UsersController extends AppController {
                 $queryDatos = "select * from datas JOIN forms_personal_data on datas.forms_personal_datum_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $value . "";
 
                 $datos_person = $this->Datas->query($queryDatos);
-                //debug($datos_person);
-                // $this->Session->write('person_id', $value);
-                //$this->set('person_id', $value);
-            }
-            // foreach ($datos_person as $dato_per) {
-            //     debug($dato_per["datas"]["id"]);
-            // }
 
+            }
+
+            $this->set('codigos', $codigos);
+            $this->set('identificador', $input);
             $this->set('form', $datos_person);
             $this->set('documento', $documento);
             $this->set('person_id', $person_id);
@@ -940,30 +956,22 @@ class UsersController extends AppController {
         if ($this->request->is("POST")) {
             $data = $this->data;
             $datos = $this->request->data;
-
             $this->loadModel("Data");
             $this->loadModel("People");
+            $this->loadModel("Input");
             foreach ($datos as $dato) {
                 
                 while ($value = key($dato)) {
 
                     $value = current($dato);
-                    //debug(key($dato));
-                    //$array_id = array();
                     if ($value != '') {
 
-                        if (key($dato) != "documento") {
-                            //debug(key($dato));
-                            //debug($datos["PersonalDatum"][key($dato)]);
-                            //array_push($array_id, key($dato));
+                        if (key($dato) != "documento" and key($dato) != "cm" and key($dato) != "codigoNuevo" and key($dato) != "codigo" and key($dato) != "identificadorNuevo" and key($dato) != "identificador") {
+
                             $conditions = "select * from datas where id=" . key($dato);
                             $datas = $this->Data->query($conditions);
-                            //debug($datas);
 
                             foreach ($datas as $data2) {
-
-                                // $newData = $this->Data->create();
-                                //debug($data2["datas"]["id"]);
                                 if ($data2["datas"]["id"] == key($dato)) {
                                     $this->Data->findAllById($data2["datas"]["id"]);
                                     $updateData = array(
@@ -972,25 +980,20 @@ class UsersController extends AppController {
                                             'descripcion' => $datos["PersonalDatum"][key($dato)]));
 
                                     $this->Data->save($updateData);
-                                    //debug($updateData);
                                 }
                                
                              }
                            
                         }
-                        else{
-                            //debug($datos["PersonalDatum"]["documento"]);
+                        elseif(key($dato) == "documento"){
                             $personas = $datos["PersonalDatum"]["documento"];
 
-                            //debug($personas);
                             $conditions = "select * from people where id=" . key($personas);
                             $peoples = $this->People->query($conditions);
-                            //debug($peoples);
 
                             foreach ($peoples as $people) {
 
                                 if ($people["people"]["id"] == key($personas)) {
-                                    //debug($datos["PersonalDatum"]["documento"][key($personas)]);
                                     $updatePeople = array(
                                         'People' => array(
                                             'id' => $people["people"]["id"],
@@ -1001,6 +1004,53 @@ class UsersController extends AppController {
                                 
                                
                             }
+                        }
+                        elseif(key($dato) == "codigo")
+                        {
+                            $codigos = $datos["PersonalDatum"]["codigo"];
+                            $identificadores = $datos["PersonalDatum"]["identificador"];
+                         
+                            foreach ($codigos as $codigo) {
+                                $conditions = "select * from inputs where entr_codigo=" . key($codigos);
+                                $inputs = $this->Input->query($conditions);
+
+                                foreach ($identificadores as $identificador) {
+                                    $entr_identificador = $identificador;
+
+                                     $updateInput = array(
+                                        'Input' => array(
+                                            'id' => $inputs[0]["inputs"]["id"],
+                                            'entr_codigo' =>$codigo,
+                                            'entr_identificador' => $entr_identificador,
+                                            ));
+
+                                    $this->Input->save($updateInput);
+                                }
+                            } 
+                        }
+                        elseif(key($dato) == "codigoNuevo")
+                        {
+                            //codigoNuevo tiene el entr_codigo que quiero guardar en input
+                            $codigoNuevo = $datos["PersonalDatum"]["codigoNuevo"];
+                            //identificadorNuevo tiene el entr_identificador que quiero guardar en input
+                            $identificadorNuevo = $datos["PersonalDatum"]["identificadorNuevo"];
+                            $personas = $datos["PersonalDatum"]["documento"];
+                            $conditions = "select * from people where id=" . key($personas);
+                            $peoples = $this->People->query($conditions);
+
+                            foreach ($peoples as $people) {
+                                $newInput = $this->Input->create();
+                                $newInput = array(
+                                    'Input' => array(
+                                        'person_id' => $people["people"]["id"],
+                                        'entr_identificador'=>$identificadorNuevo,
+                                        'entr_codigo'=>$codigoNuevo
+                                    )
+                                );
+                                $this->Input->save($newInput);
+
+                            }
+
                         }
                     }
                     next($dato);
