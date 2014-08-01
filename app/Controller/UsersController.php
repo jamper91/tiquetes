@@ -855,7 +855,7 @@ class UsersController extends AppController {
                         $user_id = $this->Session->read("User.id");
                         $input_id = $newInputId;
                         $operacion = "VENTA";
-                        $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '.$operacion.')";
+                        $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '$operacion')";
                         $operation = $this->Data->query($sql);
                         //termino el log
                     } catch (Exception $exc) {
@@ -931,7 +931,7 @@ class UsersController extends AppController {
                         $user_id = $this->Session->read("User.id");
                         $input_id = $newInputId;
                         $operacion = "ACTUALIZACION";
-                        $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '.$operacion.')";
+                        $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '$operacion')";
                         $operation = $this->Data->query($sql);
                         //termino el log
 //                    } else {
@@ -1039,7 +1039,7 @@ class UsersController extends AppController {
                                     $user_id = $this->Session->read("User.id");
                                     $input_id = $inputs[0]["inputs"]["id"];
                                     $operacion = "ACTUALIZACION";
-                                    $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '.$operacion.')";
+                                    $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '$operacion')";
                                     $operation = $this->Data->query($sql);
                                     //termino el log
                                 }
@@ -1069,7 +1069,7 @@ class UsersController extends AppController {
                                 $user_id = $this->Session->read("User.id");
                                 $input_id = $this->Input->getLastInsertId();;
                                 $operacion = "VENTA";
-                                $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '.$operacion.')";
+                                $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '$operacion')";
                                 $operation = $this->Data->query($sql);
                                 //termino el log
                             }
