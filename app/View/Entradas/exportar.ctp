@@ -43,5 +43,5 @@ $this->PhpExcel->addTableRow(array(
 ));
 
 $this->PhpExcel->addTableFooter();
-$this->PhpExcel->output("Reporte General Fondas de mi Pueblo");
+$this->PhpExcel->output("Reporte General Fondas de mi Pueblo.xlsx");
 ?>
