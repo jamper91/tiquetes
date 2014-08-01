@@ -194,7 +194,7 @@ class EntradasController extends AppController {
         $datos1 = $this->Entrada->query($sql);
 //            debug($datos);
         $pos = 0;
-        $datos3=array();
+        $datos3 = array();
         for ($index = 0; $index < count($datos1); $index++) {
             $dato = $datos1[$index];
             //Tomo la fecha y el tipo
@@ -248,13 +248,13 @@ class EntradasController extends AppController {
             $fecha2 = explode("-", $fecha);
             $mons = array(1 => "Jan", 2 => "Feb", 3 => "Mar", 4 => "Apr", 5 => "May", 6 => "Jun", 7 => "Jul", 8 => "Aug", 9 => "Sep", 10 => "Oct", 11 => "Nov", 12 => "Dec");
             $fecha = $mons[$fecha2[0]] . " - " . $fecha2[1];
-            
-            $aux=array(
-                "Fecha"=>$fecha,
-                "Validos"=>$cantidadI,
-                "Invalidos"=>$cantidadR
+
+            $aux = array(
+                "Fecha" => $fecha,
+                "Validos" => $cantidadI,
+                "Invalidos" => $cantidadR
             );
-            $datos3[$pos]=$aux;
+            $datos3[$pos] = $aux;
             $pos++;
         }
 
@@ -264,21 +264,21 @@ class EntradasController extends AppController {
     }
 
     public function exportar2() {
-        $sql = "Select * 
-                from 
-                        logs_torniquetes  l_t 
-                LEFT JOIN 
-                        inputs nput 
-                on 
-                        input.id=l_t.input_iD
-                LEFT JOIN
-                        people person 
-                on 
-                        person.id=input.person_id
-                INNER  JOIN
-                        datas data
-                on
-                        data.person_id=person.id";
+//        $sql = "Select * 
+//                from 
+//                        logs_torniquetes  l_t 
+//                LEFT JOIN 
+//                        inputs nput 
+//                on 
+//                        input.id=l_t.input_iD
+//                LEFT JOIN
+//                        people person 
+//                on 
+//                        person.id=input.person_id
+//                INNER  JOIN
+//                        datas data
+//                on
+//                        data.person_id=person.id";
         $sql = "Select * 
                 from 
                         logs_torniquetes  l_t 
@@ -392,6 +392,38 @@ class EntradasController extends AppController {
         }
 //        debug($datos2);
         $this->set("datos2", $datos2);
+    }
+
+    public function exportar3() {
+        $this->Entrada->virtualFields['Cantidad'] = 0;
+        $this->Entrada->virtualFields['formato'] = 0;
+        $this->Entrada->virtualFields['Fecha'] = 0;
+        $sql = "SELECT 
+                    Count(Log.id) AS Entrada__Cantidad,
+                    Concat(Extract(month FROM Log.fecha_realizado), '-', Extract(day FROM Log.fecha_realizado), '-', Log.user_id) AS Entrada__formato,
+                    Concat(Extract(month FROM Log.fecha_realizado), '-', Extract(day FROM Log.fecha_realizado)) AS  Entrada__Fecha,
+                    User.username,
+                    Person.pers_PrimNombre
+                FROM   
+                    logs Log
+                LEFT JOIN
+                            users User
+                        on
+                                User.id=Log.user_id
+                LEFT JOIN
+                                people Person
+                        on
+                                Person.id=User.person_id
+                WHERE
+                        Log.descripcion='VENTA'
+                GROUP  BY 
+                    ( Entrada__formato )
+                ORDER  BY 
+                    Entrada__formato
+                ";
+        $datos = $this->Entrada->query($sql);
+//        debug($datos);
+        $this->set("datos", $datos);
     }
 
     public function reportes() {
