@@ -8,7 +8,7 @@ echo $this->Html->css(array('multi-select'));
         <div class="widget-box">
             <div class="widget-title">
                 <h5>
-                    Crear Formulario
+                    Registrar Persona
                 </h5>
             </div>
             <div class="widget-content nopadding">
@@ -50,7 +50,7 @@ echo $this->Html->css(array('multi-select'));
 
                 <div id="formulario" >
                     <label style="text-align: center">
-                        Cargando
+                        Cargando...
                     </label>
 
                 </div>

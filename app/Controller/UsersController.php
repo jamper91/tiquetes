@@ -340,8 +340,8 @@ class UsersController extends AppController {
             ));
             if ($input) {
                 try {
-                    $this->Input->id=$input["Input"]["id"];
-                    $this->Input->set('person_id',  $this->request->data("person_id"));
+                    $this->Input->id = $input["Input"]["id"];
+                    $this->Input->set('person_id', $this->request->data("person_id"));
                     $this->Input->save();
 
 
@@ -491,9 +491,8 @@ class UsersController extends AppController {
             $autorizado = $this->Event->find("list", array(
                 "fields" => array(
                     "Event.id"
+            )));
 
-                    )));
-            
             foreach ($autorizado as $auth) {
                 $event_id = $auth;
             }
@@ -523,10 +522,9 @@ class UsersController extends AppController {
                                 $conditions.='  d.forms_personal_datum_id=fp.id and fp.personal_datum_id=' . key($dato);
                                 $conditions.='  and d.descripcion ' . $value;
                             }
-                        } elseif(key($dato) == "documento") {
+                        } elseif (key($dato) == "documento") {
                             $conditions2.=' pers_documento =' . $value;
-                        }
-                        elseif(key($dato) == "cm"){
+                        } elseif (key($dato) == "cm") {
                             $conditions3.='entr_identificador =' . $value;
                         }
                     }
@@ -541,8 +539,8 @@ class UsersController extends AppController {
             if ($conditions2 != '')
                 $conditions2 = "select * from people where " . $conditions2;
 
-           
-            if($conditions3 != '')
+
+            if ($conditions3 != '')
                 $conditions3 = "select * from inputs where " . $conditions3;
 
             $this->loadModel('Data');
@@ -561,7 +559,7 @@ class UsersController extends AppController {
                     $queryPersona = "select * from people where id=" . $person_id;
                     $personas2 = $this->People->query($queryPersona);
                     array_push($datosVista2, $personas2);
-                    $queryEntrada = "select * from inputs where person_id=".$person_id;
+                    $queryEntrada = "select * from inputs where person_id=" . $person_id;
                     $entrada = $this->Input->query($queryEntrada);
                     array_push($datosVista3, $entrada);
                 }
@@ -586,18 +584,18 @@ class UsersController extends AppController {
                     $queryPersona = "select * from people where id=" . $person_id;
                     $personas2 = $this->People->query($queryPersona);
                     array_push($datosVista2, $personas2);
-                    $queryEntrada = "select * from inputs where person_id=".$person_id;
+                    $queryEntrada = "select * from inputs where person_id=" . $person_id;
                     $entrada = $this->Input->query($queryEntrada);
                     array_push($datosVista3, $entrada);
                 }
-               
+
                 $this->set('datosvista', $datosVista);
                 $this->set('datosvista2', $datosVista2);
-                $this->set('datosvista3', $datosVista3); 
+                $this->set('datosvista3', $datosVista3);
                 $this->set('event_id', $event_id);
             }
 
-            if($conditions3 != ''){
+            if ($conditions3 != '') {
 
                 $people = $this->Input->query($conditions3);
 
@@ -618,7 +616,7 @@ class UsersController extends AppController {
                     $personas2 = $this->People->query($queryPersona);
                     array_push($datosVista2, $personas2);
 
-                    $queryEntrada = "select * from inputs where person_id=".$person_id;
+                    $queryEntrada = "select * from inputs where person_id=" . $person_id;
                     $entrada = $this->Input->query($queryEntrada);
                     array_push($datosVista3, $entrada);
                 }
@@ -627,7 +625,7 @@ class UsersController extends AppController {
                 $this->set('datosvista3', $datosVista3);
                 $this->set('event_id', $event_id);
             }
-        } 
+        }
 
 
         $this->set('form', $formPersonal);
@@ -729,16 +727,16 @@ class UsersController extends AppController {
             $this->loadModel('People');
 
             $datos = $this->request->data;
-            
+
             $documento = $datos['user'];
             $evento = $datos['event'];
             $input = $datos['input'];
 
             $this->loadModel('Input');
             $codigos = $this->Input->find("list", array(
-                "conditions"=>array(
-                    'entr_identificador'=>$input),
-                "fields"=>array(
+                "conditions" => array(
+                    'entr_identificador' => $input),
+                "fields" => array(
                     "Input.entr_codigo")));
 
             $this->loadModel('Forms');
@@ -757,7 +755,6 @@ class UsersController extends AppController {
                 $queryDatos = "select * from datas JOIN forms_personal_data on datas.forms_personal_datum_id=forms_personal_data.id JOIN personal_data on forms_personal_data.personal_datum_id=personal_data.id where datas.person_id=" . $value . "";
 
                 $datos_person = $this->Datas->query($queryDatos);
-
             }
 
             $this->set('codigos', $codigos);
@@ -771,6 +768,7 @@ class UsersController extends AppController {
     public function registrar2() {
         $mensaje = "";
         $this->layout = "webservice";
+        $this->loadModel("Input");
         if ($this->request->is("POST")) {
             //determino si el formulario se envia es para actualizar
             if ($this->request->data["Informacion"]["actualizar"] == 0) {
@@ -795,6 +793,7 @@ class UsersController extends AppController {
                     try {
                         $this->Input->save($newInput);
                         $newInputId = $this->Input->getLastInsertId();
+
 
 
 //                    //Agrego la entrada
@@ -843,13 +842,22 @@ class UsersController extends AppController {
                                     "codigo" => 23000,
                                     "mensaje" => "Documento ya esta registrado"
                                 );
-                            }else{
+                            } else {
                                 $mensaje = array(
                                     "codigo" => $error2,
                                     "mensaje" => $mensaje2
                                 );
                             }
                         }
+
+                        //comienzo con el log
+                        $this->loadModel("Log");
+                        $user_id = $this->Session->read("User.id");
+                        $input_id = $newInputId;
+                        $operacion = "VENTA";
+                        $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '.$operacion.')";
+                        $operation = $this->Data->query($sql);
+                        //termino el log
                     } catch (Exception $exc) {
                         $error2 = $exc->getCode();
                         $mensaje2 = $exc->getMessage();
@@ -858,12 +866,12 @@ class UsersController extends AppController {
                                 "codigo" => 23000,
                                 "mensaje" => "Codigo Manilla y/o Identificador de la manilla ya esta registrada"
                             );
-                        }else{
-                                $mensaje = array(
-                                    "codigo" => $error2,
-                                    "mensaje" => $mensaje2
-                                );
-                            }
+                        } else {
+                            $mensaje = array(
+                                "codigo" => $error2,
+                                "mensaje" => $mensaje2
+                            );
+                        }
                     }
                 } else {
 //                $this->Session->setFlash('Tarjeta no esta registrada en el sistema', 'Error');
@@ -918,6 +926,14 @@ class UsersController extends AppController {
                             "person_id" => $newPeopleId,
                             "input_id" => $newInputId
                         );
+                        //comienzo con el log
+                        $this->loadModel("Log");
+                        $user_id = $this->Session->read("User.id");
+                        $input_id = $newInputId;
+                        $operacion = "ACTUALIZACION";
+                        $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '.$operacion.')";
+                        $operation = $this->Data->query($sql);
+                        //termino el log
 //                    } else {
 ////                        $this->Session->setFlash('La tarjeta no concuerda con la categoria', 'error');
 //                        $mensaje = "La tarjeta no concuerda con la categoria";
@@ -960,7 +976,7 @@ class UsersController extends AppController {
             $this->loadModel("People");
             $this->loadModel("Input");
             foreach ($datos as $dato) {
-                
+
                 while ($value = key($dato)) {
 
                     $value = current($dato);
@@ -981,11 +997,8 @@ class UsersController extends AppController {
 
                                     $this->Data->save($updateData);
                                 }
-                               
-                             }
-                           
-                        }
-                        elseif(key($dato) == "documento"){
+                            }
+                        } elseif (key($dato) == "documento") {
                             $personas = $datos["PersonalDatum"]["documento"];
 
                             $conditions = "select * from people where id=" . key($personas);
@@ -1000,16 +1013,12 @@ class UsersController extends AppController {
                                             'pers_documento' => $datos["PersonalDatum"]["documento"][key($personas)]));
 
                                     $this->People->save($updatePeople);
-                                    }
-                                
-                               
+                                }
                             }
-                        }
-                        elseif(key($dato) == "codigo")
-                        {
+                        } elseif (key($dato) == "codigo") {
                             $codigos = $datos["PersonalDatum"]["codigo"];
                             $identificadores = $datos["PersonalDatum"]["identificador"];
-                         
+
                             foreach ($codigos as $codigo) {
                                 $conditions = "select * from inputs where entr_codigo=" . key($codigos);
                                 $inputs = $this->Input->query($conditions);
@@ -1017,19 +1026,25 @@ class UsersController extends AppController {
                                 foreach ($identificadores as $identificador) {
                                     $entr_identificador = $identificador;
 
-                                     $updateInput = array(
+                                    $updateInput = array(
                                         'Input' => array(
                                             'id' => $inputs[0]["inputs"]["id"],
-                                            'entr_codigo' =>$codigo,
+                                            'entr_codigo' => $codigo,
                                             'entr_identificador' => $entr_identificador,
-                                            ));
+                                    ));
 
                                     $this->Input->save($updateInput);
+                                    //comienzo con el log
+                                    $this->loadModel("Log");
+                                    $user_id = $this->Session->read("User.id");
+                                    $input_id = $inputs[0]["inputs"]["id"];
+                                    $operacion = "ACTUALIZACION";
+                                    $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '.$operacion.')";
+                                    $operation = $this->Data->query($sql);
+                                    //termino el log
                                 }
-                            } 
-                        }
-                        elseif(key($dato) == "codigoNuevo")
-                        {
+                            }
+                        } elseif (key($dato) == "codigoNuevo") {
                             //codigoNuevo tiene el entr_codigo que quiero guardar en input
                             $codigoNuevo = $datos["PersonalDatum"]["codigoNuevo"];
                             //identificadorNuevo tiene el entr_identificador que quiero guardar en input
@@ -1043,23 +1058,30 @@ class UsersController extends AppController {
                                 $newInput = array(
                                     'Input' => array(
                                         'person_id' => $people["people"]["id"],
-                                        'entr_identificador'=>$identificadorNuevo,
-                                        'entr_codigo'=>$codigoNuevo
+                                        'entr_identificador' => $identificadorNuevo,
+                                        'entr_codigo' => $codigoNuevo
                                     )
                                 );
                                 $this->Input->save($newInput);
-
+                                $newInputId->
+                                //comienzo con el log
+                                $this->loadModel("Log");
+                                $user_id = $this->Session->read("User.id");
+                                $input_id = $this->Input->getLastInsertId();;
+                                $operacion = "VENTA";
+                                $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '.$operacion.')";
+                                $operation = $this->Data->query($sql);
+                                //termino el log
                             }
-
                         }
                     }
                     next($dato);
                 }
             }
-             return $this->redirect(array('action' => 'buscador'));
-         }
-
+            return $this->redirect(array('action' => 'buscador'));
+        }
     }
+
     public function buscador2() {
 
         $this->loadModel('PersonalDatum');
