@@ -5,18 +5,19 @@
     <?php echo $this->Form->create('Entrada'); ?>
     <fieldset>
         <legend><?php echo __('Reportes'); ?></legend><br>
-        
+
         <div class="btn-group">
-              <button data-toggle="dropdown" class="btn btn-success dropdown-toggle">Exportar <span class="caret"></span></button>
-              <ul class="dropdown-menu">
-                  <li><a href="<?=$this->Html->url("exportar")?>">Reportes Generales</a></li>
-                <li><a href="<?=$this->Html->url("exportar2")?>">Reportes Usuarios</a></li>
-                <li><a href="<?=$this->Html->url("exportar3")?>">Reportes Ventas</a></li>
-              </ul>
-            </div>
+            <button data-toggle="dropdown" class="btn btn-success dropdown-toggle">Exportar <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+                <li><a href="<?= $this->Html->url("exportar") ?>">Reportes Generales</a></li>
+                <li><a href="<?= $this->Html->url("exportar2") ?>">Reportes Usuarios</a></li>
+                <li><a href="<?= $this->Html->url("exportar3") ?>">Reportes Ventas</a></li>
+                <li><a href="<?= $this->Html->url("exportar4") ?>">Reportes Registro</a></li>
+            </ul>
+        </div>
 <!--        <table>
-            <tr>
-                <td>
+        <tr>
+            <td>
         <?php
 //                    echo $this->Form->input('country_id', array(
 //                        "div" => array(
@@ -27,8 +28,8 @@
 //                        "empty" => "Seleccione un País"
 //                    ));
         ?>
-                </td>
-                <td>
+            </td>
+            <td>
         <?php
 //                    echo $this->Form->input('state_id', array(
 //                        "div" => array(
@@ -38,8 +39,8 @@
 //                        "empty" => "seleccione un Departamento"
 //                    ));
         ?>
-                </td>
-                <td>
+            </td>
+            <td>
         <?php
 //                    echo $this->Form->input('city_id', array(
 //                        "div" => array(
@@ -49,10 +50,10 @@
 //                        "empty" => "seleccione una ciudad"
 //                    ));
         ?>
-                </td>
-            </tr>
-            <tr>
-                <td>
+            </td>
+        </tr>
+        <tr>
+            <td>
         <?php
 //                    echo $this->Form->input('stage_id', array(
 //                        "div" => array(
@@ -62,8 +63,8 @@
 //                        "options" => "Stage.esce_nombre",
 //                    ));
         ?>
-                </td>
-                <td>
+            </td>
+            <td>
         <?php
 //                    echo $this->Form->input('event_id', array(
 //                        "div" => array(
@@ -73,14 +74,14 @@
 //                        "options" => "event.even_nombre",
 //                    ));
         ?>
-                </td>
-                <td>
+            </td>
+            <td>
         <?php
 //                        echo $this->Form->input('entrada_id');
         ?>
-                </td>
-            </tr>
-        </table>-->
+            </td>
+        </tr>
+    </table>-->
 
         <label id="mensaje"></label>
     </fieldset>
@@ -309,8 +310,8 @@
 <!--<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>-->
 <!--<script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="http://code.highcharts.com/modules/exporting.js"></script>-->
-<?php 
-    echo $this->Html->script(array("highcharts"));
+<?php
+echo $this->Html->script(array("highcharts"));
 ?>
 
 <?php
@@ -391,7 +392,7 @@ for ($index = 0; $index < count($datos); $index++) {
                         dataLabels: {
                             enabled: true,
                             format: '<b>{point.name}</b>: {point.y} ',
-    //                    format: '<b>{point.name}</b>: {point.percentage:.1f} ',
+                            //                    format: '<b>{point.name}</b>: {point.percentage:.1f} ',
                             style: {
                                 color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                             }
