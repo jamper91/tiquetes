@@ -426,6 +426,17 @@ class EntradasController extends AppController {
         $this->set("datos", $datos);
     }
 
+    public function exportar4() {
+        $this->Entrada->virtualFields['Cantidad'] = 0;
+        $sql = "SELECT 
+                    COUNT( DISTINCT person_id ) as Entrada__Cantidad
+                FROM datas
+                ";
+        $datos = $this->Entrada->query($sql);
+//        debug($datos);
+        $this->set("datos", $datos);
+    }
+
     public function reportes() {
         if ($this->request->is('post')) {
             
