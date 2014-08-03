@@ -13,6 +13,7 @@
                 <li><a href="<?= $this->Html->url("exportar2") ?>">Reportes Usuarios</a></li>
                 <li><a href="<?= $this->Html->url("exportar3") ?>">Reportes Ventas</a></li>
                 <li><a href="<?= $this->Html->url("exportar4") ?>">Reportes Registro</a></li>
+                <li><a href="<?= $this->Html->url("exportar5") ?>">Reporte Ingreso Detallado</a></li>
             </ul>
         </div>
 <!--        <table>
