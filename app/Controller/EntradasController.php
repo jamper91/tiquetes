@@ -413,6 +413,17 @@ class EntradasController extends AppController {
 
     public function exportar4() {
         $this->Entrada->virtualFields['Cantidad'] = 0;
+        $sql = "SELECT 
+                    COUNT( DISTINCT person_id ) as Entrada__Cantidad
+                FROM datas
+                ";
+        $datos = $this->Entrada->query($sql);
+//        debug($datos);
+        $this->set("datos", $datos);
+    }
+    
+    public function exportar5() {
+        $this->Entrada->virtualFields['Cantidad'] = 0;
         $this->Entrada->virtualFields['Aux'] = 0;
         $this->Entrada->virtualFields['Fecha'] = 0;
         $sql = "SELECT 
