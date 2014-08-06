@@ -48,6 +48,7 @@ class PeopleController extends AppController {
      * @return void
      */
     public function add() {
+       $this->loadModel('Categoria');
         if ($this->request->is('post')) {
             $this->Person->create();
             if ($this->Person->save($this->request->data)) {
@@ -57,10 +58,16 @@ class PeopleController extends AppController {
                 $this->Session->setFlash(__('The person could not be saved. Please, try again.'));
             }
         }
+        $categorias = $this->Categoria->find('list', array(
+            "fields" => array(
+                "Categoria.id",
+                "Categoria.descripcion"
+            )));
+        $bloodType = Array ('O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'HH');
         $documentTypes = $this->Person->DocumentType->find('list');
         $cities = $this->Person->City->find('list');
         $committeesEvents = $this->Person->CommitteesEvent->find('list');
-        $this->set(compact('documentTypes', 'cities', 'committeesEvents'));
+        $this->set(compact('documentTypes', 'cities', 'committeesEvents', 'bloodType', 'categorias'));
     }
 
     /**
