@@ -239,6 +239,46 @@ class PeopleController extends AppController {
     }
     
     public function buscador(){
+
+
+        if ($this->request->is("POST")) {
+            
+            $datos=$this->request->data;
+            $pers_documento=$datos["Person"]["pers_documento"];
+            $pers_primNombre=$datos["Person"]["pers_primNombre"];
+            $pers_primApellido=$datos["Person"]["pers_primApellido"];
+            
+            $conditions="";
+
+            if($pers_documento==null && $pers_primApellido==null && $pers_primNombre==null){
+                $conditions="1";
+            }
+
+            debug($datos);
+
+            if($pers_documento!=null){
+                $conditions.=" pers_documento='".$pers_documento."'";
+            }
+
+            if($pers_primNombre!=null){
+                if($pers_documento!=null){ $conditions.=" AND"; } // si busco tb por doc entonces agrego el AND
+                $conditions.=" pers_primNombre LIKE '".$pers_primNombre."%'";
+            }
+
+            if($pers_primApellido!=null){
+                if($pers_documento!=null  || $pers_primNombre!=null){ $conditions.=" AND"; } // si busco por doc o primNombre agrego el AND
+                $conditions.=" pers_primApellido LIKE '".$pers_primApellido."%'";
+            }
+
+
+           echo $conditions = "select * from people where " . $conditions; //die();
+
+            $datos = $this->Person->query($conditions);
+            $this->set("datos", $datos);
+
+
+
+        }
         
     }
 
