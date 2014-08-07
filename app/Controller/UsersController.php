@@ -2,6 +2,7 @@
 
 App::uses('AppController', 'Controller');
 
+
 /**
  * Users Controller
  *
@@ -15,7 +16,7 @@ class UsersController extends AppController {
      *
      * @var array
      */
-    public $components = array('Paginator', 'Auth', 'Session', 'RequestHandler');
+    public $components = array('Paginator', 'Auth', 'Session', 'RequestHandler' );
 
     public function beforeFilter() {
         $this->set('authUser', $this->Auth->user());
@@ -1216,5 +1217,7 @@ class UsersController extends AppController {
 
         $this->set('form', $formPersonal);
     }
+
+
 
 }

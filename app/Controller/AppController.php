@@ -25,7 +25,8 @@ class AppController extends Controller {
     
    public $components = array(
             'Session',
-            'Auth' 
+            'Auth' ,
+            'RequestHandler'
     );
     
     public function beforeFilter() {
