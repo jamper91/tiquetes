@@ -128,7 +128,7 @@ class PeopleController extends AppController {
                             try {
                                 $identificador = $data['input_identificador'];
                                 $codigo = $data['input_codigo'];
-                                $sql = "INSERT INTO inputs (person_id, entr_codigo, entr_identificador) values (" . $person_id . ", " . $codigo . ", " . $identificador . ");";
+                                $sql = "INSERT INTO inputs (person_id, entr_codigo, entr_identificador, categoria_id) values (" . $person_id . ", " . $codigo . ", " . $identificador . ",".$data['Person']['categoria_id'].");";
                                 $this->Data->query($sql);
                             } catch (Exception $ex) {
                                 $error2 = $ex->getCode();
@@ -169,11 +169,11 @@ class PeopleController extends AppController {
                 "Product.name"
         )));
 
-        $bloodType = Array('O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'HH');
+//        $bloodType = Array('O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'HH');
         $documentTypes = $this->Person->DocumentType->find('list');
         $cities = $this->Person->City->find('list');
         $committeesEvents = $this->Person->CommitteesEvent->find('list');
-        $this->set(compact('documentTypes', 'cities', 'committeesEvents', 'bloodType', 'categorias', 'products'));
+        $this->set(compact('documentTypes', 'cities', 'committeesEvents', /*'bloodType',*/ 'categorias', 'products'));
     }
 
     /**
@@ -198,10 +198,26 @@ class PeopleController extends AppController {
             $options = array('conditions' => array('Person.' . $this->Person->primaryKey => $id));
             $this->request->data = $this->Person->find('first', $options);
         }
+
+        $this->loadModel('Categoria');
+        $this->loadModel('Product');
+        $categorias = $this->Categoria->find('list', array(
+            "fields" => array(
+                "Categoria.id",
+                "Categoria.descripcion"
+        )));
+        $products = $this->Product->find('list', array(
+            "fields" => array(
+                "Product.product_id",
+                "Product.name"
+        )));
+
+
+
         $documentTypes = $this->Person->DocumentType->find('list');
         $cities = $this->Person->City->find('list');
         $committeesEvents = $this->Person->CommitteesEvent->find('list');
-        $this->set(compact('documentTypes', 'cities', 'committeesEvents'));
+        $this->set(compact('documentTypes', 'cities', 'committeesEvents','categorias', 'products'));
     }
 
     /**
@@ -261,6 +277,56 @@ class PeopleController extends AppController {
     }
     
     public function buscador(){
+
+
+        if ($this->request->is("POST")) {
+            
+            $datos=$this->request->data;
+            $pers_documento=$datos["Person"]["pers_documento"];
+            $pers_primNombre=$datos["Person"]["pers_primNombre"];
+            $pers_primApellido=$datos["Person"]["pers_primApellido"];
+
+            $input_identificador=$datos["input_identificador"];
+            
+            $conditions="";
+
+            if($pers_documento==null && $pers_primApellido==null && $pers_primNombre==null && $input_identificador==null){
+                $conditions="1";
+            }
+
+           // debug($datos);
+
+            if($pers_documento!=null){
+                $conditions.=" pers_documento='".$pers_documento."'";
+            }
+
+            if($pers_primNombre!=null){
+                if($pers_documento!=null){ $conditions.=" AND"; } // si busco tb por doc entonces agrego el AND
+                $conditions.=" pers_primNombre LIKE '".$pers_primNombre."%'";
+            }
+
+            if($pers_primApellido!=null){
+                if($pers_documento!=null  || $pers_primNombre!=null){ $conditions.=" AND"; } // si busco por doc o primNombre agrego el AND
+                $conditions.=" pers_primApellido LIKE '".$pers_primApellido."%'";
+            }
+
+            if($input_identificador!=null){
+
+                $conditions="SELECT * FROM people, inputs WHERE inputs.person_id=people.id AND ".$conditions."  inputs.entr_identificador='".$input_identificador."' ";
+            }else{
+                $conditions = "SELECT * FROM people WHERE " . $conditions; //die();
+                
+            }
+
+
+
+
+            $datos = $this->Person->query($conditions);
+            $this->set("datos", $datos);
+
+
+
+        }
         
     }
 
