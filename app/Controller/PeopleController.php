@@ -109,7 +109,7 @@ class PeopleController extends AppController {
                             try {
                                 $identificador = $data['input_identificador'];
                                 $codigo = $data['input_codigo'];
-                                $sql = "INSERT INTO inputs (person_id, entr_codigo, entr_identificador) values (" . $person_id . ", " . $codigo . ", " . $identificador . ");";
+                                $sql = "INSERT INTO inputs (person_id, entr_codigo, entr_identificador, categoria_id) values (" . $person_id . ", " . $codigo . ", " . $identificador . ",".$data['Person']['categoria_id'].");";
                                 $this->Data->query($sql);
                             } catch (Exception $ex) {
                                 $error2 = $ex->getCode();
