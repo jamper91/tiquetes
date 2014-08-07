@@ -27,6 +27,21 @@ class StagesController extends AppController {
         $this->set('stages', $this->Paginator->paginate());
     }
 
+
+    public function mapea($id=null){
+        if (!$this->Stage->exists($id)) {
+            throw new NotFoundException(__('Invalid stage'));
+        }
+
+        $options = array('conditions' => array('Stage.' . $this->Stage->primaryKey => $id));
+        $this->set('stage', $this->Stage->find('first', $options));
+
+
+        
+    }
+
+
+
     public function beforeFilter() {
 
         $this->Auth->allow('add', 'edit', 'index', 'imagenAjax');
@@ -84,7 +99,8 @@ class StagesController extends AppController {
                             'esce_nombre' => $data['esce_nombre'],
                             'esce_direccion' => $data['esce_direccion'],
                             'esce_telefono' => $data['esce_telefono'],
-                            'esce_mapa' => $src
+                            //'esce_mapa' => $src
+                            'esce_mapa' => $nombre
                         )
                     );
                     try {
