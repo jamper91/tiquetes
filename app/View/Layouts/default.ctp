@@ -43,8 +43,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         echo $this->fetch('meta');
         echo $this->fetch('css');
         echo $this->fetch('script');
-           echo $this->Html->script(array('jquery.form', 'jquery-1.11.0.min'));     
-
+        echo $this->Html->script(array('jquery.form', 'jquery-1.11.0.min'));
         ?>
 <!--        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
         <script src="http://malsup.github.com/jquery.form.js"></script> -->
@@ -93,125 +92,126 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         <!--close-top-serch-->
         <!--sidebar-menu-->
         <div id="sidebar">
-            <?php if($authUser)
-                { ?>
-            <a href="#" class="visible-phone">
-                <i class="icon icon-home"></i> Dashboard</a>
+            <?php if ($authUser) {
+                ?>
+                <a href="#" class="visible-phone">
+                    <i class="icon icon-home"></i> Dashboard</a>
 
-            <ul id="menu">
-                <?php if (in_array('geografia', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
-                <li class="submenu"  > 
-                    <a href="#">
-                        <i class="icon icon-fullscreen"></i> 
-                        <span>Geografia</span>
-                    </a>
-                    <ul>
-                            <li><a href="<?= $this->Html->url(array("controller" => "countries", "action" => "add")); ?>">Paises</a></li>
-                            <li><a href="<?= $this->Html->url(array("controller" => "states", "action" => "add")); ?>">Departamentos</a></li>
-                            <li><a href="<?= $this->Html->url(array("controller" => "cities", "action" => "add")); ?>">Ciudades</a></li>
-                    </ul>
-                </li>
-                <?php } ?>
-                <?php if (in_array('escenario', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
-                <li class="submenu"  > 
-                    <a href="#">
-                        <i class="icon icon-th-list"></i> 
-                        <span>Gestionar Escenario</span>
-                    </a>
-                    <ul>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Stages", "action" => "add")); ?>">Crear Escenario</a></li>
-                        <li><a href="<?= $this->Html->url(array("controller" => "Stages", "action" => "index")); ?>">Listar Escenarios</a></li>
-                    </ul>
-                </li>
-                <?php } ?>
-                <?php if (in_array('eventos', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
+                <ul id="menu">
+                    <?php if (in_array('geografia', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
+                        <li class="submenu"  > 
+                            <a href="#">
+                                <i class="icon icon-fullscreen"></i> 
+                                <span>Geografia</span>
+                            </a>
+                            <ul>
+                                <li><a href="<?= $this->Html->url(array("controller" => "countries", "action" => "add")); ?>">Paises</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "states", "action" => "add")); ?>">Departamentos</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "cities", "action" => "add")); ?>">Ciudades</a></li>
+                            </ul>
+                        </li>
+                    <?php } ?>
+                    <?php if (in_array('escenario', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
+                        <li class="submenu"  > 
+                            <a href="#">
+                                <i class="icon icon-th-list"></i> 
+                                <span>Gestionar Escenario</span>
+                            </a>
+                            <ul>
+                                <li><a href="<?= $this->Html->url(array("controller" => "Stages", "action" => "add")); ?>">Crear Escenario</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "Stages", "action" => "index")); ?>">Listar Escenarios</a></li>
+                            </ul>
+                        </li>
+                    <?php } ?>
+                    <?php if (in_array('eventos', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
 
-                    <li class="submenu"  > 
-                        <a href="#">
-                            <i class="icon icon-th-list"></i> 
-                            <span>Gestionar Eventos</span>
-                        </a>
-                        <ul>
-                            <li><a href="<?= $this->Html->url(array("controller" => "EventTypes", "action" => "add")); ?>">Crear Tipos de Evento</a></li>
-                   
-                            <li><a href="<?= $this->Html->url(array("controller" => "Events", "action" => "add")); ?>">Crear Evento</a></li>
-                     
-                            <li><a href="<?= $this->Html->url(array("controller" => "Locations", "action" => "add")); ?>">Crear Localidad</a></li>
-                      
-                            <li><a href="<?= $this->Html->url(array("controller" => "Shelves", "action" => "add")); ?>">Crear Grupo de Estan</a></li>
-                       
-                            <li><a href="<?= $this->Html->url(array("controller" => "Inputs", "action" => "add")); ?>">Crear entradas por Evento</a></li> 
-                                                
-                        </ul>
-                    </li>
-                <?php } ?>
+                        <li class="submenu"  > 
+                            <a href="#">
+                                <i class="icon icon-th-list"></i> 
+                                <span>Gestionar Eventos</span>
+                            </a>
+                            <ul>
+                                <li><a href="<?= $this->Html->url(array("controller" => "EventTypes", "action" => "add")); ?>">Crear Tipos de Evento</a></li>
 
-                 <?php if (in_array('usuarios', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
+                                <li><a href="<?= $this->Html->url(array("controller" => "Events", "action" => "add")); ?>">Crear Evento</a></li>
 
-                <li class="submenu"  > 
-                    <a href="#">                        
-                        <i class="icon icon-fullscreen"></i> 
-                        <span>Gestionar Usuarios</span>
-                    </a>
-                    <ul>
-                        <li><a href="<?= $this->Html->url(array("controller" => "users", "action" => "add")); ?>">Crear Usuario</a></li>
-                     
-                        <li><a href="<?= $this->Html->url(array("controller" => "users", "action" => "index")); ?>">Listar Usuario</a></li>
-                   
-                        <li><a href="<?= $this->Html->url(array("controller" => "TypeUsers", "action" => "add")); ?>">Crear Tipo de Usuario</a></li>
-                   
-                        <li><a href="<?= $this->Html->url(array("controller" => "TypeUsers", "action" => "index")); ?>">Listar Tipos de Usuario</a></li>
-                        
-                    </ul>
-                </li>
-                <?php } ?>
-                <?php if (in_array('formularios', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
+                                <li><a href="<?= $this->Html->url(array("controller" => "Locations", "action" => "add")); ?>">Crear Localidad</a></li>
 
-                 <li class="submenu"  > 
-                    <a href="#">
-                        <i class="icon icon-th-list"></i> 
-                        <span>Formularios</span>
-                    </a>
-                    <ul>
-                        <li><a href="<?= $this->Html->url(array("controller" => "PersonalData", "action" => "add")); ?>">Crear Campos</a></li>
-                  
-                        <li><a href="<?= $this->Html->url(array("controller" => "forms", "action" => "add")); ?>">Formularios</a></li>
-                       
-                    </ul>
-                </li>
-                <?php } ?>
-                <?php if (in_array('personas', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
-               
-                <li class="submenu"> 
-                    <a href="#">
-                        <i class="icon icon-th-list"></i> 
-                        <span>Gestionar Personas</span>
-                    </a>
-                    <ul>
-                       
-                            <li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "registrar")); ?>">Crear Persona</a></li>
-                            <!--<li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador2")); ?>">Asociar Tarjeta a Persona</a></li>-->
-                            <li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador")); ?>">Buscar Persona</a></li>
-                            <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "buscar")); ?>">Asociar Tarjeta a Usuario</a></li>
-                       
+                                <li><a href="<?= $this->Html->url(array("controller" => "Shelves", "action" => "add")); ?>">Crear Grupo de Estan</a></li>
 
-                    </ul>
-                </li>
-                <?php } ?>
-               
+                                <li><a href="<?= $this->Html->url(array("controller" => "Inputs", "action" => "add")); ?>">Crear entradas por Evento</a></li> 
 
-                <?php if (in_array('autorizacion', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
-                    <li class="submenu"  > 
-                        <a href="#">
-                            <i class="icon icon-th-list"></i> 
-                            <span>Gestionar Autorizacion</span>
-                        </a>
-                        <ul>
-                            <li><a href="<?= $this->Html->url(array("controller" => "AuthorizationsUsers", "action" => "add")); ?>">Autorizar Usuarios</a></li>
+                            </ul>
+                        </li>
+                    <?php } ?>
 
-                        </ul>
-                    </li>
-                <?php } ?>
+                    <?php if (in_array('usuarios', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
+
+                        <li class="submenu"  > 
+                            <a href="#">                        
+                                <i class="icon icon-fullscreen"></i> 
+                                <span>Gestionar Usuarios</span>
+                            </a>
+                            <ul>
+                                <li><a href="<?= $this->Html->url(array("controller" => "users", "action" => "add")); ?>">Crear Usuario</a></li>
+
+                                <li><a href="<?= $this->Html->url(array("controller" => "users", "action" => "index")); ?>">Listar Usuario</a></li>
+
+                                <li><a href="<?= $this->Html->url(array("controller" => "TypeUsers", "action" => "add")); ?>">Crear Tipo de Usuario</a></li>
+
+                                <li><a href="<?= $this->Html->url(array("controller" => "TypeUsers", "action" => "index")); ?>">Listar Tipos de Usuario</a></li>
+
+                            </ul>
+                        </li>
+                    <?php } ?>
+                    <?php if (in_array('formularios', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
+
+                        <li class="submenu"  > 
+                            <a href="#">
+                                <i class="icon icon-th-list"></i> 
+                                <span>Formularios</span>
+                            </a>
+                            <ul>
+                                <li><a href="<?= $this->Html->url(array("controller" => "PersonalData", "action" => "add")); ?>">Crear Campos</a></li>
+
+                                <li><a href="<?= $this->Html->url(array("controller" => "forms", "action" => "add")); ?>">Formularios</a></li>
+
+                            </ul>
+                        </li>
+                    <?php } ?>
+                    <?php if (in_array('personas', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
+
+                        <li class="submenu"> 
+                            <a href="#">
+                                <i class="icon icon-th-list"></i> 
+                                <span>Gestionar Personas</span>
+                            </a>
+                            <ul>
+                                <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "add")); ?>">Crear Persona</a></li>
+                                <!--<li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "registrar")); ?>">Crear Persona</a></li>-->
+                                <!--<li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador2")); ?>">Asociar Tarjeta a Persona</a></li>-->
+                                <li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador")); ?>">Buscar Persona</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "buscador")); ?>">Buscar Persona logato</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "buscar")); ?>">Asociar Tarjeta a Usuario</a></li>
+
+
+                            </ul>
+                        </li>
+                    <?php } ?>
+
+
+                    <?php if (in_array('autorizacion', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
+                        <li class="submenu"  > 
+                            <a href="#">
+                                <i class="icon icon-th-list"></i> 
+                                <span>Gestionar Autorizacion</span>
+                            </a>
+                            <ul>
+                                <li><a href="<?= $this->Html->url(array("controller" => "AuthorizationsUsers", "action" => "add")); ?>">Autorizar Usuarios</a></li>
+
+                            </ul>
+                        </li>
+                    <?php } ?>
 
                     <?php if (in_array('reportes', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
                         <li class="submenu"  > 
@@ -224,8 +224,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                             </ul>
                         </li>
                     <?php } ?> 
-            </ul>
-            <?php  }  ?> 
+                </ul>
+            <?php } ?> 
         </div>
         <!--sidebar-menu-->
 

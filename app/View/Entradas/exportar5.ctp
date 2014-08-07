@@ -10,15 +10,17 @@ $table = array(
     array('label' => __('Empresa'), 'width' => 'auto', 'filter' => true),
     array('label' => __('Manilla'), 'width' => 'auto', 'filter' => true),
     array('label' => __('Chip'), 'width' => 'auto', 'filter' => true),
-    array('label' => __('Hora'), 'width' => 'auto', 'filter' => true),
-    array('label' => __('Estado'), 'width' => 'auto', 'filter' => true),
+    array('label' => __('Agosto 1'), 'width' => 'auto', 'filter' => true),
+    array('label' => __('Agosto 2'), 'width' => 'auto', 'filter' => true),
+    array('label' => __('Agosto 3'), 'width' => 'auto', 'filter' => true),
+    array('label' => __('Total'), 'width' => 'auto', 'filter' => true)
 );
 
 // heading
 $this->PhpExcel->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
 
 // data
-foreach ($datos2 as $dato) {
+foreach ($datos as $dato) {
     $this->PhpExcel->addTableRow(array(
         $dato['Nombre'],
         $dato['Apellido'],
@@ -26,12 +28,14 @@ foreach ($datos2 as $dato) {
         $dato['Empresa'],
         $dato['Manilla'],
         $dato['Chip'],
-        $dato['Hora'],
-        $dato['Estado'],
+        $dato['Agosto-1'],
+        $dato['Agosto-2'],
+        $dato['Agosto-3'],
+        $dato['Agosto-1']+$dato['Agosto-2']+$dato['Agosto-3'],
     ));
 }
 
 $this->PhpExcel->addTableFooter();
-$this->PhpExcel->output("Reporte Usuarios Fondas de mi Pueblo.xlsx"); 
+$this->PhpExcel->output("Reporte Ingreso por Asistente Fondas de mi Pueblo.xlsx"); 
 
 ?>
