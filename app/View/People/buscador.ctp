@@ -32,7 +32,7 @@
     <div class="widget-box">
         <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
             <h5>Resultado de la b&uacute;squeda</h5>
-
+            <?php  //var_dump($datos); die(); ?>
         </div>
         <div class="widget-content nopadding">
             <table class="table table-bordered data-table">
@@ -47,15 +47,7 @@
                         <th>
                             Apellidos
                         </th>
-                        <th>
-                            Telefono
-                        </th>
-                        <th>
-                            Fecha Nacimiento
-                        </th>
-                        <th>
-                            Correo
-                        </th>
+                        
                         <th>
                             Opciones
                         </th>
@@ -76,15 +68,7 @@
                             <td>
                         <?= $dato["people"]["pers_primApellido"]  ?>
                             </td>
-                            <td>
-        <?= $dato["people"]["pers_telefono"] ?>
-                            </td>
-                            <td>
-        <?= $dato["people"]["pers_fechNacimiento"] ?>
-                            </td>
-                            <td>
-        <?= $dato["people"]["pers_mail"] ?>
-                            </td>
+                          
                             <td>
                                 <?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $dato['people']['id']),array('class'=>'btn btn-warning')); ?>
 
