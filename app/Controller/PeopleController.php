@@ -58,7 +58,8 @@ class PeopleController extends AppController {
         
         //try {
             if ($this->request->is('POST')) {
-                $data = $this->request->data;               
+                $data = $this->request->data; 
+
                 $person_id = $this->Person->find("list", array(
                     "conditions" => array(
                         'Person.pers_documento' => $data['Person']['pers_documento']),
@@ -81,8 +82,8 @@ class PeopleController extends AppController {
                     )
                 ));                
 //                var_dump($person_id); die();
-//                debug($entr_codigo);
-//                debug($entr_identificador);
+                debug($entr_codigo);
+                debug($entr_identificador);
 //                
                 
             
@@ -93,8 +94,26 @@ class PeopleController extends AppController {
                         if (($entr_identificador==array())) {
                             $this->loadModel("Person");
                             $this->Person->create();
+
                             if ($this->Person->saveAll($this->request->data)) {
                                 $this->Session->setFlash('Persona insertada correctamente.','good');
+
+                                $categoria = $this->Categoria->find('list', array(
+                                    "conditions"=>array(
+                                        "Categoria.id"=>$data['Person']['categoria_id']),
+                                    "fields" => array(
+                                        "Categoria.id",
+                                        "Categoria.descripcion"
+                                )));
+
+                                App::import('Vendor', 'Fpdf', array('file' =>'fpdf/fpdf.php'));
+                  $this->layout = 'pdf'; //this will use the pdf.ctp layout
+                    $informacion = array('documento'=>$data['Person']['pers_documento'], 'nombre'=>$data['Person']['pers_primNombre'], 'apellido'=>$data['Person']['pers_primApellido'],'categoria'=>$categoria,'empresa'=>$data['Person']['pers_empresa']);
+                  $this->set('fpdf', new FPDF('P','mm',array('70', '150')));
+                  //debug($informacion);
+                  $this->set('data', $informacion);
+               
+                  $this->render('pdf');
                                 //return $this->redirect(array('action' => 'add'));
                             } else {
                                 $this->Session->setFlash(__('The person could not be saved. Please, try again.'));
@@ -127,6 +146,9 @@ class PeopleController extends AppController {
                     $this->Session->setFlash('Error ya hay una persona con el mismo documento en la base de datos', 'error');
                 }
                 //$this->Session->setFlash('Datos registrados correctamente', 'good');
+                    
+                    //debug($categoria);
+                 
             }
         /*} catch (Exception $ex) {
             //debug($ex->getMessage());
