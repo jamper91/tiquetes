@@ -15,7 +15,7 @@ class PeopleController extends AppController {
      *
      * @var array
      */
-    public $components = array('Paginator', 'RequestHandler');
+    public $components = array('Paginator', 'Auth', 'Session', 'RequestHandler');
 
     /**
      * index method
@@ -50,23 +50,51 @@ class PeopleController extends AppController {
     public function add() {
         $this->loadModel('Categoria');
         $this->loadModel('Product');
+        $this->loadModel('Input');
+        $this->loadModel('Person');
+        $this->loadModel('PeopleProduct');
+        $this->loadModel('Data');
 //        debug($this->request->data);
-
-        try {
-            if ($this->request->is('post')) {
-                $data = $this->request->data;
-                $sql1 = "SELECT pers_id FROM people where pers_documento= " . $data['Person']['pers_documento'];
-                $sql2 = "SELECT id FROM inputs WHERE entr_codigo= " . $data['input_codigo'];
-                $sql3 = "SELECT id FROM inputs WHERE entr_identificador= " . $data['input_identificador'];
-                $persona = $this->Data->query($sql1);
-                $encod = $this->Data->query($sql2);
-                $entIdent = $this->Data->query($sql3);
-                if (!empty($persona)) {
-                    if (!empty($encod)) {
-                        if (!empty($entIdent)) {
+        
+        //try {
+            if ($this->request->is('POST')) {
+                $data = $this->request->data;               
+                $person_id = $this->Person->find("list", array(
+                    "conditions" => array(
+                        'Person.pers_documento' => $data['Person']['pers_documento']),
+                    "fields" => array(
+                        "Person.id",
+                    )
+                ));
+                $entr_codigo = $this->Input->find("list", array(
+                    "conditions" => array(
+                        'Input.entr_codigo' => $data['input_codigo']),
+                    "fields" => array(
+                        "Input.id",
+                    )
+                ));
+                $entr_identificador = $this->Input->find("list", array(
+                    "conditions" => array(
+                        'Input.entr_codigo' => $data['input_identificador']),
+                    "fields" => array(
+                        "Input.id",
+                    )
+                ));                
+//                var_dump($person_id); die();
+//                debug($entr_codigo);
+//                debug($entr_identificador);
+//                
+                
+            
+                
+                
+                if (($person_id==array())) { //echo "aqui"; die();
+                    if (($entr_codigo==array())) {
+                        if (($entr_identificador==array())) {
+                            $this->loadModel("Person");
                             $this->Person->create();
-                            if ($this->Person->save($this->request->data)) {
-                                $this->Session->setFlash(__('The person has been saved.'));
+                            if ($this->Person->saveAll($this->request->data)) {
+                                $this->Session->setFlash('Persona insertada correctamente.','good');
                                 //return $this->redirect(array('action' => 'add'));
                             } else {
                                 $this->Session->setFlash(__('The person could not be saved. Please, try again.'));
@@ -81,7 +109,7 @@ class PeopleController extends AppController {
                             try {
                                 $identificador = $data['input_identificador'];
                                 $codigo = $data['input_codigo'];
-                                $sql = "INSERT INTO inputs (entr_codigo, entr_identificador) values (" . $codigo . ", " . $identificador . ");";
+                                $sql = "INSERT INTO inputs (person_id, entr_codigo, entr_identificador) values (" . $person_id . ", " . $codigo . ", " . $identificador . ");";
                                 $this->Data->query($sql);
                             } catch (Exception $ex) {
                                 $error2 = $ex->getCode();
@@ -89,24 +117,24 @@ class PeopleController extends AppController {
                                     $this->Session->setFlash('Error Codigo RFID ó Identificador de manilla ya estan registrados en la base de datos', 'error');
                                 }
                             }
-                        } else{
+                        } else {
                             $this->Session->setFlash('Error Identificador de manilla ya  registrado en la base de datos', 'error');
                         }
-                    }else{
-                       $this->Session->setFlash('Error Codigo RFID  ya registrado en la base de datos', 'error'); 
+                    } else {
+                        $this->Session->setFlash('Error Codigo RFID  ya registrado en la base de datos', 'error');
                     }
-                }else{
-                  $this->Session->setFlash('Error ya hay una persona con el mismo documento en la base de datos', 'error');
+                } else {
+                    $this->Session->setFlash('Error ya hay una persona con el mismo documento en la base de datos', 'error');
                 }
+                //$this->Session->setFlash('Datos registrados correctamente', 'good');
             }
-            $this->Session->setFlash('Datos registrados correctamente', 'good');
-        } catch (Exception $ex) {
+        /*} catch (Exception $ex) {
             //debug($ex->getMessage());
             $error2 = $ex->getCode();
             if ($error2 == '23000') {
                 $this->Session->setFlash('Error ya hay una persona con el mismo documento en la base de datos', 'error');
             }
-        }
+        }*/
 
         $categorias = $this->Categoria->find('list', array(
             "fields" => array(
@@ -208,6 +236,10 @@ class PeopleController extends AppController {
             $this->set("datos", $datos);
             debug($datos);
         }
+    }
+    
+    public function buscador(){
+        
     }
 
 }
