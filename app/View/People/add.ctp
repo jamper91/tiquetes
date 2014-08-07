@@ -42,33 +42,35 @@ echo $this->Form->input('CommitteesEvent');
         echo $this->Form->input('pers_primApellido', array(
             'label' => 'Apellidos',
         ));
+        echo $this->Form->input('pers_telefono', array(
+            'label' => 'Telefono',
+        ));
+        echo $this->Form->input('pers_mail', array(
+            'label'=>'E-mail'
+        ));
         echo $this->Form->input('pers_empresa', array(
             'label' => 'Empresa',
         ));
+        ?>       
+        <div id="adicionales" name="adicionales" style="display: none;" >
+            <?php
+            echo $this->form->input('producto', array(
+//                "name" => $mnus['Product']['product_id'],
+                "label"=>"Por favor seleccione los productos",
+                "type" => "select",
+                "multiple" => "checkbox",
+                'options' => $products,
+            ));
+            ?>
+            <br>
+        </div>
+        <?php
         echo $this->Form->input('pers_tipoSangre', array(
             'label' => 'Tipo de Sangre',
             "options" => $bloodType,
             "empty" => "Seleccione un tipo de sangre"
         ));
-        ?>       
-        <div id="adicionales" name="adicionales" style="display: none;" >
-            <table>
-                <tr>
-                    <th colspan="4" align="center">POR FAVOR SELECCIONE ALGUNOS PRODUCTOS</th>
-                </tr>
-                <tr>
-                    <td>Sandalias</td>
-                    <td><input type="checkbox" name="sandalias" id="sandalias"></td>
-                    <td>Botas</td>
-                    <td><input type="checkbox" name="botas" id="botas"></td>
-                </tr>
-                <tr>
-                
-                </tr>
-            </table>
-            <br>
-        </div>
-        <?php
+
         echo $this->form->input('input_identificador', array(
             'label' => 'Identificador de Escarapela',
             'required' => 'true'
@@ -88,8 +90,8 @@ echo $this->Form->input('CommitteesEvent');
     $("#PersonCategoriaId").change(function() {
         if ($("#PersonCategoriaId").val() === "2") {
             $("#adicionales").css("display", "block");
-        } else{
-           $("#adicionales").css("display", "none"); 
+        } else {
+            $("#adicionales").css("display", "none");
         }
 
     });
