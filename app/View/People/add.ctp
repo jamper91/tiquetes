@@ -66,9 +66,7 @@ echo $this->Form->input('CommitteesEvent');
         </div>
         <?php
         echo $this->Form->input('pers_tipoSangre', array(
-            'label' => 'Tipo de Sangre',
-            "options" => $bloodType,
-            "empty" => "Seleccione un tipo de sangre"
+            'label' => 'Tipo de Sangre',           
         ));
 
         echo $this->form->input('input_identificador', array(

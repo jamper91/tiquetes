@@ -147,11 +147,11 @@ class PeopleController extends AppController {
                 "Product.name"
         )));
 
-        $bloodType = Array('O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'HH');
+//        $bloodType = Array('O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'HH');
         $documentTypes = $this->Person->DocumentType->find('list');
         $cities = $this->Person->City->find('list');
         $committeesEvents = $this->Person->CommitteesEvent->find('list');
-        $this->set(compact('documentTypes', 'cities', 'committeesEvents', 'bloodType', 'categorias', 'products'));
+        $this->set(compact('documentTypes', 'cities', 'committeesEvents', /*'bloodType',*/ 'categorias', 'products'));
     }
 
     /**
