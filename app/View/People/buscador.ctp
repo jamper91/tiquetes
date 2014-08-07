@@ -71,10 +71,10 @@
                                 <?= $dato["people"]["pers_documento"] ?>
                             </td>
                             <td>
-                        <?= $dato["people"]["pers_primNombre"] . ' ' . $dato["people"]["pers_segNombre"] ?>
+                        <?= $dato["people"]["pers_primNombre"] ?>
                             </td>
                             <td>
-                        <?= $dato["people"]["pers_primApellido"] . ' ' . $dato["people"]["pers_segApellido"] ?>
+                        <?= $dato["people"]["pers_primApellido"]  ?>
                             </td>
                             <td>
         <?= $dato["people"]["pers_telefono"] ?>
