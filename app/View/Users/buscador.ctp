@@ -35,6 +35,7 @@
 	
 	</table>
 	   <?php echo $this->Form->end(__('Enviar')); ?>
+	   
 	  
  </div>
 <?php if(isset($datosvista)){?>
