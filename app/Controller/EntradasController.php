@@ -264,9 +264,24 @@ class EntradasController extends AppController {
     }
 
     public function exportar2() {
-        $sql = "Select * 
+//        $sql = "Select * 
+//                from 
+//                        logs_torniquetes  l_t 
+//                LEFT JOIN 
+//                        inputs input 
+//                on 
+//                        input.id=l_t.input_iD
+//                LEFT JOIN
+//                        people person 
+//                on 
+//                        person.id=input.person_id
+//                ORDER BY
+//                        person.id,
+//                        l_t.fecha
+//                ";
+        $sql = "Select l_t.*, person.* 
                 from 
-                        logs_torniquetes  l_t 
+                        logs_torniquetes  l_t
                 LEFT JOIN 
                         inputs input 
                 on 
@@ -278,96 +293,19 @@ class EntradasController extends AppController {
                 ORDER BY
                         person.id,
                         l_t.fecha
-                ";
-        $datos = $this->Entrada->query($sql);
-
-        $datos2 = array();
-        $i = 0;
-        foreach ($datos as $dato) {
-            //Busco el nombre de la persona
-            $options = array(
-                "fields" => array(
-                    "descripcion"
-                ),
-                "conditions" => array(
-                    "Data.person_id" => $dato["person"]["id"],
-                    "Data.forms_personal_datum_id" => 16
-                ),
-                "recursive" => -1
-            );
-            $this->loadModel("Data");
-            $nombre = $this->Data->find("all", $options);
-//            debug($nombre);
-            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
-            if (empty($nombre)) {
-                $nombre = $dato["person"]["pers_primNombre"];
-            } else {
-                $nombre = $nombre[0];
-                $nombre = $nombre["Data"]["descripcion"];
-            }
-
-            //Busco el apellido de la persona
-            $options = array(
-                "fields" => array(
-                    "descripcion"
-                ),
-                "conditions" => array(
-                    "Data.person_id" => $dato["person"]["id"],
-                    "Data.forms_personal_datum_id" => 15
-                ),
-                "recursive" => -1
-            );
-            $this->loadModel("Data");
-            $apellido = $this->Data->find("all", $options);
-//            debug($apellido);
-            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
-            if (empty($apellido)) {
-                $apellido = $dato["person"]["pers_primApellido"];
-            } else {
-                $apellido = $apellido[0];
-                $apellido = $apellido["Data"]["descripcion"];
-            }
-
-            //Busco la empresa de la persona
-            $options = array(
-                "fields" => array(
-                    "descripcion"
-                ),
-                "conditions" => array(
-                    "Data.person_id" => $dato["person"]["id"],
-                    "Data.forms_personal_datum_id" => 14
-                ),
-                "recursive" => -1
-            );
-            $this->loadModel("Data");
-            $empresa = $this->Data->find("all", $options);
-
-            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
-            if (empty($empresa)) {
-                $empresa = $dato["person"]["pers_primApellido"];
-            } else {
-                $empresa = $empresa[0];
-                $empresa = $empresa["Data"]["descripcion"];
-            }
-
-
-            $estado = "";
-            switch ($dato["l_t"]["tipo"]) {
-                case "RECHAZO":
-                    $estado = "RECHAZADO";
-                    break;
-                case "INGRESO":
-                    $estado = "VALIDO";
-                    BREAK;
-            }
+                        ";
+        $this->loadModel("Person");
+        $datos = $this->Person->query($sql);
+        debug($datos);
+        
             $datetimearray = explode(" ", $dato["l_t"]["fecha"]);
             $time = $datetimearray[1];
             $aux = array(
                 "Cedula" => $dato["person"]["pers_documento"],
-                "Nombre" => $nombre,
-                "Apellido" => $apellido,
-                "Empresa" => $empresa,
-                "Manilla" => $dato["input"]["entr_identificador"],
+                "Nombre" => $dato["person"]["pers_primNombre"],
+                "Apellido" => $dato["person"]["pers_primApellido"],
+                "Empresa" => $dato["person"]["pers_empresa"],
+                "Escarapela" => $dato["input"]["entr_identificador"],
                 "Chip" => $dato["input"]["entr_codigo"],
                 "Hora" => $time,
                 "Estado" => $estado
@@ -375,9 +313,101 @@ class EntradasController extends AppController {
             $datos2[$i] = $aux;
             $i++;
         }
+        
+//        foreach ($datos as $dato) {
+//            //Busco el nombre de la persona
+//            $options = array(
+//                "fields" => array(
+//                    "descripcion"
+//                ),
+//                "conditions" => array(
+//                    "Data.person_id" => $dato["person"]["id"],
+//                    "Data.forms_personal_datum_id" => 16
+//                ),
+//                "recursive" => -1
+//            );
+//            $this->loadModel("Data");
+//            $nombre = $this->Data->find("all", $options);
+////            debug($nombre);
+//            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
+//            if (empty($nombre)) {
+//                $nombre = $dato["person"]["pers_primNombre"];
+//            } else {
+//                $nombre = $nombre[0];
+//                $nombre = $nombre["Data"]["descripcion"];
+//            }
+//
+//            //Busco el apellido de la persona
+//            $options = array(
+//                "fields" => array(
+//                    "descripcion"
+//                ),
+//                "conditions" => array(
+//                    "Data.person_id" => $dato["person"]["id"],
+//                    "Data.forms_personal_datum_id" => 15
+//                ),
+//                "recursive" => -1
+//            );
+//            $this->loadModel("Data");
+//            $apellido = $this->Data->find("all", $options);
+////            debug($apellido);
+//            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
+//            if (empty($apellido)) {
+//                $apellido = $dato["person"]["pers_primApellido"];
+//            } else {
+//                $apellido = $apellido[0];
+//                $apellido = $apellido["Data"]["descripcion"];
+//            }
+//
+//            //Busco la empresa de la persona
+//            $options = array(
+//                "fields" => array(
+//                    "descripcion"
+//                ),
+//                "conditions" => array(
+//                    "Data.person_id" => $dato["person"]["id"],
+//                    "Data.forms_personal_datum_id" => 14
+//                ),
+//                "recursive" => -1
+//            );
+//            $this->loadModel("Data");
+//            $empresa = $this->Data->find("all", $options);
+//
+//            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
+//            if (empty($empresa)) {
+//                $empresa = $dato["person"]["pers_primApellido"];
+//            } else {
+//                $empresa = $empresa[0];
+//                $empresa = $empresa["Data"]["descripcion"];
+//            }
+//
+//
+//            $estado = "";
+//            switch ($dato["l_t"]["tipo"]) {
+//                case "RECHAZO":
+//                    $estado = "RECHAZADO";
+//                    break;
+//                case "INGRESO":
+//                    $estado = "VALIDO";
+//                    BREAK;
+//            }
+//            $datetimearray = explode(" ", $dato["l_t"]["fecha"]);
+//            $time = $datetimearray[1];
+//            $aux = array(
+//                "Cedula" => $dato["person"]["pers_documento"],
+//                "Nombre" => $nombre,
+//                "Apellido" => $apellido,
+//                "Empresa" => $empresa,
+//                "Manilla" => $dato["input"]["entr_identificador"],
+//                "Chip" => $dato["input"]["entr_codigo"],
+//                "Hora" => $time,
+//                "Estado" => $estado
+//            );
+//            $datos2[$i] = $aux;
+//            $i++;
+//        }
 //        debug($datos2);
-        $this->set("datos2", $datos2);
-    }
+//        $this->set("datos2", $datos2);    
 
     public function exportar3() {
         $this->Entrada->virtualFields['Cantidad'] = 0;
@@ -421,7 +451,7 @@ class EntradasController extends AppController {
 //        debug($datos);
         $this->set("datos", $datos);
     }
-    
+
     public function exportar5() {
         $this->Entrada->virtualFields['Cantidad'] = 0;
         $this->Entrada->virtualFields['Aux'] = 0;
@@ -513,9 +543,6 @@ class EntradasController extends AppController {
 
 //            $datetimearray = explode(" ", $dato["EntradaInput"]["fecha"]);
 //            $time = $datetimearray[1];
-
-            
-
             //Busco los ingresos del primer dia
             $fecha1 = "";
             $options = array(
