@@ -52,7 +52,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
     <body>
         <!--Header-part-->
         <div id="header">
-            <h1><a href="dashboard.html">Matrix Admin</a></h1>
+            <h1><a >Chandy</a></h1>
         </div>
         <!--close-Header-part-->         
         <!--top-Header-menu-->

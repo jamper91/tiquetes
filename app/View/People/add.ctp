@@ -27,6 +27,11 @@ echo $this->Form->input('CommitteesEvent');
     <fieldset>
         <legend><?php echo __('Crear Persona'); ?></legend>
         <?php
+        echo $this->Form->input('pistola', array(
+            'label' => 'Codigo de Barras',
+            'type' => 'password'
+        ));
+
         echo $this->Form->input('categoria_id', array(
             'label' => 'Tipo de Asistente',
             'required' => 'true',
@@ -95,3 +100,60 @@ echo $this->Form->input('CommitteesEvent');
     });
 
 </script>
+<script>
+    $(document).ready(function() {//Esta funcion se activa cuando se este ingresando texto en el cuadro
+        $("input[type='password']").on('input', function(e) {
+            if ($('#PersonPistola').val().length === 170)
+            {
+                var documento = "";
+                var apellido1 = ""; 
+                var apellido2 = "";
+                var nombre = "";
+                var sangre = "";
+                alert($('#PersonPistola').val().length);
+                for (var i = 0; i < $('#PersonPistola').val().length; i++) {
+                    if (i >= 48 && i < 58) {
+                        
+                        var letra = $('#PersonPistola').val()[i].toString();
+                        documento = documento + letra;
+                    }
+                    if (i >= 58 && i < 81) {
+                        var letra = $('#PersonPistola').val()[i].toString();
+                        if (letra != " ") {
+                            apellido1 = apellido1 + letra;
+                        }
+                    }
+                    if (i >= 81 && i < 104){
+                        var letra = $('#PersonPistola').val()[i].toString();
+                        if (letra != " ") {
+                            apellido2 = apellido2 + letra;
+                        }
+                    }
+                    if (i >= 104 && i < 127){
+                        var letra = $('#PersonPistola').val()[i].toString();
+                        if (letra != " ") {
+                            nombre = nombre + letra;
+                        }
+                    }
+                    if (i >= 166 && i < 169){
+                        var letra = $('#PersonPistola').val()[i].toString();
+                        if (letra != " ") {
+                            sangre = sangre + letra;
+                        }
+                    }
+//                            $('#documento').val(documento);
+                }
+                $('#PersonPersDocumento').val(documento);
+                $('#PersonPersPrimNombre').val(nombre);
+                $('#PersonPersPrimApellido').val(apellido1+" "+apellido2);
+                $('#PersonPersTipoSangre').val(sangre);
+                $('#PersonPistola').val("");
+                $('#PersonCategoriaId').focus();
+//                        var url = "validar_admin.jsp"; // the script where you handle the form input. 
+                
+            }
+        });
+    });
+
+</script>
+
