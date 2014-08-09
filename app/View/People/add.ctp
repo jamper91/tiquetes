@@ -51,7 +51,8 @@ echo $this->Form->input('CommitteesEvent');
             'label' => 'Telefono',
         ));
         echo $this->Form->input('pers_mail', array(
-            'label'=>'E-mail'
+            'label'=>'E-mail',
+            'type'=>'email'
         ));
         echo $this->Form->input('pers_empresa', array(
             'label' => 'Empresa',

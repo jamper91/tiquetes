@@ -279,7 +279,7 @@ class EntradasController extends AppController {
 //                        person.id,
 //                        l_t.fecha
 //                ";
-        $sql = "Select l_t.*, person.* 
+        $sql = "Select l_t.*, person.*, input.*
                 from 
                         logs_torniquetes  l_t
                 LEFT JOIN 
@@ -296,8 +296,11 @@ class EntradasController extends AppController {
                         ";
         $this->loadModel("Person");
         $this->loadModel("LogsTorniquete");
+        $this->loadModel("Input");
+
         $datos = $this->Person->query($sql);
-        $estado = "";
+        foreach ($datos as $dato) {
+            $estado = "";
             switch ($dato["l_t"]["tipo"]) {
                 case "RECHAZO":
                     $estado = "RECHAZADO";
@@ -306,24 +309,26 @@ class EntradasController extends AppController {
                     $estado = "VALIDO";
                     BREAK;
             }
-//        debug($datos);
-        
+
+//            debug($datos);
+
             $datetimearray = explode(" ", $dato["l_t"]["fecha"]);
             $time = $datetimearray[1];
             $aux = array(
-                "Cedula" => $datos["person"]["pers_documento"],
-                "Nombre" => $datos["person"]["pers_primNombre"],
-                "Apellido" => $datos["person"]["pers_primApellido"],
-                "Empresa" => $datos["person"]["pers_empresa"],
-                "Escarapela" => $datos["input"]["entr_identificador"],
-                "Chip" => $datos["input"]["entr_codigo"],
+                "Cedula" => $dato["person"]["pers_documento"],
+                "Nombre" => $dato["person"]["pers_primNombre"],
+                "Apellido" => $dato["person"]["pers_primApellido"],
+                "Empresa" => $dato["person"]["pers_empresa"],
+                "Escarapela" => $dato["input"]["entr_identificador"],
+                "Chip" => $dato["input"]["entr_codigo"],
                 "Hora" => $time,
                 "Estado" => $estado
             );
-            $datos2[$i] = $aux;
-            $i++;
+//            $datos2[$i] = $aux;
+//            $i++;
         }
-        
+    }
+
 //        foreach ($datos as $dato) {
 //            //Busco el nombre de la persona
 //            $options = array(

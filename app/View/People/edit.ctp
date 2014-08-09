@@ -26,12 +26,13 @@
             'label' => 'Telefono',
         ));
         echo $this->Form->input('pers_mail', array(
-            'label'=>'E-mail'
+            'label'=>'E-mail',
+            'type'=>'email'
         ));
         echo $this->Form->input('pers_empresa', array(
             'label' => 'Empresa',
         ));?>
-        <div id="adicionales" name="adicionales" style="display: none;" >
+        <div id="adicionales" name="adicionales"  style="display: none;">
             <?php
             
             $selected=array();
@@ -80,7 +81,11 @@
     <?php echo $this->Form->end(__('Actualizar')); ?>
 </div>
 <script>
-
+    $(document).ready(function(){        
+        if ($("#PersonCategoriaId").val() === "2") {
+            $("#adicionales").css("display", "block");
+        }
+    });
     $("#PersonCategoriaId").change(function() {
         if ($("#PersonCategoriaId").val() === "2") {
             $("#adicionales").css("display", "block");
