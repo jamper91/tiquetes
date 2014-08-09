@@ -295,18 +295,28 @@ class EntradasController extends AppController {
                         l_t.fecha
                         ";
         $this->loadModel("Person");
+        $this->loadModel("LogsTorniquete");
         $datos = $this->Person->query($sql);
-        debug($datos);
+        $estado = "";
+            switch ($dato["l_t"]["tipo"]) {
+                case "RECHAZO":
+                    $estado = "RECHAZADO";
+                    break;
+                case "INGRESO":
+                    $estado = "VALIDO";
+                    BREAK;
+            }
+//        debug($datos);
         
             $datetimearray = explode(" ", $dato["l_t"]["fecha"]);
             $time = $datetimearray[1];
             $aux = array(
-                "Cedula" => $dato["person"]["pers_documento"],
-                "Nombre" => $dato["person"]["pers_primNombre"],
-                "Apellido" => $dato["person"]["pers_primApellido"],
-                "Empresa" => $dato["person"]["pers_empresa"],
-                "Escarapela" => $dato["input"]["entr_identificador"],
-                "Chip" => $dato["input"]["entr_codigo"],
+                "Cedula" => $datos["person"]["pers_documento"],
+                "Nombre" => $datos["person"]["pers_primNombre"],
+                "Apellido" => $datos["person"]["pers_primApellido"],
+                "Empresa" => $datos["person"]["pers_empresa"],
+                "Escarapela" => $datos["input"]["entr_identificador"],
+                "Chip" => $datos["input"]["entr_codigo"],
                 "Hora" => $time,
                 "Estado" => $estado
             );
@@ -390,7 +400,7 @@ class EntradasController extends AppController {
 //                case "INGRESO":
 //                    $estado = "VALIDO";
 //                    BREAK;
-//            }
+//            }$estado
 //            $datetimearray = explode(" ", $dato["l_t"]["fecha"]);
 //            $time = $datetimearray[1];
 //            $aux = array(
