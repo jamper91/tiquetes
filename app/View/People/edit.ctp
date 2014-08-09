@@ -2,10 +2,14 @@
     <?php echo $this->Form->create('Person'); ?>
     <fieldset>
         <legend><?php echo __('Editar Persona'); ?></legend>
-        <?php
+        <?php var_dump($input); 
+
+        $selected1=$input[0]["Input"]["categoria_id"];
+
         echo $this->Form->input('categoria_id', array(
             'label' => 'Tipo de Asistente',
             'required' => 'true',
+            'selected'=>$selected1,
             "options" => $categorias,
             "empty" => "Seleccione una categoria"
         ));

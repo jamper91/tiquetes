@@ -192,19 +192,19 @@ class PeopleController extends AppController {
             $this->Person->id=$id;
             if ($this->Person->save($this->request->data)) {
                 
-               // echo "<pre>"; var_dump($data); echo "</pre>";
+              //  echo "<pre>"; var_dump($data); echo "</pre>"; 
                 
-                if (!empty($data['producto'])) {
                         $sql = "DELETE FROM people_products WHERE person_id=".$id."";
                         $this->Person->query($sql);
+                if (!empty($data['producto'])) {
                     foreach ($data['producto'] as $va) {
                         $sql = "INSERT INTO people_products (product_id, person_id) VALUES (" . $va . ", " . $id . ");";
                         $this->Person->query($sql);
                     }
-
+                }
                     $identificador = $data['input_identificador'];
                     $codigo = $data['input_codigo'];
-
+                    
                     $sql = "UPDATE inputs  SET  entr_codigo=".$codigo.", entr_identificador=".$identificador.", categoria_id=".$data['Person']['categoria_id']."   WHERE person_id=".$id."";
                     $this->Person->query($sql);
 
@@ -215,7 +215,7 @@ class PeopleController extends AppController {
 
 
 
-                }
+                
 
 
 
@@ -249,7 +249,8 @@ class PeopleController extends AppController {
         $input = $this->Input->find('all', array(
             "fields" => array(
                    "Input.entr_identificador",
-                   "Input.entr_codigo"
+                   "Input.entr_codigo",
+                   "Input.categoria_id"
 
         ),
             "conditions"=>array("Input.person_id"=>$id),
