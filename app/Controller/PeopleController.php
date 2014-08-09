@@ -162,13 +162,44 @@ class PeopleController extends AppController {
      * @return void
      */
     public function edit($id = null) {
+        $data = $this->request->data; 
         if (!$this->Person->exists($id)) {
             throw new NotFoundException(__('Invalid person'));
         }
         if ($this->request->is(array('post', 'put'))) {
+            $this->Person->id=$id;
             if ($this->Person->save($this->request->data)) {
-                $this->Session->setFlash(__('The person has been saved.'));
-                return $this->redirect(array('action' => 'index'));
+                
+               // echo "<pre>"; var_dump($data); echo "</pre>";
+                
+                if (!empty($data['producto'])) {
+                        $sql = "DELETE FROM people_products WHERE person_id=".$id."";
+                        $this->Person->query($sql);
+                    foreach ($data['producto'] as $va) {
+                        $sql = "INSERT INTO people_products (product_id, person_id) VALUES (" . $va . ", " . $id . ");";
+                        $this->Person->query($sql);
+                    }
+
+                    $identificador = $data['input_identificador'];
+                    $codigo = $data['input_codigo'];
+
+                    $sql = "UPDATE inputs  SET  entr_codigo=".$codigo.", entr_identificador=".$identificador.", categoria_id=".$data['Person']['categoria_id']."   WHERE person_id=".$id."";
+                    $this->Person->query($sql);
+
+                   
+                   /* $sql = "INSERT INTO inputs (person_id, entr_codigo, entr_identificador, categoria_id) values (" . $id . ", " . $codigo . ", " . $identificador . ",".$data['Person']['categoria_id'].");";
+                    $this->Person->query($sql);*/
+
+
+
+
+                }
+
+
+
+
+                $this->Session->setFlash(__('The person has been update.'),'good');
+                //return $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash(__('The person could not be saved. Please, try again.'));
             }
@@ -179,23 +210,64 @@ class PeopleController extends AppController {
 
         $this->loadModel('Categoria');
         $this->loadModel('Product');
+        $this->loadModel('Input');
         $categorias = $this->Categoria->find('list', array(
             "fields" => array(
                 "Categoria.id",
                 "Categoria.descripcion"
         )));
-        $products = $this->Product->find('list', array(
+
+        $products1 = $this->Product->find('list', array(
             "fields" => array(
                 "Product.product_id",
                 "Product.name"
         )));
 
 
+        $input = $this->Input->find('all', array(
+            "fields" => array(
+                   "Input.entr_identificador",
+                   "Input.entr_codigo"
+
+        ),
+            "conditions"=>array("Input.person_id"=>$id),
+            "limit" => "1"
+
+
+
+            ));
+
+
+        $products = $this->Product->find('list', array(
+            "fields" => array(
+                
+                "Product.product_id",
+                "o.product_id",
+                "Product.name",
+                
+            ),
+            //"contain"=>array("PeopleProduct"),
+            'joins' => array(
+                array(
+                    'table' => 'people_products',
+                    'alias' => 'o',
+                    'type' => 'LEFT',
+                    'conditions' => array(
+                        'o.person_id  '=>$id,'o.product_id=Product.product_id'
+                    )
+                )
+            ),
+
+           // "conditions"=>array("o.person_id"=>$id) 
+            )
+        );
+       /* echo "<pre>";
+        var_dump($products); echo "</pre>"; die();*/
 
         $documentTypes = $this->Person->DocumentType->find('list');
         $cities = $this->Person->City->find('list');
         $committeesEvents = $this->Person->CommitteesEvent->find('list');
-        $this->set(compact('documentTypes', 'cities', 'committeesEvents','categorias', 'products'));
+        $this->set(compact('documentTypes', 'cities', 'committeesEvents','categorias', 'products','products1','input'));
     }
 
     /**
