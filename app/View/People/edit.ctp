@@ -2,7 +2,7 @@
     <?php echo $this->Form->create('Person'); ?>
     <fieldset>
         <legend><?php echo __('Editar Persona'); ?></legend>
-        <?php var_dump($input); 
+        <?php //var_dump($input); 
 
         $selected1=$input[0]["Input"]["categoria_id"];
 
