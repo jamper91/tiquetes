@@ -4,27 +4,21 @@
 
 	$fpdf -> SetLineWidth(5);
     $fpdf -> SetMargins(2, 2);
-    $fpdf->AddPage();
+    $fpdf -> AddPage();
     
-    //foreach ($data as $dat) {
-    	//debug($data['nombre']);
+
 	if($data['nombre']){
         $ncompleto = $data['nombre'].' '.$data['apellido'];
 		$fpdf->SetFont('Arial','B',6);
 		$fpdf->Cell(0,100, $ncompleto ,0,0,'C');
 		$fpdf->Ln(4);
 	}
-	if($data['apellido'])
-    {
-    	$fpdf->SetFont('Arial','',4);
-    		$fpdf->Cell(0,100, $data['apellido'],0,0,'C');
-    		$fpdf->Ln(4);	
-    }
 
     if($data['documento'])
     {
+        $cedula = 'C.C '.$data['documento'];
     	$fpdf->SetFont('Arial','',4);
-    		$fpdf->Cell(0,100, $data['documento'],0,0,'C');
+    		$fpdf->Cell(0,100, $cedula,0,0,'C');
     		$fpdf->Ln(4);	
     }
     if($data['empresa'])
@@ -33,10 +27,23 @@
     		$fpdf->Cell(0,100, $data['empresa'],0,0,'C');
     		$fpdf->Ln(4);	
     }
+    if($data['empresa'] == '')
+    {
+        $fpdf->Cell(0,100, '',0,0,'C');
+        $fpdf->Ln(4);
+    }
+
+    if($data['ciudad'])
+    {
+        $fpdf->SetFont('Arial','',4);
+        $fpdf->Cell(0,100, $data['ciudad'],0,0,'C');
+        $fpdf->Ln(4);   
+    }
+
     if($data['categoria'])
     {
     	foreach ($data['categoria'] as $value) {
-    		$fpdf->SetFont('Arial','B',4);
+    		$fpdf->SetFont('Arial','B,U',4);
     		$fpdf->Cell(0,100, $value,0,0,'C');
     		$fpdf->Ln(4);
     	}
