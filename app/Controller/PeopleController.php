@@ -208,15 +208,6 @@ class PeopleController extends AppController {
 
                 /* $sql = "INSERT INTO inputs (person_id, entr_codigo, entr_identificador, categoria_id) values (" . $id . ", " . $codigo . ", " . $identificador . ",".$data['Person']['categoria_id'].");";
                   $this->Person->query($sql); */
-
-
-
-
-
-
-
-
-
                 $this->Session->setFlash(__('The person has been update.'), 'good');
                 //return $this->redirect(array('action' => 'index'));
             } else {
