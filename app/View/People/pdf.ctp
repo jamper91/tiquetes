@@ -9,8 +9,9 @@
     //foreach ($data as $dat) {
     	//debug($data['nombre']);
 	if($data['nombre']){
+        $ncompleto = $data['nombre'].' '.$data['apellido'];
 		$fpdf->SetFont('Arial','B',6);
-		$fpdf->Cell(0,100, $data['nombre'],0,0,'C');
+		$fpdf->Cell(0,100, $ncompleto ,0,0,'C');
 		$fpdf->Ln(4);
 	}
 	if($data['apellido'])
@@ -32,7 +33,7 @@
     		$fpdf->Cell(0,100, $data['empresa'],0,0,'C');
     		$fpdf->Ln(4);	
     }
-     if($data['categoria'])
+    if($data['categoria'])
     {
     	foreach ($data['categoria'] as $value) {
     		$fpdf->SetFont('Arial','B',4);

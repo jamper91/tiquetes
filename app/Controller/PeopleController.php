@@ -85,10 +85,6 @@ class PeopleController extends AppController {
                 debug($entr_codigo);
                 debug($entr_identificador);
 //                
-                
-            
-                
-                
                 if (($person_id==array())) { //echo "aqui"; die();
                     if (($entr_codigo==array())) {
                         if (($entr_identificador==array())) {
@@ -98,22 +94,21 @@ class PeopleController extends AppController {
                             if ($this->Person->saveAll($this->request->data)) {
                                 $this->Session->setFlash('Persona insertada correctamente.','good');
 
-                                $categoria = $this->Categoria->find('list', array(
-                                    "conditions"=>array(
-                                        "Categoria.id"=>$data['Person']['categoria_id']),
-                                    "fields" => array(
-                                        "Categoria.id",
-                                        "Categoria.descripcion"
-                                )));
+                    $categoria = $this->Categoria->find('list', array(
+                        "conditions"=>array(
+                            "Categoria.id"=>$data['Person']['categoria_id']),
+                        "fields" => array(
+                            "Categoria.id",
+                            "Categoria.descripcion"
+                    )));
 
-                                App::import('Vendor', 'Fpdf', array('file' =>'fpdf/fpdf.php'));
-                  $this->layout = 'pdf'; //this will use the pdf.ctp layout
+                    App::import('Vendor', 'Fpdf', array('file' =>'fpdf/fpdf.php'));
+                    $this->layout = 'pdf'; //this will use the pdf.ctp layout
                     $informacion = array('documento'=>$data['Person']['pers_documento'], 'nombre'=>$data['Person']['pers_primNombre'], 'apellido'=>$data['Person']['pers_primApellido'],'categoria'=>$categoria,'empresa'=>$data['Person']['pers_empresa']);
-                  $this->set('fpdf', new FPDF('P','mm',array('70', '150')));
-                  //debug($informacion);
-                  $this->set('data', $informacion);
-               
-                  $this->render('pdf');
+                    $this->set('fpdf', new FPDF('P','mm',array('70', '150')));
+                    //debug($informacion);
+                    $this->set('data', $informacion);
+                    $this->render('pdf');
                                 //return $this->redirect(array('action' => 'add'));
                             } else {
                                 $this->Session->setFlash(__('The person could not be saved. Please, try again.'));
