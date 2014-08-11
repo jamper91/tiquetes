@@ -22,8 +22,8 @@
         echo $this->Form->input('pers_primApellido', array(
             'label' => 'Apellidos',
         ));
-        echo $this->Form->input('pers_ciudad', array(
-            'label' => 'Cuidad',
+        echo $this->Form->input('ciudad', array(
+            'label' => 'Ciudad',
              'required'=>'true'
         ));
           echo $this->Form->input('pers_direccion', array(
@@ -31,6 +31,7 @@
         ));
         echo $this->Form->input('pers_telefono', array(
             'label' => 'Telefono',
+            'required'=>'true'
         ));
         echo $this->Form->input('pers_mail', array(
             'label'=>'E-mail',
