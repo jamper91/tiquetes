@@ -108,7 +108,7 @@ class PeopleController extends AppController {
                             App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                             $this->layout = 'pdf'; //this will use the pdf.ctp layout
                             $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'apellido' => $data['Person']['pers_primApellido'], 'categoria' => $categoria, 'empresa' => $data['Person']['pers_empresa'], 'ciudad' => $data['Person']['ciudad']);
-                            $this->set('fpdf', new FPDF('P', 'mm', array('70', '150')));
+                            $this->set('fpdf', new FPDF('L', 'mm', array('40', '40')));
                             //debug($informacion);
                             $this->set('data', $informacion);
 
