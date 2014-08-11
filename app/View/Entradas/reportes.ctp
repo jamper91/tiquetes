@@ -1,7 +1,4 @@
-    
-
-
-<div class="categoriasEntradas form">
+ <div class="categoriasEntradas form">
     <?php echo $this->Form->create('Entrada'); ?>
     <fieldset>
         <legend><?php echo __('Reportes'); ?></legend><br>

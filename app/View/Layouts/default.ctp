@@ -52,7 +52,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
     <body>
         <!--Header-part-->
         <div id="header">
-            <h1><a href="dashboard.html">Matrix Admin</a></h1>
+            <h1><a >Ticket Express</a></h1>
         </div>
         <!--close-Header-part-->         
         <!--top-Header-menu-->
@@ -166,7 +166,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                     <?php } ?>
                     <?php if (in_array('formularios', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
 
-                        <li class="submenu"  > 
+<!--                        <li class="submenu"  > 
                             <a href="#">
                                 <i class="icon icon-th-list"></i> 
                                 <span>Formularios</span>
@@ -177,7 +177,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                                 <li><a href="<?= $this->Html->url(array("controller" => "forms", "action" => "add")); ?>">Formularios</a></li>
 
                             </ul>
-                        </li>
+                        </li>-->
                     <?php } ?>
                     <?php if (in_array('personas', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
 
@@ -190,9 +190,9 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                                 <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "add")); ?>">Crear Persona</a></li>
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "registrar")); ?>">Crear Persona</a></li>-->
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador2")); ?>">Asociar Tarjeta a Persona</a></li>-->
-                                <li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador")); ?>">Buscar Persona</a></li>
-                                <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "buscador")); ?>">Buscar Persona logato</a></li>
-                                <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "buscar")); ?>">Asociar Tarjeta a Usuario</a></li>
+                                <!--<li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador")); ?>">Buscar Persona</a></li>-->
+                                <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "buscador")); ?>">Buscar Persona</a></li>
+                                <!--<li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "buscar")); ?>">Asociar Tarjeta a Usuario</a></li>-->
 
 
                             </ul>
