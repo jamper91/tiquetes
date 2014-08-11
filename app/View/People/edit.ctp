@@ -31,6 +31,7 @@
         ));
         echo $this->Form->input('pers_telefono', array(
             'label' => 'Telefono',
+            'required'=>'true'
         ));
         echo $this->Form->input('pers_mail', array(
             'label'=>'E-mail',

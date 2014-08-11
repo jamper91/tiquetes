@@ -52,6 +52,7 @@ echo $this->Form->input('CommitteesEvent');
         ));
           echo $this->Form->input('pers_direccion', array(
             'label' => 'Direccion',
+              'required'=>'true'
         ));
         echo $this->Form->input('pers_telefono', array(
             'label' => 'Telefono',
