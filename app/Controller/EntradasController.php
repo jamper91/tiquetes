@@ -565,7 +565,7 @@ class EntradasController extends AppController {
                     "EntradasInput.ingresos"
                 ),
                 "conditions" => array(
-                    "EntradasInput.fecha" => '2014-08-01 00:00:00',
+                    "EntradasInput.fecha" => '2014-08-11 00:00:00',
                     "EntradasInput.input_id" => $dato["input"]["id"]
                 ),
                 "recursive" => -1
@@ -589,7 +589,7 @@ class EntradasController extends AppController {
                     "EntradasInput.ingresos"
                 ),
                 "conditions" => array(
-                    "EntradasInput.fecha" => '2014-08-02 00:00:00',
+                    "EntradasInput.fecha" => '2014-08-12 00:00:00',
                     "EntradasInput.input_id" => $dato["input"]["id"]
                 ),
                 "recursive" => -1
@@ -613,7 +613,7 @@ class EntradasController extends AppController {
                     "EntradasInput.ingresos"
                 ),
                 "conditions" => array(
-                    "EntradasInput.fecha" => '2014-08-03 00:00:00',
+                    "EntradasInput.fecha" => '2014-08-13 00:00:00',
                     "EntradasInput.input_id" => $dato["input"]["id"]
                 ),
                 "recursive" => -1
@@ -627,6 +627,52 @@ class EntradasController extends AppController {
             } else {
                 $fecha3 = $fecha3[0];
                 $fecha3 = $fecha3["EntradasInput"]["ingresos"];
+            }
+            
+            //Busco los ingresos del cuarto dia dia
+            $fecha4= "";
+            $options = array(
+                "fields" => array(
+                    "EntradasInput.ingresos"
+                ),
+                "conditions" => array(
+                    "EntradasInput.fecha" => '2014-08-14 00:00:00',
+                    "EntradasInput.input_id" => $dato["input"]["id"]
+                ),
+                "recursive" => -1
+            );
+            $this->loadModel("EntradasInput");
+            $fecha4 = $this->EntradasInput->find("all", $options);
+
+            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
+            if (empty($fecha4)) {
+                $fecha4 = 0;
+            } else {
+                $fecha4 = $fecha4[0];
+                $fecha4 = $fecha4["EntradasInput"]["ingresos"];
+            }
+            
+            //Busco los ingresos del quinto dia dia
+            $fecha5= "";
+            $options = array(
+                "fields" => array(
+                    "EntradasInput.ingresos"
+                ),
+                "conditions" => array(
+                    "EntradasInput.fecha" => '2014-08-15 00:00:00',
+                    "EntradasInput.input_id" => $dato["input"]["id"]
+                ),
+                "recursive" => -1
+            );
+            $this->loadModel("EntradasInput");
+            $fecha5 = $this->EntradasInput->find("all", $options);
+
+            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
+            if (empty($fecha5)) {
+                $fecha5 = 0;
+            } else {
+                $fecha5 = $fecha5[0];
+                $fecha5 = $fecha5["EntradasInput"]["ingresos"];
             }
 
 //            $aux = array(
@@ -653,7 +699,9 @@ class EntradasController extends AppController {
                 "Chip" => $dato["input"]["entr_codigo"],
                 "Agosto-1" => $fecha1,
                 "Agosto-2" => $fecha2,
-                "Agosto-3" => $fecha3
+                "Agosto-3" => $fecha3,
+                "Agosto-4" => $fecha4,
+                "Agosto-5" => $fecha5
             );
             $datos2[$i] = $aux;
             $i++;
