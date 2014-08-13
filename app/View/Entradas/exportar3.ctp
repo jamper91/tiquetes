@@ -33,5 +33,5 @@ foreach ($datos as $dato) {
 }
 
 $this->PhpExcel->addTableFooter();
-$this->PhpExcel->output("Reporte Ventas Fondas de mi Pueblo.xlsx");
+$this->PhpExcel->output("Reporte Ventas.xlsx");
 ?>
