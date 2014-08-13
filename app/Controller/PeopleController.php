@@ -108,7 +108,7 @@ class PeopleController extends AppController {
                             App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                             $this->layout = 'pdf'; //this will use the pdf.ctp layout
                             $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'apellido' => $data['Person']['pers_primApellido'], 'categoria' => $categoria, 'empresa' => $data['Person']['pers_empresa'], 'ciudad' => $data['Person']['ciudad']);
-                            $this->set('fpdf', new FPDF('L', 'mm', array('40', '40')));
+                            $this->set('fpdf', new FPDF('L', 'mm', array('60', '40')));
                             //debug($informacion);
                             $this->set('data', $informacion);
 
@@ -160,17 +160,16 @@ class PeopleController extends AppController {
                 "Categoria.id",
                 "Categoria.descripcion"
         )));
-        $products = $this->Product->find('list', array(
-            "fields" => array(
-                "Product.product_id",
-                "Product.name"
-        )));
-
+//        $products = $this->Product->find('list', array(
+//            "fields" => array(
+//                "Product.product_id",
+//                "Product.name"
+//        )));
 //        $bloodType = Array('O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'HH');
         $documentTypes = $this->Person->DocumentType->find('list');
         $cities = $this->Person->City->find('list');
         $committeesEvents = $this->Person->CommitteesEvent->find('list');
-        $this->set(compact('documentTypes', 'cities', 'committeesEvents', /* 'bloodType', */ 'categorias', 'products'));
+        $this->set(compact('documentTypes', 'cities', 'committeesEvents', /* 'bloodType',  'products', */ 'categorias'));
     }
 
     /**
@@ -181,6 +180,12 @@ class PeopleController extends AppController {
      * @return void
      */
     public function edit($id = null) {
+        $this->loadModel('Categoria');
+        $this->loadModel('Product');
+        $this->loadModel('Input');
+        $this->loadModel('Person');
+        $this->loadModel('PeopleProduct');
+        $this->loadModel('Data');
         $data = $this->request->data;
         if (!$this->Person->exists($id)) {
             throw new NotFoundException(__('Invalid person'));
@@ -202,14 +207,47 @@ class PeopleController extends AppController {
                 $identificador = $data['input_identificador'];
                 $codigo = $data['input_codigo'];
 
-                $sql = "UPDATE inputs  SET  entr_codigo=" . $codigo . ", entr_identificador=" . $identificador . ", categoria_id=" . $data['Person']['categoria_id'] . "   WHERE person_id=" . $id . "";
-                $this->Person->query($sql);
-
+                $input2 = $this->Input->find('all', array(
+                    "fields" => array(
+                        "Input.entr_identificador",
+                        "Input.entr_codigo",
+                        "Input.categoria_id"
+                    ),
+                    "conditions" => array("Input.person_id" => $id),
+                    "limit" => "1"
+                ));
+                if ($input2 != array()) {
+                    $sql = "UPDATE inputs  SET  entr_codigo=" . $codigo . ", entr_identificador=" . $identificador . ", categoria_id=" . $data['Person']['categoria_id'] . "   WHERE person_id=" . $id . "";
+                    $this->Person->query($sql);
+                } else {
+                    $sql = "INSERT INTO `inputs`(`person_id`, `entr_codigo`, `entr_identificador`,  `categoria_id`) VALUES (" . $id . "," . $codigo . "," . $identificador . "," . $data['Person']['categoria_id'] . ");";
+                    $this->Person->query($sql);
+                }
 
                 /* $sql = "INSERT INTO inputs (person_id, entr_codigo, entr_identificador, categoria_id) values (" . $id . ", " . $codigo . ", " . $identificador . ",".$data['Person']['categoria_id'].");";
                   $this->Person->query($sql); */
-                $this->Session->setFlash(__('The person has been update.'), 'good');
-                //return $this->redirect(array('action' => 'index'));
+                $this->Session->setFlash(__('La persona se modificó satisfactoriamente.'), 'good');
+
+                $categoria = $this->Categoria->find('list', array(
+                    "conditions" => array(
+                        "Categoria.id" => $data['Person']['categoria_id']),
+                    "fields" => array(
+                        "Categoria.id",
+                        "Categoria.descripcion"
+                )));
+                App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
+                $this->layout = 'pdf'; //this will use the pdf.ctp layout
+                $informacion = array('documento' => $data['Person']['pers_documento'],
+                    'nombre' => $data['Person']['pers_primNombre'],
+                    'apellido' => $data['Person']['pers_primApellido'],
+                    'categoria' => $categoria,
+                    'empresa' => $data['Person']['pers_empresa'],
+                    'ciudad' => $data['Person']['ciudad']);
+                $this->set('fpdf', new FPDF('L', 'mm', array('60', '40')));
+                //debug($informacion);
+                $this->set('data', $informacion);
+                $this->render('pdf');
+//                return $this->redirect(array('action' => 'buscador'));
             } else {
                 $this->Session->setFlash(__('The person could not be saved. Please, try again.'));
             }

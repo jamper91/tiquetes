@@ -2,49 +2,57 @@
 <?php 
 	//debug($data);
     //
-	$fpdf -> SetLineWidth(5);
-    $fpdf -> SetMargins(0.3, 1, 0.3);
+	//$fpdf -> SetLineWidth(5);
+    //$fpdf -> SetMargins(2, 2);
+    $fpdf -> SetAutoPageBreak(true, 0.3);
     $fpdf -> AddPage();
     
 
 	if($data['nombre']){
         $ncompleto = $data['nombre'].' '.$data['apellido'];
-		$fpdf->SetFont('Arial','B',6);
-		$fpdf->Cell(0,6, $ncompleto ,0,0,'C');
+        $fpdf->SetY(-30);
+		$fpdf->SetFont('Arial','B',16);
+		$fpdf->Cell(0,2, $ncompleto ,0,0,'C');
 		$fpdf->Ln(2);
 	}
 
     if($data['documento'])
     {
         $cedula = 'C.C '.$data['documento'];
-    	$fpdf->SetFont('Arial','',4);
-    		$fpdf->Cell(0,6, $cedula,0,0,'C');
+        $fpdf->SetY(-25);
+    	$fpdf->SetFont('Arial','',8);
+    		$fpdf->Cell(0,2, $cedula,0,0,'C');
     		$fpdf->Ln(2);	
     }
     if($data['empresa'])
     {
-    	$fpdf->SetFont('Arial','',4);
-    		$fpdf->Cell(0,6, $data['empresa'],0,0,'C');
-    		$fpdf->Ln(2);	
+        $fpdf->SetY(-20);
+    	$fpdf->SetFont('Arial','',8);
+		$fpdf->Cell(0,2, $data['empresa'],0,0,'C');
+		$fpdf->Ln(2);	
     }
     if($data['empresa'] == '')
     {
-        $fpdf->Cell(0,6, '',0,0,'C');
+        $fpdf->SetY(-20);
+        $fpdf->Cell(0,2, '',0,0,'C');
         $fpdf->Ln(2);
     }
 
     if($data['ciudad'])
     {
-        $fpdf->SetFont('Arial','',4);
-        $fpdf->Cell(0,6, $data['ciudad'],0,0,'C');
+        $fpdf->SetY(-15);
+        $fpdf->SetFont('Arial','',8);
+        $fpdf->Cell(0,2, $data['ciudad'],0,0,'C');
         $fpdf->Ln(2);   
     }
 
+    
     if($data['categoria'])
     {
     	foreach ($data['categoria'] as $value) {
-    		$fpdf->SetFont('Arial','U', 6);
-    		$fpdf->Cell(0,6, $value,0,0,'C');
+            $fpdf->SetY(-10);
+    		$fpdf->SetFont('Arial','B', 22);
+    		$fpdf->Cell(0,2, $value,0,0,'C');
     		$fpdf->Ln(2);
     	}
     		

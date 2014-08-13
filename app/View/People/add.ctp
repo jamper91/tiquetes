@@ -26,14 +26,14 @@ echo $this->Form->input('CommitteesEvent');
     <?php echo $this->Form->create('Person'); ?>
     <fieldset>
         <legend><?php echo __('Crear Persona'); ?></legend>
-        <?php  
+        <?php
         echo $this->Form->input('categoria_id', array(
             'label' => 'Categoría',
             'required' => 'true',
             "options" => $categorias,
             "empty" => "Seleccione una categoria"
         ));
-         echo $this->Form->input('pistola', array(
+        echo $this->Form->input('pistola', array(
             'label' => 'Código de Barras',
             'type' => 'password'
         ));
@@ -46,16 +46,16 @@ echo $this->Form->input('CommitteesEvent');
         echo $this->Form->input('pers_primApellido', array(
             'label' => 'Apellidos',
         ));
-         echo $this->Form->input('ciudad', array(
+        echo $this->Form->input('ciudad', array(
             'label' => 'Ciudad',
-             'required'=>'true'
+            'required' => 'true'
         ));
-          echo $this->Form->input('pers_direccion', array(
-            'label' => 'Direccion',
-              'required'=>'true'
+        echo $this->Form->input('pers_direccion', array(
+            'label' => 'Direccion'
         ));
         echo $this->Form->input('pers_telefono', array(
             'label' => 'Telefono',
+            'required' => 'true'
         ));
         echo $this->Form->input('pers_mail', array(
             'label' => 'E-mail',
@@ -67,15 +67,17 @@ echo $this->Form->input('CommitteesEvent');
         ?>       
         <div id="adicionales" name="adicionales" style="display: none;" >
             <?php
-            echo $this->form->input('producto', array(
-//                "name" => $mnus['Product']['product_id'],
-                "label" => "Por favor seleccione los productos",
-                "type" => "select",
-                "multiple" => "checkbox",
-                'options' => $products,
+//            echo $this->form->input('producto', array(
+////                "name" => $mnus['Product']['product_id'],
+//                "label" => "Por favor seleccione los productos",
+//                "type" => "select",
+//                "multiple" => "checkbox",
+//                'options' => $products,
+//            ));
+            echo $this->Form->input('stand', array(
+                'label' => 'Número de Stand'
             ));
-            ?>
-            <br>
+            ?>            
         </div>
         <?php
 //        echo $this->Form->input('pers_tipoSangre', array(
@@ -89,7 +91,7 @@ echo $this->Form->input('CommitteesEvent');
         echo $this->form->input('input_codigo', array(
             'label' => 'Codigo RFID',
             'required' => 'true',
-            'type'=>'password'
+            'type' => 'password'
         ));
         ?>
 
@@ -98,19 +100,19 @@ echo $this->Form->input('CommitteesEvent');
 </div>
 
 <script>
-    $(documet).ready(function() {
-        $("#PersonPistola").val("");
-        $('#PersonCategoriaId').val($('#PersonCategoriaId > option:first').val());
-        $("#PersonPersDocumento").val("");
-        $("#PersonPersPrimNombre").val("");
-        $("#PersonPersPrimApellido").val("");
-        $("#PersonPersTelefono").val("");
-        $("#PersonPersMail").val("");
-        $("#PersonPersEmpresa").val("");
-        $("#PersonPersTipoSangre").val(""); 
-        $("#input_identificador").val("");
-        $("#input_codigo").val("");
-    });
+//    $(documet).ready(function() {
+//        $("#PersonPistola").val("");
+//        $('#PersonCategoriaId').val($('#PersonCategoriaId > option:first').val());
+//        $("#PersonPersDocumento").val("");
+//        $("#PersonPersPrimNombre").val("");
+//        $("#PersonPersPrimApellido").val("");
+//        $("#PersonPersTelefono").val("");
+//        $("#PersonPersMail").val("");
+//        $("#PersonPersEmpresa").val("");
+//        $("#PersonPersTipoSangre").val(""); 
+//        $("#input_identificador").val("");
+//        $("#input_codigo").val("");
+//    });
     $("#PersonCategoriaId").change(function() {
         if ($("#PersonCategoriaId").val() === "2") {
             $("#adicionales").css("display", "block");
@@ -131,12 +133,15 @@ echo $this->Form->input('CommitteesEvent');
                 var apellido2 = "";
                 var nombre = "";
                 var sangre = "";
-                alert($('#PersonPistola').val().length);
+               // alert($('#PersonPistola').val().length);
+			   var sw=0;
                 for (var i = 0; i < $('#PersonPistola').val().length; i++) {
                     if (i >= 48 && i < 58) {
-
                         var letra = $('#PersonPistola').val()[i].toString();
-                        documento = documento + letra;
+                        if(letra != "0" || sw == 1){
+							sw=1;
+							documento = documento + letra;
+						}
                     }
                     if (i >= 58 && i < 81) {
                         var letra = $('#PersonPistola').val()[i].toString();
@@ -166,7 +171,7 @@ echo $this->Form->input('CommitteesEvent');
                 }
                 $('#PersonPersDocumento').val(documento);
                 $('#PersonPersPrimNombre').val(nombre);
-                $('#PersonPersPrimApellido').val(apellido1 + " " + apellido2);
+                $('#PersonPersPrimApellido').val(apellido1 ); //+ " " + apellido2
 //                $('#PersonPersTipoSangre').val(sangre);
                 $('#PersonPistola').val("");
                 $('#PersonCategoriaId').focus();

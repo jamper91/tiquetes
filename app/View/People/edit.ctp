@@ -3,9 +3,9 @@
     <fieldset>
         <legend><?php echo __('Editar Persona'); ?></legend>
         <?php //var_dump($input); 
-
+        if($input != array()){
         $selected1=$input[0]["Input"]["categoria_id"];
-
+        
         echo $this->Form->input('categoria_id', array(
             'label' => 'Tipo de Asistente',
             'required' => 'true',
@@ -13,6 +13,14 @@
             "options" => $categorias,
             "empty" => "Seleccione una categoria"
         ));
+        } else{
+            echo $this->Form->input('categoria_id', array(
+            'label' => 'Categoría',
+            'required' => 'true',
+            "options" => $categorias,
+            "empty" => "Seleccione una categoria"
+        ));
+        }
         echo $this->Form->input('pers_documento', array(
             'label' => 'Número de Documento',
         ));
@@ -42,29 +50,31 @@
         ));?>
         <div id="adicionales" name="adicionales"  style="display: none;">
             <?php
-            
-            $selected=array();
-            foreach ($products as $key => $item)
-            {
-                foreach ($products[$key] as $value) {
-                  
-                    array_push($selected,$value);
-                    
-                }
-               
-            }
-
-
-            echo $this->form->input('producto', array(
-//                "name" => $mnus['Product']['product_id'],
-                "label"=>"Por favor seleccione los productos",
-                "type" => "select",
-                "multiple" => "checkbox",
-                "selected"=>$selected,
-                'options' => $products1,
+//            
+//            $selected=array();
+//            foreach ($products as $key => $item)
+//            {
+//                foreach ($products[$key] as $value) {
+//                  
+//                    array_push($selected,$value);
+//                    
+//                }
+//               
+//            }
+//
+//
+//            echo $this->form->input('producto', array(
+////                "name" => $mnus['Product']['product_id'],
+//                "label"=>"Por favor seleccione los productos",
+//                "type" => "select",
+//                "multiple" => "checkbox",
+//                "selected"=>$selected,
+//                'options' => $products1,
+//            ));
+            echo $this->Form->input('stand', array(
+                'label' => 'Número de Stand'                
             ));
-            ?>
-            <br>
+            ?>            
         </div>
         <?php
         echo $this->Form->input('pers_tipoSangre', array(
@@ -78,6 +88,7 @@
         ));
         echo $this->form->input('input_codigo', array(
             'label' => 'Codigo RFID',
+            'type' => 'password',
             'required' => 'true',
             'value'=>(isset($input[0]["Input"]["entr_codigo"])) ? $input[0]["Input"]["entr_codigo"] : ''
         ));
