@@ -1,45 +1,49 @@
-<div class="authorizationsUsers index">
-	<h2><?php echo __('Authorizations Users'); ?></h2>
-	<table cellpadding="0" cellspacing="0">
-	<thead>
-	<tr>
-			<th><?php echo $this->Paginator->sort('id'); ?></th>
-			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('authorization_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('estado'); ?></th>
-			<th class="actions"><?php echo __('Actions'); ?></th>
-	</tr>
-	</thead>
-	<tbody>
-	<?php foreach ($authorizationsUsers as $authorizationsUser): ?>
-	<tr>
-		<td><?php echo h($authorizationsUser['AuthorizationsUser']['id']); ?>&nbsp;</td>
-		<td>
-			<?php echo $this->Html->link($authorizationsUser['User']['id'], array('controller' => 'users', 'action' => 'view', $authorizationsUser['User']['id'])); ?>
-		</td>
-		<td>
-			<?php echo $this->Html->link($authorizationsUser['Authorization']['id'], array('controller' => 'authorizations', 'action' => 'view', $authorizationsUser['Authorization']['id'])); ?>
-		</td>
-		<td><?php echo h($authorizationsUser['AuthorizationsUser']['estado']); ?>&nbsp;</td>
-		<td class="actions">
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $authorizationsUser['AuthorizationsUser']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $authorizationsUser['AuthorizationsUser']['id']), array(), __('Are you sure you want to delete # %s?', $authorizationsUser['AuthorizationsUser']['id'])); ?>
-		</td>
-	</tr>
-<?php endforeach; ?>
-	</tbody>
-	</table>
-	<p>
-	<?php
-	echo $this->Paginator->counter(array(
-	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
-	));
-	?>	</p>
-	<div class="paging">
-	<?php
-		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
-		echo $this->Paginator->numbers(array('separator' => ''));
-		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
-	?>
+<?php
+echo $this->Html->script(array('matrix.tables'));
+?>
+<div class="row-fluid">
+    <div class="span12">
+    	<div class="widget-box">
+            <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
+                <h5>Permisos</h5>
+            </div>
+
+			<div class="widget-content nopadding">
+				
+				<table class="table table-bordered data-table">
+				<thead>
+				<tr>
+						
+						<th>Usuario</th>
+						<th>Permiso</th>
+						<th>Evento</th>
+						<th>Opciones</th>
+				</tr>
+				</thead>
+				<tbody>
+				<?php foreach ($authorizationsUsers as $authorizationsUser): ?>
+				<tr>
+					<td>
+						<?php echo h($authorizationsUser['User']['username']);?>
+					</td>
+					<td>
+						<?php echo h($authorizationsUser['Authorization']['nombre']);?>
+					</td>
+					<td><?php echo h($authorizationsUser['Event']['even_nombre']); ?>&nbsp;</td>
+
+					<td class="actions">
+						<span class="btn btn-success btn-mini">
+							<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $authorizationsUser['AuthorizationsUser']['id'])); ?>
+						</span>
+						<span class="btn btn-danger btn-mini">
+						<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $authorizationsUser['AuthorizationsUser']['id']), array(), __('Are you sure you want to delete # %s?', $authorizationsUser['AuthorizationsUser']['id'])); ?>
+						</span>
+					</td>
+				</tr>
+				<?php endforeach; ?>
+				</tbody>
+				</table>
+			</div>
+		</div>	
 	</div>
 </div>

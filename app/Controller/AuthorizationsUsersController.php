@@ -15,7 +15,7 @@ class AuthorizationsUsersController extends AppController {
      *
      * @var array
      */
-    public $components = array('Paginator');
+    public $components = array('Paginator', 'RequestHandler');
 
     /**
      * index method
@@ -48,33 +48,28 @@ class AuthorizationsUsersController extends AppController {
      * @return void
      */
     public function add() {
+
         if ($this->request->is('post')) {
             $data = $this->data;
             $datos = $this->request->data;
             //debug($datos);
-
             try {
                 foreach ($datos as $dato) {
+                $event_id = $dato['event_id'];
+                $user_id = $dato['user_id'];
 
-                //debug($dato);
-               // $event_id = $dato['event_id'];
-                //debug($dato);
-                foreach ($dato['user_id'] as $user_id) {
-                    //debug($user_id);
-                    foreach ($dato['authorization_id'] as $authorization_id) {
-                        //debug($authorization_id);
-                        $newAuthorizationsUser = $this->AuthorizationsUser->create();
-                        $newAuthorizationsUser = array(
-                            'AuthorizationsUser' => array(
-                                'user_id' => $user_id,
-                                'authorization_id' => $authorization_id,
-                                //'event_id' => $event_id
-                            )
-                        );
-                        $this->AuthorizationsUser->save($newAuthorizationsUser);
-                        //debug($newAuthorizationsUser);
-                    }
+                foreach ($dato['authorization_id'] as $authorization_id) {
+                    $newAuthorizationsUser = $this->AuthorizationsUser->create();
+                    $newAuthorizationsUser = array(
+                        'AuthorizationsUser' => array(
+                            'user_id' => $user_id,
+                            'authorization_id' => $authorization_id,
+                            'event_id' => $event_id
+                        )
+                    );
+                    $this->AuthorizationsUser->save($newAuthorizationsUser);
                 }
+                
             }
             } catch (Exception $ex) {
                
@@ -92,7 +87,9 @@ class AuthorizationsUsersController extends AppController {
             // } else {
             // 	$this->Session->setFlash(__('The authorizations user could not be saved. Please, try again.'));
             // }
+            return $this->redirect(array('action' => 'index'));
         }
+
         $this->loadModel('Authorizations');
         $authorizations = $this->Authorizations->find('list', array(
             'fields' => array(
@@ -120,6 +117,15 @@ class AuthorizationsUsersController extends AppController {
         $this->set('events', $events);
     }
 
+    public function getAuthorizationByUser(){
+        $this->layout = "webservices";
+        $datos = $this->request->data;
+            debug($datos);
+    }
+
+
+
+
     /**
      * edit method
      *
@@ -131,17 +137,61 @@ class AuthorizationsUsersController extends AppController {
         if (!$this->AuthorizationsUser->exists($id)) {
             throw new NotFoundException(__('Invalid authorizations user'));
         }
-        if ($this->request->is(array('post', 'put'))) {
-            if ($this->AuthorizationsUser->save($this->request->data)) {
-                $this->Session->setFlash(__('The authorizations user has been saved.'));
-                return $this->redirect(array('action' => 'index'));
-            } else {
-                $this->Session->setFlash(__('The authorizations user could not be saved. Please, try again.'));
-            }
-        } else {
-            $options = array('conditions' => array('AuthorizationsUser.' . $this->AuthorizationsUser->primaryKey => $id));
-            $this->request->data = $this->AuthorizationsUser->find('first', $options);
+        if ($this->request->is(array('post', 'put'))) 
+        {
+            // debug($id);
+            $datas = $this->request->data;
+                // $autorizacion = $datas["AuthorizationsUser"]["authorization_id"];
+                // debug($autorizacion);
+                $updateAuth = array(
+                    'AuthorizationsUser' => array(
+                        'id' => $id,
+                        'user_id' => $datas["AuthorizationsUser"]["user_id"],
+                        'authorization_id' => $datas["AuthorizationsUser"]["authorization_id"][0],
+                        'event_id' => $datas["AuthorizationsUser"]["event_id"], ));
+
+                $this->AuthorizationsUser->save($updateAuth);  
+                if ($this->AuthorizationsUser->save($updateAuth)) {
+                    $this->Session->setFlash(__('The authorizations user has been saved.'));
+                    return $this->redirect(array('action' => 'index'));
+                } 
+                else 
+                {
+                    $this->Session->setFlash(__('The authorizations user could not be saved. Please, try again.'));
+                }       
+            
         }
+        else {
+                        $options = array('conditions' => array('AuthorizationsUser.' . $this->AuthorizationsUser->primaryKey => $id));
+                        $this->request->data = $this->AuthorizationsUser->find('first', $options);
+                    }
+
+
+
+        
+
+        $this->loadModel('Authorizations');
+        $authorizations = $this->Authorizations->find('list', array(
+            'fields' => array(
+                "Authorizations.nombre"
+            )
+        ));
+
+        $this->loadModel('Users');
+        $users = $this->Users->find('list', array(
+            'fields' => array(
+                "Users.username"
+            )
+        ));
+        $this->loadModel('Events');
+        $events = $this->Events->find('list', array(
+            'fields' => array(
+                "Events.even_nombre"
+            )
+        ));
+
+        $this->set(compact('events', 'users', 'authorizations'));
+
     }
 
     /**

@@ -50,7 +50,7 @@ class FormsController extends AppController {
      */
     public function add() {
         if ($this->request->is('post')) {
-            debug($this->request->data);
+            //debug($this->request->data);
             $this->Form->create();
             if ($this->Form->save($this->request->data)) {
                 
@@ -87,17 +87,21 @@ class FormsController extends AppController {
             throw new NotFoundException(__('Invalid form'));
         }
         if ($this->request->is(array('post', 'put'))) {
+            debug($this->request->data);
             if ($this->Form->save($this->request->data)) {
 //                $this->Session->setFlash(__('The form has been saved.'));
                 $this->Session->setFlash('Formulario Actualizado con exito', 'good');
-                return $this->redirect(array('action' => 'index'));
+                //return $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash('El formulario no pudo ser actualizado con exito', 'error');
             }
-        } else {
+        } 
+        else 
+        {
             $options = array('conditions' => array('Form.' . $this->Form->primaryKey => $id));
             $this->request->data = $this->Form->find('first', $options);
         }
+
         $events = $this->Form->Event->find('list', array(
             "fields" => array(
                 "Event.id",

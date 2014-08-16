@@ -166,7 +166,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                     <?php } ?>
                     <?php if (in_array('formularios', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
 
-<!--                        <li class="submenu"  > 
+                       <li class="submenu"  > 
                             <a href="#">
                                 <i class="icon icon-th-list"></i> 
                                 <span>Formularios</span>
@@ -177,8 +177,9 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                                 <li><a href="<?= $this->Html->url(array("controller" => "forms", "action" => "add")); ?>">Formularios</a></li>
 
                             </ul>
-                        </li>-->
+                        </li>
                     <?php } ?>
+                    
                     <?php if (in_array('personas', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
 
                         <li class="submenu"> 
