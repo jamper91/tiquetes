@@ -3,9 +3,9 @@
     <fieldset>
         <legend><?php echo __('Editar Persona'); ?></legend>
         <?php //var_dump($input); 
-
+        if($input != array()){
         $selected1=$input[0]["Input"]["categoria_id"];
-
+        
         echo $this->Form->input('categoria_id', array(
             'label' => 'Tipo de Asistente',
             'required' => 'true',
@@ -13,6 +13,14 @@
             "options" => $categorias,
             "empty" => "Seleccione una categoria"
         ));
+        } else{
+            echo $this->Form->input('categoria_id', array(
+            'label' => 'Categoría',
+            'required' => 'true',
+            "options" => $categorias,
+            "empty" => "Seleccione una categoria"
+        ));
+        }
         echo $this->Form->input('pers_documento', array(
             'label' => 'Número de Documento',
         ));
@@ -22,40 +30,51 @@
         echo $this->Form->input('pers_primApellido', array(
             'label' => 'Apellidos',
         ));
+        echo $this->Form->input('ciudad', array(
+            'label' => 'Ciudad',
+             'required'=>'true'
+        ));
+          echo $this->Form->input('pers_direccion', array(
+            'label' => 'Direccion',
+        ));
         echo $this->Form->input('pers_telefono', array(
             'label' => 'Telefono',
+            'required'=>'true'
         ));
         echo $this->Form->input('pers_mail', array(
-            'label'=>'E-mail'
+            'label'=>'E-mail',
+            'type'=>'email'
         ));
         echo $this->Form->input('pers_empresa', array(
             'label' => 'Empresa',
         ));?>
-        <div id="adicionales" name="adicionales" style="display: none;" >
+        <div id="adicionales" name="adicionales"  style="display: none;">
             <?php
-            
-            $selected=array();
-            foreach ($products as $key => $item)
-            {
-                foreach ($products[$key] as $value) {
-                  
-                    array_push($selected,$value);
-                    
-                }
-               
-            }
-
-
-            echo $this->form->input('producto', array(
-//                "name" => $mnus['Product']['product_id'],
-                "label"=>"Por favor seleccione los productos",
-                "type" => "select",
-                "multiple" => "checkbox",
-                "selected"=>$selected,
-                'options' => $products1,
+//            
+//            $selected=array();
+//            foreach ($products as $key => $item)
+//            {
+//                foreach ($products[$key] as $value) {
+//                  
+//                    array_push($selected,$value);
+//                    
+//                }
+//               
+//            }
+//
+//
+//            echo $this->form->input('producto', array(
+////                "name" => $mnus['Product']['product_id'],
+//                "label"=>"Por favor seleccione los productos",
+//                "type" => "select",
+//                "multiple" => "checkbox",
+//                "selected"=>$selected,
+//                'options' => $products1,
+//            ));
+            echo $this->Form->input('stand', array(
+                'label' => 'Número de Stand'                
             ));
-            ?>
-            <br>
+            ?>            
         </div>
         <?php
         echo $this->Form->input('pers_tipoSangre', array(
@@ -69,6 +88,7 @@
         ));
         echo $this->form->input('input_codigo', array(
             'label' => 'Codigo RFID',
+            'type' => 'password',
             'required' => 'true',
             'value'=>(isset($input[0]["Input"]["entr_codigo"])) ? $input[0]["Input"]["entr_codigo"] : ''
         ));
@@ -80,7 +100,11 @@
     <?php echo $this->Form->end(__('Actualizar')); ?>
 </div>
 <script>
-
+    $(document).ready(function(){        
+        if ($("#PersonCategoriaId").val() === "2") {
+            $("#adicionales").css("display", "block");
+        }
+    });
     $("#PersonCategoriaId").change(function() {
         if ($("#PersonCategoriaId").val() === "2") {
             $("#adicionales").css("display", "block");

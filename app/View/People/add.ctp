@@ -27,19 +27,18 @@ echo $this->Form->input('CommitteesEvent');
     <fieldset>
         <legend><?php echo __('Crear Persona'); ?></legend>
         <?php
-        echo $this->Form->input('pistola', array(
-            'label' => 'Codigo de Barras',
-            'type' => 'password'
-        ));
-
         echo $this->Form->input('categoria_id', array(
-            'label' => 'Tipo de Asistente',
+            'label' => 'Categoría',
             'required' => 'true',
             "options" => $categorias,
             "empty" => "Seleccione una categoria"
         ));
+        echo $this->Form->input('pistola', array(
+            'label' => 'Código de Barras',
+            'type' => 'password'
+        ));
         echo $this->Form->input('pers_documento', array(
-            'label' => 'Número de Documento',
+            'label' => 'Identificación',
         ));
         echo $this->Form->input('pers_primNombre', array(
             'label' => 'Nombres',
@@ -47,11 +46,20 @@ echo $this->Form->input('CommitteesEvent');
         echo $this->Form->input('pers_primApellido', array(
             'label' => 'Apellidos',
         ));
+        echo $this->Form->input('ciudad', array(
+            'label' => 'Ciudad',
+            'required' => 'true'
+        ));
+        echo $this->Form->input('pers_direccion', array(
+            'label' => 'Direccion'
+        ));
         echo $this->Form->input('pers_telefono', array(
             'label' => 'Telefono',
+            'required' => 'true'
         ));
         echo $this->Form->input('pers_mail', array(
-            'label'=>'E-mail'
+            'label' => 'E-mail',
+            'type' => 'email'
         ));
         echo $this->Form->input('pers_empresa', array(
             'label' => 'Empresa',
@@ -59,20 +67,22 @@ echo $this->Form->input('CommitteesEvent');
         ?>       
         <div id="adicionales" name="adicionales" style="display: none;" >
             <?php
-            echo $this->form->input('producto', array(
-//                "name" => $mnus['Product']['product_id'],
-                "label"=>"Por favor seleccione los productos",
-                "type" => "select",
-                "multiple" => "checkbox",
-                'options' => $products,
+//            echo $this->form->input('producto', array(
+////                "name" => $mnus['Product']['product_id'],
+//                "label" => "Por favor seleccione los productos",
+//                "type" => "select",
+//                "multiple" => "checkbox",
+//                'options' => $products,
+//            ));
+            echo $this->Form->input('stand', array(
+                'label' => 'Número de Stand'
             ));
-            ?>
-            <br>
+            ?>            
         </div>
         <?php
-        echo $this->Form->input('pers_tipoSangre', array(
-            'label' => 'Tipo de Sangre',           
-        ));
+//        echo $this->Form->input('pers_tipoSangre', array(
+//            'label' => 'Tipo de Sangre',
+//        ));
 
         echo $this->form->input('input_identificador', array(
             'label' => 'Identificador de Escarapela',
@@ -80,7 +90,8 @@ echo $this->Form->input('CommitteesEvent');
         ));
         echo $this->form->input('input_codigo', array(
             'label' => 'Codigo RFID',
-            'required' => 'true'
+            'required' => 'true',
+            'type' => 'password'
         ));
         ?>
 
@@ -89,7 +100,19 @@ echo $this->Form->input('CommitteesEvent');
 </div>
 
 <script>
-
+//    $(documet).ready(function() {
+//        $("#PersonPistola").val("");
+//        $('#PersonCategoriaId').val($('#PersonCategoriaId > option:first').val());
+//        $("#PersonPersDocumento").val("");
+//        $("#PersonPersPrimNombre").val("");
+//        $("#PersonPersPrimApellido").val("");
+//        $("#PersonPersTelefono").val("");
+//        $("#PersonPersMail").val("");
+//        $("#PersonPersEmpresa").val("");
+//        $("#PersonPersTipoSangre").val(""); 
+//        $("#input_identificador").val("");
+//        $("#input_codigo").val("");
+//    });
     $("#PersonCategoriaId").change(function() {
         if ($("#PersonCategoriaId").val() === "2") {
             $("#adicionales").css("display", "block");
@@ -106,16 +129,19 @@ echo $this->Form->input('CommitteesEvent');
             if ($('#PersonPistola').val().length === 170)
             {
                 var documento = "";
-                var apellido1 = ""; 
+                var apellido1 = "";
                 var apellido2 = "";
                 var nombre = "";
                 var sangre = "";
-                alert($('#PersonPistola').val().length);
+               // alert($('#PersonPistola').val().length);
+			   var sw=0;
                 for (var i = 0; i < $('#PersonPistola').val().length; i++) {
                     if (i >= 48 && i < 58) {
-                        
                         var letra = $('#PersonPistola').val()[i].toString();
-                        documento = documento + letra;
+                        if(letra != "0" || sw == 1){
+							sw=1;
+							documento = documento + letra;
+						}
                     }
                     if (i >= 58 && i < 81) {
                         var letra = $('#PersonPistola').val()[i].toString();
@@ -123,19 +149,19 @@ echo $this->Form->input('CommitteesEvent');
                             apellido1 = apellido1 + letra;
                         }
                     }
-                    if (i >= 81 && i < 104){
+                    if (i >= 81 && i < 104) {
                         var letra = $('#PersonPistola').val()[i].toString();
                         if (letra != " ") {
                             apellido2 = apellido2 + letra;
                         }
                     }
-                    if (i >= 104 && i < 127){
+                    if (i >= 104 && i < 127) {
                         var letra = $('#PersonPistola').val()[i].toString();
                         if (letra != " ") {
                             nombre = nombre + letra;
                         }
                     }
-                    if (i >= 166 && i < 169){
+                    if (i >= 166 && i < 169) {
                         var letra = $('#PersonPistola').val()[i].toString();
                         if (letra != " ") {
                             sangre = sangre + letra;
@@ -145,12 +171,12 @@ echo $this->Form->input('CommitteesEvent');
                 }
                 $('#PersonPersDocumento').val(documento);
                 $('#PersonPersPrimNombre').val(nombre);
-                $('#PersonPersPrimApellido').val(apellido1+" "+apellido2);
-                $('#PersonPersTipoSangre').val(sangre);
+                $('#PersonPersPrimApellido').val(apellido1 ); //+ " " + apellido2
+//                $('#PersonPersTipoSangre').val(sangre);
                 $('#PersonPistola').val("");
                 $('#PersonCategoriaId').focus();
 //                        var url = "validar_admin.jsp"; // the script where you handle the form input. 
-                
+
             }
         });
     });

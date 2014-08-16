@@ -18,6 +18,6 @@ foreach ($datos as $dato) {
 }
 
 $this->PhpExcel->addTableFooter();
-$this->PhpExcel->output("Reporte Usuarios Registrados Fondas de mi Pueblo.xlsx"); 
+$this->PhpExcel->output("Reporte Usuarios Registrados.xlsx"); 
 
 ?>

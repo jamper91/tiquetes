@@ -8,11 +8,13 @@ $table = array(
     array('label' => __('Apellido'), 'width' => 'auto', 'filter' => true),
     array('label' => __('Cedula'), 'width' => 'auto', 'filter' => true),
     array('label' => __('Empresa'), 'width' => 'auto', 'filter' => true),
-    array('label' => __('Manilla'), 'width' => 'auto', 'filter' => true),
+    array('label' => __('Escarapela'), 'width' => 'auto', 'filter' => true),
     array('label' => __('Chip'), 'width' => 'auto', 'filter' => true),
-    array('label' => __('Agosto 1'), 'width' => 'auto', 'filter' => true),
-    array('label' => __('Agosto 2'), 'width' => 'auto', 'filter' => true),
-    array('label' => __('Agosto 3'), 'width' => 'auto', 'filter' => true),
+    array('label' => __('Dia 1'), 'width' => 'auto', 'filter' => true),
+    array('label' => __('Dia 2'), 'width' => 'auto', 'filter' => true),
+    array('label' => __('Dia 3'), 'width' => 'auto', 'filter' => true),
+    array('label' => __('Dia 4'), 'width' => 'auto', 'filter' => true),
+    array('label' => __('Dia 5'), 'width' => 'auto', 'filter' => true),
     array('label' => __('Total'), 'width' => 'auto', 'filter' => true)
 );
 
@@ -31,11 +33,13 @@ foreach ($datos as $dato) {
         $dato['Agosto-1'],
         $dato['Agosto-2'],
         $dato['Agosto-3'],
-        $dato['Agosto-1']+$dato['Agosto-2']+$dato['Agosto-3'],
+        $dato['Agosto-4'],
+        $dato['Agosto-5'],
+        $dato['Agosto-1']+$dato['Agosto-2']+$dato['Agosto-3']+$dato['Agosto-4']+$dato['Agosto-5'],
     ));
 }
 
 $this->PhpExcel->addTableFooter();
-$this->PhpExcel->output("Reporte Ingreso por Asistente Fondas de mi Pueblo.xlsx"); 
+$this->PhpExcel->output("Reporte Ingreso por Asistente.xlsx"); 
 
 ?>
