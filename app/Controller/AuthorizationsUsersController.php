@@ -119,8 +119,10 @@ class AuthorizationsUsersController extends AppController {
 
     public function getAuthorizationByUser(){
         $this->layout = "webservices";
+        debug("entre en autorizacion por usuario");
         $datos = $this->request->data;
-            debug($datos);
+        debug($datos['user_id']);
+        //$this->set($datos);
     }
 
 

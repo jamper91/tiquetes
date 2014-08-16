@@ -70,7 +70,7 @@ $(document).ready(function() {
     $("#AuthorizationsUserUserId").change(function() {
         //alert($("#AuthorizationsUserUserId").val());
 
-        var url = urlbase + "AuthorizationsUsers/xml/getAuthorizationByUser.xml";
+        var url = urlbase + "authorizationsUsers/getAuthorizationByUser.xml";
             var datos = {
                 user_id: $("#AuthorizationsUserUserId").val()
             };
