@@ -129,6 +129,15 @@ class PeopleController extends AppController {
                             $codigo = $data['input_codigo'];
                             $sql = "INSERT INTO inputs (person_id, entr_codigo, entr_identificador, categoria_id) values (" . $person_id . ", " . $codigo . ", " . $identificador . "," . $data['Person']['categoria_id'] . ");";
                             $this->Data->query($sql);
+                            $newInputId = $this->Input->getLastInsertId();
+                            //comienzo con el log
+                            $this->loadModel("Log");
+                            $user_id = $this->Session->read("User.id");
+                            $input_id = $newInputId;
+                            $operacion = "VENTA";
+                            $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '$operacion')";
+                            $operation = $this->Data->query($sql);
+                            //termino el log
                         } catch (Exception $ex) {
                             $error2 = $ex->getCode();
                             if ($error2 == '23000') {
