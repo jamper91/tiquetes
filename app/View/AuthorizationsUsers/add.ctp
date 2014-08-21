@@ -59,24 +59,23 @@ echo $this->Html->css(array('multi-select'));
         }
     });
 
-//        $('#AuthorizationsUserUserId').multiSelect({
-//         afterSelect: function(values) {
-//                 //alert("Select value: " + values);
-// //            console.log($('#FormPersonalDatumId option[value="' + values + '"]').html());
-//             $('#AuthorizationsUserUserId option[value="' + values + '"]').attr("selected", "selected")
-//         }
+    //        $('#AuthorizationsUserUserId').multiSelect({
+    //         afterSelect: function(values) {
+    //                 //alert("Select value: " + values);
+    // //            console.log($('#FormPersonalDatumId option[value="' + values + '"]').html());
+    //             $('#AuthorizationsUserUserId option[value="' + values + '"]').attr("selected", "selected")
+    //         }
+    //     });
+// $(document).ready(function() {
+//     $("#AuthorizationsUserUserId").change(function() {
+//         //alert($("#AuthorizationsUserUserId").val());
+//         var url = urlbase + "authorizationsUsers/getAuthorizationByUser.xml";
+//             var datos = {
+//                 user_id: $("#AuthorizationsUserUserId").val()
+//             };
+//             ajax(url, datos, function(xml) {
+//                 alert("volvi");
+//             });   
+//         });
 //     });
-$(document).ready(function() {
-    $("#AuthorizationsUserUserId").change(function() {
-        //alert($("#AuthorizationsUserUserId").val());
-
-        var url = urlbase + "authorizationsUsers/getAuthorizationByUser.xml";
-            var datos = {
-                user_id: $("#AuthorizationsUserUserId").val()
-            };
-            ajax(url, datos, function(xml) {
-                alert("volvi");
-            });   
-        });
-    });
 </script>

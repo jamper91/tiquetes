@@ -1,6 +1,7 @@
 <?php
 echo $this->Html->script(array('matrix.tables'));
 ?>
+<?php //debug($authorizationsUsers);?>
 <div class="row-fluid">
     <div class="span12">
     	<div class="widget-box">
@@ -33,7 +34,10 @@ echo $this->Html->script(array('matrix.tables'));
 
 					<td class="actions">
 						<span class="btn btn-success btn-mini">
-							<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $authorizationsUser['AuthorizationsUser']['id'])); ?>
+							<?php echo $this->Html->link(__('Edit'), 
+							array('action' => 'edit', 
+							$authorizationsUser['AuthorizationsUser']['id'],
+								 $authorizationsUser['AuthorizationsUser']['user_id'])); ?>
 						</span>
 						<span class="btn btn-danger btn-mini">
 						<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $authorizationsUser['AuthorizationsUser']['id']), array(), __('Are you sure you want to delete # %s?', $authorizationsUser['AuthorizationsUser']['id'])); ?>
