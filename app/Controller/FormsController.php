@@ -95,9 +95,7 @@ class FormsController extends AppController {
             } else {
                 $this->Session->setFlash('El formulario no pudo ser actualizado con exito', 'error');
             }
-        } 
-        else 
-        {
+        } else {
             $options = array('conditions' => array('Form.' . $this->Form->primaryKey => $id));
             $this->request->data = $this->Form->find('first', $options);
         }
@@ -137,5 +135,4 @@ class FormsController extends AppController {
         }
         return $this->redirect(array('action' => 'index'));
     }
-
 }

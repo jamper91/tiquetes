@@ -30,7 +30,8 @@
                     <?php
                     echo $this->Form->input('city_id', array(
                         'label' => '',
-                        "empty" => "Seleccione Una Ciudad"
+                        "empty" => "Seleccione Una Ciudad",
+                        'required'=> 'true'
                     ));
                     ?>
                 </td>
@@ -38,7 +39,8 @@
                 <td>
                     <?php
                     echo $this->Form->input('esce_nombre',array(
-                        'label' => ''
+                        'label' => '',
+                        'required'=> 'true'
                     ));
                     ?>
                 </td>
@@ -65,7 +67,7 @@
                 <td><?php echo 'mapa' ?></td>
                 <td>
                     <!--<input type="file" id="doc_file" name="doc_file">-->
-                    <?php echo $this->Form->input('doc_file', array('type' => 'file', 'label' => '')); ?>
+                    <?php echo $this->Form->input('doc_file', array('type' => 'file', 'label' => '', 'required'=> 'true')); ?>
                 </td>
             </tr>
         </table>
