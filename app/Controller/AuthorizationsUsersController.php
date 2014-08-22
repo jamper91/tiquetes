@@ -159,18 +159,21 @@ class AuthorizationsUsersController extends AppController {
 
             $sqlOld = "DELETE FROM Authorizations_users WHERE user_id=".$user_id;
             $this->AuthorizationsUser->query($sqlOld);
-
-            foreach ($new as $nv) {
-                  $newAuthorizationsUser = $this->AuthorizationsUser->create();
-                    $newAuthorizationsUser = array(
-                        'AuthorizationsUser' => array(
-                            'user_id' => $user_id,
-                            'authorization_id' => $nv,
-                            'event_id' => $datas['AuthorizationsUser']['event_id']
-                        )
-                    );
-                    $this->AuthorizationsUser->save($newAuthorizationsUser);
-            }    
+            
+                foreach ($new as $nv) {
+                      $newAuthorizationsUser = $this->AuthorizationsUser->create();
+                        $newAuthorizationsUser = array(
+                            'AuthorizationsUser' => array(
+                                'user_id' => $user_id,
+                                'authorization_id' => $nv,
+                                'event_id' => $datas['AuthorizationsUser']['event_id']
+                            )
+                        );
+                        $this->AuthorizationsUser->save($newAuthorizationsUser);
+                        
+                } 
+                $this->Session->setFlash('Las autorizaciones del usuario se han Actualizado con exito', 'good');
+                return $this->redirect(array('action' => 'index')); 
             
         }
         else {

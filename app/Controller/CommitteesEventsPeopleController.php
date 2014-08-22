@@ -13,7 +13,7 @@ class CommitteesEventsPeopleController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator');
+	public $components = array('Paginator', 'RequestHandler');
 
 /**
  * index method
@@ -54,7 +54,42 @@ class CommitteesEventsPeopleController extends AppController {
 			} else {
 				$this->Session->setFlash(__('The committees events person could not be saved. Please, try again.'));
 			}
+
 		}
+
+		$this->loadModel('Events');
+        $events = $this->Events->find('list', array(
+            'fields' => array(
+                "Events.even_nombre"
+            )
+        ));
+        $this->set('events', $events);
+	}
+
+
+	public function getCommitteesByEvent()
+	{
+		$this->loadModel('CommitteesEvent');
+		$this->loadModel('Committees');
+		$this->layout = "webservices";
+        $event_id = $this->request->data["event_id"];
+        $sql = "SELECT Committee.id, Committee.nombre as name FROM committees Committee INNER JOIN  committees_events ce ON Committee.id=ce.committee_id WHERE ce.event_id =".$event_id;
+        $respuesta = $this->CommitteesEvent->query($sql);
+        
+        // debug($respuesta);
+       
+        // 
+        // //debug($comites);
+     
+        // 	debug("mensaje".$comite);
+        
+        $this->set(
+                array(
+                    "datos" => $respuesta,
+                    "_serialize" => array("datos")
+                )
+        );
+
 	}
 
 /**
