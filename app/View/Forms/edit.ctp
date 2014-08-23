@@ -2,6 +2,13 @@
 <?php
 echo $this->Html->script(array('jquery.multi-select'));
 echo $this->Html->css(array('multi-select'));
+
+
+echo "<pre>";
+var_dump($personalData);
+//var_dump($this->request->data); 
+echo "</pre>";
+
 ?>
 <div class="row-fluid">
     <div class="span6">

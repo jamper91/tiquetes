@@ -1,24 +1,22 @@
 <?php
 echo $this->Html->script(array('matrix.tables'));
 ?>
+<?php //debug($authorizationsUsers);?>
 <div class="row-fluid">
     <div class="span12">
     	<div class="widget-box">
             <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
                 <h5>Permisos</h5>
             </div>
-
 			<div class="widget-content nopadding">
-				
 				<table class="table table-bordered data-table">
 				<thead>
-				<tr>
-						
+					<tr>	
 						<th>Usuario</th>
 						<th>Permiso</th>
 						<th>Evento</th>
 						<th>Opciones</th>
-				</tr>
+					</tr>
 				</thead>
 				<tbody>
 				<?php foreach ($authorizationsUsers as $authorizationsUser): ?>
@@ -33,11 +31,14 @@ echo $this->Html->script(array('matrix.tables'));
 
 					<td class="actions">
 						<span class="btn btn-success btn-mini">
-							<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $authorizationsUser['AuthorizationsUser']['id'])); ?>
+							<?php echo $this->Html->link(__('Edit'), 
+							array('action' => 'edit', 
+							$authorizationsUser['AuthorizationsUser']['id'],
+								 $authorizationsUser['AuthorizationsUser']['user_id'])); ?>
 						</span>
-						<span class="btn btn-danger btn-mini">
+					<!--<span class="btn btn-danger btn-mini">
 						<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $authorizationsUser['AuthorizationsUser']['id']), array(), __('Are you sure you want to delete # %s?', $authorizationsUser['AuthorizationsUser']['id'])); ?>
-						</span>
+						</span> -->
 					</td>
 				</tr>
 				<?php endforeach; ?>

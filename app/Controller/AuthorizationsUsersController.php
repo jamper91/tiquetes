@@ -24,7 +24,15 @@ class AuthorizationsUsersController extends AppController {
      */
     public function index() {
         $this->AuthorizationsUser->recursive = 0;
-        $this->set('authorizationsUsers', $this->Paginator->paginate());
+        $this->loadModel('Users');
+        $users = $this->Users->find('list', array(
+            'fields' => array(
+                "Users.username"
+            )
+        ));
+        $options = array('group' => array('AuthorizationsUser.user_id'));
+        $this->set('users', $users);
+        $this->set('authorizationsUsers', $this->AuthorizationsUser->find('all', $options));
     }
 
     /**
@@ -38,8 +46,12 @@ class AuthorizationsUsersController extends AppController {
         if (!$this->AuthorizationsUser->exists($id)) {
             throw new NotFoundException(__('Invalid authorizations user'));
         }
+
+      
         $options = array('conditions' => array('AuthorizationsUser.' . $this->AuthorizationsUser->primaryKey => $id));
+       
         $this->set('authorizationsUser', $this->AuthorizationsUser->find('first', $options));
+        
     }
 
     /**
@@ -117,13 +129,13 @@ class AuthorizationsUsersController extends AppController {
         $this->set('events', $events);
     }
 
-    public function getAuthorizationByUser(){
-        $this->layout = "webservices";
-        debug("entre en autorizacion por usuario");
-        $datos = $this->request->data;
-        debug($datos['user_id']);
-        //$this->set($datos);
-    }
+    // public function getAuthorizationByUser(){
+    //     $this->layout = "webservices";
+    //     //debug("entre en autorizacion por usuario");
+    //     $datos = $this->request->data['user_id'];
+    //     //debug($datos['user_id']);
+    //     $this->set($datos);
+    // }
 
 
 
@@ -135,64 +147,72 @@ class AuthorizationsUsersController extends AppController {
      * @param string $id
      * @return void
      */
-    public function edit($id = null) {
-        if (!$this->AuthorizationsUser->exists($id)) {
+    public function edit($id = null, $user_id = null) {
+      /*  if (!$this->AuthorizationsUser->exists($id)) {
             throw new NotFoundException(__('Invalid authorizations user'));
-        }
+        }*/
         if ($this->request->is(array('post', 'put'))) 
         {
-            // debug($id);
             $datas = $this->request->data;
-                // $autorizacion = $datas["AuthorizationsUser"]["authorization_id"];
-                // debug($autorizacion);
-                $updateAuth = array(
-                    'AuthorizationsUser' => array(
-                        'id' => $id,
-                        'user_id' => $datas["AuthorizationsUser"]["user_id"],
-                        'authorization_id' => $datas["AuthorizationsUser"]["authorization_id"][0],
-                        'event_id' => $datas["AuthorizationsUser"]["event_id"], ));
 
-                $this->AuthorizationsUser->save($updateAuth);  
-                if ($this->AuthorizationsUser->save($updateAuth)) {
-                    $this->Session->setFlash(__('The authorizations user has been saved.'));
-                    return $this->redirect(array('action' => 'index'));
+            $new = $datas['AuthorizationsUser']['Authorization'];
+
+            $sqlOld = "DELETE FROM Authorizations_users WHERE user_id=".$user_id;
+            $this->AuthorizationsUser->query($sqlOld);
+            
+                foreach ($new as $nv) {
+                      $newAuthorizationsUser = $this->AuthorizationsUser->create();
+                        $newAuthorizationsUser = array(
+                            'AuthorizationsUser' => array(
+                                'user_id' => $user_id,
+                                'authorization_id' => $nv,
+                                'event_id' => $datas['AuthorizationsUser']['event_id']
+                            )
+                        );
+                        $this->AuthorizationsUser->save($newAuthorizationsUser);
+                        
                 } 
-                else 
-                {
-                    $this->Session->setFlash(__('The authorizations user could not be saved. Please, try again.'));
-                }       
+                $this->Session->setFlash('Las autorizaciones del usuario se han Actualizado con exito', 'good');
+                return $this->redirect(array('action' => 'index')); 
             
         }
         else {
-                        $options = array('conditions' => array('AuthorizationsUser.' . $this->AuthorizationsUser->primaryKey => $id));
-                        $this->request->data = $this->AuthorizationsUser->find('first', $options);
-                    }
-
-
-
-        
+                //$options = array('conditions' => array('AuthorizationsUser.' . $this->AuthorizationsUser->primaryKey => $id));
+                $options = array( 
+                    'conditions' => array('AuthorizationsUser.user_id'  => $user_id));
+                $authorizations = $this->AuthorizationsUser->find('all', $options);
+                $nuevo = array();
+                foreach($authorizations as $authorization)
+                {
+                    array_push($nuevo, $authorization['Authorization']);
+                }
+                $authorizations[0]['Authorization'] = $nuevo;
+                $this->request->data =  $authorizations[0];
+            }
+   
 
         $this->loadModel('Authorizations');
-        $authorizations = $this->Authorizations->find('list', array(
+        $authorization = $this->AuthorizationsUser->Authorization->find('list', array(
             'fields' => array(
-                "Authorizations.nombre"
+                "Authorization.id",
+                "Authorization.nombre"
             )
         ));
 
         $this->loadModel('Users');
-        $users = $this->Users->find('list', array(
+        $users = $this->AuthorizationsUser->User->find('list', array(
             'fields' => array(
-                "Users.username"
+                "User.username"
             )
         ));
         $this->loadModel('Events');
-        $events = $this->Events->find('list', array(
+        $events = $this->AuthorizationsUser->Event->find('list', array(
             'fields' => array(
-                "Events.even_nombre"
+                "Event.even_nombre"
             )
         ));
 
-        $this->set(compact('events', 'users', 'authorizations'));
+        $this->set(compact('events', 'users', 'authorization'));
 
     }
 
