@@ -2,7 +2,6 @@
 
 App::uses('AppController', 'Controller');
 
-
 /**
  * Users Controller
  *
@@ -16,7 +15,7 @@ class UsersController extends AppController {
      *
      * @var array
      */
-    public $components = array('Paginator', 'Auth', 'Session', 'RequestHandler' );
+    public $components = array('Paginator', 'Auth', 'Session', 'RequestHandler');
 
     public function beforeFilter() {
         $this->set('authUser', $this->Auth->user());
@@ -63,11 +62,11 @@ class UsersController extends AppController {
      */
     public function add() {
 //        $this->layout = false;
-
+        $this->loadModel('People');
         if ($this->request->is('post')) {
 
             $data = $this->data;
-            $this->loadModel('People');
+
 // this is for the case you want to insert into 2 tables at a same time
             $newPeole = $this->People->create();
             $newPeole = array(
@@ -1068,7 +1067,8 @@ class UsersController extends AppController {
                                 //comienzo con el log
                                 $this->loadModel("Log");
                                 $user_id = $this->Session->read("User.id");
-                                $input_id = $this->Input->getLastInsertId();;
+                                $input_id = $this->Input->getLastInsertId();
+                                ;
                                 $operacion = "VENTA";
                                 $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '$operacion')";
                                 $operation = $this->Data->query($sql);
@@ -1217,7 +1217,5 @@ class UsersController extends AppController {
 
         $this->set('form', $formPersonal);
     }
-
-
 
 }

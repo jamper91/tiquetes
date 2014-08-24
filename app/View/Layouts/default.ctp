@@ -225,6 +225,20 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                             </ul>
                         </li>
                     <?php } ?> 
+
+
+                    <?php if (in_array('commite', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
+                        <li class="submenu"  > 
+                            <a href="#">
+                                <i class="icon icon-th-list"></i> 
+                                <span>Gestionar Comites</span>
+                            </a>
+                            <ul>
+                                <li><a href="<?= $this->Html->url(array("controller" => "CommitteesEventsPeople", "action" => "add")); ?>">Comites por evento</a></li>
+
+                            </ul>
+                        </li>
+                    <?php } ?>
                 </ul>
             <?php } ?> 
         </div>
