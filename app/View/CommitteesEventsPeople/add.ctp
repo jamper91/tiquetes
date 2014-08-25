@@ -13,14 +13,14 @@
                     ));
 
     		
-    		echo $this->Form->input('committees_event_id', array(
+    		echo $this->Form->input('committees_id', array(
     			"div" => array(
                         "class" => "controls"
                     ),
                     'label' => 'Comites',
                     'empty' => "Seleccione un comite"
     			));
-    		echo $this->Form->input('cant_person', array('label' => 'Numero de personas'));
+    		echo $this->Form->input('cantidad', array('label' => 'Numero de personas'));
     	?>
     	</fieldset>
         <input type="submit">
@@ -34,7 +34,7 @@ $(document).ready(function() {
                 event_id: $("#event_id").val()
             };
         ajax(url, datos, function(xml) {
-            $("#committees_event_id").html("<option>Seleccione un Comité</option>");
+            $("#committees_id").html("<option>Seleccione un Comité</option>");
             $("datos", xml).each(function() {
                 var obj = $(this).find("Committee");
                 var valor, texto;
@@ -44,7 +44,7 @@ $(document).ready(function() {
                     var html = "<option value='$1'>$2</option>";
                     html = html.replace("$1", valor);
                     html = html.replace("$2", texto);
-                    $("#committees_event_id").append(html);
+                    $("#committees_id").append(html);
                 }
             });
         });

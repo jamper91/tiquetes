@@ -147,7 +147,8 @@ class CompaniesController extends AppController {
                 "Person.pers_primApellido",
                 "Person.city_id",
                 "Person.pers_direccion",
-                "Person.pers_telefono"
+                "Person.pers_telefono",
+                "Person.pers_mail"
             ),
             "recursive" => 0
         );

@@ -133,9 +133,55 @@ class CommitteesEventsPeopleController extends AppController {
 
 	public function contar()
 	{
-		//debug($this->request->data);
 		$event_id = $this->request->data['event_id'];
-		$committees_id = $this->request->data['committees_event_id'];
-		$cantidad = $this->request->data['cant_person'];
+		$committees_id = $this->request->data['committees_id'];
+		$cantidad = $this->request->data['cantidad'];
+
+		if($this->request->is(array('post', 'put')))
+		{
+			debug($this->request->data);
+			for($i=0; $i<=$cantidad; $i++)
+			{
+
+			}
+		}
+		$this->set('event_id', $event_id);
+		$this->set('committees_id', $committees_id);
+		$this->set('cantidad', $cantidad);
+		
 	}
+	public function registrarPersona()
+	{
+		$data=$this->request->data;
+
+		$this->loadModel('People');
+		$newPeole = $this->People->create();
+            $newPeole = array(
+                'People' => array(
+                    'pers_primNombre' => $data['nombre'],
+                    'pers_primApellido' => $data['apellido'],
+                    //'city_id' => $data['User']['city_id'],
+                    'pers_documento' => $data['documento'],
+                    'pers_direccion' => $data['direccion'],
+                    // 'pers_telefono' => $data['People']['pers_telefono'],
+                    // 'pers_celular' => $data['People']['pers_celular'],
+                    // 'pers_fechNacimiento' => $data['People']['pers_fechNacimiento'],
+                    // 'pers_tipoSangre' => $data['People']['pers_tipoSangre'],
+                    'pers_mail' => $data['correo']
+                )
+            );
+
+            $this->People->save($newPeole);
+            $newPeopleId = $this->People->getLastInsertId();
+          	$a['person']['valor'] = $newPeopleId;
+            //aqui debo de guardar en la tabla committeeEventPeople
+
+		  $this->set(
+                array(
+                    "datos" => $a,
+                    "_serialize" => array("datos")
+                )
+        );
+	}
+
 }
