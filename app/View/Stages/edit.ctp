@@ -1,5 +1,6 @@
 <div class="stages form">
-<?php echo $this->Form->create('Stage'); ?>
+<?php echo $this->Form->create('Stage',array('type' => 'file')); ?>
+
 	<fieldset>
 		<legend><?php echo __('Edit Stage'); ?></legend>
 	<?php
@@ -12,4 +13,5 @@
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
+
 </div>

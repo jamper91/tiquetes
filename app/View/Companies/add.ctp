@@ -51,7 +51,8 @@
                 <td><?php
                     echo $this->Form->input('city_id', array(
                         'label' => 'Ciudad',
-                        "empty" => "Seleccione Una Ciudad"
+                        "empty" => "Seleccione Una Ciudad",
+                        'required' => 'true'
                     ));
                     ?></td>
                 <td><?php
@@ -67,12 +68,7 @@
                         'required' => 'true'
                     ));
                     ?></td>
-                <td><?php
-//                    echo $this->Form->input('pers_email', array(
-//                        'label' => 'E-mail',
-//                        'type'=> 'email'
-//                    ));
-                    ?></td>
+                <td><input type="hidden" name="data[Company][pers_id]" id="CompanyPers_id"></td>
             </tr>
         </table>
         <legend><?php echo __('Datos de la Empresa'); ?></legend>
@@ -192,13 +188,15 @@
             ajax(url, datos, function(xml) {
                 $("datos", xml).each(function() {
                     var obj = $(this).find("Person");
-                    var nombre, apellido, ciudad, direccion, telefono;
+                    var nombre, apellido, ciudad, direccion, telefono, id;
+                    id = $("id", obj).text();
                     nombre = $("pers_primNombre", obj).text();
                     apellido = $("pers_primApellido", obj).text();
                     ciudad = $("city_id", obj).text();                    
                     direccion = $("pers_direccion", obj).text();
                     telefono = $("pers_telefono", obj).text();
-                    if(nombre !== null){
+                    if(nombre !== null){                        
+                        $("#CompanyPers_id").val(id);
                         $("#CompanyPersPrimNombre").val(nombre);
                         $("#CompanyPersPrimApellido").val(apellido);
                         $("#CompanyCityId option[value="+ciudad+"]").attr("selected",true);

@@ -41,6 +41,7 @@
         echo $this->Form->input('parent_id');
         echo $this->Form->input('loca_fila');
         echo $this->Form->input('loca_colomnna');
+        echo $this->Form->input('coord', array("value"=>" ","type"=>"hidden"));
         ?>
     </fieldset>
     <?php echo $this->Form->end(__('Submit')); ?>
