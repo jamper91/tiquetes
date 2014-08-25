@@ -41,6 +41,26 @@ class StagesController extends AppController {
     }
 
 
+    public function guardacoords(){
+
+
+        var_dump($_POST);
+        $this->loadModel('Location');
+        $this->Location->updateAll(
+            array('Location.coord' => 'CONCAT(Location.coord, "' . $_POST["coord"].'")'),                    
+            array('Location.id' => $_POST["location"])
+        );
+
+
+
+
+
+        
+    }
+
+
+
+
 
     public function beforeFilter() {
 
@@ -158,6 +178,27 @@ class StagesController extends AppController {
             throw new NotFoundException(__('Invalid stage'));
         }
         if ($this->request->is(array('post', 'put'))) {
+
+            $file = $this->request->data["Stage"]["esce_mapa"];
+            //var_dump($file);
+
+
+
+                $nombre = $file["name"];
+                $tipo = $file["type"];
+                $ruta_provicional = $file["tmp_name"];
+                $size = $file["size"];
+//                $dimensiones = getimagesize($ruta_provicional);
+//                $width = $dimensiones[0];
+//                $height = $dimensiones[1];
+                $carpeta = WWW_ROOT."/img/escenario/";
+                $src = $carpeta .$nombre;
+                    move_uploaded_file($ruta_provicional, $src);
+              
+            $this->request->data["Stage"]["esce_mapa"]=$nombre;        
+
+
+
             if ($this->Stage->save($this->request->data)) {
                 $this->Session->setFlash(__('The stage has been saved.'));
                 return $this->redirect(array('action' => 'index'));
