@@ -141,6 +141,10 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 
                                 <li><a href="<?= $this->Html->url(array("controller" => "Inputs", "action" => "add")); ?>">Crear entradas por Evento</a></li> 
 
+
+                                <li><a href="<?= $this->Html->url(array("controller" => "Events", "action" => "index")); ?>">Lista de eventos</a></li>
+
+
                             </ul>
                         </li>
                     <?php } ?>

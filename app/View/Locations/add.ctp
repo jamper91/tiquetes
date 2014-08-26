@@ -24,7 +24,9 @@
             ),
             "label" => "Ciudad",
             "empty" => "seleccione una ciudad"
-        ));        
+        ));
+
+
         echo $this->Form->input('stage_id', array(
             "div" => array(
                 "class" => "controls"
@@ -32,6 +34,18 @@
             "label" => "Escenario",
             "options" => "Stage.esce_nombre",
         ));
+
+
+        echo $this->Form->input('event_id', array(
+            "div" => array(
+                "class" => "controls"
+            ),
+            "label" => "Evento",
+            "options" => "Event.even_nombre",
+        ));
+
+
+
         echo $this->Form->input('loca_nombre', array(
             "div" => array(
                 "class" => "controls"
@@ -117,4 +131,35 @@
             });
         });
     });
+
+
+    $("#LocationStageId").change(function() {
+        var url2 = urlbase + "events/getEventsByStage.xml";
+        var datos2 = {
+            stage_id: $(this).val()
+        };
+        console.log("CAMBIE!");
+        ajax(url2, datos2, function(xml) {       
+            $("#LocationEventId").html("<option>Seleccione un Evento</option>");
+            $("datos", xml).each(function() {
+                var obj = $(this).find("Event");
+                var valor, texto;
+                valor = $("id", obj).text();
+                texto = $("name", obj).text();
+                if (valor) {
+                    var html = "<option value='$1'>$2</option>";
+                    html = html.replace("$1", valor);
+                    html = html.replace("$2", texto);
+                    $("#LocationEventId").append(html);
+                }
+            });
+        });
+    });
+
+
+
+
+
+
+
 </script>
