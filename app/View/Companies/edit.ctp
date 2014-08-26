@@ -1,7 +1,7 @@
 <div class="companies form">
     <?php echo $this->Form->create('Company'); ?>
     <fieldset>
-        <legend><?php echo __('Crear Empresa'); ?></legend>
+        <legend><?php echo __('Editar Empresa'); ?></legend>
         <br>
         <legend><?php echo __('Datos del Representante Legal'); ?></legend>
         <table>
@@ -25,7 +25,8 @@
                 <td><?php
                     echo $this->Form->input('pers_primApellido', array(
                         'label' => 'Apellidos',
-                        'required' => 'true'
+                        'required' => 'true',
+                        'value' => $people [0]['p']['pers_primApellido']
                     ));
                     ?></td>
             </tr>
@@ -58,7 +59,8 @@
                     ?></td>
                 <td><?php
                     echo $this->Form->input('pers_direccion', array(
-                        'label' => 'Dirección'
+                        'label' => 'Dirección',
+                        'value' => $people [0]['p']['pers_direccion']
                     ));
                     ?></td>
             </tr>
@@ -66,10 +68,11 @@
                 <td><?php
                     echo $this->Form->input('pers_telefono', array(
                         'label' => 'Teléfono',
-                        'required' => 'true'
+                        'required' => 'true',
+                        'value' => $people [0]['p']['pers_telefono']
                     ));
                     ?></td>
-                <td><input type="hidden" name="data[Company][pers_id]" id="CompanyPers_id"></td>
+                <td><input type="hidden" name="data[Company][pers_id]" id="CompanyPers_id" value="<?php  $people [0]['p']['id']; ?>"></td>
             </tr>
         </table>
         <legend><?php echo __('Datos de la Empresa'); ?></legend>
@@ -123,5 +126,86 @@
         </table>
 
     </fieldset>
-    <?php echo $this->Form->end(__('Editar')); ?>
+    <?php echo $this->Form->end(__('Actualizar')); ?>
 </div>
+<script>
+    $("#CompanyStateId").change(function() {
+        var url2 = urlbase + "cities/getCitiesByState.xml";
+        var datos2 = {
+            state_id: $(this).val()
+        };
+
+        ajax(url2, datos2, function(xml) {
+            $("#CompanyCityId").html("<option>Seleccione una ciudad</option>");
+            $("datos", xml).each(function() {
+                var obj = $(this).find("City");
+                var valor, texto;
+                valor = $("id", obj).text();
+                texto = $("name", obj).text();
+                if (valor) {
+                    var html = "<option value='$1'>$2</option>";
+                    html = html.replace("$1", valor);
+                    html = html.replace("$2", texto);
+                    $("#CompanyCityId").append(html);
+                }
+            });
+        });
+    });
+    $(document).ready(function() {
+        $("#CompanyStateId").html("");        
+        $("#CompanyCountryId").change(function() {
+            var url = urlbase + "states/getStatesByCountry.xml";
+            var datos = {
+                country_id: $(this).val()
+            };
+            ajax(url, datos, function(xml) {
+                $("#CompanyStateId").html("<option>Seleccione un Departamento</option>");
+                $("datos", xml).each(function() {
+                    var obj = $(this).find("State");
+                    var valor, texto;
+                    valor = $("id", obj).text();
+                    texto = $("name", obj).text();
+                    if (valor) {
+                        var html = "<option value='$1'>$2</option>";
+                        html = html.replace("$1", valor);
+                        html = html.replace("$2", texto);
+                        $("#CompanyStateId").append(html);
+                    }
+                });
+            });
+        });
+        $("#CompanyPersDocumento").keyup(function() {
+//            alert("aasd");
+            var url = urlbase + "companies/search.xml";
+            var datos = {
+                documento: $(this).val()
+            };
+            ajax(url, datos, function(xml) {
+                $("datos", xml).each(function() {
+                    var obj = $(this).find("Person");
+                    var nombre, apellido, ciudad, direccion, telefono, id;
+                    id = $("id", obj).text();
+                    nombre = $("pers_primNombre", obj).text();
+                    apellido = $("pers_primApellido", obj).text();
+                    ciudad = $("city_id", obj).text();                    
+                    direccion = $("pers_direccion", obj).text();
+                    telefono = $("pers_telefono", obj).text();
+                    if(nombre !== null){                        
+                        $("#CompanyPers_id").val(id);
+                        $("#CompanyPersPrimNombre").val(nombre);
+                        $("#CompanyPersPrimApellido").val(apellido);
+                        $("#CompanyCityId option[value="+ciudad+"]").attr("selected",true);
+                        $("#CompanyPersDireccion").val(direccion);
+                        $("#CompanyPersTelefono").val(telefono);
+                    } else {
+                        $("#CompanyCityId option[value='']").attr("selected",true);
+                        $("#CompanyPersPrimNombre").val();
+                        $("#CompanyPersPrimApellido").val();
+                        $("#CompanyPersDireccion").val();
+                        $("#CompanyPersTelefono").val();
+                    }
+                });
+            });
+        });
+    });
+</script>
