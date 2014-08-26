@@ -51,7 +51,8 @@
                 <td><?php
                     echo $this->Form->input('city_id', array(
                         'label' => 'Ciudad',
-                        "empty" => "Seleccione Una Ciudad"
+                        "empty" => "Seleccione Una Ciudad",
+                        'required' => 'true'
                     ));
                     ?></td>
                 <td><?php
@@ -194,8 +195,8 @@
                     ciudad = $("city_id", obj).text();                    
                     direccion = $("pers_direccion", obj).text();
                     telefono = $("pers_telefono", obj).text();
-                    if(nombre !== null){
-                        $("#CompanyPersId").val(id);
+                    if(nombre !== null){                        
+                        $("#CompanyPers_id").val(id);
                         $("#CompanyPersPrimNombre").val(nombre);
                         $("#CompanyPersPrimApellido").val(apellido);
                         $("#CompanyCityId option[value="+ciudad+"]").attr("selected",true);
