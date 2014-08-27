@@ -47,15 +47,35 @@ class CommitteesController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
+			$datos = $this->request->data;
 			$this->Committee->create();
 			if ($this->Committee->save($this->request->data)) {
-				$this->Session->setFlash(__('The committee has been saved.'));
+				$newCommitteeId = $this->Committee->getLastInsertId();
+				$this->loadModel('CommitteesEvents');
+
+				$newCommittee = $this->CommitteesEvents->create();
+		        $newCommittee = array(
+		        	'CommitteesEvents' => array(
+		        		'committee_id' => $newCommitteeId,
+		        		'event_id'=> $datos['Committee']['event_id']
+		        		));
+
+		        $this->CommitteesEvents->save($newCommittee);
+
+				$this->Session->setFlash('El comité se ha guardado con éxito', 'good');
 				return $this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The committee could not be saved. Please, try again.'));
 			}
+
 		}
-		$events = $this->Committee->Event->find('list');
+		$this->loadModel('Events');
+        $events = $this->Events->find('list', array(
+            'fields' => array(
+                "Events.even_nombre"
+            )
+        ));
+		//debug($events);
 		$this->set(compact('events'));
 	}
 
@@ -72,7 +92,7 @@ class CommitteesController extends AppController {
 		}
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->Committee->save($this->request->data)) {
-				$this->Session->setFlash(__('The committee has been saved.'));
+				$this->Session->setFlash('El comité se ha editado con éxito', 'good');
 				return $this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The committee could not be saved. Please, try again.'));
@@ -81,7 +101,12 @@ class CommitteesController extends AppController {
 			$options = array('conditions' => array('Committee.' . $this->Committee->primaryKey => $id));
 			$this->request->data = $this->Committee->find('first', $options);
 		}
-		$events = $this->Committee->Event->find('list');
+			$this->loadModel('Events');
+        $events = $this->Events->find('list', array(
+            'fields' => array(
+                "Events.even_nombre"
+            )
+        ));
 		$this->set(compact('events'));
 	}
 
@@ -99,7 +124,7 @@ class CommitteesController extends AppController {
 		}
 		$this->request->allowMethod('post', 'delete');
 		if ($this->Committee->delete()) {
-			$this->Session->setFlash(__('The committee has been deleted.'));
+			$this->Session->setFlash('el comité ha sido borrado', 'good');
 		} else {
 			$this->Session->setFlash(__('The committee could not be deleted. Please, try again.'));
 		}

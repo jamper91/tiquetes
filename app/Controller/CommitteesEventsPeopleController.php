@@ -137,14 +137,6 @@ class CommitteesEventsPeopleController extends AppController {
 		$committees_id = $this->request->data['committees_id'];
 		$cantidad = $this->request->data['cantidad'];
 
-		if($this->request->is(array('post', 'put')))
-		{
-			debug($this->request->data);
-			for($i=0; $i<=$cantidad; $i++)
-			{
-
-			}
-		}
 		$this->set('event_id', $event_id);
 		$this->set('committees_id', $committees_id);
 		$this->set('cantidad', $cantidad);
@@ -153,35 +145,79 @@ class CommitteesEventsPeopleController extends AppController {
 	public function registrarPersona()
 	{
 		$data=$this->request->data;
+			$this->loadModel('Person');
+			$people = $this->Person->find("first", array(
+	                "conditions" => array(
+	                    'Person.pers_documento' => $data['documento']),
+	                "fields" => array(
+	                    "Person.id"
+	                )
+	            ));
 
-		$this->loadModel('People');
-		$newPeole = $this->People->create();
-            $newPeole = array(
-                'People' => array(
-                    'pers_primNombre' => $data['nombre'],
-                    'pers_primApellido' => $data['apellido'],
-                    //'city_id' => $data['User']['city_id'],
-                    'pers_documento' => $data['documento'],
-                    'pers_direccion' => $data['direccion'],
-                    // 'pers_telefono' => $data['People']['pers_telefono'],
-                    // 'pers_celular' => $data['People']['pers_celular'],
-                    // 'pers_fechNacimiento' => $data['People']['pers_fechNacimiento'],
-                    // 'pers_tipoSangre' => $data['People']['pers_tipoSangre'],
-                    'pers_mail' => $data['correo']
-                )
-            );
+			if($people == null)
+			{
+				$this->loadModel('People');
+				$newPeole = $this->People->create();
+		        $newPeole = array(
+		            'People' => array(
+		                'pers_primNombre' => $data['nombre'],
+		                'pers_primApellido' => $data['apellido'],
+		                //'city_id' => $data['User']['city_id'],
+		                'pers_documento' => $data['documento'],
+		                'pers_direccion' => $data['direccion'],
+		                // 'pers_telefono' => $data['People']['pers_telefono'],
+		                // 'pers_celular' => $data['People']['pers_celular'],
+		                // 'pers_fechNacimiento' => $data['People']['pers_fechNacimiento'],
+		                // 'pers_tipoSangre' => $data['People']['pers_tipoSangre'],
+		                'pers_mail' => $data['correo']
+		            )
+		        );
 
-            $this->People->save($newPeole);
-            $newPeopleId = $this->People->getLastInsertId();
-          	$a['person']['valor'] = $newPeopleId;
-            //aqui debo de guardar en la tabla committeeEventPeople
+		        $this->People->save($newPeole);
+		        $newPeopleId = $this->People->getLastInsertId();
+		        //debug($newPeopleId);
+		      	$a['person']['valor'] = $newPeopleId;
+		    }
+		    else
+		    {
+		    	$newPeopleId = $people['Person']['id'];
+		    	$a['person']['valor'] = $newPeopleId;
+		    }
 
-		  $this->set(
-                array(
-                    "datos" => $a,
-                    "_serialize" => array("datos")
-                )
-        );
+	    //buscar la información en committeeEvent
+	      	$this->loadModel('CommitteesEvents');
+	      	$CommitteesEvents = $this->CommitteesEvents->find("first", array(
+	                "conditions" => array(
+	                    'CommitteesEvents.committee_id' => $data['committee_id'],
+	                	'CommitteesEvents.event_id' => $data['event_id']),
+	                "fields" => array(
+	                    "CommitteesEvents.id",
+	                )
+	            ));
+
+
+	    //aqui debo de guardar en la tabla committeeEventPeople
+	        $newCommittee = $this->CommitteesEventsPerson->create();
+	        $newCommittee = array(
+	        	'CommitteesEventsPerson' => array(
+	        		'person_id' => $newPeopleId,
+	        		'committees_event_id'=> $CommitteesEvents['CommitteesEvents']['id']
+	        		));
+
+	        $this->CommitteesEventsPerson->save($newCommittee);
+	        $newCEP_id = $this->CommitteesEventsPerson->getLastInsertId();
+
+			$this->set(
+	                array(
+	                    "datos" => $a,
+	                    "_serialize" => array("datos")
+	                )
+	        );
+		//}
+		// if($data['cantidad'] == 0)
+  //       {
+  //       	return $this->redirect(array('action' => 'index'));	
+  //       }
 	}
 
 }
