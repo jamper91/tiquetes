@@ -42,6 +42,7 @@
 		<td><?php echo h($event['Event']['even_publicar']); ?>&nbsp;</td>
 		<td><?php echo h($event['Event']['even_codigo']); ?>&nbsp;</td>
 		<td class="actions">
+			<?php echo $this->Html->link(__('Mapeo'), array('action' => 'mapea', $event['Event']['id'],0)); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $event['Event']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $event['Event']['id']), array(), __('Are you sure you want to delete # %s?', $event['Event']['id'])); ?>
 		</td>

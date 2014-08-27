@@ -27,6 +27,49 @@ class EventsController extends AppController {
         $this->set('events', $this->Paginator->paginate());
     }
 
+
+    public function mapea($id=null){
+        if (!$this->Event->exists($id)) {
+            throw new NotFoundException(__('Invalid stage'));
+        }
+        $this->loadModel('Location');
+        $options = array('conditions' => array('Event.' . $this->Event->primaryKey => $id));
+        $this->set('event', $this->Event->find('first', $options));
+        $this->set('locations',$this->Location->find("all",array("conditions"=>array('Location.event_id'=>$id)   )));
+
+
+        
+    }
+
+
+    public function guardacoords(){
+
+
+        var_dump($_POST);
+        $this->loadModel('Location');
+        $this->Location->updateAll(
+            array('Location.coord' => 'CONCAT(Location.coord, "' . $_POST["coord"].'")'),                    
+            array('Location.id' => $_POST["location"])
+        );
+
+
+
+
+
+        
+    }
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * view method
      *

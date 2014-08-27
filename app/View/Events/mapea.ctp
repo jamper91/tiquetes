@@ -1,11 +1,19 @@
+
 <div id="contenido">
 
 
 <?php
 
+/*echo "<pre>";
+var_dump($locations);
+echo "</pre>";
+*/
+
+$stage=$event["Event"]["stage_id"];
 $parametros=$this->request->params["pass"];
 
-echo "<h1>".$stage["Stage"]["esce_nombre"]."</h1>";
+echo "<h1>".$event["Event"]["even_nombre"]."</h1>";
+echo "<h2>".$event["Stage"]["esce_nombre"]."</h2>";
 
 if($parametros[1]>0){
   echo "<p>".$this->Html->link(__('Finalizar Edicion'), array('action' => 'mapea', $parametros[0],0),array('class'=>'btn btn-success btn-mini'))."</p>"; 
@@ -14,23 +22,29 @@ if($parametros[1]>0){
 
 echo "<b>Localidades:</b> ";
 
-foreach ($stage["Location"] as $value) {
-  echo "<li> <b>".$this->Html->link($value["loca_nombre"], array(
-    'controller'=>'Stages','action'=>'mapea',$parametros[0],$value["id"]))."</b>";
-
- echo ($value["coord"]!=" ")? "(SI) ":" (NO) ";
 
 
-  echo "</li>";
-  
+
+foreach ($locations as $key => $value) {
+
+    $value=$value["Location"];
+
+    echo "<li> <b>".$this->Html->link($value["loca_nombre"], array(
+        'controller'=>'Events','action'=>'mapea',$parametros[0],$value["id"]))."</b>";
+
+     echo ($value["coord"]!=" ")? "(SI) ":" (NO) ";
+
+      echo "</li>";
 }
+
+
 
 
 
 ?>
 
 
-<img id="mapeos" src="<?php echo $this->webroot.'/img/escenario/'.$stage["Stage"]["esce_mapa"] ?>" usemap="#esenario" >
+<img id="mapeos" src="<?php echo $this->webroot.'/img/escenario/'.$event["Stage"]["esce_mapa"] ?>" usemap="#esenario" >
 <map id="image_map" name="esenario">
 
 
@@ -44,7 +58,9 @@ if($parametros[1]!=0){ // si estamos en edicion
 
 }
 
- foreach ($stage["Location"] as $location) {  ?>
+ foreach ($locations as $key => $value) {
+
+    $location=$value["Location"];  ?>
   
 <area  <?=$href?>  full="<?=$location['loca_nombre']?>" shape="poly" coords="<?=$location['coord']?> " state="WL-<?=$location['id']?>"  nohref ></area>
 <?php }  ?>
@@ -94,7 +110,7 @@ $( '#mapeos' ).on( 'click', function( e ) {
     
     var coord=" "+clickX+","+clickY+",";
 
-    var formData = {stage:"<?=$parametros[0]?>",location:"<?=$parametros[1]?>",coord:coord}; //Array 
+    var formData = {event:"<?=$parametros[0]?>",location:"<?=$parametros[1]?>",coord:coord}; //Array 
  
         var form = $(this);
     $.ajax({
@@ -106,7 +122,7 @@ $( '#mapeos' ).on( 'click', function( e ) {
            
             console.log(formData.stage);
             
-            $("#contenido").load(urlbase+"Stages/mapea/"+formData.stage+"/"+formData.location+"");
+            $("#contenido").load(urlbase+"Events/mapea/"+formData.event+"/"+formData.location+"");
 
         },
         error: function (jqXHR, textStatus, errorThrown)
