@@ -238,7 +238,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                                 <span>Gestionar Comites</span>
                             </a>
                             <ul>
-                                <li><a href="<?= $this->Html->url(array("controller" => "CommitteesEventsPeople", "action" => "add")); ?>">Comites por evento</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "Committees", "action" => "add")); ?>">Crear comite</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "CommitteesEventsPeople", "action" => "add")); ?>">Conformar comite</a></li>
 
                             </ul>
                         </li>
