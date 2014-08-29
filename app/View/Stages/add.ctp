@@ -1,9 +1,8 @@
-
 <div class="stages form">
     <form method="POST" action="add" id="Stage" name="Stage" enctype="multipart/form-data">
     <?php // echo $this->Form->create('Stage'); ?>
     <fieldset>
-        <legend><?php echo __('Add Stage'); ?></legend>
+        <legend><?php echo __('AGREGAR ESCENARIO'); ?></legend>
         <table>
             <tr>
                 <td><?php echo 'País' ?></td>
@@ -75,13 +74,15 @@
 
     </fieldset>
     <?php // echo $this->Form->end(__('Submit')); ?>
-    <input type="submit">
+        <br>
+        <input type="submit" value="Crear" class="btn btn-success">
     </form>
 </div>
 <script>
     $(document).ready(function() {
-        $("#state_id").html("");
-        $("#city_id").html("");
+//        $("#state_id").html("");
+//        $("#city_id").html("");
+        
         $("#country_id").change(function() {
             var url = urlbase + "states/getStatesByCountry.xml";
             var datos = {
