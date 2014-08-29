@@ -1,7 +1,7 @@
 <div class="roleCompanies form">
 <?php echo $this->Form->create('RoleCompany'); ?>
 	<fieldset>
-		<legend><?php echo __('Add Role Company'); ?></legend>
+		<legend><?php echo __('Agregar Patrocinador'); ?></legend>
 	<?php
 		echo $this->Form->input('nombre');
 	?>
