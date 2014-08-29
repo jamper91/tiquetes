@@ -94,7 +94,6 @@ class EventsController extends AppController {
         if ($this->request->is('post')) {
             $data = $this->data;
             $this->loadModel('Event');
-// this is for the case you want to insert into 2 tables at a same time
 
             if (isset($this->request->data["even_imagen1"]) && (isset($this->request->data["even_imagen2"]))) {
                 $file1 = $this->request->data["even_imagen1"];
@@ -103,16 +102,17 @@ class EventsController extends AppController {
                 $tipo = $file1["type"];
                 $ruta_provicional = $file1["tmp_name"];
                 $size = $file2["size"];
-              $nombre2 = $file2["name"];
+                $nombre2 = $file2["name"];
                 $tipo2 = $file2["type"];
                 $ruta_provicional2 = $file2["tmp_name"];
                 $size2 = $file2["size"];
 //                  $dimensiones = getimagesize($ruta_provicional);
 //                $width = $dimensiones[0];
 //                $height = $dimensiones[1];
-                $carpeta = WWW_ROOT . "/img/events/";
+                $carpeta = WWW_ROOT . "/img/events1/";
+                $carpeta2 = WWW_ROOT . "/img/events2/";
                 $src = $carpeta . $nombre;
-                $src2 = $carpeta . $nombre2;
+                $src2 = $carpeta2 . $nombre2;
                 move_uploaded_file($ruta_provicional, $src);
                 move_uploaded_file($ruta_provicional2, $src2);
                 $newEvent = $this->Event->create();
@@ -121,13 +121,13 @@ class EventsController extends AppController {
                         'city_id' => $data['city_id'],
                         'stage_id' => $data['stage_id'],
                         'event_type_id' => $data['event_type_id'],
-                        'even_nombre' => $data['even_nombre'],
+                        'even_nombre' => $data['even_nombre'],// strtoupper($src2)
                         'even_numeResolucion' => $data['even_numeResolucion'],
                         'even_palaClave' => $data['even_palaClave'],
                         'even_observaciones' => $data['even_observaciones'],
                         'even_estado' => $data['even_estado'],
-                        'even_imagen1' => $src,
-                        'even_imagen2' => $src2,
+                        'even_imagen1' => $nombre,
+                        'even_imagen2' => $nombre2,
                         'even_fechInicio' => $data['even_fechInicio'],
                         'even_fechFinal' => $data['even_fechFinal'],
                         'even_publicar' => $data['even_publicar'],
@@ -135,24 +135,57 @@ class EventsController extends AppController {
                     )
                 );
                 try {
-                    $this->Event->save($newPeole);
+                    $this->Event->save($newEvent);
                     $newEventId = $this->Event->getLastInsertId();
-
-//                    $newUser = $this->User->create();
-//                    $newUser = array(
-//                        'User' => array(
-//                            'person_id' => $newPeopleId,
-//                            'username' => $data['User']['username'],
-//                            'password' => $data['User']['password'],
-//                            'estado' => 1,
-//                            'type_user_id' => $data['User']['type_user_id'],
-//                            'department_id' => $data['User']['department_id'],
-//                            'validodesde' => $data['User']['validodesde']['year'] . '-' . $data['User']['validodesde']['month'] . '-' . $data['User']['validodesde']['day'],
-//                            'validohasta' => $data['User']['validohasta']['year'] . '-' . $data['User']['validohasta']['month'] . '-' . $data['User']['validohasta']['day'],
-//                            'identificador' => $data['User']['Identificador']
-//                        )
-//                    );
-//                    $this->User->save($newUser);
+                    
+                    foreach ($data['Committee'] as $Committee_id) {
+                    $newCommittesEvent = $this->CommitteesEvent->create();
+                        $newCommittesEvent = array(
+                            'CommittesEvent' => array(
+                            'committee_id' => $Committee_id,
+                            'event_id' => $newEventId
+                            )
+                        );
+                        $this->CommitteesEvent->save($newCommittesEvent);
+                    }
+                    
+                    
+                    foreach ($data['Company'] as $Company_id) {
+                    $newCompaniesEvent = $this->CompaniesEvent->create();
+                        $newCompaniesEvent = array(
+                            'CompaniesEvent' => array(
+                            'committee_id' => $Company_id,
+                            'event_id' => $newEventId
+                            )
+                        );
+                        $this->CompaniesEvent->save($newCompaniesEvent);
+                    }
+                    
+                    
+                    foreach ($data['Hotel'] as $Hotel_id) {
+                    $newEventsHotel = $this->EventsHotel->create();
+                        $newEventsHotel = array(
+                            'EventsHotel' => array(
+                            'hotel_id' => $Hotel_id,
+                            'event_id' => $newEventId
+                            )
+                        );
+                        $this->EventsHotel->save($newEventsHotel);
+                    }
+                    
+                    
+                    foreach ($data['Payment'] as $Payment_id) {
+                    $newEventsPayment = $this->EventsPayment->create();
+                        $newEventsPayment = array(
+                            'EventsPayment' => array(
+                            'payment_id' => $Payment_id,
+                            'event_id' => $newEventId
+                            )
+                        );
+                        $this->EventsPayment->save($newEventsPayment);
+                    }
+                    
+//                  
 //                    $usuario = $this->User->getLastInsertId();
 //                    $this->loadModel('Authorization');
 //                    $newAutirizationsUser = $this->Authorization->create();
@@ -191,7 +224,7 @@ class EventsController extends AppController {
 
         $this->set(compact('state'));
 
-        //$cities = $this->Stage->City->find('list');
+//        $cities = $this->Stage->City->find('list');
         $this->set(compact('cities'));
 
         $this->set(compact('stages'));
