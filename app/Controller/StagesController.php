@@ -148,7 +148,7 @@ class StagesController extends AppController {
 //                    $this->Session->setFlash(__('Debe ingresar un nombre.', 'error'));
 //                }
 //            } else {
-                $this->Session->setFlash(__('Debe seleccionar una ciudad.', 'error'));
+//                $this->Session->setFlash(__('Debe seleccionar una ciudad.', 'error'));
             }
         }
 
@@ -179,28 +179,41 @@ class StagesController extends AppController {
             throw new NotFoundException(__('Invalid stage'));
         }
         if ($this->request->is(array('post', 'put'))) {
-
-            $file = $this->request->data["Stage"]["esce_mapa"];
-            //var_dump($file);
+            $file = $this->request->data["Stage"]["esce_mapa2"];
+//                debug($file);
             $nombre = $file["name"];
-            $tipo = $file["type"];
-            $ruta_provicional = $file["tmp_name"];
-            $size = $file["size"];
-            $dimensiones = getimagesize($ruta_provicional);
-            $width = $dimensiones[0];
-            $height = $dimensiones[1];
-            $carpeta = WWW_ROOT . "/img/escenario/";
-            $src = $carpeta . $nombre;
-            if ($tipo != 'image/jpeg') {
-                $this->Session->setFlash(__('El archivo no es compatible solo recibe imagenes jpg o jepg.', 'error'));
-            } elseif ($width != 500 && $height != 500) {
-                $this->Session->setFlash(__('Las dimenciones no son correctas deben ser 500px X 500px.', 'error'));
+            if ($nombre != "") {
+                $tipo = $file["type"];
+                $ruta_provicional = $file["tmp_name"];
+                $size = $file["size"];
+                $dimensiones = getimagesize($ruta_provicional);
+                $width = $dimensiones[0];
+                $height = $dimensiones[1];
+                $carpeta = WWW_ROOT . "/img/escenario/";
+                $src = $carpeta . $nombre;
+                if ($tipo != 'image/jpeg') {
+                    $this->Session->setFlash(__('El archivo no es compatible solo recibe imagenes jpg o jepg.', 'error'));
+                } elseif ($width != 500 && $height != 500) {
+                    $this->Session->setFlash(__('Las dimenciones no son correctas deben ser 500px X 500px.', 'error'));
+                } else {
+                    move_uploaded_file($ruta_provicional, $src);
+
+                    $this->request->data["Stage"]["esce_mapa"] = $nombre;
+
+                    if ($this->Stage->save($this->request->data)) {
+                        CakeSession::write('sw', '0');
+                        $this->Session->setFlash(__('El escenario se editó correctamente.'));
+                        return $this->redirect(array('action' => 'index'));
+                    } else {
+                        $this->Session->setFlash(__('El escenario no pudo ser editado. Por favor, intente nuevamente.'));
+                    }
+                }
             } else {
-                move_uploaded_file($ruta_provicional, $src);
-
+                $nombre = $this->request->data["nameImage"];
+                debug($nombre);
                 $this->request->data["Stage"]["esce_mapa"] = $nombre;
-
                 if ($this->Stage->save($this->request->data)) {
+                    CakeSession::write('sw', '0');
                     $this->Session->setFlash(__('El escenario se editó correctamente.'));
                     return $this->redirect(array('action' => 'index'));
                 } else {
@@ -211,6 +224,7 @@ class StagesController extends AppController {
             $options = array('conditions' => array('Stage.' . $this->Stage->primaryKey => $id));
             $this->request->data = $this->Stage->find('first', $options);
         }
+
         $countries = $this->Stage->City->State->Country->find('list');
         $this->set(compact('countries'));
 

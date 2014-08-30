@@ -1,7 +1,16 @@
 <div class="stages form">
-    <?php echo $this->Form->create('Stage', array( 'enctype'=>'multipart/form-data')); ?>
+    <?php echo $this->Form->create('Stage', array('enctype' => 'multipart/form-data')); ?>
     <fieldset>
         <legend><?php echo __('Editando Escenario'); ?></legend>
+        <?php
+        if (CakeSession::read('sw') != '1') {
+            if ($this->Form->data['Stage']['esce_mapa'] != "") {
+                $nameimg = $this->Form->data['Stage']['esce_mapa'];
+                CakeSession::write('nameimage', $nameimg);
+                CakeSession::write('sw', '1');
+            }
+        }
+        ?>
         <table>
             <tr>
                 <td>
@@ -45,13 +54,27 @@
             </tr>
             <tr>
                 <td >
-                    <!--<img id="viewprev" src="<?php // echo $this->webroot.'/img/escenario/'."esce_mapa"  ?>" align="center">-->
-                    <?php // echo $this->Html->image( '/escenario/'.'esce_mapa'); ?>
-                    <!--<img width="100px" id="imgprev" src="<?php // echo $this->webroot . '/img/escenario/' . $this->Form->data['Stage']['esce_mapa'] ?>" >-->
+                    <?php
+                    $sename = "";
+                    $sename = CakeSession::read('nameimage');
+                    $nombrese = $sename;
+//                    debug($nombrese);
+//                    $sename =$this->Session->read('nameimage'); 
+                    ?>
+                    <?php
+                    //style="visibility: hidden"  , 'required' => 'true'
+                    ?>
+                    <img width="100px" style=""  id="imgprev" name="imgprev" src="<?php echo $this->webroot . '/img/escenario/' . $nombrese ?>" >
+                    <input type="hidden" id="nameImage" name="nameImage" value="<?php echo $nombrese ?>"
                 </td>
                 <td>&nbsp;</td>
                 <td>
-                    <?php echo $this->Form->input('esce_mapa', array('type' => 'file', 'label' => 'MAPA', 'required'=> 'true')); ?>
+                    <input type="checkbox" id="habimg" name="habimg">&nbsp;Cambiar imagen
+                    <div id="imgyes" style=" display: none">
+                        <?php
+                        echo $this->Form->input('esce_mapa2', array('type' => 'file', 'label' => 'MAPA'));
+                        ?>
+                    </div>
                 </td>
             </tr>
         </table>
@@ -60,16 +83,16 @@
         ?>              
 
     </fieldset>
-    <?php // echo $this->Form->end(__('Submit',array('class'=>'btn btn-success'))); ?>
+    <?php // echo $this->Form->end(__('Submit',array('class'=>'btn btn-success')));   ?>
     <br>
-        <input type="submit" value="Actuailizar" class="btn btn-warning">
+    <input type="submit" value="Actuailizar" class="btn btn-warning">
 </div>
 <script>
     $(document).ready(function() {
 //        $("#state_id").html("");
 //        $("#city_id").html("");
 
-        
+
         $("#StageCountryId").change(function() {
             var url = urlbase + "states/getStatesByCountry.xml";
             var datos = {
@@ -115,4 +138,15 @@
         });
     });
 //       
+</script>
+<script>
+    $("#habimg").change(function() {
+//    alert($("#habimg").is(':checked'));
+        if ($("#habimg").is(':checked') === true) {
+            $("#imgyes").css("display", "block");
+        } else {
+            $("#imgyes").css("display", "none");
+        }
+
+    });
 </script>
