@@ -27,40 +27,24 @@ class StagesController extends AppController {
         $this->set('stages', $this->Paginator->paginate());
     }
 
-
-    public function mapea($id=null){
+    public function mapea($id = null) {
         if (!$this->Stage->exists($id)) {
             throw new NotFoundException(__('Invalid stage'));
         }
 
         $options = array('conditions' => array('Stage.' . $this->Stage->primaryKey => $id));
         $this->set('stage', $this->Stage->find('first', $options));
-
-
-        
     }
 
-
-    public function guardacoords(){
+    public function guardacoords() {
 
 
         var_dump($_POST);
         $this->loadModel('Location');
         $this->Location->updateAll(
-            array('Location.coord' => 'CONCAT(Location.coord, "' . $_POST["coord"].'")'),                    
-            array('Location.id' => $_POST["location"])
+                array('Location.coord' => 'CONCAT(Location.coord, "' . $_POST["coord"] . '")'), array('Location.id' => $_POST["location"])
         );
-
-
-
-
-
-        
     }
-
-
-
-
 
     public function beforeFilter() {
 
@@ -95,36 +79,48 @@ class StagesController extends AppController {
      * @return void
      */
     public function add() {
-        $src="";
+
         if ($this->request->is('post')) {
             $data = $this->data;
             $this->loadModel('Stage');
+//            if ($data['city_id'] != "") {
+//                if ($data['esce_nombre'] != "") {
+//                    if ($data['esce_direccion'] != "") {
+//                        if ($data['esce_telefono'] != "") {
+            $src = "";
             if (isset($this->request->data["doc_file"])) {
                 $file = $this->request->data["doc_file"];
                 $nombre = $file["name"];
                 $tipo = $file["type"];
+//                                debug($tipo);
                 $ruta_provicional = $file["tmp_name"];
                 $size = $file["size"];
-//                $dimensiones = getimagesize($ruta_provicional);
-//                $width = $dimensiones[0];
-//                $height = $dimensiones[1];
-                $carpeta = WWW_ROOT."/img/escenario/";
-                $src = $carpeta .$nombre;
-
+                $dimensiones = getimagesize($ruta_provicional);
+                $width = $dimensiones[0];
+//                                debug($width);
+                $height = $dimensiones[1];
+//                                debug($height);
+                $carpeta = WWW_ROOT . "/img/escenario/";
+                $src = $carpeta . $nombre;
+                if ($tipo != 'image/jpeg') {
+                    $this->Session->setFlash(__('El archivo no es compatible solo recibe imagenes jpg o jepg.', 'error'));
+                } elseif ($width != 500 && $height != 500) {
+                    $this->Session->setFlash(__('Las dimenciones no son correctas deben ser 500px X 500px.', 'error'));
+                } else {
                     move_uploaded_file($ruta_provicional, $src);
                     $newStage = $this->Stage->create();
                     $newStage = array(
                         'Stage' => array(
                             'city_id' => $data['city_id'],
-                            'esce_nombre' => $data['esce_nombre'],
-                            'esce_direccion' => $data['esce_direccion'],
+                            'esce_nombre' => strtoupper($data['esce_nombre']),
+                            'esce_direccion' => strtoupper($data['esce_direccion']),
                             'esce_telefono' => $data['esce_telefono'],
                             //'esce_mapa' => $src
                             'esce_mapa' => $nombre
                         )
                     );
                     try {
-                        $this->Stage->save($newStage);                        
+                        $this->Stage->save($newStage);
                         return $this->redirect(array('action' => 'index'));
                     } catch (Exception $ex) {
                         $error2 = $ex->getCode();
@@ -133,23 +129,28 @@ class StagesController extends AppController {
                         }
                     }
                     if ($this->Stage->save($this->request->data)) {
-                        $this->Session->setFlash(__('The stage has been saved.'));
+                        $this->Session->setFlash(__('El escenario se guardo con Exito.'));
                         return $this->redirect(array('action' => 'index'));
                     } else {
-                        $this->Session->setFlash(__('The stage could not be saved. Please, try again.'));
+                        $this->Session->setFlash(__('El escenario no pudo ser guardado. Por favor, intente de nuevo.'));
                     }
-//                if ($tipo != 'image/jpg' || $tipo = 'image/jepg') {
-//                    echo "Error el archivo no es compatible solo recibe imagenes jpg o jepg";
-////                } elseif ($width > 500 && $height > 500) {
-////                    echo "Error las dimenciones no son correctas";
+                }
+//                            } else {
+//                                $this->Session->setFlash(__('Debe seleccionar un archivo.', 'error'));
+//                            }
+//                        } else {
+//                            $this->Session->setFlash(__('Debe ingresar un número telefonico.', 'error'));
+//                        }
+//                    } else {
+//                        $this->Session->setFlash(__('Debe ingresar la dirección.', 'error'));
+//                    }
 //                } else {
-//                    
-////                    echo '<img src="$src" />';
-//                    
+//                    $this->Session->setFlash(__('Debe ingresar un nombre.', 'error'));
 //                }
+//            } else {
+//                $this->Session->setFlash(__('Debe seleccionar una ciudad.', 'error'));
             }
         }
-
 
         $this->loadModel('Country');
         $countriesName = $this->Country->find('list', array(
@@ -159,10 +160,10 @@ class StagesController extends AppController {
             "recursive" => -2
         ));
         $this->set(compact('countriesName'));
-
+        $state = $this->Stage->City->State->find('list');
         $this->set(compact('state'));
 
-        //$cities = $this->Stage->City->find('list');
+        $cities = $this->Stage->City->find('list');
         $this->set(compact('cities'));
     }
 
@@ -178,37 +179,58 @@ class StagesController extends AppController {
             throw new NotFoundException(__('Invalid stage'));
         }
         if ($this->request->is(array('post', 'put'))) {
-
-            $file = $this->request->data["Stage"]["esce_mapa"];
-            //var_dump($file);
-
-
-
-                $nombre = $file["name"];
+            $file = $this->request->data["Stage"]["esce_mapa2"];
+//                debug($file);
+            $nombre = $file["name"];
+            if ($nombre != "") {
                 $tipo = $file["type"];
                 $ruta_provicional = $file["tmp_name"];
                 $size = $file["size"];
-//                $dimensiones = getimagesize($ruta_provicional);
-//                $width = $dimensiones[0];
-//                $height = $dimensiones[1];
-                $carpeta = WWW_ROOT."/img/escenario/";
-                $src = $carpeta .$nombre;
+                $dimensiones = getimagesize($ruta_provicional);
+                $width = $dimensiones[0];
+                $height = $dimensiones[1];
+                $carpeta = WWW_ROOT . "/img/escenario/";
+                $src = $carpeta . $nombre;
+                if ($tipo != 'image/jpeg') {
+                    $this->Session->setFlash(__('El archivo no es compatible solo recibe imagenes jpg o jepg.', 'error'));
+                } elseif ($width != 500 && $height != 500) {
+                    $this->Session->setFlash(__('Las dimenciones no son correctas deben ser 500px X 500px.', 'error'));
+                } else {
                     move_uploaded_file($ruta_provicional, $src);
-              
-            $this->request->data["Stage"]["esce_mapa"]=$nombre;        
 
+                    $this->request->data["Stage"]["esce_mapa"] = $nombre;
 
-
-            if ($this->Stage->save($this->request->data)) {
-                $this->Session->setFlash(__('The stage has been saved.'));
-                return $this->redirect(array('action' => 'index'));
+                    if ($this->Stage->save($this->request->data)) {
+                        CakeSession::write('sw', '0');
+                        $this->Session->setFlash(__('El escenario se editó correctamente.'));
+                        return $this->redirect(array('action' => 'index'));
+                    } else {
+                        $this->Session->setFlash(__('El escenario no pudo ser editado. Por favor, intente nuevamente.'));
+                    }
+                }
             } else {
-                $this->Session->setFlash(__('The stage could not be saved. Please, try again.'));
+                $nombre = $this->request->data["nameImage"];
+                debug($nombre);
+                $this->request->data["Stage"]["esce_mapa"] = $nombre;
+                if ($this->Stage->save($this->request->data)) {
+                    CakeSession::write('sw', '0');
+                    $this->Session->setFlash(__('El escenario se editó correctamente.'));
+                    return $this->redirect(array('action' => 'index'));
+                } else {
+                    $this->Session->setFlash(__('El escenario no pudo ser editado. Por favor, intente nuevamente.'));
+                }
             }
         } else {
             $options = array('conditions' => array('Stage.' . $this->Stage->primaryKey => $id));
             $this->request->data = $this->Stage->find('first', $options);
         }
+
+        $countries = $this->Stage->City->State->Country->find('list');
+        $this->set(compact('countries'));
+
+//        $states = $this->Stage->City->State->find('list');
+//        $this->set(compact('states'));
+
         $cities = $this->Stage->City->find('list');
         $this->set(compact('cities'));
     }

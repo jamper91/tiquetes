@@ -16,6 +16,7 @@ class PeopleController extends AppController {
      * @var array
      */
     public $components = array('Paginator', 'Auth', 'Session', 'RequestHandler');
+    public $helpers = array('PhpExcel');
 
     /**
      * index method
@@ -427,6 +428,49 @@ class PeopleController extends AppController {
 
             $datos = $this->Person->query($conditions);
             $this->set("datos", $datos);
+        }
+    }
+
+    public function importarUsuarios() {
+        
+    }
+
+    public function cargarUsuarios() {
+        if ($this->request->is("POST")) {
+
+            $datos = $this->request->data;
+//            debug($datos);
+            $tam = $datos['size'];
+            $inicio = "Se registraron  ";
+            $medio = "Y se actualizaron las personas con los siguientes numeros de documento: ";
+            $repetidos = "";
+            $cont = 0;
+            for ($i = 1; $i <= $tam; $i++) {
+
+                $doc = $datos["doc$i"];
+                $nom = $datos["nom$i"];
+                $ape = $datos["ape$i"];
+                $dir = $datos["dir$i"];
+                $tel = $datos["tel$i"];
+                $mail = $datos["mail$i"];
+
+                $sql1 = "SELECT id FROM people WHERE pers_documento='" . $doc . "'";
+                $id = $this->Person->query($sql1);
+                if ($id == array()) {
+                    $cont = $cont+1;
+                    $sql = "INSERT INTO people (pers_documento, pers_primNombre, pers_primApellido, pers_direccion, pers_telefono, pers_mail) VALUES ('$doc','$nom','$ape','$dir','$tel', '$mail')";
+                    $this->Person->query($sql);
+                    $this->Session->setFlash('Datos cargados Correctamente', 'good');
+                    
+                } else {
+                    $repetidos = $repetidos.", ".$doc;
+                    $sql2 = "UPDATE `people` SET `pers_primNombre`='$nom',`pers_primApellido`='$ape',`pers_direccion`='$dir',`pers_telefono`=$tel,`pers_mail`='$mail' WHERE `pers_documento` = '$doc'";
+                    $this->Person->query($sql2);
+                    $this->Session->setFlash($inicio.$cont." nuevas personas. ". $medio.$repetidos.".", 'good');
+                }                
+            }
+            
+//            debug($repetidos);
         }
     }
 
