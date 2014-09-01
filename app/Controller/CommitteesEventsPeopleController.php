@@ -61,7 +61,10 @@ class CommitteesEventsPeopleController extends AppController {
         $events = $this->Events->find('list', array(
             'fields' => array(
                 "Events.even_nombre"
-            )
+            ),
+            'conditions' => array(
+            	"Events.Even_fechInicio>NOW()"
+            	)
         ));
         $this->set('events', $events);
 	}
