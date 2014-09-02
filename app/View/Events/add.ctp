@@ -3,7 +3,7 @@ echo $this->Html->script(array('jquery.multi-select', 'jscal2', 'es'));
 echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'));
 ?>
 <div class="events form">
-    <?php // echo $this->Form->create('Event'); ?>
+    <?php // echo $this->Form->create('Event',array('enctype'=>'multipart/form-data')); ?>
     <form method="POST" action="add" id="Event" name="Event" enctype="multipart/form-data">
         <fieldset>
             <legend><?php echo __('AGREGAR EVENTO'); ?></legend>
@@ -16,9 +16,9 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                             "div" => array(
                                 "class" => "controls"
                             ),
-                            'label' => 'País',
+                            'label' => 'Pais',
                             "options" => $countriesName,
-                            "empty" => "Seleccione un País"
+                            "empty" => "Seleccione un Pais"
                         ));
                         ?>
                     </td>
@@ -45,7 +45,8 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                             ),
                             "label" => "Ciudad",
                             "options" => $cities,
-                            "empty" => "seleccione una ciudad"
+                            "empty" => "seleccione una ciudad",
+                            'required' => 'true'
                         ));
                         ?> 
                     </td>
@@ -57,7 +58,9 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                                 "class" => "controls"
                             ),
                             "label" => "Escenario",
-                            "options" => "Stage.esce_nombre",
+                            "options" => $stages, //"Stage.esce_nombre",
+                            "empty" => "seleccione un escenario",
+                            'required' => 'true'
                         ));
                         ?>
                     </td>
@@ -72,14 +75,15 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                             ),
                             "label" => "Tipo de Evento",
                             "options" => $eventTypesName,
-                            "empty" => "Seleccione Tipo de Evento"
+                            "empty" => "Seleccione Tipo de Evento",
+                            'required' => 'true'
                         ));
                         ?>
                     </td>
                     <td></td>
                     <td>
                         <?php
-                        echo $this->Form->input('even_codigo', array('label' => 'codigo del evento'));
+                        echo $this->Form->input('even_codigo', array('label' => 'Codigo del evento', 'required' => 'true'));
                         ?>
                     </td>
                 </tr>
@@ -87,49 +91,52 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                     <td></td>
                     <td>
                         <?php
-                        echo $this->Form->input('even_nombre', array('label' => 'Nombre'));
+                        echo $this->Form->input('even_nombre', array('label' => 'Nombre', 'required' => 'true'));
                         ?> 
                     </td>
                     <td></td>
                     <td>
                         <?php
-                        echo $this->Form->input('even_numeResolucion', array('label' => 'Numero de Resolucion'));
+                        echo $this->Form->input('even_numeResolucion', array('label' => 'Numero de Resolucion', 'required' => 'true'));
                         ?>
                     </td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td>
+                        <label  for= "EventPalaClave" > Palabra clave </label> 
+                        <?php
+                        echo $this->Form->textarea('even_palaClave', array ( 'escape'  =>  false, 'autocapitalize'=>'off', 'required' => 'true', 'rows'=>'2', 'cols'=>'30','maxlength'=>'20' ));
+                        ?>
+                    </td>
+                    <td></td>
+                    <td>
+                        <label  for= "EventObservaciones" > Observaciones </label> 
+                        <?php
+                        echo $this->Form->textarea('even_observaciones', array ( 'escape'  =>  false, 'autocapitalize'=>'off', 'rows'=>'2', 'cols'=>'30','maxlength'=>'20' ));
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td ><img src="../img/calendario.png"  id="selector" name="selector" style="cursor:pointer" /></td>
+                    <td>
+                        <?php
+                        echo $this->Form->input('even_fechInicio', array('label' => 'fecha inicio', 'maxlength' => '15', 'readonly' => 'readonly', 'required' => 'true'));
+                        ?>                        
+                    </td>                    
+                    <td><img src="../img/calendario.png" id="selector2" name="selector2" style="cursor:pointer" /></td>
+                    <td>
+                        <?php
+                        echo $this->Form->input('even_fechFinal', array('label' => 'fecha final', 'maxlength' => '15', 'readonly' => 'readonly', 'required' => 'true'));
+                        ?> 
+                    </td>                    
                 </tr>
                 <tr>
                     <td></td>
                     <td>
                         <?php
-                        echo $this->Form->input('even_palaClave', array('label' => 'palabra clave'));
-                        ?>
-                    </td>
-                    <td></td>
-                    <td>
-                        <?php
-                        echo $this->Form->input('even_observaciones', array('label' => 'observaciones'));
-                        ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <?php
-                        echo $this->Form->input('even_estado', array('type' => 'checkbox', 'label' => 'estado'));
-                        ?>
-                    </td>
-                    <td></td>
-                    <td>
-                        <?php
-                        echo $this->Form->input('even_publicar', array('type' => 'checkbox', 'label' => 'publicar evento'));
-                        ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <?php
-                        echo $this->Form->input('even_imagen1', array('type' => 'file', 'label' => 'Imagen 1'));
+                        echo $this->Form->input('even_imagen1', array('type' => 'file', 'label' => 'Imagen 1', 'required' => 'true'));
                         ?>
                     </td>
                     <td></td>
@@ -140,25 +147,40 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                     </td>
                 </tr>
                 <tr>
-                    <td ><img src="../img/calendario.png"  id="selector" name="selector" style="cursor:pointer" /></td>
+                    <td><br></td>
                     <td>
                         <?php
-                        echo $this->Form->input('even_fechInicio', array('label' => 'fecha inicio', 'maxlength' => '15', 'readonly' => 'readonly'));
+                        ?>
+                    </td>
+                    <td></td>
+                    <td>
+                        <?php
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td ><img src="../img/calendario.png"  id="selector3" name="selector3" style="cursor:pointer" /></td>
+                    <td>
+                        <?php
+                        echo $this->Form->input('fechainiciopublicacion', array('label' => 'fecha inicio de publicacion', 'maxlength' => '15', 'readonly' => 'readonly'));
                         ?>                        
                     </td>                    
-                    <td><img src="../img/calendario.png" id="selector2" name="selector2" style="cursor:pointer" /></td>
+                    <td><img src="../img/calendario.png" id="selector4" name="selector4" style="cursor:pointer" /></td>
                     <td>
                         <?php
-                        echo $this->Form->input('even_fechFinal', array('label' => 'fecha final', 'maxlength' => '15', 'readonly' => 'readonly'));
-                        ?> 
+                        echo $this->Form->input('fechafinpublicacion', array('label' => 'fecha final de publicacion', 'maxlength' => '15', 'readonly' => 'readonly'));
+                        ?> <br>
                     </td>                    
                 </tr>
+
                 <tr>
                     <td></td>
                     <td>
                         <?php
-                        
+                        echo $this->Form->input('even_publicar', array('type' => 'checkbox', 'label' => 'Publicar evento'));
+//                        echo $this->Form->input('even_estado', array('type' => 'checkbox', 'label' => 'estado'));
                         ?>
+                        <br>
                     </td>
                     <td></td>
                     <td>
@@ -166,80 +188,97 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                         ?>
                     </td>
                 </tr>
-            </table>
 
-            <?php
-//        echo $this->Form->input('event_type_id');
-//            echo $this->Form->input('even_imagen1');
-//            echo $this->Form->input('even_imagen2');
-            ?>  
-
-            <?php
-//            echo $this->Form->input('Committee');
-//            echo $this->Form->input('Company');
-//            echo $this->Form->input('Hotel');
-            ?>
-            <!--id="EventsCommittee"-->
-            <div class="control-group" >
-                <label class="control-label">Comites</label>
-                <?php
-                echo $this->Form->input('Committee', array(
-                    "div" => array(
-                        "class" => "controls"
-                    ),
-                    "label" => "",
-                    "options" => $committees,
-                    "multiple" => true
-                ));
+                <tr>
+                    <td><br></td>
+                    <td>
+                        <!--id="EventsCompany"-->
+                        <div class="control-group" >
+                            <label class="control-label">Empresa Organizadora</label>
+                            <?php
+                            echo $this->Form->input('Company', array(
+                                "div" => array(
+                                    "class" => "controls"
+                                ),
+                                "label" => "",
+                                "options" => $companies,
+                                "multiple" => true
+                            ));
 //                    
-                ?>
-            </div>
-            <!--id="EventsCompany"-->
-            <div class="control-group" >
-                <label class="control-label">Empresa Organizadora</label>
-                <?php
-                echo $this->Form->input('Company', array(
-                    "div" => array(
-                        "class" => "controls"
-                    ),
-                    "label" => "",
-                    "options" => $companies,
-                    "multiple" => true
-                ));
+                            ?>
+                        </div>
+                        <?php
+                        ?>
+                    </td>
+                    <td></td>
+                    <td>
+                        <!--id="EventsCommittee"-->
+                        <div class="control-group" >
+                            <label class="control-label">Comites</label>
+                            <?php
+                            echo $this->Form->input('Committee', array(
+                                "div" => array(
+                                    "class" => "controls"
+                                ),
+                                "label" => "",
+                                "options" => $committees,
+                                "multiple" => true
+                            ));
 //                    
-                ?>
-            </div>
-            <!--id="EventsHotel"-->
-            <div class="control-group" >
-                <label class="control-label">Hoteles</label>
-                <?php
-                echo $this->Form->input('Hotel', array(
-                    "div" => array(
-                        "class" => "controls"
-                    ),
-                    "label" => "",
-                    "options" => $hotels,
-                    "multiple" => true
-                ));
+                            ?>
+                        </div>
+                        <?php
+                        ?>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td></td>
+                    <td>
+                        <!--id="EventsPayment"-->
+                        <div class="control-group"  >
+                            <label class="control-label">Medios de Pago</label>
+                            <?php
+                            echo $this->Form->input('Payment', array(
+                                "div" => array(
+                                    "class" => "controls"
+                                ),
+                                "label" => "",
+                                "options" => $paymentsName,
+                                "multiple" => true
+                            ));
 //                    
-                ?>
-            </div>
-            <!--id="EventsPayment"-->
-            <div class="control-group"  >
-                <label class="control-label">Medios de Pago</label>
-                <?php
-                echo $this->Form->input('Payment', array(
-                    "div" => array(
-                        "class" => "controls"
-                    ),
-                    "label" => "",
-                    "options" => $paymentsName,
-                    "multiple" => true
-                ));
+                            ?>
+                        </div>
+                        <?php
+                        ?>
+                    </td>
+                    <td></td>
+                    <td>
+                        <!--id="EventsHotel"-->
+                        <div class="control-group" >
+                            <label class="control-label">Hoteles</label>
+                            <?php
+                            echo $this->Form->input('Hotel', array(
+                                "div" => array(
+                                    "class" => "controls"
+                                ),
+                                "label" => "",
+                                "options" => $hotels,
+                                "multiple" => true
+                            ));
 //                    
-                ?>
-            </div>
-            <!--            <div class="control-group"  >
+                            ?>
+                        </div>
+                        <?php
+                        ?>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td><br></td>
+                    <td>
+                        <!--                        <div class="control-group"  >
                             <label class="control-label">Tipos de Registro</label>
             <?php
 //                echo $this->Form->input('RegistrationType', array(
@@ -253,16 +292,47 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
 //                    
             ?>
                         </div>-->
-            <?php
-//            echo $this->Form->input('Payment');
-//            echo $this->Form->input('RegistrationType');
-            ?>
+                        <?php
+                        ?>
+                    </td>
+                    <td></td>
+                    <td>
+                        <?php
+                        ?>
+                    </td>
+                </tr>
+            </table>
+
         </fieldset>
-        <input type="submit">
+        <input type="submit" value="Agregar" >
     </form>
-    <?php // echo $this->Form->end(__('Submit'));       ?>
+    <?php // echo $this->Form->end(__('Submit'));         ?>
 </div>
 <script>
+    $("#country_id").change(function() {
+//        alert($(this).val());
+        if ($(this).val() !== "") {
+            var url4 = urlbase + "cities/getCitiesByCountry.xml";
+            var datos4 = {
+                country_id: $(this).val()
+            };
+            ajax(url4, datos4, function(xml) {
+                $("#city_id").html("<option>Seleccione una ciudad</option>");
+                $("datos", xml).each(function() {
+                    var obj = $(this).find("City");
+                    var valor, texto;
+                    valor = $("id", obj).text();
+                    texto = $("name", obj).text();
+                    if (valor) {
+                        var html = "<option value='$1'>$2</option>";
+                        html = html.replace("$1", valor);
+                        html = html.replace("$2", texto);
+                        $("#city_id").append(html);
+                    }
+                });
+            });
+        }
+    });
 
     $("#state_id").change(function() {
         var url2 = urlbase + "cities/getCitiesByState.xml";
@@ -287,8 +357,8 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
     });
 
     $(document).ready(function() {
-        $("#state_id").html("");
-        $("#city_id").html("");
+//        $("#state_id").html("");
+//        $("#city_id").html("");
         $("#country_id").change(function() {
             var url = urlbase + "states/getStatesByCountry.xml";
             var datos = {
@@ -384,6 +454,26 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
     Calendar.setup({
         inputField: "even_fechFinal",
         trigger: "selector2",
+        onSelect: function() {
+            this.hide()
+        },
+        dateFormat: "%Y-%m-%d"
+    });
+</script>
+<script>
+    Calendar.setup({
+        inputField: "fechainiciopublicacion",
+        trigger: "selector3",
+        onSelect: function() {
+            this.hide()
+        },
+        dateFormat: "%Y-%m-%d"
+    });
+</script>
+<script>
+    Calendar.setup({
+        inputField: "fechafinpublicacion",
+        trigger: "selector4",
         onSelect: function() {
             this.hide()
         },
