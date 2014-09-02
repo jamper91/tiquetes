@@ -23,7 +23,11 @@ class RoleCompaniesController extends AppController {
      * @return void
      */
     public function index() {
-        $this->RoleCompany->recursive = 0;
+        $prueba = $this->RoleCompany->recursive = 0;
+        $sql = "SELECT r.id, c.empr_nombre, e.even_nombre, r.item FROM `role_companies` r INNER JOIN `companies` c ON c.id = r.company_id INNER JOIN `events` e ON e.id = r.event_id";
+        $patrocinadores = $this->RoleCompany->query($sql);
+        debug($patrocinadores);
+        $this->set(compact('patrocinadores'));
         $this->set('roleCompanies', $this->Paginator->paginate());
     }
 
@@ -49,7 +53,7 @@ class RoleCompaniesController extends AppController {
      */
     public function add() {
         $this->loadModel("Company");
-         $this->loadModel("Event");
+        $this->loadModel("Event");
         if ($this->request->is('post')) {
             $this->RoleCompany->create();
 //            debug($this->request->data);die;
@@ -72,7 +76,7 @@ class RoleCompaniesController extends AppController {
                 "Event.even_nombre",
                 "Event.even_fechInicio > NOW()"
             )
-        ));        
+        ));
         $this->set(compact('companies', 'events'));
     }
 
@@ -84,6 +88,8 @@ class RoleCompaniesController extends AppController {
      * @return void
      */
     public function edit($id = null) {
+        $this->loadModel("Company");
+        $this->loadModel("Event");
         if (!$this->RoleCompany->exists($id)) {
             throw new NotFoundException(__('Invalid role company'));
         }
@@ -96,7 +102,23 @@ class RoleCompaniesController extends AppController {
             }
         } else {
             $options = array('conditions' => array('RoleCompany.' . $this->RoleCompany->primaryKey => $id));
+            $datos = $this->RoleCompany->find('first', $options);
+            debug($datos);
             $this->request->data = $this->RoleCompany->find('first', $options);
+            $companies = $this->Company->find('list', array(
+                "fields" => array(
+                    "Company.id",
+                    "Company.empr_nombre"
+                )
+            ));
+            $events = $this->Event->find('list', array(
+                "fields" => array(
+                    "Event.id",
+                    "Event.even_nombre",
+                    "Event.even_fechInicio > NOW()"
+                )
+            ));
+            $this->set(compact('companies', 'events'));
         }
     }
 

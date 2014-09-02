@@ -3,15 +3,19 @@
     <fieldset>
         <legend><?php echo __('Editar'); ?></legend>
         <?php
-        echo $this->Form->input('company_id', array(
-            "div" => array(
-                "class" => "controls"
-            ),
-            "label" => "Empresa",
-            "empty" => "Seleccione una Empresa",
-            'required' => 'true'
-        ));
+//        if ($RoleCompany != array()) {
+//            $selected1 = $RoleCompany[0]["RoleCompany"]["company_id"];
 
+            echo $this->Form->input('company_id', array(
+                "div" => array(
+                    "class" => "controls"
+                ),
+                "label" => "Empresa",
+//                'selected'=>$selected1,
+                "empty" => "Seleccione una Empresa",
+                'required' => 'true'
+            ));
+//        }
         echo $this->Form->input('event_id', array(
             "div" => array(
                 "class" => "controls"
@@ -44,13 +48,13 @@
         $("#RoleCompanyCantidad").keydown(function(event) {
             return soloNumeros(event);
         });
-        
+
         $("#RoleCompanyPrecio").keydown(function(event) {
             return soloNumeros(event);
         });
-        
-        $("#RoleCompanyItem").on('keyup', function(){ 
-           $("#RoleCompanyItem").val(conMayusculas($(this).val()));
+
+        $("#RoleCompanyItem").on('keyup', function() {
+            $("#RoleCompanyItem").val(conMayusculas($(this).val()));
         });
     });
 </script>
