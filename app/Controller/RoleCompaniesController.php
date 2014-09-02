@@ -26,7 +26,6 @@ class RoleCompaniesController extends AppController {
         $prueba = $this->RoleCompany->recursive = 0;
         $sql = "SELECT r.id, c.empr_nombre, e.even_nombre, r.item FROM `role_companies` r INNER JOIN `companies` c ON c.id = r.company_id INNER JOIN `events` e ON e.id = r.event_id";
         $patrocinadores = $this->RoleCompany->query($sql);
-        debug($patrocinadores);
         $this->set(compact('patrocinadores'));
         $this->set('roleCompanies', $this->Paginator->paginate());
     }
@@ -90,12 +89,22 @@ class RoleCompaniesController extends AppController {
     public function edit($id = null) {
         $this->loadModel("Company");
         $this->loadModel("Event");
+        
         if (!$this->RoleCompany->exists($id)) {
             throw new NotFoundException(__('Invalid role company'));
         }
         if ($this->request->is(array('post', 'put'))) {
-            if ($this->RoleCompany->save($this->request->data)) {
-                $this->Session->setFlash(__('The role company has been saved.'));
+            $data = $data = $this->data;
+            debug($data);
+            $item = $data ["RoleCompany"]["item"];
+            $cant = $data ["RoleCompany"]["cantidad"];
+            $precio = $data ["RoleCompany"]["precio"];
+            $comp = $data ["RoleCompany"]["company_id"];
+            $event = $data ["RoleCompany"]["event_id"];
+            $query = "UPDATE `role_companies` SET `item`='$item',`cantidad`='$cant',`precio`='$precio',`company_id`=$comp,`event_id`=$event WHERE `id` = ".$id;
+            
+            if (!$this->RoleCompany->query($query)){
+                $this->Session->setFlash('Se ha actualizado exitosamente el proveedor.', 'good');
                 return $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash(__('The role company could not be saved. Please, try again.'));
@@ -103,7 +112,7 @@ class RoleCompaniesController extends AppController {
         } else {
             $options = array('conditions' => array('RoleCompany.' . $this->RoleCompany->primaryKey => $id));
             $datos = $this->RoleCompany->find('first', $options);
-            debug($datos);
+//            debug($datos);
             $this->request->data = $this->RoleCompany->find('first', $options);
             $companies = $this->Company->find('list', array(
                 "fields" => array(
