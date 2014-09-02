@@ -137,7 +137,7 @@ mysql_select_db("tiquetes", $conexion);
 
                     </tbody>            
         </table>        
-    <?php echo $this->Form->end(__('Buscar')); ?>
+    <?php echo $this->Form->end(__('Registrar')); ?>
 </div>
 <script language="javascript" type="text/javascript">
 //    function importarUsuarios(frm) {
