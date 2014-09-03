@@ -1,6 +1,6 @@
 <?php
-echo $this->Html->script(array('jquery.multi-select'));
-echo $this->Html->css(array('multi-select'));
+echo $this->Html->script(array('jquery.multi-select', 'jscal2', 'es'));
+echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'));
 ?>
 <div class="users form">    
     <?php echo $this->Form->create('User'); ?>
@@ -60,8 +60,8 @@ echo $this->Html->css(array('multi-select'));
             <tr>
                 <td>Teléfono</td>
                 <td><input type="text" id="PeoplePers_telefono" name="data[People][pers_telefono]"/></td>
-                <td>Fecha de Nacimiento</td>
-                <td><input type="text" id="PeoplePers_fechNacimiento" name="data[People][pers_fechNacimiento]"/></td>
+                <td>Fecha de Nacimiento<img src="<?php echo $this->webroot . '/img/calendario.png' ?>"  id="selector" name="selector" style="cursor:pointer" /></td>
+                <td><input type="text" id="PeoplePers_fechNacimiento" name="data[People][pers_fechNacimiento]" readonly="readonly" /></td>
             </tr>            
             <tr>
                 <td>Email</td>
@@ -98,20 +98,22 @@ echo $this->Html->css(array('multi-select'));
                 <td><input name="data[User][passwordConfirm]" required="true" id="UserPasswordConfirm" type="password"></td> 
                                 
             </tr>
-            <tr><td>Valido Desde</td>                
+            <tr><td>Valido Desde<img src="<?php echo $this->webroot . '/img/calendario.png' ?>"  id="selector2" name="selector2" style="cursor:pointer" /></td>                
                 <td>
+                    <input id="validodesde" name="validodesde" readonly="readonly" type="text" required="true">
                     <?php
-                    echo $this->Form->input('validodesde', array(
-                        'label' => ''
-                    ));
+//                    echo $this->Form->input('validodesde', array(
+//                        'label' => ''
+//                    ));
                     ?>
                 </td>
-                <td>Valido Hasta</td>
+                <td>Valido Hasta<img src="<?php echo $this->webroot . '/img/calendario.png' ?>"  id="selector3" name="selector3" style="cursor:pointer" /></td>
                 <td>
+                    <input id="validohasta" name="validohasta" readonly="readonly" type="text" required="true">
                     <?php
-                    echo $this->Form->input('validohasta', array(
-                        'label' => ''
-                    ));
+//                    echo $this->Form->input('validohasta', array(
+//                        'label' => ''
+//                    ));
                     ?>
                 </td>              
                 
@@ -188,4 +190,34 @@ echo $this->Html->css(array('multi-select'));
     
 
 
+</script>
+<script>
+    Calendar.setup({
+        inputField: "PeoplePers_fechNacimiento",
+        trigger: "selector",
+        onSelect: function() {
+            this.hide()
+        },
+        dateFormat: "%Y-%m-%d"
+    });
+</script>
+<script>
+    Calendar.setup({
+        inputField: "validodesde",
+        trigger: "selector2",
+        onSelect: function() {
+            this.hide()
+        },
+        dateFormat: "%Y-%m-%d"
+    });
+</script>
+<script>
+    Calendar.setup({
+        inputField: "validohasta",
+        trigger: "selector3",
+        onSelect: function() {
+            this.hide()
+        },
+        dateFormat: "%Y-%m-%d"
+    });
 </script>
