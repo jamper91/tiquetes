@@ -98,8 +98,10 @@ class UsersController extends AppController {
                         'estado' => 1,
                         'type_user_id' => $data['User']['type_user_id'],
                         'department_id' => $data['User']['department_id'],
-                        'validodesde' => $data['User']['validodesde']['year'] . '-' . $data['User']['validodesde']['month'] . '-' . $data['User']['validodesde']['day'],
-                        'validohasta' => $data['User']['validohasta']['year'] . '-' . $data['User']['validohasta']['month'] . '-' . $data['User']['validohasta']['day'],
+//                        'validodesde' => $data['User']['validodesde']['year'] . '-' . $data['User']['validodesde']['month'] . '-' . $data['User']['validodesde']['day'],
+//                        'validohasta' => $data['User']['validohasta']['year'] . '-' . $data['User']['validohasta']['month'] . '-' . $data['User']['validohasta']['day'],
+                        'validodesde' => $data['validodesde'],
+                        'validohasta' => $data['validohasta'],
                         'identificador' => $data['User']['Identificador']
                     )
                 );
@@ -208,6 +210,11 @@ class UsersController extends AppController {
             throw new NotFoundException(__('Invalid user'));
         }
         if ($this->request->is(array('post', 'put'))) {
+            $fechainicio = $this->request->data['User']['uservalidodesde'];
+            $fechafinal = $this->request->data['User']['uservalidohasta'];
+            $this->request->data['User']['validodesde'] = $fechainicio;
+            $this->request->data['User']['validohasta'] = $fechafinal;
+
             if ($this->User->save($this->request->data)) {
                 $this->Session->setFlash(__('The user has been saved.'));
                 return $this->redirect(array('action' => 'index'));

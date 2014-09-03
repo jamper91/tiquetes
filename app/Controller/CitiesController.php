@@ -16,6 +16,7 @@ class CitiesController extends AppController {
      * @var array
      */
     public $components = array('Paginator', 'RequestHandler');
+
 //    var $helpers = array('xls');
 
     /**
@@ -83,6 +84,7 @@ class CitiesController extends AppController {
 
         $states = $this->City->State->find('list');
         $this->set(compact('states'));
+        
     }
 
     /**
@@ -164,6 +166,23 @@ class CitiesController extends AppController {
     function export() {
         $data = $this->City->find('all');
         $this->set('cities', $data);
+    }
+
+    public function getCitiesByCountry() {
+        $this->loadModel('Countries');
+        $this->loadModel('Cities');
+        $this->layout = "webservices";
+        $country_id = $this->request->data["country_id"];
+        $sql = "SELECT City.id, City.name FROM cities City INNER JOIN  states d ON City.state_id=d.id WHERE d.country_id =" . $country_id;
+        $cities = $this->City->query($sql);
+
+
+        $this->set(
+                array(
+                    "datos" => $cities,
+                    "_serialize" => array("datos")
+                )
+        );
     }
 
 }
