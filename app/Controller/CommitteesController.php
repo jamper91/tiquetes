@@ -110,10 +110,13 @@ class CommitteesController extends AppController {
             'fields' => array(
                 "Events.even_nombre"
             ),
-            'conditions' => array(
-                "Events.Even_fechInicio>NOW()"
-            )
-        ));
+
+           'conditions' => array(
+            	"Events.Even_fechInicio>NOW()"
+            	)
+            
+         ));
+
 
 
         $this->set(compact('events'));
