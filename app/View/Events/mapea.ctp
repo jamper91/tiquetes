@@ -102,7 +102,9 @@ $('img').mapster(initial_opts)
 
 $( '#mapeos' ).on( 'click', function( e ) {
 
-   var evtobj=window.event? event : e;
+   var evtobj=window.event? event : e.originalEvent;
+   //evtobj=e;
+   console.log(evtobj);
 
     clickX = evtobj.layerX;
     clickY = evtobj.layerY;

@@ -45,19 +45,48 @@
         ));
 
 
+       
 
+
+
+        ?>
+        <input type="button" value="Add an Item" onClick="addInput('items');" id="add">
+        <?php
+        echo '<div id="items">';
+        echo "<hr>A</hr>";
         echo $this->Form->input('loca_nombre', array(
             "div" => array(
                 "class" => "controls"
             ),
             'label' => 'Nombre',
         ));
-        echo $this->Form->input('parent_id');
+        //echo $this->Form->input('parent_id');
         echo $this->Form->input('loca_fila');
         echo $this->Form->input('loca_colomnna');
         echo $this->Form->input('coord', array("value"=>" ","type"=>"hidden"));
+        echo '</div>';
+    
+
         ?>
     </fieldset>
+    <script type="text/javascript">
+
+    var counter = 1;
+    var limit = 3;
+    function addInput(divName){
+         if (counter == limit)  {
+              alert("You have reached the limit of adding " + counter + " inputs");
+         }
+         else {
+              var newdiv = document.createElement('div');
+              newdiv.innerHTML = "Entry " + (counter + 1) + " <br><input type='text' name='myInputs[]'>";
+              document.getElementById(divName).appendChild(newdiv);
+              counter++;
+         }
+    }
+
+
+    </script>
     <?php echo $this->Form->end(__('Submit')); ?>
 </div>
 <script>
