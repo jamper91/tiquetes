@@ -210,7 +210,7 @@ class StagesController extends AppController {
                 }
             } else {
                 $nombre = $this->request->data["nameImage"];
-                debug($nombre);
+//                debug($nombre);
                 $this->request->data["Stage"]["esce_mapa"] = $nombre;
                 if ($this->Stage->save($this->request->data)) {
                     CakeSession::write('sw', '0');

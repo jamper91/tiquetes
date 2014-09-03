@@ -46,7 +46,7 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                             "label" => "Ciudad",
                             "options" => $cities,
                             "empty" => "seleccione una ciudad",
-                            'required' => 'true'
+//                            'required' => 'true'
                         ));
                         ?> 
                     </td>
@@ -119,13 +119,13 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                     </td>
                 </tr>
                 <tr>
-                    <td ><img src="../img/calendario.png"  id="selector" name="selector" style="cursor:pointer" /></td>
+                    <td ><img src="<?php echo $this->webroot . '/img/calendario.png' ?>"  id="selector" name="selector" style="cursor:pointer" /></td>
                     <td>
                         <?php
                         echo $this->Form->input('even_fechInicio', array('label' => 'fecha inicio', 'maxlength' => '15', 'readonly' => 'readonly', 'required' => 'true'));
                         ?>                        
                     </td>                    
-                    <td><img src="../img/calendario.png" id="selector2" name="selector2" style="cursor:pointer" /></td>
+                    <td><img src="<?php echo $this->webroot . '/img/calendario.png' ?>" id="selector2" name="selector2" style="cursor:pointer" /></td>
                     <td>
                         <?php
                         echo $this->Form->input('even_fechFinal', array('label' => 'fecha final', 'maxlength' => '15', 'readonly' => 'readonly', 'required' => 'true'));
@@ -159,13 +159,13 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                     </td>
                 </tr>
                 <tr>
-                    <td ><img src="../img/calendario.png"  id="selector3" name="selector3" style="cursor:pointer" /></td>
+                    <td ><img src="<?php echo $this->webroot . '/img/calendario.png' ?>"  id="selector3" name="selector3" style="cursor:pointer" /></td>
                     <td>
                         <?php
                         echo $this->Form->input('fechainiciopublicacion', array('label' => 'fecha inicio de publicacion', 'maxlength' => '15', 'readonly' => 'readonly'));
                         ?>                        
                     </td>                    
-                    <td><img src="../img/calendario.png" id="selector4" name="selector4" style="cursor:pointer" /></td>
+                    <td><img src="<?php echo $this->webroot . '/img/calendario.png' ?>" id="selector4" name="selector4" style="cursor:pointer" /></td>
                     <td>
                         <?php
                         echo $this->Form->input('fechafinpublicacion', array('label' => 'fecha final de publicacion', 'maxlength' => '15', 'readonly' => 'readonly'));
@@ -304,7 +304,7 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
             </table>
 
         </fieldset>
-        <input type="submit" value="Agregar" >
+        <input type="submit" value="Agregar" class="btn btn-success" >
     </form>
     <?php // echo $this->Form->end(__('Submit'));         ?>
 </div>

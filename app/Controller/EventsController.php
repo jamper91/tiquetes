@@ -25,6 +25,14 @@ class EventsController extends AppController {
     public function index() {
         $this->Event->recursive = 0;
         $this->set('events', $this->Paginator->paginate());
+        
+        $stages = $this->Event->Stage->find('list', array(
+            "fields" => array(
+                "Stage.esce_nombre"
+            ),
+            "recursive" => -2
+        ));
+        $this->set(compact('stages'));
     }
 
     public function mapea($id = null) {
@@ -133,53 +141,56 @@ class EventsController extends AppController {
                                     $this->Event->save($newEvent);
                                     $newEventId = $this->Event->getLastInsertId();
 
-                                    foreach ($data['Committee'] as $Committee_id) {
-                                        $newCommittesEvent = $this->Event->CommitteesEvent->create();
-                                        $newCommittesEvent = array(
-                                            'CommittesEvent' => array(
-                                                'committee_id' => $Committee_id,
-                                                'event_id' => $newEventId
-                                            )
-                                        );
-                                        debug($newCommittesEvent);
-                                        $this->Event->CommitteesEvent->save($newCommittesEvent);
+                                    if ($data['Committee'] != "") {
+                                        foreach ($data['Committee'] as $Committee_id) {
+                                            $newCommitteesEvent = $this->Event->CommitteesEvent->create();
+                                            $newCommitteesEvent = array(
+                                                'CommitteesEvent' => array(
+                                                    'committee_id' => $Committee_id,
+                                                    'event_id' => $newEventId
+                                                )
+                                            );
+                                            $this->Event->CommitteesEvent->save($newCommitteesEvent);
+                                        }
                                     }
 
-
-                                    foreach ($data['Company'] as $Company_id) {
-                                        $newCompaniesEvent = $this->Event->CompaniesEvent->create();
-                                        $newCompaniesEvent = array(
-                                            'CompaniesEvent' => array(
-                                                'committee_id' => $Company_id,
-                                                'event_id' => $newEventId
-                                            )
-                                        );
-                                        debug($newCompaniesEvent);
-                                        $this->Event->CompaniesEvent->save($newCompaniesEvent);
-                                    }
-                                    die();
-
-                                    foreach ($data['Hotel'] as $Hotel_id) {
-                                        $newEventsHotel = $this->Event->EventsHotel->create();
-                                        $newEventsHotel = array(
-                                            'EventsHotel' => array(
-                                                'hotel_id' => $Hotel_id,
-                                                'event_id' => $newEventId
-                                            )
-                                        );
-                                        $this->Event->EventsHotel->save($newEventsHotel);
+                                    if ($data['Company'] != "") {
+                                        foreach ($data['Company'] as $Company_id) {
+                                            $newCompaniesEvent = $this->Event->CompaniesEvent->create();
+                                            $newCompaniesEvent = array(
+                                                'CompaniesEvent' => array(
+                                                    'company_id' => $Company_id,
+                                                    'event_id' => $newEventId
+                                                )
+                                            );
+                                            $this->Event->CompaniesEvent->save($newCompaniesEvent);
+                                        }
                                     }
 
+                                    if ($data['Hotel'] != "") {
+                                        foreach ($data['Hotel'] as $Hotel_id) {
+                                            $newEventsHotel = $this->Event->EventsHotel->create();
+                                            $newEventsHotel = array(
+                                                'EventsHotel' => array(
+                                                    'hotel_id' => $Hotel_id,
+                                                    'event_id' => $newEventId
+                                                )
+                                            );
+                                            $this->Event->EventsHotel->save($newEventsHotel);
+                                        }
+                                    }
 
-                                    foreach ($data['Payment'] as $Payment_id) {
-                                        $newEventsPayment = $this->Event->EventsPayment->create();
-                                        $newEventsPayment = array(
-                                            'EventsPayment' => array(
-                                                'payment_id' => $Payment_id,
-                                                'event_id' => $newEventId
-                                            )
-                                        );
-                                        $this->Event->EventsPayment->save($newEventsPayment);
+                                    if ($data['Payment'] != "") {
+                                        foreach ($data['Payment'] as $Payment_id) {
+                                            $newEventsPayment = $this->Event->EventsPayment->create();
+                                            $newEventsPayment = array(
+                                                'EventsPayment' => array(
+                                                    'payment_id' => $Payment_id,
+                                                    'event_id' => $newEventId
+                                                )
+                                            );
+                                            $this->Event->EventsPayment->save($newEventsPayment);
+                                        }
                                     }
 
                                     return $this->redirect(array('action' => 'index'));
@@ -212,7 +223,7 @@ class EventsController extends AppController {
                                     'even_observaciones' => strtoupper($data['even_observaciones']),
 //                        'even_estado' => $data['even_estado'],
                                     'even_imagen1' => $nombre,
-                                    'even_imagen2' => $name2,
+//                                    'even_imagen2' => $name2,
                                     'even_fechInicio' => $data['even_fechInicio'],
                                     'even_fechFinal' => $data['even_fechFinal'],
                                     'even_publicar' => $data['even_publicar'],
@@ -225,53 +236,56 @@ class EventsController extends AppController {
                                 $this->Event->save($newEvent);
                                 $newEventId = $this->Event->getLastInsertId();
 
-                                foreach ($data['Committee'] as $Committee_id) {
-                                    $newCommittesEvent = $this->Event->CommitteesEvent->create();
-                                    $newCommittesEvent = array(
-                                        'CommittesEvent' => array(
-                                            'committee_id' => $Committee_id,
-                                            'event_id' => $newEventId
-                                        )
-                                    );
-                                    debug($newCommittesEvent);
-                                    $this->Event->CommitteesEvent->save($newCommittesEvent);
+                                if ($data['Committee'] != "") {
+                                    foreach ($data['Committee'] as $Committee_id) {
+                                        $newCommitteesEvent = $this->Event->CommitteesEvent->create();
+                                        $newCommitteesEvent = array(
+                                            'CommitteesEvent' => array(
+                                                'committee_id' => $Committee_id,
+                                                'event_id' => $newEventId
+                                            )
+                                        );
+                                        $this->Event->CommitteesEvent->save($newCommitteesEvent);
+                                    }
                                 }
 
-
-                                foreach ($data['Company'] as $Company_id) {
-                                    $newCompaniesEvent = $this->Event->CompaniesEvent->create();
-                                    $newCompaniesEvent = array(
-                                        'CompaniesEvent' => array(
-                                            'committee_id' => $Company_id,
-                                            'event_id' => $newEventId
-                                        )
-                                    );
-                                    debug($newCompaniesEvent);
-                                    $this->Event->CompaniesEvent->save($newCompaniesEvent);
-                                }
-                                die();
-
-                                foreach ($data['Hotel'] as $Hotel_id) {
-                                    $newEventsHotel = $this->Event->EventsHotel->create();
-                                    $newEventsHotel = array(
-                                        'EventsHotel' => array(
-                                            'hotel_id' => $Hotel_id,
-                                            'event_id' => $newEventId
-                                        )
-                                    );
-                                    $this->Event->EventsHotel->save($newEventsHotel);
+                                if ($data['Company'] != "") {
+                                    foreach ($data['Company'] as $Company_id) {
+                                        $newCompaniesEvent = $this->Event->CompaniesEvent->create();
+                                        $newCompaniesEvent = array(
+                                            'CompaniesEvent' => array(
+                                                'company_id' => $Company_id,
+                                                'event_id' => $newEventId
+                                            )
+                                        );
+                                        $this->Event->CompaniesEvent->save($newCompaniesEvent);
+                                    }
                                 }
 
+                                if ($data['Hotel'] != "") {
+                                    foreach ($data['Hotel'] as $Hotel_id) {
+                                        $newEventsHotel = $this->Event->EventsHotel->create();
+                                        $newEventsHotel = array(
+                                            'EventsHotel' => array(
+                                                'hotel_id' => $Hotel_id,
+                                                'event_id' => $newEventId
+                                            )
+                                        );
+                                        $this->Event->EventsHotel->save($newEventsHotel);
+                                    }
+                                }
 
-                                foreach ($data['Payment'] as $Payment_id) {
-                                    $newEventsPayment = $this->Event->EventsPayment->create();
-                                    $newEventsPayment = array(
-                                        'EventsPayment' => array(
-                                            'payment_id' => $Payment_id,
-                                            'event_id' => $newEventId
-                                        )
-                                    );
-                                    $this->Event->EventsPayment->save($newEventsPayment);
+                                if ($data['Payment'] != "") {
+                                    foreach ($data['Payment'] as $Payment_id) {
+                                        $newEventsPayment = $this->Event->EventsPayment->create();
+                                        $newEventsPayment = array(
+                                            'EventsPayment' => array(
+                                                'payment_id' => $Payment_id,
+                                                'event_id' => $newEventId
+                                            )
+                                        );
+                                        $this->Event->EventsPayment->save($newEventsPayment);
+                                    }
                                 }
 
                                 return $this->redirect(array('action' => 'index'));
@@ -378,11 +392,404 @@ class EventsController extends AppController {
             throw new NotFoundException(__('Invalid event'));
         }
         if ($this->request->is(array('post', 'put'))) {
-            if ($this->Event->save($this->request->data)) {
-                $this->Session->setFlash(__('The event has been saved.'));
-                return $this->redirect(array('action' => 'index'));
+
+            $data = $this->request->data;
+            $newEventId = $data['Event']['id'];
+            //imagenes
+            $file = $this->request->data["Event"]["even_imagen3"];
+//                debug($file);
+            $nombre = $file["name"];
+            if ($nombre != "") {
+                $tipo = $file["type"];
+                $ruta_provicional = $file["tmp_name"];
+                $size = $file["size"];
+                $dimensiones = getimagesize($ruta_provicional);
+                $width = $dimensiones[0];
+                $height = $dimensiones[1];
+                $carpeta = WWW_ROOT . "/img/escenario/";
+                $src = $carpeta . $nombre;
+                if ($tipo != 'image/jpeg') {
+                    $this->Session->setFlash(__('El archivo no es compatible solo recibe imagenes jpg o jepg.', 'error'));
+                } elseif ($width != 500 && $height != 500) {
+                    $this->Session->setFlash(__('Las dimenciones no son correctas deben ser 500px X 500px.', 'error'));
+                } else {
+                    $file2 = $this->request->data["Event"]["even_imagen4"];
+//                debug($file);
+                    $nombre2 = $file2["name"];
+                    if ($nombre2 != "") {
+                        $tipo2 = $file2["type"];
+                        $ruta_provicional2 = $file2["tmp_name"];
+                        $size2 = $file2["size"];
+                        $dimensiones2 = getimagesize($ruta_provicional2);
+                        $width2 = $dimensiones2[0];
+                        $height2 = $dimensiones2[1];
+                        $carpeta2 = WWW_ROOT . "/img/escenario/";
+                        $src2 = $carpeta2 . $nombre2;
+                        if ($tipo2 != 'image/jpeg') {
+                            $this->Session->setFlash(__('El archivo no es compatible solo recibe imagenes jpg o jepg.', 'error'));
+                        } elseif ($width2 != 500 && $height2 != 500) {
+                            $this->Session->setFlash(__('Las dimenciones no son correctas deben ser 500px X 500px.', 'error'));
+                        } else {
+                            move_uploaded_file($ruta_provicional, $src);
+                            move_uploaded_file($ruta_provicional2, $src2);
+                            $this->request->data["Event"]["even_imagen1"] = $nombre;
+                            $this->request->data["Event"]["even_imagen2"] = $nombre2;
+
+                            //fechas           
+                            $fechainicio = $this->request->data['Event']['EvenFechInicio'];
+                            $fechafinal = $this->request->data['Event']['EvenFechFinal'];
+                            $this->request->data['Event']['even_fechInicio'] = $fechainicio;
+                            $this->request->data['Event']['even_fechFinal'] = $fechafinal;
+
+                            $fechainiciopublicacion = $this->request->data['Event']['EvenFechainiciopublicacion'];
+                            $fechafinalpublicacion = $this->request->data['Event']['EvenFechafinpublicacion'];
+                            $this->request->data['Event']['fechainiciopublicacion'] = $fechainiciopublicacion;
+                            $this->request->data['Event']['fechafinpublicacion'] = $fechafinalpublicacion;
+
+                            //multiselects
+                            $sqlOld = "DELETE FROM committees_events WHERE event_id=" . $newEventId;
+                            $this->Event->CommitteesEvent->query($sqlOld);
+                            if ($data['Committee']['Committee'] != "") {
+                                foreach ($data['Committee']['Committee'] as $Committee_id) {
+                                    $newCommitteesEvent = $this->Event->CommitteesEvent->create();
+                                    $newCommitteesEvent = array(
+                                        'CommitteesEvent' => array(
+                                            'committee_id' => $Committee_id,
+                                            'event_id' => $newEventId
+                                        )
+                                    );
+                                    $this->Event->CommitteesEvent->save($newCommitteesEvent);
+                                }
+                            }
+
+                            $sqlOld = "DELETE FROM companies_events WHERE event_id=" . $newEventId;
+                            $this->Event->CompaniesEvent->query($sqlOld);
+                            if ($data['Company']['Company'] != "") {
+                                foreach ($data['Company']['Company'] as $Company_id) {
+                                    $newCompaniesEvent = $this->Event->CompaniesEvent->create();
+                                    $newCompaniesEvent = array(
+                                        'CompaniesEvent' => array(
+                                            'company_id' => $Company_id,
+                                            'event_id' => $newEventId
+                                        )
+                                    );
+                                    $this->Event->CompaniesEvent->save($newCompaniesEvent);
+                                }
+                            }
+
+                            $sqlOld = "DELETE FROM events_hotels WHERE event_id=" . $newEventId;
+                            $this->Event->EventsHotel->query($sqlOld);
+                            if ($data['Hotel']['Hotel'] != "") {
+                                foreach ($data['Hotel']['Hotel'] as $Hotel_id) {
+                                    $newEventsHotel = $this->Event->EventsHotel->create();
+                                    $newEventsHotel = array(
+                                        'EventsHotel' => array(
+                                            'hotel_id' => $Hotel_id,
+                                            'event_id' => $newEventId
+                                        )
+                                    );
+                                    $this->Event->EventsHotel->save($newEventsHotel);
+                                }
+                            }
+
+                            $sqlOld = "DELETE FROM events_payments WHERE event_id=" . $newEventId;
+                            $this->Event->EventsPayment->query($sqlOld);
+                            if ($data['Payment']['Payment'] != "") {
+                                foreach ($data['Payment']['Payment'] as $Payment_id) {
+                                    $newEventsPayment = $this->Event->EventsPayment->create();
+                                    $newEventsPayment = array(
+                                        'EventsPayment' => array(
+                                            'payment_id' => $Payment_id,
+                                            'event_id' => $newEventId
+                                        )
+                                    );
+                                    $this->Event->EventsPayment->save($newEventsPayment);
+                                }
+                            }
+
+                            if ($this->Event->save($this->request->data)) {
+                                CakeSession::write('sw', '0');
+                                $this->Session->setFlash(__('The event has been saved.'));
+                                return $this->redirect(array('action' => 'index'));
+                            } else {
+                                $this->Session->setFlash(__('The event could not be saved. Please, try again.'));
+                            }
+                        }
+                    } else {
+                        move_uploaded_file($ruta_provicional, $src);
+                        $this->request->data["Event"]["even_imagen1"] = $nombre;
+                        $this->request->data["Event"]["even_imagen2"] = $this->request->data["nameImage2"];
+
+                        //fechas           
+                        $fechainicio = $this->request->data['Event']['EvenFechInicio'];
+                        $fechafinal = $this->request->data['Event']['EvenFechFinal'];
+                        $this->request->data['Event']['even_fechInicio'] = $fechainicio;
+                        $this->request->data['Event']['even_fechFinal'] = $fechafinal;
+
+                        $fechainiciopublicacion = $this->request->data['Event']['EvenFechainiciopublicacion'];
+                        $fechafinalpublicacion = $this->request->data['Event']['EvenFechafinpublicacion'];
+                        $this->request->data['Event']['fechainiciopublicacion'] = $fechainiciopublicacion;
+                        $this->request->data['Event']['fechafinpublicacion'] = $fechafinalpublicacion;
+
+                        //multiselects
+                        //multiselects
+                        $sqlOld = "DELETE FROM committees_events WHERE event_id=" . $newEventId;
+                        $this->Event->CommitteesEvent->query($sqlOld);
+                        if ($data['Committee']['Committee'] != "") {
+                            foreach ($data['Committee']['Committee'] as $Committee_id) {
+                                $newCommitteesEvent = $this->Event->CommitteesEvent->create();
+                                $newCommitteesEvent = array(
+                                    'CommitteesEvent' => array(
+                                        'committee_id' => $Committee_id,
+                                        'event_id' => $newEventId
+                                    )
+                                );
+                                $this->Event->CommitteesEvent->save($newCommitteesEvent);
+                            }
+                        }
+
+                        $sqlOld = "DELETE FROM companies_events WHERE event_id=" . $newEventId;
+                        $this->Event->CompaniesEvent->query($sqlOld);
+                        if ($data['Company']['Company'] != "") {
+                            foreach ($data['Company']['Company'] as $Company_id) {
+                                $newCompaniesEvent = $this->Event->CompaniesEvent->create();
+                                $newCompaniesEvent = array(
+                                    'CompaniesEvent' => array(
+                                        'company_id' => $Company_id,
+                                        'event_id' => $newEventId
+                                    )
+                                );
+                                $this->Event->CompaniesEvent->save($newCompaniesEvent);
+                            }
+                        }
+
+                        $sqlOld = "DELETE FROM events_hotels WHERE event_id=" . $newEventId;
+                        $this->Event->EventsHotel->query($sqlOld);
+                        if ($data['Hotel']['Hotel'] != "") {
+                            foreach ($data['Hotel']['Hotel'] as $Hotel_id) {
+                                $newEventsHotel = $this->Event->EventsHotel->create();
+                                $newEventsHotel = array(
+                                    'EventsHotel' => array(
+                                        'hotel_id' => $Hotel_id,
+                                        'event_id' => $newEventId
+                                    )
+                                );
+                                $this->Event->EventsHotel->save($newEventsHotel);
+                            }
+                        }
+
+                        $sqlOld = "DELETE FROM events_payments WHERE event_id=" . $newEventId;
+                        $this->Event->EventsPayment->query($sqlOld);
+                        if ($data['Payment']['Payment'] != "") {
+                            foreach ($data['Payment']['Payment'] as $Payment_id) {
+                                $newEventsPayment = $this->Event->EventsPayment->create();
+                                $newEventsPayment = array(
+                                    'EventsPayment' => array(
+                                        'payment_id' => $Payment_id,
+                                        'event_id' => $newEventId
+                                    )
+                                );
+                                $this->Event->EventsPayment->save($newEventsPayment);
+                            }
+                        }
+
+                        if ($this->Event->save($this->request->data)) {
+                            CakeSession::write('sw', '0');
+                            $this->Session->setFlash(__('The event has been saved.'));
+                            return $this->redirect(array('action' => 'index'));
+                        } else {
+                            $this->Session->setFlash(__('The event could not be saved. Please, try again.'));
+                        }
+                    }
+                }
             } else {
-                $this->Session->setFlash(__('The event could not be saved. Please, try again.'));
+                $file2 = $this->request->data["Event"]["even_imagen4"];
+//                debug($file);
+                $nombre2 = $file2["name"];
+                if ($nombre2 != "") {
+                    $tipo2 = $file2["type"];
+                    $ruta_provicional2 = $file2["tmp_name"];
+                    $size2 = $file2["size"];
+                    $dimensiones2 = getimagesize($ruta_provicional2);
+                    $width2 = $dimensiones2[0];
+                    $height2 = $dimensiones2[1];
+                    $carpeta2 = WWW_ROOT . "/img/escenario/";
+                    $src2 = $carpeta2 . $nombre2;
+                    if ($tipo2 != 'image/jpeg') {
+                        $this->Session->setFlash(__('El archivo no es compatible solo recibe imagenes jpg o jepg.', 'error'));
+                    } elseif ($width2 != 500 && $height2 != 500) {
+                        $this->Session->setFlash(__('Las dimenciones no son correctas deben ser 500px X 500px.', 'error'));
+                    } else {
+                        move_uploaded_file($ruta_provicional2, $src2);
+                        $this->request->data["Event"]["even_imagen1"] = $this->request->data["nameImage1"];
+                        $this->request->data["Event"]["even_imagen2"] = $nombre2;
+
+                        //fechas           
+                        $fechainicio = $this->request->data['Event']['EvenFechInicio'];
+                        $fechafinal = $this->request->data['Event']['EvenFechFinal'];
+                        $this->request->data['Event']['even_fechInicio'] = $fechainicio;
+                        $this->request->data['Event']['even_fechFinal'] = $fechafinal;
+
+                        $fechainiciopublicacion = $this->request->data['Event']['EvenFechainiciopublicacion'];
+                        $fechafinalpublicacion = $this->request->data['Event']['EvenFechafinpublicacion'];
+                        $this->request->data['Event']['fechainiciopublicacion'] = $fechainiciopublicacion;
+                        $this->request->data['Event']['fechafinpublicacion'] = $fechafinalpublicacion;
+
+                        //multiselects
+                        //multiselects
+                        $sqlOld = "DELETE FROM committees_events WHERE event_id=" . $newEventId;
+                        $this->Event->CommitteesEvent->query($sqlOld);
+                        if ($data['Committee']['Committee'] != "") {
+                            foreach ($data['Committee']['Committee'] as $Committee_id) {
+                                $newCommitteesEvent = $this->Event->CommitteesEvent->create();
+                                $newCommitteesEvent = array(
+                                    'CommitteesEvent' => array(
+                                        'committee_id' => $Committee_id,
+                                        'event_id' => $newEventId
+                                    )
+                                );
+                                $this->Event->CommitteesEvent->save($newCommitteesEvent);
+                            }
+                        }
+
+                        $sqlOld = "DELETE FROM companies_events WHERE event_id=" . $newEventId;
+                        $this->Event->CompaniesEvent->query($sqlOld);
+                        if ($data['Company']['Company'] != "") {
+                            foreach ($data['Company']['Company'] as $Company_id) {
+                                $newCompaniesEvent = $this->Event->CompaniesEvent->create();
+                                $newCompaniesEvent = array(
+                                    'CompaniesEvent' => array(
+                                        'company_id' => $Company_id,
+                                        'event_id' => $newEventId
+                                    )
+                                );
+                                $this->Event->CompaniesEvent->save($newCompaniesEvent);
+                            }
+                        }
+
+                        $sqlOld = "DELETE FROM events_hotels WHERE event_id=" . $newEventId;
+                        $this->Event->EventsHotel->query($sqlOld);
+                        if ($data['Hotel']['Hotel'] != "") {
+                            foreach ($data['Hotel']['Hotel'] as $Hotel_id) {
+                                $newEventsHotel = $this->Event->EventsHotel->create();
+                                $newEventsHotel = array(
+                                    'EventsHotel' => array(
+                                        'hotel_id' => $Hotel_id,
+                                        'event_id' => $newEventId
+                                    )
+                                );
+                                $this->Event->EventsHotel->save($newEventsHotel);
+                            }
+                        }
+
+                        $sqlOld = "DELETE FROM events_payments WHERE event_id=" . $newEventId;
+                        $this->Event->EventsPayment->query($sqlOld);
+                        if ($data['Payment']['Payment'] != "") {
+                            foreach ($data['Payment']['Payment'] as $Payment_id) {
+                                $newEventsPayment = $this->Event->EventsPayment->create();
+                                $newEventsPayment = array(
+                                    'EventsPayment' => array(
+                                        'payment_id' => $Payment_id,
+                                        'event_id' => $newEventId
+                                    )
+                                );
+                                $this->Event->EventsPayment->save($newEventsPayment);
+                            }
+                        }
+
+                        if ($this->Event->save($this->request->data)) {
+                            CakeSession::write('sw', '0');
+                            $this->Session->setFlash(__('The event has been saved.'));
+                            return $this->redirect(array('action' => 'index'));
+                        } else {
+                            $this->Session->setFlash(__('The event could not be saved. Please, try again.'));
+                        }
+                    }
+                } else {
+                    $this->request->data["Event"]["even_imagen1"] = $this->request->data["nameImage1"];
+                    $this->request->data["Event"]["even_imagen2"] = $this->request->data["nameImage2"];
+
+                    //fechas           
+                    $fechainicio = $this->request->data['Event']['EvenFechInicio'];
+                    $fechafinal = $this->request->data['Event']['EvenFechFinal'];
+                    $this->request->data['Event']['even_fechInicio'] = $fechainicio;
+                    $this->request->data['Event']['even_fechFinal'] = $fechafinal;
+
+                    $fechainiciopublicacion = $this->request->data['Event']['EvenFechainiciopublicacion'];
+                    $fechafinalpublicacion = $this->request->data['Event']['EvenFechafinpublicacion'];
+                    $this->request->data['Event']['fechainiciopublicacion'] = $fechainiciopublicacion;
+                    $this->request->data['Event']['fechafinpublicacion'] = $fechafinalpublicacion;
+
+                    //multiselects
+                    //multiselects
+                    $sqlOld = "DELETE FROM committees_events WHERE event_id=" . $newEventId;
+                    $this->Event->CommitteesEvent->query($sqlOld);
+                    if ($data['Committee']['Committee'] != "") {
+                        foreach ($data['Committee']['Committee'] as $Committee_id) {
+                            $newCommitteesEvent = $this->Event->CommitteesEvent->create();
+                            $newCommitteesEvent = array(
+                                'CommitteesEvent' => array(
+                                    'committee_id' => $Committee_id,
+                                    'event_id' => $newEventId
+                                )
+                            );
+                            $this->Event->CommitteesEvent->save($newCommitteesEvent);
+                        }
+                    }
+
+                    $sqlOld = "DELETE FROM companies_events WHERE event_id=" . $newEventId;
+                    $this->Event->CompaniesEvent->query($sqlOld);
+                    if ($data['Company']['Company'] != "") {
+                        foreach ($data['Company']['Company'] as $Company_id) {
+                            $newCompaniesEvent = $this->Event->CompaniesEvent->create();
+                            $newCompaniesEvent = array(
+                                'CompaniesEvent' => array(
+                                    'company_id' => $Company_id,
+                                    'event_id' => $newEventId
+                                )
+                            );
+                            $this->Event->CompaniesEvent->save($newCompaniesEvent);
+                        }
+                    }
+
+                    $sqlOld = "DELETE FROM events_hotels WHERE event_id=" . $newEventId;
+                    $this->Event->EventsHotel->query($sqlOld);
+                    if ($data['Hotel']['Hotel'] != "") {
+                        foreach ($data['Hotel']['Hotel'] as $Hotel_id) {
+                            $newEventsHotel = $this->Event->EventsHotel->create();
+                            $newEventsHotel = array(
+                                'EventsHotel' => array(
+                                    'hotel_id' => $Hotel_id,
+                                    'event_id' => $newEventId
+                                )
+                            );
+                            $this->Event->EventsHotel->save($newEventsHotel);
+                        }
+                    }
+
+                    $sqlOld = "DELETE FROM events_payments WHERE event_id=" . $newEventId;
+                    $this->Event->EventsPayment->query($sqlOld);
+                    if ($data['Payment']['Payment'] != "") {
+                        foreach ($data['Payment']['Payment'] as $Payment_id) {
+                            $newEventsPayment = $this->Event->EventsPayment->create();
+                            $newEventsPayment = array(
+                                'EventsPayment' => array(
+                                    'payment_id' => $Payment_id,
+                                    'event_id' => $newEventId
+                                )
+                            );
+                            $this->Event->EventsPayment->save($newEventsPayment);
+                        }
+                    }
+
+                    if ($this->Event->save($this->request->data)) {
+                        CakeSession::write('sw', '0');
+                        $this->Session->setFlash(__('The event has been saved.'));
+                        return $this->redirect(array('action' => 'index'));
+                    } else {
+                        $this->Session->setFlash(__('The event could not be saved. Please, try again.'));
+                    }
+                }
             }
         } else {
             $options = array('conditions' => array('Event.' . $this->Event->primaryKey => $id));

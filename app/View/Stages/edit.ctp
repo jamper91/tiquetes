@@ -1,13 +1,17 @@
 <div class="stages form">
     <?php echo $this->Form->create('Stage', array('enctype' => 'multipart/form-data')); ?>
     <fieldset>
-        <legend><?php echo __('Editando Escenario'); ?></legend>
+        <legend><?php echo __('Editando Escenario');
+    CakeSession::write('sw', '0')
+    ?></legend>
         <?php
-        if (CakeSession::read('sw') != '1') {
+        if (CakeSession::read('sw') != '1' && CakeSession::read('idStage') != $this->Form->data['Stage']['id']) {
+            CakeSession::delete('nameimage');
             if ($this->Form->data['Stage']['esce_mapa'] != "") {
                 $nameimg = $this->Form->data['Stage']['esce_mapa'];
                 CakeSession::write('nameimage', $nameimg);
                 CakeSession::write('sw', '1');
+                CakeSession::write('idStage', $this->Form->data['Stage']['id']);
             }
         }
         ?>
@@ -36,20 +40,20 @@
             </tr>
             <tr>
                 <td>
-                    <?php echo $this->Form->input('city_id', array('label' => 'CIUDAD')); ?>
+<?php echo $this->Form->input('city_id', array('label' => 'CIUDAD')); ?>
                 </td>
                 <td>&nbsp;</td>
                 <td>
-                    <?php echo $this->Form->input('esce_nombre', array('label' => 'NOMBRE')); ?>
+<?php echo $this->Form->input('esce_nombre', array('label' => 'NOMBRE')); ?>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <?php echo $this->Form->input('esce_direccion', array('label' => 'DIRECCION')); ?>
+<?php echo $this->Form->input('esce_direccion', array('label' => 'DIRECCION')); ?>
                 </td>
                 <td>&nbsp;</td>
                 <td>
-                    <?php echo $this->Form->input('esce_telefono', array('label' => 'TELEFONO')); ?>
+<?php echo $this->Form->input('esce_telefono', array('label' => 'TELEFONO')); ?>
                 </td>
             </tr>
             <tr>
@@ -83,7 +87,7 @@
         ?>              
 
     </fieldset>
-    <?php // echo $this->Form->end(__('Submit',array('class'=>'btn btn-success')));   ?>
+<?php // echo $this->Form->end(__('Submit',array('class'=>'btn btn-success')));    ?>
     <br>
     <input type="submit" value="Actuailizar" class="btn btn-warning">
 </div>
