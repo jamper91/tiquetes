@@ -25,8 +25,6 @@
             "label" => "Ciudad",
             "empty" => "seleccione una ciudad"
         ));
-
-
         echo $this->Form->input('stage_id', array(
             "div" => array(
                 "class" => "controls"
@@ -34,8 +32,6 @@
             "label" => "Escenario",
             "options" => "Stage.esce_nombre",
         ));
-
-
         echo $this->Form->input('event_id', array(
             "div" => array(
                 "class" => "controls"
@@ -43,54 +39,21 @@
             "label" => "Evento",
             "options" => "Event.even_nombre",
         ));
-
-
-       
-
-
-
-        ?>
-        <input type="button" value="Add an Item" onClick="addInput('items');" id="add">
-        <?php
-        echo '<div id="items">';
-        echo "<hr>A</hr>";
         echo $this->Form->input('loca_nombre', array(
             "div" => array(
                 "class" => "controls"
             ),
             'label' => 'Nombre',
         ));
-        //echo $this->Form->input('parent_id');
+        echo $this->Form->input('parent_id');
         echo $this->Form->input('loca_fila');
         echo $this->Form->input('loca_colomnna');
-        echo $this->Form->input('coord', array("value"=>" ","type"=>"hidden"));
-        echo '</div>';
-    
-
+        echo $this->Form->input('coord', array("value" => " ", "type" => "hidden"));
         ?>
     </fieldset>
-    <script type="text/javascript">
-
-    var counter = 1;
-    var limit = 3;
-    function addInput(divName){
-         if (counter == limit)  {
-              alert("You have reached the limit of adding " + counter + " inputs");
-         }
-         else {
-              var newdiv = document.createElement('div');
-              newdiv.innerHTML = "Entry " + (counter + 1) + " <br><input type='text' name='myInputs[]'>";
-              document.getElementById(divName).appendChild(newdiv);
-              counter++;
-         }
-    }
-
-
-    </script>
     <?php echo $this->Form->end(__('Submit')); ?>
 </div>
 <script>
-
     $("#LocationStateId").change(function() {
         var url2 = urlbase + "cities/getCitiesByState.xml";
         var datos2 = {
@@ -112,7 +75,6 @@
             });
         });
     });
-
     $(document).ready(function() {
         $("#LocationStateId").html("");
         $("#LocationCityId").html("");
@@ -138,13 +100,12 @@
             });
         });
     });
-    
     $("#LocationCityId").change(function() {
         var url2 = urlbase + "stages/getStagesByCity.xml";
         var datos2 = {
             city_id: $(this).val()
         };
-        ajax(url2, datos2, function(xml) {       
+        ajax(url2, datos2, function(xml) {
             $("#LocationStageId").html("<option>Seleccione un escenario</option>");
             $("datos", xml).each(function() {
                 var obj = $(this).find("Stage");
@@ -160,15 +121,13 @@
             });
         });
     });
-
-
     $("#LocationStageId").change(function() {
         var url2 = urlbase + "events/getEventsByStage.xml";
         var datos2 = {
             stage_id: $(this).val()
         };
         console.log("CAMBIE!");
-        ajax(url2, datos2, function(xml) {       
+        ajax(url2, datos2, function(xml) {
             $("#LocationEventId").html("<option>Seleccione un Evento</option>");
             $("datos", xml).each(function() {
                 var obj = $(this).find("Event");
@@ -184,11 +143,4 @@
             });
         });
     });
-
-
-
-
-
-
-
 </script>
