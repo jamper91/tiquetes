@@ -7,7 +7,7 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
     <fieldset>
         <legend><?php echo __('Editar Evento');
 
-    CakeSession::write('sw', '0')
+    CakeSession::write('sw', '0');
     ?></legend>
         <?php
 //        echo $this->Form->input('id');

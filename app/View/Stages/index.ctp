@@ -13,20 +13,20 @@
 	</tr>
 	</thead>
 	<tbody>
-	<?php foreach ($escenario as $stage): ?>
+	<?php foreach ($stages as $stage): ?>
 	<tr>
-		<td><?php echo h($stage['s']['id']); ?>&nbsp;</td>
+		<td><?php echo h($stage['Stage']['id']); ?>&nbsp;</td>
 		<td>
-			<?php echo h($stage['c']['name']); ?>
+			<?php echo h($stage['City']['name']); ?>
 		</td>
-		<td><?php echo h($stage['s']['esce_nombre']); ?>&nbsp;</td>
-		<td><?php echo h($stage['s']['esce_direccion']); ?>&nbsp;</td>
-		<td><?php echo h($stage['s']['esce_telefono']); ?>&nbsp;</td>
-		<td><img width="100px"   src="<?php echo $this->webroot.'/img/escenario/'.h($stage['s']['esce_mapa']); ?>" >&nbsp;</td>
+		<td><?php echo h($stage['Stage']['esce_nombre']); ?>&nbsp;</td>
+		<td><?php echo h($stage['Stage']['esce_direccion']); ?>&nbsp;</td>
+		<td><?php echo h($stage['Stage']['esce_telefono']); ?>&nbsp;</td>
+		<td><img width="100px"   src="<?php echo $this->webroot.'/img/escenario/'.h($stage['Stage']['esce_mapa']); ?>" >&nbsp;</td>
 		<td class="actions">
 			<?php // echo $this->Html->link(__('Mapeo'), array('action' => 'mapea', $stage['Stage']['id'],0),array('class'=>'btn btn-primary btn-mini')); ?>
-			<?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $stage['s']['id']),array('class'=>'btn btn-warning btn-mini')); ?>
-			<?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $stage['s']['id']), array('class'=>'btn btn-danger btn-mini'), __('Are you sure you want to delete # %s?', $stage['s']['id'])); ?>
+			<?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $stage['Stage']['id']),array('class'=>'btn btn-warning btn-mini')); ?>
+			<?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $stage['Stage']['id']), array('class'=>'btn btn-danger btn-mini'), __('Are you sure you want to delete # %s?', $stage['Stage']['id'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>

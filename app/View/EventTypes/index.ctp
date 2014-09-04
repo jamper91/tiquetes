@@ -1,5 +1,5 @@
 <div class="eventTypes index">
-	<h2><?php echo __('Event Types'); ?></h2>
+	<h2><?php echo __('Tipos de evento'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<thead>
 	<tr>
@@ -14,8 +14,8 @@
 		<td><?php echo h($eventType['EventType']['id']); ?>&nbsp;</td>
 		<td><?php echo h($eventType['EventType']['nombre']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $eventType['EventType']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $eventType['EventType']['id']), array(), __('Are you sure you want to delete # %s?', $eventType['EventType']['id'])); ?>
+			<?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $eventType['EventType']['id']), array('class' => 'btn btn-warning btn-mini')); ?>
+			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $eventType['EventType']['id']), array('class' => 'btn btn-danger btn-mini'), __('Are you sure you want to delete # %s?', $eventType['EventType']['id'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>

@@ -1,5 +1,5 @@
 <div class="typeUsers index">
-    <h2><?php echo __('Type Users'); ?></h2>
+    <h2><?php echo __('Tipos de Usuario'); ?></h2>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
@@ -14,8 +14,8 @@
                     <td><?php echo h($typeUser['TypeUser']['id']); ?>&nbsp;</td>
                     <td><?php echo h($typeUser['TypeUser']['descripcion']); ?>&nbsp;</td>
                     <td class="actions">
-                        <?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $typeUser['TypeUser']['id'])); ?>
-                        <?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $typeUser['TypeUser']['id']), array(), __('Are you sure you want to delete # %s?', $typeUser['TypeUser']['id'])); ?>
+                        <?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $typeUser['TypeUser']['id']),array('class'=>'btn btn-warning btn-mini')); ?>
+                        <?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $typeUser['TypeUser']['id']),array('class'=>'btn btn-danger btn-mini'), __('Are you sure you want to delete # %s?', $typeUser['TypeUser']['id'])); ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

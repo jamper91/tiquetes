@@ -1,5 +1,7 @@
 <?php
+
 App::uses('AppController', 'Controller');
+
 /**
  * Categorias Controller
  *
@@ -9,109 +11,118 @@ App::uses('AppController', 'Controller');
  */
 class CategoriasController extends AppController {
 
-/**
- * Components
- *
- * @var array
- */
-	public $components = array('Paginator', 'Session', 'RequestHandler');
+    /**
+     * Components
+     *
+     * @var array
+     */
+    public $components = array('Paginator', 'Session', 'RequestHandler');
 
-/**
- * index method
- *
- * @return void
- */
-	public function index() {
-		$this->Categoria->recursive = 0;
-		$this->set('categorias', $this->Paginator->paginate());
-	}
+    /**
+     * index method
+     *
+     * @return void
+     */
+    public function index() {
+        $this->Categoria->recursive = 0;
+        $this->set('categorias', $this->Paginator->paginate());
+    }
 
-/**
- * view method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function view($id = null) {
-		if (!$this->Categoria->exists($id)) {
-			throw new NotFoundException(__('Invalid categoria'));
-		}
-		$options = array('conditions' => array('Categoria.' . $this->Categoria->primaryKey => $id));
-		$this->set('categoria', $this->Categoria->find('first', $options));
-	}
+    /**
+     * view method
+     *
+     * @throws NotFoundException
+     * @param string $id
+     * @return void
+     */
+    public function view($id = null) {
+        if (!$this->Categoria->exists($id)) {
+            throw new NotFoundException(__('Invalid categoria'));
+        }
+        $options = array('conditions' => array('Categoria.' . $this->Categoria->primaryKey => $id));
+        $this->set('categoria', $this->Categoria->find('first', $options));
+    }
 
-/**
- * add method
- *
- * @return void
- */
-	public function add() {
-		if ($this->request->is('post')) {
-			$this->Categoria->create();
-			if ($this->Categoria->save($this->request->data)) {
-				$this->Session->setFlash(__('The categoria has been saved.'));
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The categoria could not be saved. Please, try again.'));
-			}
-		}
-		$events = $this->Categoria->Event->find('list');
-		$entradas = $this->Categoria->Entrada->find('list');
-		$this->set(compact('events', 'entradas'));
-	}
+    /**
+     * add method
+     *
+     * @return void
+     */
+    public function add() {
+        if ($this->request->is('post')) {
+            $sql = "SELECT c.id FROM `categorias` c WHERE c.descripcion ='" . strtoupper($this->request->data['Categoria']['descripcion']) . "'";
+            $id = $this->Categoria->query($sql);
+//            debug($id);
+//            die();
+            if ($id == "") {
+                $this->Categoria->create();
+                $this->request->data['Categoria']['descripcion'] = strtoupper($this->request->data['Categoria']['descripcion']);
+                if ($this->Categoria->save($this->request->data)) {
+                    $this->Session->setFlash(__('The categoria has been saved.'));
+                    return $this->redirect(array('action' => 'index'));
+                } else {
+                    $this->Session->setFlash(__('La categoria no se pudo crear. Por favor, vuelve a intentar.'));
+                }
+            } else {
+                $this->Session->setFlash(__('The categoria ya ha sido creada. Por favor, ingrese otra.'));
+            }
+        }
+        $events = $this->Categoria->Event->find('list');
+        $entradas = $this->Categoria->Entrada->find('list');
+        $this->set(compact('events', 'entradas'));
+    }
 
-/**
- * edit method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function edit($id = null) {
-		if (!$this->Categoria->exists($id)) {
-			throw new NotFoundException(__('Invalid categoria'));
-		}
-		if ($this->request->is(array('post', 'put'))) {
-			if ($this->Categoria->save($this->request->data)) {
-				$this->Session->setFlash(__('The categoria has been saved.'));
-				return $this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The categoria could not be saved. Please, try again.'));
-			}
-		} else {
-			$options = array('conditions' => array('Categoria.' . $this->Categoria->primaryKey => $id));
-			$this->request->data = $this->Categoria->find('first', $options);
-		}
-		$events = $this->Categoria->Event->find('list');
-		$entradas = $this->Categoria->Entrada->find('list');
-		$this->set(compact('events', 'entradas'));
-	}
+    /**
+     * edit method
+     *
+     * @throws NotFoundException
+     * @param string $id
+     * @return void
+     */
+    public function edit($id = null) {
+        if (!$this->Categoria->exists($id)) {
+            throw new NotFoundException(__('Invalid categoria'));
+        }
+        if ($this->request->is(array('post', 'put'))) {
+            if ($this->Categoria->save($this->request->data)) {
+                $this->Session->setFlash(__('The categoria has been saved.'));
+                return $this->redirect(array('action' => 'index'));
+            } else {
+                $this->Session->setFlash(__('The categoria could not be saved. Please, try again.'));
+            }
+        } else {
+            $options = array('conditions' => array('Categoria.' . $this->Categoria->primaryKey => $id));
+            $this->request->data = $this->Categoria->find('first', $options);
+        }
+        $events = $this->Categoria->Event->find('list');
+        $entradas = $this->Categoria->Entrada->find('list');
+        $this->set(compact('events', 'entradas'));
+    }
 
-/**
- * delete method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function delete($id = null) {
-		$this->Categoria->id = $id;
-		if (!$this->Categoria->exists()) {
-			throw new NotFoundException(__('Invalid categoria'));
-		}
-		$this->request->allowMethod('post', 'delete');
-		if ($this->Categoria->delete()) {
-			$this->Session->setFlash(__('The categoria has been deleted.'));
-		} else {
-			$this->Session->setFlash(__('The categoria could not be deleted. Please, try again.'));
-		}
-		return $this->redirect(array('action' => 'index'));
-	}
-        
-        public function getCategoriesByEvent() {
-            $this->layout = "webservices";
-        $even_id = $this->request->data["even_id"];    
+    /**
+     * delete method
+     *
+     * @throws NotFoundException
+     * @param string $id
+     * @return void
+     */
+    public function delete($id = null) {
+        $this->Categoria->id = $id;
+        if (!$this->Categoria->exists()) {
+            throw new NotFoundException(__('Invalid categoria'));
+        }
+        $this->request->allowMethod('post', 'delete');
+        if ($this->Categoria->delete()) {
+            $this->Session->setFlash(__('The categoria has been deleted.'));
+        } else {
+            $this->Session->setFlash(__('The categoria could not be deleted. Please, try again.'));
+        }
+        return $this->redirect(array('action' => 'index'));
+    }
+
+    public function getCategoriesByEvent() {
+        $this->layout = "webservices";
+        $even_id = $this->request->data["even_id"];
         $options = array(
             "conditions" => array(
                 "Categoria.event_id" => $even_id
@@ -132,5 +143,6 @@ class CategoriasController extends AppController {
                     "_serialize" => array("datos")
                 )
         );
-        }
+    }
+
 }

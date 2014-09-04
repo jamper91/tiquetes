@@ -4,8 +4,8 @@
 	<thead>
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
-			<th><?php echo $this->Paginator->sort('committee_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('event_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('committee_id','comite'); ?></th>
+			<th><?php echo $this->Paginator->sort('event_id','evento'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	</thead>
@@ -14,10 +14,10 @@
 	<tr>
 		<td><?php echo h($committeesEvent['CommitteesEvent']['id']); ?>&nbsp;</td>
 		<td>
-			<?php echo $this->Html->link($committeesEvent['Committee']['id'], array('controller' => 'committees', 'action' => 'view', $committeesEvent['Committee']['id'])); ?>
+			<?php echo $this->Html->link($committeesEvent['Committee']['nombre'], array('controller' => 'committees', 'action' => 'view', $committeesEvent['Committee']['id'])); ?>
 		</td>
 		<td>
-			<?php echo $this->Html->link($committeesEvent['Event']['id'], array('controller' => 'events', 'action' => 'view', $committeesEvent['Event']['id'])); ?>
+			<?php echo $this->Html->link($committeesEvent['Event']['even_nombre'], array('controller' => 'events', 'action' => 'view', $committeesEvent['Event']['id'])); ?>
 		</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $committeesEvent['CommitteesEvent']['id'])); ?>
