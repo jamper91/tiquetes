@@ -40,13 +40,30 @@ class EventsController extends AppController {
 
     public function mapea($id = null) {
         if (!$this->Event->exists($id)) {
-            throw new NotFoundException(__('Invalid stage'));
+            throw new NotFoundException(__('Invalid Event'));
         }
         $this->loadModel('Location');
         $options = array('conditions' => array('Event.' . $this->Event->primaryKey => $id));
         $this->set('event', $this->Event->find('first', $options));
         $this->set('locations', $this->Location->find("all", array("conditions" => array('Location.event_id' => $id))));
     }
+
+    // $id es el id del evento al que pertenece la cuadricula
+    public function grid($id=null){
+        if (!$this->Event->exists($id)) {
+            throw new NotFoundException(__('Invalid Event'));
+        }
+
+        $parametros=$this->request->params["pass"];
+        $id_loc=$parametros[1];
+        $this->loadModel('Location');
+        $this->set('location', $this->Location->find("first", array("conditions" => array('Location.id' => $id_loc))));
+        $grid=$this->Location->query('SELECT * FROM grid_location WHERE id_location='.$parametros[1]); // Traemos datos 
+        $this->set('grid',$grid);
+
+
+    }
+
 
     public function guardacoords() {
 

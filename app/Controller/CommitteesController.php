@@ -59,7 +59,7 @@ class CommitteesController extends AppController {
                 $newCommittee = array(
                     'CommitteesEvents' => array(
                         'committee_id' => $newCommitteeId,
-                        'event_id' => $datos['Committee']['event_id']
+//                        'event_id' => $datos['Committee']['event_id']
                 ));
 
                 $this->CommitteesEvents->save($newCommittee);

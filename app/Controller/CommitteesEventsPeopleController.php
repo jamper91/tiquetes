@@ -76,9 +76,9 @@ class CommitteesEventsPeopleController extends AppController {
 		$this->loadModel('Committees');
 		$this->layout = "webservices";
         $event_id = $this->request->data["event_id"];
-        $sql = "SELECT Committee.id, Committee.nombre as name FROM committees Committee INNER JOIN  committees_events ce ON Committee.id=ce.committee_id WHERE ce.event_id =".$event_id;
+        $sql = "SELECT c.id, c.nombre as name FROM committees c WHERE c.id NOT IN (SELECT c.id FROM committees c INNER JOIN committees_events ce ON ce.committee_id =c.id INNER JOIN committees_events_people cp ON cp.committees_event_id = ce.id WHERE  ce.event_id = $event_id)";
         $respuesta = $this->CommitteesEvent->query($sql);
-        
+//        debug($respuesta);
         
         $this->set(
                 array(

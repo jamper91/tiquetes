@@ -29,10 +29,21 @@ foreach ($locations as $key => $value) {
 
     $value=$value["Location"];
 
-    echo "<li> <b>".$this->Html->link($value["loca_nombre"], array(
-        'controller'=>'Events','action'=>'mapea',$parametros[0],$value["id"]))."</b>";
+    echo "<li> <b>".$value["loca_nombre"]."</b>";
+
+    /*$this->Html->link($value["loca_nombre"], array(
+        'controller'=>'Events','action'=>'mapea',$parametros[0],$value["id"]))."</b>";*/
 
      echo ($value["coord"]!=" ")? "(SI) ":" (NO) ";
+
+     echo $this->Html->link('Cuadricula', array(
+        'controller'=>'Events','action'=>'grid',$parametros[0],$value["id"]),array('class'=>'btn btn-mini btn-success'));
+     echo $this->Html->link('Editar', array(
+        'controller'=>'Events','action'=>'mapea',$parametros[0],$value["id"]),array('class'=>'btn btn-mini btn-warning'));
+     echo $this->Html->link('Borrar', array(
+        'controller'=>'Events','action'=>'borrar',$parametros[0],$value["id"]),array('class'=>'btn btn-mini btn-danger'));
+
+
 
       echo "</li>";
 }
@@ -102,7 +113,9 @@ $('img').mapster(initial_opts)
 
 $( '#mapeos' ).on( 'click', function( e ) {
 
-   var evtobj=window.event? event : e;
+   var evtobj=window.event? event : e.originalEvent;
+   //evtobj=e;
+   console.log(evtobj);
 
     clickX = evtobj.layerX;
     clickY = evtobj.layerY;
