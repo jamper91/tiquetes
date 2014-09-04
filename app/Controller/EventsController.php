@@ -24,6 +24,9 @@ class EventsController extends AppController {
      */
     public function index() {
         $this->Event->recursive = 0;
+        $sql = "SELECT e.id, e.even_codigo, s.esce_nombre, et.nombre, e.even_nombre, e.even_numeResolucion, e.even_imagen1, e.even_imagen2, e.even_fechInicio, e.even_fechFinal, e.even_publicar FROM `events` e INNER JOIN `stages` s ON s.id = e.stage_id INNER JOIN `event_types` et ON et.id = e.event_type_id";
+        $eventos = $this->Event->query($sql);
+        $this->set(compact('eventos'));
         $this->set('events', $this->Paginator->paginate());
         
         $stages = $this->Event->Stage->find('list', array(

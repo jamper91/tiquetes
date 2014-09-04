@@ -24,6 +24,9 @@ class StagesController extends AppController {
      */
     public function index() {
         $this->Stage->recursive = 0;
+        $sql = "SELECT s.id, c.name, s.esce_nombre, s.esce_direccion, s.esce_telefono, s.esce_mapa FROM `stages` s INNER JOIN `cities` c ON c.id = s.city_id";
+        $escenario = $this->Stage->query($sql);
+        $this->set(compact('escenario'));
         $this->set('stages', $this->Paginator->paginate());
     }
 

@@ -4,10 +4,10 @@
         <table class="table table-bordered data-table">
             <thead>
                 <tr>
-                    <th><?php echo $this->Paginator->sort('id'); ?></th>
-                    <th><?php echo $this->Paginator->sort('Empresa'); ?></th>
-                    <th><?php echo $this->Paginator->sort('Evento'); ?></th>
-                    <th><?php echo $this->Paginator->sort('Servicio'); ?></th>
+                    <th><?php echo $this->Paginator->sort('id','id'); ?></th>
+                    <th><?php echo $this->Paginator->sort('empr_nombre','Empresa'); ?></th>
+                    <th><?php echo $this->Paginator->sort('even_nombre','Evento'); ?></th>
+                    <th><?php echo $this->Paginator->sort('item','Servicio'); ?></th>
                     <th class="actions"><?php echo __('Actions'); ?></th>
                 </tr>
             </thead>
