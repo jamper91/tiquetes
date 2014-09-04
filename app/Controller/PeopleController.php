@@ -437,7 +437,6 @@ class PeopleController extends AppController {
 
     public function cargarUsuarios() {
         if ($this->request->is("POST")) {
-
             $datos = $this->request->data;
 //            debug($datos);
             $tam = $datos['size'];

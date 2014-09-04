@@ -73,7 +73,7 @@ class UsersController extends AppController {
                 'People' => array(
                     'pers_primNombre' => $data['People']['pers_primNombre'],
                     'pers_primApellido' => $data['People']['pers_primApellido'],
-                    'document_type_id' => $data['User']['document_type_id'],
+//                    'document_type_id' => $data['User']['document_type_id'],
                     //'city_id' => $data['User']['city_id'],
                     'pers_documento' => $data['People']['pers_documento'],
                     'pers_direccion' => $data['People']['pers_direccion'],
@@ -84,7 +84,13 @@ class UsersController extends AppController {
                     'pers_mail' => $data['People']['pers_mail']
                 )
             );
-            try {
+
+            $consulta = "SELECT id FROM people WHERE pers_documento= " . $data['People']['pers_documento'];
+            $respuesta = $this->People->query($consulta);
+            if ($respuesta != array()) {
+                $id = $respuesta[0]['people']['id'];
+            }
+            if ($respuesta === array()) {
                 $this->People->save($newPeole);
                 $newPeopleId = $this->People->getLastInsertId();
 
@@ -106,39 +112,40 @@ class UsersController extends AppController {
                     )
                 );
                 $this->User->save($newUser);
-                //$usuario = $this->User->getLastInsertId();
-                //$this->loadModel('AuthorizationsUsers');
-                //$newAutirizationsUser = $this->AuthorizationsUsers->create();
-                //$this->Authorization->save($this->request->data);
-                //$data_auth = $this->request->data;
-                //debug($data_auth);
-                // foreach ($data_auth as $value) {
-                //         $authorizations = $value['authorization_id'];
-                //         foreach($authorizations as $value2){
-                //         if($value2 != '')
-                //         {
-                //             debug($value2);
-                //         }
-                //     }
-                // }
-                // for ($i = 0; $i < count($this->request->data['authorization_id']); $i++)
-                //     {
-                //         $newAuthorizationsUser = array(
-                //         'AutorizartionUser' => array(
-                //             'authorization_id' => $data("data[User][Autorization][$i]"),
-                //             'user_id'=>$usuario
-                //             )
-                //         );
-                //         //debug($newAuthorizationsUser);
-                //     }           
                 return $this->redirect(array('action' => 'index'));
-            } catch (Exception $ex) {
-                //debug($ex->getMessage());
-                $error2 = $ex->getCode();
-                if ($error2 == '23000') {
-                    $this->Session->setFlash('Error ya hay una persona con el mismo documento en la base de datos', 'error');
-                }
+                $this->Session->setFlash('Usuario registrado con exito', 'good');
+            } else {
+                $nombre = $data['People']['pers_primNombre'];
+                $apellido = $data['People']['pers_primApellido'];
+                $documento = $data['People']['pers_documento'];
+                $direccion = $data['People']['pers_direccion'];
+                $telefono = $data['People']['pers_telefono'];
+                $fech = $data['People']['pers_fechNacimiento'];
+                $mail = $data['People']['pers_mail'];
+                $sql = "UPDATE `people` SET `pers_primNombre`='$nombre',`pers_primApellido`='$apellido',`pers_direccion`='$direccion',`pers_telefono`=$telefono,`pers_mail`='$mail' WHERE `pers_documento` ='$documento'";
+                $this->People->query($sql);
+                $newUser = $this->User->create();
+
+                $newUser = array(
+                    'User' => array(
+                        'person_id' => $id,
+                        'username' => $data['User']['username'],
+                        'password' => $data['User']['password'],
+                        'estado' => 1,
+                        'type_user_id' => $data['User']['type_user_id'],
+                        'department_id' => $data['User']['department_id'],
+//                        'validodesde' => $data['User']['validodesde']['year'] . '-' . $data['User']['validodesde']['month'] . '-' . $data['User']['validodesde']['day'],
+//                        'validohasta' => $data['User']['validohasta']['year'] . '-' . $data['User']['validohasta']['month'] . '-' . $data['User']['validohasta']['day'],
+                        'validodesde' => $data['validodesde'],
+                        'validohasta' => $data['validohasta'],
+                        'identificador' => $data['User']['Identificador']
+                    )
+                );
+                $this->User->save($newUser);
+                return $this->redirect(array('action' => 'index'));
+                $this->Session->setFlash('Usuario registrado con exito', 'good');
             }
+
 
 
 //debug($newPeopleId);

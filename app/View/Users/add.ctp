@@ -8,24 +8,16 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
         <legend><?php echo __('Crear Usuario'); ?></legend>
         <table>
             <tr>
+                
+                <td colspan="4" align="center">Número de Documento: <input type="text" required="true" id="PeoplePers_documento" name="data[People][pers_documento]"/> </td>
+                <td><input type="hidden" name="data[Person][pers_id]" id="PeoplePers_id"></td>
+            </tr>
+            <tr>
                 <td>Nombres</td>
                 <td><input type="text" required="true" id="PeoplePers_primNombre" name="data[People][pers_primNombre]"/></td>
                 <td>Apellidos</td>
                 <td><input type="text" id="PeoplePers_primApellido" required="true" name="data[People][pers_primApellido]"/></td>
-            </tr>
-            <tr>
-                <td><?php echo 'Tipo de Documento'; ?></td>
-                <td><?php
-                    echo $this->Form->input('document_type_id', array(
-                        'label' => '',
-                        "options" => $documentTypeName,
-                        "empty" => "Seleccione un tipo de documento"
-                    ));
-                    ?>
-                </td>
-                <td>Número de Documento: </td>
-                <td><input type="text" required="true" id="PeoplePers_documento" name="data[People][pers_documento]"/></td>
-            </tr>
+            </tr>            
             <tr>
                 <td><?php echo 'País' ?></td>
                 <td><?php
@@ -78,7 +70,7 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                 </td>
             </tr>
             <tr>
-                <td>Departamento</td>
+                <td>Área</td>
                 <td><?php
                     echo $this->Form->input('department_id', array(
                         'label' => '',
@@ -88,7 +80,7 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                     ?></td>
                 <td>Nombre de Usuario</td>
                 <td><input name="data[User][username]" required="true" maxlength="20" id="UserUsuario" type="text"></td>
-                
+
 
             </tr>
             <tr>
@@ -96,7 +88,7 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                 <td><input name="data[User][password]" required="true" id="UserPassword" type="password"></td>
                 <td>Confirmar Contraseña</td>
                 <td><input name="data[User][passwordConfirm]" required="true" id="UserPasswordConfirm" type="password"></td> 
-                                
+
             </tr>
             <tr><td>Valido Desde<img src="<?php echo $this->webroot . '/img/calendario.png' ?>"  id="selector2" name="selector2" style="cursor:pointer" /></td>                
                 <td>
@@ -116,14 +108,14 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
 //                    ));
                     ?>
                 </td>              
-                
+
             </tr>
             <tr><td>Indentificador</td>
                 <td><input name="data[User][Identificador]" required="true" id="UserIdentificador" type="text"></td>
             </tr>
         </table>
 
-          
+
 
     </fieldset>
     <?php echo $this->Form->end(__('Crear')); ?>
@@ -136,14 +128,13 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
         var datos2 = {
             state_id: $(this).val()
         };
-
         ajax(url2, datos2, function(xml) {
             $("#UserCityId").html("<option>Seleccione una ciudad</option>");
             $("datos", xml).each(function() {
                 var obj = $(this).find("City");
                 var valor, texto;
                 valor = $("id", obj).text();
-                texto = $("name", obj).text();               
+                texto = $("name", obj).text();
                 if (valor) {
                     var html = "<option value='$1'>$2</option>";
                     html = html.replace("$1", valor);
@@ -154,17 +145,17 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
         });
     });
     $(document).ready(function() {
-        $("#UserAddForm").submit(function(e){
-            
-            if($("#UserPassword").val()===$("#UserPasswordConfirm").val()){
+        $("#UserAddForm").submit(function(e) {
+
+            if ($("#UserPassword").val() === $("#UserPasswordConfirm").val()) {
                 return true;
-            } else{
+            } else {
                 alert("Error la contraseña no coinside con la confirmación");
-                return false; 
+                return false;
             }
         });
         $("#UserStateId").html("");
-        $("#UserCityId").html("");
+//        $("#UserCityId").html("");
         $("#UserCountryId").change(function() {
             var url = urlbase + "states/getStatesByCountry.xml";
             var datos = {
@@ -186,8 +177,46 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                 });
             });
         });
+        $("#PeoplePers_documento").keyup(function() {
+//            alert("aasd");
+            var url = urlbase + "companies/search.xml";
+            var datos = {
+                documento: $(this).val()
+            };
+            ajax(url, datos, function(xml) {
+                $("datos", xml).each(function() {
+                    var obj = $(this).find("Person");
+                    var nombre, apellido, ciudad, direccion, telefono, id, email;
+                    id = $("id", obj).text();
+                    nombre = $("pers_primNombre", obj).text();
+                    apellido = $("pers_primApellido", obj).text();
+                    ciudad = $("city_id", obj).text();
+                    direccion = $("pers_direccion", obj).text();
+                    telefono = $("pers_telefono", obj).text();
+                    email = $("pers_mail", obj).text();
+                    
+                    if (nombre !== null) {
+                        $("#PeoplePers_id").val(id);
+                        $("#PeoplePers_primNombre").val(nombre);
+                        $("#PeoplePers_primApellido").val(apellido);
+                        $("#UserCityId option[value=" + ciudad + "]").attr("selected", true);
+                        $("#PeoplePers_direccion").val(direccion);
+                        $("#PeoplePers_telefono").val(telefono);
+                        $("#PeoplePers_mail").val(email);
+                    } else {
+                        $("#PeoplePers_id").val();
+                        $("#UserCityId option[value='']").attr("selected", true);
+                        $("#PeoplePers_primNombre").val();
+                        $("#PeoplePers_primApellido").val();
+                        $("#PeoplePers_direccion").val();
+                        $("#PeoplePers_telefono").val();
+                        $("#PeoplePers_mail").val();
+                    }
+                });
+            });
+        });
     });
-    
+
 
 
 </script>

@@ -1,7 +1,7 @@
 <?php
 // 		session_start();
-$conexion = mysql_connect("localhost", "root", "");
-mysql_select_db("tiquetes", $conexion);
+//$conexion = mysql_connect("localhost", "root", "");
+//mysql_select_db("tiquetes", $conexion);
 ?>
 <div align="center">
     <form action="" method="post" enctype="multipart/form-data" name="form1">
