@@ -460,7 +460,7 @@ class PeopleController extends AppController {
                     $cont = $cont+1;
                     $sql = "INSERT INTO people (pers_documento, pers_primNombre, pers_primApellido, pers_direccion, pers_telefono, pers_mail) VALUES ('$doc','$nom','$ape','$dir','$tel', '$mail')";
                     $this->Person->query($sql);
-                    $this->Session->setFlash('Datos cargados Correctamente', 'good');
+                    $this->Session->setFlash($inicio.$cont." nuevas Personas", 'good');
                     
                 } else {
                     $repetidos = $repetidos.", ".$doc;
