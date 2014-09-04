@@ -110,7 +110,7 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                 </td>              
 
             </tr>
-            <tr><td>Indentificador</td>
+            <tr><td>Identificador</td>
                 <td><input name="data[User][Identificador]" required="true" id="UserIdentificador" type="text"></td>
             </tr>
         </table>
