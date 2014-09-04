@@ -74,7 +74,7 @@ class UsersController extends AppController {
                     'pers_primNombre' => $data['People']['pers_primNombre'],
                     'pers_primApellido' => $data['People']['pers_primApellido'],
 //                    'document_type_id' => $data['User']['document_type_id'],
-                    //'city_id' => $data['User']['city_id'],
+                    'city_id' => $data['User']['city_id'],
                     'pers_documento' => $data['People']['pers_documento'],
                     'pers_direccion' => $data['People']['pers_direccion'],
                     'pers_telefono' => $data['People']['pers_telefono'],
@@ -112,8 +112,9 @@ class UsersController extends AppController {
                     )
                 );
                 $this->User->save($newUser);
-                return $this->redirect(array('action' => 'index'));
                 $this->Session->setFlash('Usuario registrado con exito', 'good');
+                return $this->redirect(array('action' => 'index'));
+                
             } else {
                 $nombre = $data['People']['pers_primNombre'];
                 $apellido = $data['People']['pers_primApellido'];
@@ -122,7 +123,8 @@ class UsersController extends AppController {
                 $telefono = $data['People']['pers_telefono'];
                 $fech = $data['People']['pers_fechNacimiento'];
                 $mail = $data['People']['pers_mail'];
-                $sql = "UPDATE `people` SET `pers_primNombre`='$nombre',`pers_primApellido`='$apellido',`pers_direccion`='$direccion',`pers_telefono`=$telefono,`pers_mail`='$mail' WHERE `pers_documento` ='$documento'";
+                $city = $data['User']['city_id'];
+                $sql = "UPDATE `people` SET `city_id`=$city, `pers_primNombre`='$nombre',`pers_primApellido`='$apellido',`pers_direccion`='$direccion',`pers_telefono`=$telefono,`pers_mail`='$mail' WHERE `pers_documento` ='$documento'";
                 $this->People->query($sql);
                 $newUser = $this->User->create();
 
@@ -142,8 +144,9 @@ class UsersController extends AppController {
                     )
                 );
                 $this->User->save($newUser);
-                return $this->redirect(array('action' => 'index'));
                 $this->Session->setFlash('Usuario registrado con exito', 'good');
+                return $this->redirect(array('action' => 'index'));
+                
             }
 
 
