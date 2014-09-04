@@ -23,10 +23,7 @@ class RoleCompaniesController extends AppController {
      * @return void
      */
     public function index() {
-        $prueba = $this->RoleCompany->recursive = 0;
-        $sql = "SELECT r.id, c.empr_nombre, e.even_nombre, r.item FROM `role_companies` r INNER JOIN `companies` c ON c.id = r.company_id INNER JOIN `events` e ON e.id = r.event_id";
-        $patrocinadores = $this->RoleCompany->query($sql);
-        $this->set(compact('patrocinadores'));
+        $this->RoleCompany->recursive = 0;        
         $this->set('roleCompanies', $this->Paginator->paginate());
     }
 
