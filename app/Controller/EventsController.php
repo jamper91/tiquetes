@@ -62,6 +62,31 @@ class EventsController extends AppController {
     }
 
 
+    public function borracoords($id = null) {
+        $parametros=$this->request->params["pass"];
+        $id=$parametros[1];
+
+        $this->loadModel('Location');
+        $this->Location->id = $id;
+        if (!$this->Location->exists()) {
+            throw new NotFoundException(__('Invalid Location'));
+        }
+
+        //$this->Location->coord=" ";
+        $this->Location->saveField("coord"," ");;
+
+
+        /*$this->request->allowMethod('post', 'delete');
+        if ($this->Location->delete()) {
+            $this->Session->setFlash(__('The Location has been deleted.'));
+        } else {
+            $this->Session->setFlash(__('The Location could not be deleted. Please, try again.'));
+        }*/
+        return $this->redirect(array('action' => 'mapea',$parametros[0],0));
+    }
+
+
+
     public function guardacoords() {
 
 

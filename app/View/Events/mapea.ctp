@@ -41,7 +41,7 @@ foreach ($locations as $key => $value) {
      echo $this->Html->link('Editar', array(
         'controller'=>'Events','action'=>'mapea',$parametros[0],$value["id"]),array('class'=>'btn btn-mini btn-warning'));
      echo $this->Html->link('Borrar', array(
-        'controller'=>'Events','action'=>'borrar',$parametros[0],$value["id"]),array('class'=>'btn btn-mini btn-danger'));
+        'controller'=>'Events','action'=>'borracoords',$parametros[0],$value["id"]),array('class'=>'btn btn-mini btn-danger'));
 
 
 
