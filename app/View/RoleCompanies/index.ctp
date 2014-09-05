@@ -4,26 +4,26 @@
         <table class="table table-bordered data-table">
             <thead>
                 <tr>
-                    <th><?php echo $this->Paginator->sort('id'); ?></th>
-                    <th><?php echo $this->Paginator->sort('Empresa'); ?></th>
-                    <th><?php echo $this->Paginator->sort('Evento'); ?></th>
-                    <th><?php echo $this->Paginator->sort('Servicio'); ?></th>
+                    <th><?php echo $this->Paginator->sort('id','id'); ?></th>
+                    <th><?php echo $this->Paginator->sort('empr_nombre','Empresa'); ?></th>
+                    <th><?php echo $this->Paginator->sort('even_nombre','Evento'); ?></th>
+                    <th><?php echo $this->Paginator->sort('item','Servicio'); ?></th>
                     <th class="actions"><?php echo __('Actions'); ?></th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($patrocinadores as $patrocinio ): ?>
+                <?php foreach ($roleCompanies as $roleCompanie ): ?>
                     <tr>
-                        <td><?php echo h($patrocinio['r']['id']); ?>&nbsp;</td>
-                        <td><?php echo h($patrocinio['c']['empr_nombre']); ?>&nbsp;</td>
-                        <td><?php echo h($patrocinio['e']['even_nombre']); ?>&nbsp;</td>
-                        <td><?php echo h($patrocinio['r']['item']); ?>&nbsp;</td>
+                        <td><?php echo h($roleCompanie['RoleCompany']['id']); ?>&nbsp;</td>
+                        <td><?php echo h($roleCompanie['RoleCompany']['event_id']); ?>&nbsp;</td>
+                        <td><?php echo h($roleCompanie['RoleCompany']['company_id']); ?>&nbsp;</td>
+                        <td><?php echo h($roleCompanie['RoleCompany']['item']); ?>&nbsp;</td>
                         <td class="actions">
                             <span class="btn btn-success btn-mini">
-                                <?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $patrocinio['r']['id'])); ?>
+                                <?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $roleCompanie['RoleCompany']['id'])); ?>
                             </span>
                             <span class="btn btn-danger btn-mini">
-                                <?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $patrocinio['r']['id']), array(), __('Are you sure you want to delete # %s?', $patrocinio['r']['id'])); ?>
+                                <?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $roleCompanie['RoleCompany']['id']), array(), __('Are you sure you want to delete # %s?', $roleCompanie['RoleCompany']['id'])); ?>
                             </span>
                         </td>
                     </tr>

@@ -93,7 +93,12 @@ class LocationsController extends AppController {
             $options = array('conditions' => array('Location.' . $this->Location->primaryKey => $id));
             $this->request->data = $this->Location->find('first', $options);
         }
-        $stages = $this->Location->Stage->find('list');
+        $stages = $this->Location->Stage->find('list', array(
+            "fields" => array(
+                "Stage.esce_nombre"
+            ),
+            "recursive" => -2
+        ));
         $parentLocations = $this->Location->ParentLocation->find('list');
         $this->set(compact('stages', 'parentLocations'));
     }

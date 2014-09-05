@@ -6,11 +6,11 @@ echo $this->Html->css(array('multi-select'));
 <div class="authorizationsUsers form">
 <?php echo $this->Form->create('AuthorizationsUser'); ?>
 	<fieldset>
-		<legend><?php echo __('Asignación de permisos a usuarios para un evento'); ?></legend>
+		<legend><?php echo __('Asignación de permisos a un usuario para un evento'); ?></legend>
 	<?php
 		//echo $this->Form->input('user_id');
 		//echo $this->Form->input('authorization_id');
-		echo $this->Form->input('event_id');
+		echo $this->Form->input('event_id',array('label'=>'Evento'));
 	?>
 
 <!--         <label class="control-label">Usuarios</label>

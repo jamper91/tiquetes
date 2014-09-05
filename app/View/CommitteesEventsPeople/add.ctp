@@ -18,7 +18,7 @@
                         "class" => "controls"
                     ),
                     'label' => 'Comites',
-                    'empty' => "Seleccione un comite"
+                    'empty' => "Seleccione un comité"
     			));
     		echo $this->Form->input('cantidad', array('label' => 'Numero de personas'));
     	?>
@@ -36,7 +36,7 @@ $(document).ready(function() {
         ajax(url, datos, function(xml) {
             $("#committees_id").html("<option>Seleccione un Comité</option>");
             $("datos", xml).each(function() {
-                var obj = $(this).find("Committee");
+                var obj = $(this).find("c");
                 var valor, texto;
                 valor = $("id", obj).text();
                 texto = $("name", obj).text();
@@ -49,5 +49,5 @@ $(document).ready(function() {
             });
         });
     });
-})
+});
 </script>

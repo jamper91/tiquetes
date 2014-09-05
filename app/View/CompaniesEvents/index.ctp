@@ -4,9 +4,9 @@
         <thead>
             <tr>
                 <th><?php echo $this->Paginator->sort('id'); ?></th>
-                <th><?php echo $this->Paginator->sort('company_id'); ?></th>
-                <th><?php echo $this->Paginator->sort('event_id'); ?></th>
-                <th><?php echo $this->Paginator->sort('role_company_id'); ?></th>
+                <th><?php echo $this->Paginator->sort('company_id','empresa'); ?></th>
+                <th><?php echo $this->Paginator->sort('event_id','evento'); ?></th>
+                <th><?php // echo $this->Paginator->sort('role_company_id'); ?></th>
                 <th class="actions"><?php echo __('Actions'); ?></th>
             </tr>
         </thead>
@@ -15,13 +15,13 @@
                 <tr>
                     <td><?php echo h($companiesEvent['CompaniesEvent']['id']); ?>&nbsp;</td>
                     <td>
-                        <?php echo $this->Html->link($companiesEvent['Company']['id'], array('controller' => 'companies', 'action' => 'view', $companiesEvent['Company']['id'])); ?>
+                        <?php echo h($companiesEvent['Company']['empr_nombre']); ?>
                     </td>
                     <td>
-                        <?php echo $this->Html->link($companiesEvent['Event']['id'], array('controller' => 'events', 'action' => 'view', $companiesEvent['Event']['id'])); ?>
+                        <?php echo h($companiesEvent['Event']['even_nombre']); ?>
                     </td>
                     <td>
-                        <?php echo $this->Html->link($companiesEvent['RoleCompany']['id'], array('controller' => 'role_companies', 'action' => 'view', $companiesEvent['RoleCompany']['id'])); ?>
+                        <?php // echo $this->Html->link($companiesEvent['RoleCompany']['id'], array('controller' => 'role_companies', 'action' => 'view', $companiesEvent['RoleCompany']['id'])); ?>
                     </td>
                     <td class="actions">
                         <?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $companiesEvent['CompaniesEvent']['id'])); ?>

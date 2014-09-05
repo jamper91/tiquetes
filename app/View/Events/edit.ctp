@@ -7,7 +7,7 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
     <fieldset>
         <legend><?php echo __('Editar Evento');
 
-    CakeSession::write('sw', '0')
+    CakeSession::write('sw', '0');
     ?></legend>
         <?php
 //        echo $this->Form->input('id');
@@ -382,7 +382,7 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
         if ($(this).val() !== "") {
             var url4 = urlbase + "cities/getCitiesByCountry.xml";
             var datos4 = {
-                EventCountryId: $(this).val()
+                country_id: $(this).val()
             };
             ajax(url4, datos4, function(xml) {
                 $("#EventCityId").html("<option>Seleccione una ciudad</option>");
@@ -405,7 +405,7 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
     $("#EventStateId").change(function() {
         var url2 = urlbase + "cities/getCitiesByState.xml";
         var datos2 = {
-            EventStateId: $(this).val()
+            state_id: $(this).val()
         };
         ajax(url2, datos2, function(xml) {
             $("#EventCityId").html("<option>Seleccione una ciudad</option>");
@@ -430,7 +430,7 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
         $("#EventCountryId").change(function() {
             var url = urlbase + "states/getStatesByCountry.xml";
             var datos = {
-                EventCountryId: $(this).val()
+                country_id: $(this).val()
             };
             ajax(url, datos, function(xml) {
                 $("#EventStateId").html("<option>Seleccione un Departamento</option>");
@@ -452,7 +452,7 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
         $("#EventCityId").change(function() {
             var url2 = urlbase + "stages/getStagesByCity.xml";
             var datos2 = {
-                EventCityId: $(this).val()
+                city_id: $(this).val()
             };
             ajax(url2, datos2, function(xml) {
                 $("#EventStageId").html("<option>Seleccione un escenario</option>");

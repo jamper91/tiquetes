@@ -68,7 +68,7 @@
                         'required' => 'true'
                     ));
                     ?></td>
-                <td><input type="hidden" name="data[Company][pers_id]" id="CompanyPers_id"></td>
+                <td><input type="hidden" name="data[people][pers_id]" id="PeoplePers_id"></td>
             </tr>
         </table>
         <legend><?php echo __('Datos de la Empresa'); ?></legend>
@@ -202,7 +202,7 @@
                         $("#CompanyCityId option[value="+ciudad+"]").attr("selected",true);
                         $("#CompanyPersDireccion").val(direccion);
                         $("#CompanyPersTelefono").val(telefono);
-                    } else {
+                    } else {                       
                         $("#CompanyCityId option[value='']").attr("selected",true);
                         $("#CompanyPersPrimNombre").val();
                         $("#CompanyPersPrimApellido").val();

@@ -2,7 +2,7 @@
     <?php echo $this->Form->create('Stage', array('enctype' => 'multipart/form-data')); ?>
     <fieldset>
         <legend><?php echo __('Editando Escenario');
-    CakeSession::write('sw', '0')
+    CakeSession::write('sw', '0');
     ?></legend>
         <?php
         if (CakeSession::read('sw') != '1' && CakeSession::read('idStage') != $this->Form->data['Stage']['id']) {

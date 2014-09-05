@@ -5,7 +5,7 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
 <div class="users form">
     <?php echo $this->Form->create('User'); ?>
     <fieldset>
-        <legend><?php echo __('Edit User'); ?></legend>
+        <legend><?php echo __('Editar Usuario'); ?></legend>
         <table>
             <tr>
                 <td></td>
@@ -17,11 +17,11 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                 <td></td>
                 <td><?php echo $this->Form->input('username', array('label' => 'Nombre de usuario','required'=>'true'));?></td>
                 <td></td>
-                <td><?php echo $this->Form->input('password', array('label' => 'Contraseña', 'value'=>'','required'=>'true'));?></td>
+                <td><?php echo $this->Form->input('password', array('label' => 'Contraseña', 'value'=>'','required'=>'true', 'type'=>'password'));?></td>
             </tr>
             <tr>
                 <td></td>
-                <td><?php echo $this->Form->input('conpassword', array('label' => 'Confirmar contraseña','required'=>'true'));?></td>
+                <td><?php echo $this->Form->input('conpassword', array('label' => 'Confirmar contraseña','required'=>'true','type'=>'password'));?></td>
                 <td></td>
                 <td><?php echo $this->Form->input('id');?></td>
             </tr>
@@ -37,7 +37,7 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
        
         ?>
     </fieldset>
-    <?php echo $this->Form->end(__('Submit')); ?>
+    <?php echo $this->Form->end(__('Actualizar')); ?>
 </div>
 <script>
     $(document).ready(function() {

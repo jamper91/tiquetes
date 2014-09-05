@@ -45,13 +45,13 @@
             ),
             'label' => 'Nombre',
         ));
-        echo $this->Form->input('parent_id');
-        echo $this->Form->input('loca_fila');
-        echo $this->Form->input('loca_colomnna');
+        echo $this->Form->input('parent_id',array('label'=>'localidad padre'));
+        echo $this->Form->input('loca_fila',array('label'=>'numero de filas'));
+        echo $this->Form->input('loca_colomnna',array('label'=>'numero de columnas'));
         echo $this->Form->input('coord', array("value" => " ", "type" => "hidden"));
         ?>
     </fieldset>
-    <?php echo $this->Form->end(__('Submit')); ?>
+    <?php echo $this->Form->end(__('Agregar')); ?>
 </div>
 <script>
     $("#LocationStateId").change(function() {

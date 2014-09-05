@@ -290,7 +290,7 @@ class CompaniesController extends AppController {
         $this->loadModel("Person");
         $this->layout = "webservices";
         $documento = $this->request->data["documento"]; //State
-        $sql = "SELECT p.id, p.pers_primNombre, p.pers_prim_apellido, p.city_id, p.pers_direccion, p.pers_telefono  FROM people p WHERE p.pers_documento = " . $documento;
+        $sql = "SELECT p.id, p.pers_primNombre, p.pers_prim_apellido, p.city_id, p.pers_direccion, p.pers_telefono, p.pers_mail  FROM people p WHERE p.pers_documento = " . $documento;
         $options = array(
             "conditions" => array(
                 "Person.pers_documento" => $documento
@@ -302,7 +302,7 @@ class CompaniesController extends AppController {
                 "Person.city_id",
                 "Person.pers_direccion",
                 "Person.pers_telefono",
-                "Person.pers_mail"
+                "Person.pers_mail",
             ),
             "recursive" => 0
         );
