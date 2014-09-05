@@ -1,4 +1,4 @@
-<div class="events index">
+<div class="events index" table-bordered table condensed  stages index>
     <h2><?php
         echo __('Eventos');
         
