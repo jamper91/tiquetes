@@ -25,7 +25,10 @@ class CategoriasController extends AppController {
      */
     public function index() {
         $this->Categoria->recursive = 0;
-        $this->set('categorias', $this->Paginator->paginate());
+        $sql = "SELECT id, descripcion FROM `categorias`";
+        $categories = $this->Categoria->query($sql);
+//        $this->set(compact('eventos'));
+        $this->set('categories', $this->Paginator->paginate());
     }
 
     /**
@@ -50,26 +53,28 @@ class CategoriasController extends AppController {
      */
     public function add() {
         if ($this->request->is('post')) {
-            $sql = "SELECT c.id FROM `categorias` c WHERE c.descripcion ='" . strtoupper($this->request->data['Categoria']['descripcion']) . "'";
-            $id = $this->Categoria->query($sql);
-//            debug($id);
+//            debug(strtoupper($this->request->data['Categoria']['descripcion']));
 //            die();
-            if ($id == "") {
+            $x = "";
+            $sql = "SELECT id FROM `categorias` WHERE descripcion ='" . strtoupper($this->request->data['Categoria']['descripcion']) . "'"; //
+            $id = $this->Categoria->query($sql);
+            if ($id != array())
+                $x = $id[0]['categorias']['id'];
+            if ($x == "") {
                 $this->Categoria->create();
                 $this->request->data['Categoria']['descripcion'] = strtoupper($this->request->data['Categoria']['descripcion']);
                 if ($this->Categoria->save($this->request->data)) {
-                    $this->Session->setFlash(__('The categoria has been saved.'));
+                    $this->Session->setFlash('La categoria se guardo con exito.', 'good');
                     return $this->redirect(array('action' => 'index'));
                 } else {
-                    $this->Session->setFlash(__('La categoria no se pudo crear. Por favor, vuelve a intentar.'));
+                    $this->Session->setFlash('La categoria no se pudo crear. Por favor, vuelve a intentar.', 'error');
                 }
             } else {
-                $this->Session->setFlash(__('The categoria ya ha sido creada. Por favor, ingrese otra.'));
+                $this->Session->setFlash('The categoria ya ha sido creada. Por favor, ingrese otra.', 'error');
             }
         }
         $events = $this->Categoria->Event->find('list');
-        $entradas = $this->Categoria->Entrada->find('list');
-        $this->set(compact('events', 'entradas'));
+        $this->set(compact('events'));
     }
 
     /**
@@ -84,11 +89,33 @@ class CategoriasController extends AppController {
             throw new NotFoundException(__('Invalid categoria'));
         }
         if ($this->request->is(array('post', 'put'))) {
-            if ($this->Categoria->save($this->request->data)) {
-                $this->Session->setFlash(__('The categoria has been saved.'));
-                return $this->redirect(array('action' => 'index'));
+            $x = "";
+            $y = $this->request->data['descripcionant'];
+            $sql = "SELECT id, descripcion FROM `categorias` WHERE descripcion ='" . strtoupper($this->request->data['Categoria']['descripcion']) . "'"; //
+            $id = $this->Categoria->query($sql);
+//            debug($id);
+//            die();
+            if ($id != array()) {
+                $x = $id[0]['categorias']['id'];
+            }
+            if ($x != "") {
+                if ($this->request->data['Categoria']['id'] == $x) {
+                    $this->Session->setFlash('La categoria se edito correctamente.', 'good');
+                    return $this->redirect(array('action' => 'index'));
+                } else {
+                    $this->Session->setFlash('La categoria ya existe no la puede duplicar', 'error');
+                }
+            } elseif ($y != "EXPOSITOR" && $y != "ACOMPAÑANTE" && $y != "CONFERENCISTA") {
+                $this->request->data['Categoria']['descripcion'] = strtoupper($this->request->data['Categoria']['descripcion']);
+                if ($this->Categoria->save($this->request->data)) {
+                    $this->Session->setFlash('La categoria se edito correctamente.', 'good');
+                    return $this->redirect(array('action' => 'index'));
+                } else {
+                    $this->Session->setFlash('The categoria no se pudo editar. por favor, intente de nuevo.', 'error');
+                }
             } else {
-                $this->Session->setFlash(__('The categoria could not be saved. Please, try again.'));
+                $this->Session->setFlash('Las categorias EXPOSITOR, ACOMPAÑANTE, CONFERENCISTA no se puede editar.', 'error');
+                return $this->redirect(array('action' => 'index'));
             }
         } else {
             $options = array('conditions' => array('Categoria.' . $this->Categoria->primaryKey => $id));
@@ -108,16 +135,22 @@ class CategoriasController extends AppController {
      */
     public function delete($id = null) {
         $this->Categoria->id = $id;
+        
+        if ($id != "1" && $id != "2" && $id != "16") {
         if (!$this->Categoria->exists()) {
-            throw new NotFoundException(__('Invalid categoria'));
+            throw new NotFoundException('Categoria invalida'.'error');
         }
         $this->request->allowMethod('post', 'delete');
         if ($this->Categoria->delete()) {
-            $this->Session->setFlash(__('The categoria has been deleted.'));
+            $this->Session->setFlash('La categoria se elimino correctamente.','good');
         } else {
-            $this->Session->setFlash(__('The categoria could not be deleted. Please, try again.'));
+            $this->Session->setFlash('La categoria no se pudo eliminar. Por favor, intente de nuevo.','error');
         }
         return $this->redirect(array('action' => 'index'));
+        }else{
+            $this->Session->setFlash('Las categorias EXPOSITOR, ACOMPAÑANTE, CONFERENCISTA no se puede eliminar.', 'error');
+            return $this->redirect(array('action' => 'index'));
+        }
     }
 
     public function getCategoriesByEvent() {
