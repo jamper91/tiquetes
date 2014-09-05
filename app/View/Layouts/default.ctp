@@ -149,7 +149,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                                 <li><a href="<?= $this->Html->url(array("controller" => "EventTypes", "action" => "add")); ?>">Crear Tipos de Evento</a></li>
                                 <li><a href="<?= $this->Html->url(array("controller" => "Events", "action" => "add")); ?>">Crear Evento</a></li>
                                 <li><a href="<?= $this->Html->url(array("controller" => "Locations", "action" => "add")); ?>">Crear Localidad</a></li>
-                                <li><a href="<?= $this->Html->url(array("controller" => "Categorias", "action" => "add")); ?>">Crear Categorias</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "Categorias", "action" => "add")); ?>">Crear Categorias</a></li>                                
+                                <li><a href="<?= $this->Html->url(array("controller" => "Categorias", "action" => "index")); ?>">Lista Categorias</a></li>
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "Shelves", "action" => "add")); ?>">Crear Grupo de Estan</a></li>-->
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "Inputs", "action" => "add")); ?>">Crear entradas por Evento</a></li>-->
 
