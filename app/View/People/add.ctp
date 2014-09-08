@@ -74,25 +74,25 @@ echo $this->Form->input('CommitteesEvent');
 //                "multiple" => "checkbox",
 //                'options' => $products,
 //            ));
-            echo $this->Form->input('stand', array(
-                'label' => 'Número de Stand'
-            ));
-            ?>            
+//            echo $this->Form->input('stand', array(
+//                'label' => 'Número de Stand'
+//            ));
+            ?>
+            <input type="hidden" name="data[people][pers_id]" id="PeoplePers_id">
         </div>
         <?php
 //        echo $this->Form->input('pers_tipoSangre', array(
 //            'label' => 'Tipo de Sangre',
 //        ));
-
-        echo $this->form->input('input_identificador', array(
-            'label' => 'Identificador de Escarapela',
-            'required' => 'true'
-        ));
-        echo $this->form->input('input_codigo', array(
-            'label' => 'Codigo RFID',
-            'required' => 'true',
-            'type' => 'password'
-        ));
+//        echo $this->form->input('input_identificador', array(
+//            'label' => 'Identificador de Escarapela',
+//            'required' => 'true'
+//        ));
+//        echo $this->form->input('input_codigo', array(
+//            'label' => 'Codigo RFID',
+//            'required' => 'true',
+//            'type' => 'password'
+//        ));
         ?>
 
     </fieldset>
@@ -133,15 +133,15 @@ echo $this->Form->input('CommitteesEvent');
                 var apellido2 = "";
                 var nombre = "";
                 var sangre = "";
-               // alert($('#PersonPistola').val().length);
-			   var sw=0;
+                // alert($('#PersonPistola').val().length);
+                var sw = 0;
                 for (var i = 0; i < $('#PersonPistola').val().length; i++) {
                     if (i >= 48 && i < 58) {
                         var letra = $('#PersonPistola').val()[i].toString();
-                        if(letra != "0" || sw == 1){
-							sw=1;
-							documento = documento + letra;
-						}
+                        if (letra != "0" || sw == 1) {
+                            sw = 1;
+                            documento = documento + letra;
+                        }
                     }
                     if (i >= 58 && i < 81) {
                         var letra = $('#PersonPistola').val()[i].toString();
@@ -171,13 +171,46 @@ echo $this->Form->input('CommitteesEvent');
                 }
                 $('#PersonPersDocumento').val(documento);
                 $('#PersonPersPrimNombre').val(nombre);
-                $('#PersonPersPrimApellido').val(apellido1 ); //+ " " + apellido2
+                $('#PersonPersPrimApellido').val(apellido1); //+ " " + apellido2
 //                $('#PersonPersTipoSangre').val(sangre);
                 $('#PersonPistola').val("");
                 $('#PersonCategoriaId').focus();
 //                        var url = "validar_admin.jsp"; // the script where you handle the form input. 
 
             }
+        });
+        $("#PersonPersDocumento").keyup(function() {
+//            alert("aasd");
+            var url = urlbase + "companies/search.xml";
+            var datos = {
+                documento: $(this).val()
+            };
+            ajax(url, datos, function(xml) {
+                $("datos", xml).each(function() {
+                    var obj = $(this).find("Person");
+                    var nombre, apellido, ciudad, direccion, telefono, id;
+                    id = $("id", obj).text();
+                    nombre = $("pers_primNombre", obj).text();
+                    apellido = $("pers_primApellido", obj).text();
+                    ciudad = $("city_id", obj).text();
+                    direccion = $("pers_direccion", obj).text();
+                    telefono = $("pers_telefono", obj).text();
+                    if (nombre !== null) {
+                        $("#CompanyPers_id").val(id);
+                        $("#PersonPersPrimNombre").val(nombre);
+                        $("#PersonPersPrimApellido").val(apellido);
+//                        $("#PersonCityId option[value="+ciudad+"]").attr("selected",true);
+                        $("#PersonPersDireccion").val(direccion);
+                        $("#PersonPersTelefono").val(telefono);
+                    } else {
+//                        $("#CompanyCityId option[value='']").attr("selected",true);
+                        $("#PersonPersPrimNombre").val(nombre);
+                        $("#PersonPersPrimApellido").val(apellido);
+                        $("#PersonPersDireccion").val(direccion);
+                        $("#PersonPersTelefono").val(telefono);
+                    }
+                });
+            });
         });
     });
 
