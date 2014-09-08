@@ -572,6 +572,7 @@ class PeopleController extends AppController {
                 $ciu = $res[0]['people']['ciudad'];
                 $sql2 = "SELECT entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve";
                 $res2 = $this->Input->query($sql2);
+                if($res2 != array()){
                 $cadena = $res2[0]['inputs']['entr_codigo'];
                 App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                 $this->layout = 'pdf'; //this will use the pdf.ctp layout
@@ -579,6 +580,9 @@ class PeopleController extends AppController {
                 $informacion = array('documento' => $doc, 'nombre' => $nom, 'apellido' => $ape, 'empresa' => $emp, 'ciudad' => $ciu, 'codigo' => $cadena);
                 $this->set('data', $informacion);
                 $this->render('pdf');
+                }else{
+                    $this->Session->setFlash("Lo sentimos no existe una persona con el numero de documento " . $doc . " registrada para este evento", 'error');
+                }
             } else {
                 $this->Session->setFlash("Lo sentimos no existe una persona con el numero de documento " . $doc . " registrada para este evento", 'error');
             }
