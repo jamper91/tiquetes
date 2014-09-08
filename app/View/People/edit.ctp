@@ -3,24 +3,16 @@
     <fieldset>
         <legend><?php echo __('Editar Persona'); ?></legend>
         <?php //var_dump($input); 
-        if($input != array()){
-        $selected1=$input[0]["Input"]["categoria_id"];
+        
+//        $selected1=$input[0]["Input"]["categora_id"];
         
         echo $this->Form->input('categoria_id', array(
             'label' => 'Tipo de Asistente',
-            'required' => 'true',
-            'selected'=>$selected1,
+            'required' => 'true',            
             "options" => $categorias,
             "empty" => "Seleccione una categoria"
         ));
-        } else{
-            echo $this->Form->input('categoria_id', array(
-            'label' => 'Categoría',
-            'required' => 'true',
-            "options" => $categorias,
-            "empty" => "Seleccione una categoria"
-        ));
-        }
+        
         echo $this->Form->input('pers_documento', array(
             'label' => 'Número de Documento',
         ));
@@ -71,27 +63,27 @@
 //                "selected"=>$selected,
 //                'options' => $products1,
 //            ));
-            echo $this->Form->input('stand', array(
-                'label' => 'Número de Stand'                
-            ));
-            ?>            
+//            echo $this->Form->input('stand', array(
+//                'label' => 'Número de Stand'                
+//            ));
+//            ?>            
         </div>
         <?php
-        echo $this->Form->input('pers_tipoSangre', array(
-            'label' => 'Tipo de Sangre',           
-        ));  
-        //var_dump($input);
-        echo $this->form->input('input_identificador', array(
-            'label' => 'Identificador de Escarapela',
-            'required' => 'true',
-            'value'=> (isset($input[0]["Input"]["entr_identificador"])) ? $input[0]["Input"]["entr_identificador"]  : ''
-        ));
-        echo $this->form->input('input_codigo', array(
-            'label' => 'Codigo RFID',
-            'type' => 'password',
-            'required' => 'true',
-            'value'=>(isset($input[0]["Input"]["entr_codigo"])) ? $input[0]["Input"]["entr_codigo"] : ''
-        ));
+//        echo $this->Form->input('pers_tipoSangre', array(
+//            'label' => 'Tipo de Sangre',           
+//        ));  
+//        //var_dump($input);
+//        echo $this->form->input('input_identificador', array(
+//            'label' => 'Identificador de Escarapela',
+//            'required' => 'true',
+//            'value'=> (isset($input[0]["Input"]["entr_identificador"])) ? $input[0]["Input"]["entr_identificador"]  : ''
+//        ));
+//        echo $this->form->input('input_codigo', array(
+//            'label' => 'Codigo RFID',
+//            'type' => 'password',
+//            'required' => 'true',
+//            'value'=>(isset($input[0]["Input"]["entr_codigo"])) ? $input[0]["Input"]["entr_codigo"] : ''
+//        ));
 
 
 

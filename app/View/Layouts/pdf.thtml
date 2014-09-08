@@ -1,0 +1,9 @@
+<?php
+/*
+** File: pdf.thtml
+** Location: views/layouts
+** Set content-type for pdf printing
+*/
+header ( "Content-type: application/pdf" );
+echo $content_for_layout ;
+?>
