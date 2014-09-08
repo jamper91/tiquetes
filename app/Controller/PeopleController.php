@@ -556,7 +556,7 @@ class PeopleController extends AppController {
         }
     }
 
-<<<<<<< HEAD
+
     public function reimprimir() {
         $this->loadModel("Input");
         if ($this->request->is("POST")) {
@@ -583,7 +583,8 @@ class PeopleController extends AppController {
             } else {
                 $this->Session->setFlash("Lo sentimos no existe una persona con el numero de documento " . $doc . " registrada para este evento", 'error');
             }
-=======
+        }
+    }
     public function certificate() {
 
         if ($this->request->is("POST")) {
@@ -710,7 +711,7 @@ class PeopleController extends AppController {
             //debug($informacion);
             $this->set('data', $informacion);
             $this->render('certificado');
->>>>>>> 646efcd623cc37eaf6f3c9c9aae0e4869f43651d
+
         }
     }
 
