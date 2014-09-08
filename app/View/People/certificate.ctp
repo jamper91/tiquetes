@@ -7,7 +7,8 @@
         
         echo $this->Form->input('codigo', array(
             'label' => 'Codigo de barras',
-            'required' => 'true'
+            'required' => 'true',
+            'type'=>'number'
         ));
         
        ?>

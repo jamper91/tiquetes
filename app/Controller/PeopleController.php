@@ -556,7 +556,6 @@ class PeopleController extends AppController {
         }
     }
 
-
     public function reimprimir() {
         $this->loadModel("Input");
         if ($this->request->is("POST")) {
@@ -585,134 +584,152 @@ class PeopleController extends AppController {
             }
         }
     }
+
     public function certificate() {
 
         if ($this->request->is("POST")) {
-
             $datos = $this->request->data;
             $codigo = $datos["Person"]["codigo"];
-            $sql = "SELECT p.pers_documento,p.pers_primNombre,p.pers_primApellido,c.descripcion, e.even_nombre, e.even_fechInicio, e.even_fechFinal, city.name FROM `people` p INNER JOIN `inputs` i ON i.person_id=p.id INNER JOIN `categorias` c ON i.categoria_id=c.id INNER JOIN `events_categorias` ec ON ec.categoria_id=c.id INNER JOIN `events` e ON ec.event_id = e.id INNER JOIN `stages` s ON s.id=e.stage_id INNER JOIN `cities` city ON s.city_id = city.id WHERE i.entr_codigo=" . $codigo;
-            $datos = $this->Person->query($sql);
-            $identificacion = $datos[0]['p']['pers_documento'];
-            $nombre = $datos[0]['p']['pers_primNombre'];
-            $apellido = $datos[0]['p']['pers_primApellido'];
-            $categoria = $datos[0]['c']['descripcion'];
-            $evento = $datos[0]['e']['even_nombre'];
-            $fechainicial = $datos[0]['e']['even_fechInicio'];
-            $fechafinal = $datos[0]['e']['even_fechFinal'];
-            $ciudad = $datos[0]['city']['name'];
-
-            $sql = "SELECT DAYOFMONTH('$fechainicial') AS dia ,MONTH('$fechainicial') AS mes ,YEAR('$fechainicial') AS ano";
-            $fecha = $this->Person->query($sql);
-            $diainicial = $fecha[0][0]['dia'];
-            $mesinicial = $fecha[0][0]['mes'];
-            $anoinicial = $fecha[0][0]['ano'];
-            $sql = "SELECT DAYOFMONTH('$fechafinal') AS dia ,MONTH('$fechafinal') AS mes ,YEAR('$fechafinal') AS ano";
-            $fecha = $this->Person->query($sql);
-            $diafinal = $fecha[0][0]['dia'];
-            $mesfinal = $fecha[0][0]['mes'];
-            $anofinal = $fecha[0][0]['ano'];
-
-            switch ($mesinicial) {
-                case '1':
-                    $mesinicial = 'Enero';
-                    break;
-                case '2':
-                    $mesinicial = 'Febrero';
-                    break;
-                case '3':
-                    $mesinicial = 'Marzo';
-                    break;
-                case '4':
-                    $mesinicial = 'Abril';
-                    break;
-                case '5':
-                    $mesinicial = 'Mayo';
-                    break;
-                case '6':
-                    $mesinicial = 'Junio';
-                    break;
-                case '7':
-                    $mesinicial = 'Julio';
-                    break;
-                case '8':
-                    $mesinicial = 'Agosto';
-                    break;
-                case '9';
-                    $mesinicial = 'Septiembre';
-                    break;
-                case '10';
-                    $mesinicial = 'Octubre';
-                    break;
-                case '11';
-                    $mesinicial = 'Noviembre';
-                    break;
-                case '12';
-                    $mesinicial = 'Diciembre';
-                    break;
-                default:
-                    break;
+            $validar = "";
+            $sqlexiste = "SELECT i.id FROM `inputs` i WHERE i.entr_codigo=$codigo";
+            $existe = $this->Person->query($sqlexiste);
+//            if ($existe[0]['i']['id'] != "") {
+//                $sqlexiste = "SELECT i.id FROM `inputs` i WHERE i.entr_codigo=$codigo AND i.certificate is NULL";
+//                $existe = $this->Person->query($sqlexiste);
+            
+            if ($existe != array()) {
+                $validar = $existe[0]['i']['id'];
             }
-            switch ($mesfinal) {
-                case '1':
-                    $mesfinal = 'Enero';
-                    break;
-                case '2':
-                    $mesfinal = 'Febrero';
-                    break;
-                case '3':
-                    $mesfinal = 'Marzo';
-                    break;
-                case '4':
-                    $mesfinal = 'Abril';
-                    break;
-                case '5':
-                    $mesfinal = 'Mayo';
-                    break;
-                case '6':
-                    $mesfinal = 'Junio';
-                    break;
-                case '7':
-                    $mesfinal = 'Julio';
-                    break;
-                case '8':
-                    $mesfinal = 'Agosto';
-                    break;
-                case '9';
-                    $mesfinal = 'Septiembre';
-                    break;
-                case '10';
-                    $mesfinal = 'Octubre';
-                    break;
-                case '11';
-                    $mesfinal = 'Noviembre';
-                    break;
-                case '12';
-                    $mesfinal = 'Diciembre';
-                    break;
-                default:
-                    break;
-            }
-            App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf_1.php'));
-            $this->layout = 'certificado'; //this will use the pdf.ctp layout
-            $informacion = array('documento' => $identificacion,
-                'nombre' => $nombre,
-                'apellido' => $apellido,
-                'categoria' => $categoria,
-                'evento' => $evento,
-                'ciudad' => $ciudad,
-                'diainicio'=>$diainicial,
-                'diafinal'=>$diafinal,
-                'mesinicial'=>$mesinicial,
-                'mesfinal'=>$mesfinal,
-                'ano'=>$anoinicial
-            );
-            $this->set('fpdf_1', new FPDF('L', 'mm', array('160', '100')));
-            //debug($informacion);
-            $this->set('data', $informacion);
-            $this->render('certificado');
+            if ($validar != "") {
+                $sql = "SELECT p.pers_documento,p.pers_primNombre,p.pers_primApellido,c.descripcion, e.even_nombre, e.even_fechInicio, e.even_fechFinal, city.name FROM `people` p INNER JOIN `inputs` i ON i.person_id=p.id INNER JOIN `categorias` c ON i.categoria_id=c.id INNER JOIN `events_categorias` ec ON ec.categoria_id=c.id INNER JOIN `events` e ON ec.event_id = e.id INNER JOIN `stages` s ON s.id=e.stage_id INNER JOIN `cities` city ON s.city_id = city.id WHERE i.entr_codigo=" . $codigo;
+                $datos = $this->Person->query($sql);
+                $identificacion = $datos[0]['p']['pers_documento'];
+                $nombre = $datos[0]['p']['pers_primNombre'];
+                $apellido = $datos[0]['p']['pers_primApellido'];
+                $categoria = $datos[0]['c']['descripcion'];
+                $evento = $datos[0]['e']['even_nombre'];
+                $fechainicial = $datos[0]['e']['even_fechInicio'];
+                $fechafinal = $datos[0]['e']['even_fechFinal'];
+                $ciudad = $datos[0]['city']['name'];
 
+                $sql = "SELECT DAYOFMONTH('$fechainicial') AS dia ,MONTH('$fechainicial') AS mes ,YEAR('$fechainicial') AS ano";
+                $fecha = $this->Person->query($sql);
+                $diainicial = $fecha[0][0]['dia'];
+                $mesinicial = $fecha[0][0]['mes'];
+                $anoinicial = $fecha[0][0]['ano'];
+                $sql = "SELECT DAYOFMONTH('$fechafinal') AS dia ,MONTH('$fechafinal') AS mes ,YEAR('$fechafinal') AS ano";
+                $fecha = $this->Person->query($sql);
+                $diafinal = $fecha[0][0]['dia'];
+                $mesfinal = $fecha[0][0]['mes'];
+                $anofinal = $fecha[0][0]['ano'];
+
+                switch ($mesinicial) {
+                    case '1':
+                        $mesinicial = 'Enero';
+                        break;
+                    case '2':
+                        $mesinicial = 'Febrero';
+                        break;
+                    case '3':
+                        $mesinicial = 'Marzo';
+                        break;
+                    case '4':
+                        $mesinicial = 'Abril';
+                        break;
+                    case '5':
+                        $mesinicial = 'Mayo';
+                        break;
+                    case '6':
+                        $mesinicial = 'Junio';
+                        break;
+                    case '7':
+                        $mesinicial = 'Julio';
+                        break;
+                    case '8':
+                        $mesinicial = 'Agosto';
+                        break;
+                    case '9';
+                        $mesinicial = 'Septiembre';
+                        break;
+                    case '10';
+                        $mesinicial = 'Octubre';
+                        break;
+                    case '11';
+                        $mesinicial = 'Noviembre';
+                        break;
+                    case '12';
+                        $mesinicial = 'Diciembre';
+                        break;
+                    default:
+                        break;
+                }
+                switch ($mesfinal) {
+                    case '1':
+                        $mesfinal = 'Enero';
+                        break;
+                    case '2':
+                        $mesfinal = 'Febrero';
+                        break;
+                    case '3':
+                        $mesfinal = 'Marzo';
+                        break;
+                    case '4':
+                        $mesfinal = 'Abril';
+                        break;
+                    case '5':
+                        $mesfinal = 'Mayo';
+                        break;
+                    case '6':
+                        $mesfinal = 'Junio';
+                        break;
+                    case '7':
+                        $mesfinal = 'Julio';
+                        break;
+                    case '8':
+                        $mesfinal = 'Agosto';
+                        break;
+                    case '9';
+                        $mesfinal = 'Septiembre';
+                        break;
+                    case '10';
+                        $mesfinal = 'Octubre';
+                        break;
+                    case '11';
+                        $mesfinal = 'Noviembre';
+                        break;
+                    case '12';
+                        $mesfinal = 'Diciembre';
+                        break;
+                    default:
+                        break;
+                }
+                App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf_1.php'));
+                $this->layout = 'certificado'; //this will use the pdf.ctp layout
+                $informacion = array('documento' => $identificacion,
+                    'nombre' => $nombre,
+                    'apellido' => $apellido,
+                    'categoria' => $categoria,
+                    'evento' => $evento,
+                    'ciudad' => $ciudad,
+                    'diainicio' => $diainicial,
+                    'diafinal' => $diafinal,
+                    'mesinicial' => $mesinicial,
+                    'mesfinal' => $mesfinal,
+                    'ano' => $anoinicial
+                );
+                $this->set('fpdf_1', new FPDF('L', 'mm', array('160', '100')));
+                //debug($informacion);
+                $this->set('data', $informacion);
+                $this->render('certificado');
+//                } else {
+//                    $this->Session->setFlash("El certificado ya fue impreso", 'error');
+//                }
+//                $this->Session->setFlash("Su certificado fue exportado con exito", 'good');
+            } else {
+                $this->Session->setFlash("La escarapela no es valida", 'error');
+            }
         }
+        
     }
 
 }
