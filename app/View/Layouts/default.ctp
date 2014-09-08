@@ -132,8 +132,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                             <ul>
                                 <li><a href="<?= $this->Html->url(array("controller" => "Companies", "action" => "add")); ?>">Crear Empresa</a></li>
                                 <li><a href="<?= $this->Html->url(array("controller" => "Companies", "action" => "index")); ?>">Listar Empresas</a></li>
-                                <li><a href="<?= $this->Html->url(array("controller" => "rolecompanies", "action" => "add")); ?>">Crear Petrocinador</a></li>
-                                <li><a href="<?= $this->Html->url(array("controller" => "rolecompanies", "action" => "index")); ?>">Listar Patrocinadores</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "RoleCompanies", "action" => "add")); ?>">Crear Petrocinador</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "RoleCompanies", "action" => "index")); ?>">Listar Patrocinadores</a></li>
                             </ul>
                         </li>
                     <?php } ?>

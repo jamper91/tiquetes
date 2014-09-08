@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+<div class="companies index" table-bordered table condensed  stages index>
+=======
 <div class="companies index">
+>>>>>>> a331b1bef94be417a95eca4e0eae6000c4263b2c
     <h2><?php echo __('Empresas'); ?></h2>
     <table cellpadding="0" cellspacing="0">
         <thead>
