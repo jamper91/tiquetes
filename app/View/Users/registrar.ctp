@@ -1,6 +1,6 @@
 
 <?php
-echo $this->Html->script(array('jquery.validate.min','jquery.multi-select'));
+echo $this->Html->script(array('jquery.validate.min', 'jquery.multi-select'));
 echo $this->Html->css(array('multi-select'));
 ?>
 <div class="row-fluid">
@@ -48,10 +48,39 @@ echo $this->Html->css(array('multi-select'));
                 ?>
 
 
+
                 <div id="formulario" >
                     <label style="text-align: center">
                         Seleccione un evento
                     </label>
+                    <table id="formulario2" style="display: none">
+                        <tr>
+
+                            <td>Número de Documento:  </td>
+                            <td colspan="1"><input type="text" required="true" id="PeopleDocumento" name="data[People][pers_documento]"/><input type="hidden" name="data[Person][pers_id]" id="PeoplePers_id"></td>
+                        </tr>
+                        <tr>
+                            <td>Nombres</td>
+                            <td><input type="text" required="true" id="PeoplePers_primNombre" name="data[People][pers_primNombre]"/></td>
+                        </tr>
+                        <tr>
+                            <td>Apellidos</td>
+                            <td><input type="text" id="PeoplePers_primApellido" required="true" name="data[People][pers_primApellido]"/></td>
+                        </tr>            
+                        <tr>
+ 
+                            <td>Dirección:</td>
+                            <td><input type="text" id="PeoplePers_direccion" name="data[People][pers_direccion]"/></td>
+                        </tr>
+                        <tr>
+                            <td>Teléfono</td>
+                            <td><input type="text" id="PeoplePers_telefono" name="data[People][pers_telefono]"/></td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td><input type="email" id="PeoplePers_mail" name="data[People][pers_mail]"/></td>
+                        </tr>            
+                    </table>
 
                 </div>
                 <input type="button" id="btnNuevo" class="btn btn-success" value="Registrar Nuevo" id="btnLimpiar" style="display:none"> 
@@ -100,8 +129,8 @@ echo $this->Html->css(array('multi-select'));
             $("#inputActualizar").val(actualizar);
             $("#inputInputId").val(inputId);
             $("#inputPersonId").val(personId);
-            
-            console.log("validacion: "+$("#UserRegistrarForm").valid());
+
+            console.log("validacion: " + $("#UserRegistrarForm").valid());
             if ($("#UserRegistrarForm").valid())
             {
                 var datos = $('#UserRegistrarForm').serialize();
@@ -123,12 +152,12 @@ echo $this->Html->css(array('multi-select'));
 
                     });
                 });
-            }else{
+            } else {
                 console.log("no paso la validacion");
             }
 
         });
-        
+
         $("#UserEventId").change(function()
         {
             actualizarForm();
@@ -137,10 +166,10 @@ echo $this->Html->css(array('multi-select'));
         {
 //            actualizarForm();
         })();
-        
+
         function actualizarForm()
         {
-            $("#formulario").html("Cargando...");
+//            $("#formulario").html("Cargando...");
             console.log("entre actualizarForm");
             var event_id = $("#UserEventId").val();
             //Obtengo los tipos de usuarios
@@ -177,10 +206,12 @@ echo $this->Html->css(array('multi-select'));
                         {
                             var formulario = "";
                             //Agrego el campo de la cedula y campos necesarios para almacenar otra informacion
-                            formulario += "<div class='controls'>";
-                            formulario += "<label for='PeopleDocumento'>Documento</label>";
-                            formulario += "<input id='PeopleDocumento' type='number' name='data[People][pers_documento]'></input>";
-                            formulario += "</div>";
+//                            formulario += "<div class='controls'>";
+//                            formulario += "<tr>";
+//                            formulario += "<td colspan='2'><label for='PeopleDocumento'>Documento</label></td>";
+//                            formulario += "<td colspan='2'><input id='PeopleDocumento' type='number' name='data[People][pers_documento]'></input></td>";
+//                            formulario += "</tr>";
+//                            formulario += "</div>";
 
 
                             var con = 0;
@@ -203,12 +234,14 @@ echo $this->Html->css(array('multi-select'));
                                 idFPD = $("id", obj).text();
                                 if (id) {
                                     var html = "";
-                                    html += "<div class='controls'>";
-                                    html += "<label for='Form$1'>$1</label>";
-                                    html += "<input type='$2' name='data[Data][$5][descripcion]' $6></input>";
+//                                    html += "<div class='controls'>";
+                                    html += "<tr>";
+                                    html += "<td colspan='1'><label for='Form$1'>$1</label></td>";
+                                    html += "<td colspan='1'><input type='$2' name='data[Data][$5][descripcion]' $6></input>";
                                     html += "<input style='display:none' type='text' name='data[Data][$5][forms_personal_datum_id]' value='$4'></input>";
-                                    html += "<input style='display:none' type='text' name='data[Data][$5][person_id]' value='-1'></input>";
-                                    html += "</div>";
+                                    html += "<input style='display:none' type='text' name='data[Data][$5][person_id]' value='-1'></input></td>";
+                                    html += "</tr>";
+//                                    html += "</div>";
 
                                     html = html.replace("$1", descripcion);
                                     html = html.replace("$1", descripcion);
@@ -225,16 +258,20 @@ echo $this->Html->css(array('multi-select'));
                                 }
                             });
                             //Agrego el campo de la tarjeta
-                            formulario += "<div class='controls'>";
-                            formulario += "<label for='PersonDocumento'>Identificador Manilla</label>";
-                            formulario += "<input id='PersonDocumento' type='text' name='data[Input][entr_identificador]'></input>";
-                            formulario += "</div>";
+//                            formulario += "<div class='controls'>";
+                            formulario += "<tr>";
+                            formulario += "<td colspan='1'><label for='PersonDocumento'>Identificador Manilla</label></rd>";
+                            formulario += "<td colspan='1'><input id='PersonDocumento' type='text' name='data[Input][entr_identificador]'></input></td>";
+                            formulario += "</tr>";
+//                            formulario += "</div>";
 
                             //Agrego el campo de la tarjeta
-                            formulario += "<div class='controls'>";
-                            formulario += "<label for='PersonDocumento'>Codigo Manilla</label>";
-                            formulario += "<input id='PersonDocumento' type='password' name='data[Input][entr_codigo]'></input>";
-                            formulario += "</div>";
+//                            formulario += "<div class='controls'>";
+                            formulario += "<tr>";
+                            formulario += "<td colspan='1'><label for='PersonDocumento'>Codigo Manilla</label></td>";
+                            formulario += "<td colspan='1'><input id='PersonDocumento' type='password' name='data[Input][entr_codigo]'></input></td>";
+                            formulario += "</tr>";
+//                            formulario += "</div>";
 
 
                             //Datos para almacenar en la tabla events_registration_types
@@ -246,12 +283,54 @@ echo $this->Html->css(array('multi-select'));
                             formulario += "<input style='display:none' type='text' name='data[Input][events_registration_type_id]' value='-1'></input>";
 //                            formulario += "<input style='display:none' type='text' name='data[Input][category_id]' value='-1' id='InputCategoryId'></input>";
                             formulario += "<input style='display:none' type='text' name='data[Input][person_id]' value='-1'></input>";
-                            $("#formulario").html(formulario);
+                            $("#formulario2").append(formulario);
+                            $("#formulario2").css("display","block");
+//                            $("#formulario").html(formulario);
                         }
                     });
                 }
             });
         }
+        
+        $("#PeopleDocumento").keyup(function() {
+//            alert("aasd");
+            var url = urlbase + "companies/search.xml";
+            var datos = {
+                documento: $(this).val()
+            };
+            ajax(url, datos, function(xml) {
+                $("datos", xml).each(function() {
+                    var obj = $(this).find("Person");
+                    var nombre, apellido, ciudad, direccion, telefono, id, email;
+                    id = $("id", obj).text();
+                    nombre = $("pers_primNombre", obj).text();
+                    apellido = $("pers_primApellido", obj).text();
+                    ciudad = $("city_id", obj).text();
+                    direccion = $("pers_direccion", obj).text();
+                    telefono = $("pers_telefono", obj).text();
+                    email = $("pers_mail", obj).text();
+                    
+                    if (nombre !== null) {
+                        $("#PeoplePers_id").val(id);
+                        $("#PeoplePers_primNombre").val(nombre);
+                        $("#PeoplePers_primApellido").val(apellido);
+                        $("#UserCityId option[value=" + ciudad + "]").attr("selected", true);
+                        $("#PeoplePers_direccion").val(direccion);
+                        $("#PeoplePers_telefono").val(telefono);
+                        $("#PeoplePers_mail").val(email);
+                        actualizar = 1;
+                    } else {
+                        $("#PeoplePers_id").val();
+                        $("#UserCityId option[value='']").attr("selected", true);
+                        $("#PeoplePers_primNombre").val();
+                        $("#PeoplePers_primApellido").val();
+                        $("#PeoplePers_direccion").val();
+                        $("#PeoplePers_telefono").val();
+                        $("#PeoplePers_mail").val();
+                    }
+                });
+            });
+        });
     });
 
 </script>
