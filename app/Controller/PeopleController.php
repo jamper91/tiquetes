@@ -87,7 +87,7 @@ class PeopleController extends AppController {
 //                
 
             $caracteres = "0123456789"; //posibles caracteres a usar
-            $numerodeletras = 13; //numero de letras para generar el texto
+            $numerodeletras = 12; //numero de letras para generar el texto
             $cadena = ""; //variable para almacenar la cadena generada
             $while = TRUE;
             while ($while) {
@@ -98,7 +98,7 @@ class PeopleController extends AppController {
                 $ejemplo = strlen($cadena);
                 $if = TRUE;
                 while ($if) {
-                    if ($ejemplo < 13) {
+                    if ($ejemplo < 12) {
                         $numerodado = rand(0, 9);
                         $cadena = $cadena . $numerodado;
                         $ejemplo = strlen($cadena);

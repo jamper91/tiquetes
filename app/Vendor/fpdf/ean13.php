@@ -4,7 +4,7 @@ require_once('fpdf.php');
 class PDF_EAN13 extends FPDF
 
 {    
-function EAN13($x, $y, $barcode, $h=12, $w=.30)
+function EAN13($x, $y, $barcode, $h=16, $w=.35)
 {
 	$this->Barcode($x,$y,$barcode,$h,$w,13);
 }

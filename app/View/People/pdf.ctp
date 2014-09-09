@@ -10,8 +10,8 @@ $pdf->AddPage();
 
 if ($data['codigo']) {
     $codigo = $data['codigo'];
-    $pdf->SetY(-10);
-    $pdf->cell(0, 2, $pdf->EAN13(16, 22, "$codigo"), 0, 0, 'C');
+    $pdf->SetY(-24);
+    $pdf->cell(0, 2, $pdf->EAN13(15, 23, "$codigo"), 0, 0, 'C');
     $pdf->Ln(2);
 }
 if ($data['nombre']) {
@@ -30,19 +30,19 @@ if ($data['documento']) {
     $pdf->Ln(2);
 }
 if ($data['empresa']) {
-    $pdf->SetY(-25);
+    $pdf->SetY(-27);
     $pdf->SetFont('Arial', '', 8);
     $pdf->Cell(0, 2, $data['empresa'], 0, 0, 'C');
     $pdf->Ln(2);
 }
 if ($data['empresa'] == '') {
-    $pdf->SetY(-25);
+    $pdf->SetY(-27);
     $pdf->Cell(0, 2, '', 0, 0, 'C');
     $pdf->Ln(2);
 }
 
 if ($data['ciudad']) {
-    $pdf->SetY(-21);
+    $pdf->SetY(-22);
     $pdf->SetFont('Arial', '', 8);
     $pdf->Cell(0, 2, $data['ciudad'], 0, 0, 'C');
     $pdf->Ln(2);
