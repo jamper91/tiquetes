@@ -40,6 +40,9 @@ echo $this->Form->input('CommitteesEvent');
         echo $this->Form->input('pers_documento', array(
             'label' => 'Identificación',
         ));
+        echo $this->Form->input('pers_expedicion', array(
+            'label' => 'Lugar de Expedición',
+        ));
         echo $this->Form->input('pers_primNombre', array(
             'label' => 'Nombres',
         ));
@@ -61,8 +64,11 @@ echo $this->Form->input('CommitteesEvent');
             'label' => 'E-mail',
             'type' => 'email'
         ));
-        echo $this->Form->input('pers_empresa', array(
-            'label' => 'Empresa',
+        echo $this->Form->input('pers_institucion', array(
+            'label' => 'Institución',
+        ));
+        echo $this->Form->input('pers_cargo', array(
+            'label' => 'Cargo',
         ));
         ?>       
         <div id="adicionales" name="adicionales" style="display: none;" >
@@ -188,29 +194,67 @@ echo $this->Form->input('CommitteesEvent');
             ajax(url, datos, function(xml) {
                 $("datos", xml).each(function() {
                     var obj = $(this).find("Person");
-                    var nombre, apellido, ciudad, direccion, telefono, id;
+                    var nombre, apellido, ciudad, direccion, telefono, exp, ciu, mail, ins, car;
                     id = $("id", obj).text();
                     nombre = $("pers_primNombre", obj).text();
                     apellido = $("pers_primApellido", obj).text();
                     ciudad = $("city_id", obj).text();
                     direccion = $("pers_direccion", obj).text();
                     telefono = $("pers_telefono", obj).text();
+                    mail = $("pers_mail", obj).text();
+                    ciu = $("ciudad", obj).text();
+                    ins = $("pers_institucion", obj).text();
+                    car =  $("pers_cargo", obj).text();
+                    exp = $("pers_expedicion", obj).text();
+//                    alert(ciu+ins+car+exp+mail);
                     if (nombre !== null) {
                         $("#CompanyPers_id").val(id);
                         $("#PersonPersPrimNombre").val(nombre);
                         $("#PersonPersPrimApellido").val(apellido);
-//                        $("#PersonCityId option[value="+ciudad+"]").attr("selected",true);
                         $("#PersonPersDireccion").val(direccion);
                         $("#PersonPersTelefono").val(telefono);
+                        $("#PersonPersExpedicion").val(exp);
+                        $("#PersonCiudad").val(ciu);
+                        $("#PersonPersMail").val(mail);
+                        $("#PersonPersInstitucion").val(ins);
+                        $("#PersonPersCargo").val(car);
                     } else {
-//                        $("#CompanyCityId option[value='']").attr("selected",true);
-                        $("#PersonPersPrimNombre").val(nombre);
-                        $("#PersonPersPrimApellido").val(apellido);
-                        $("#PersonPersDireccion").val(direccion);
-                        $("#PersonPersTelefono").val(telefono);
+                        $("#PersonPersPrimNombre").val();
+                        $("#PersonPersPrimApellido").val();
+                        $("#PersonPersDireccion").val();
+                        $("#PersonPersTelefono").val();
+                        $("#PersonPersExpedicion").val();
+                        $("#PersonCiudad").val();
+                        $("#PersonPersMail").val();
+                        $("#PersonPersInstitucion").val();
+                        $("#PersonPersCargo").val();
                     }
                 });
             });
+        });
+        $("#PersonPersPrimNombre").on('keyup', function(){ 
+           $("#PersonPersPrimNombre").val(conMayusculas($(this).val()));
+        });
+        $("#PersonPersPrimApellido").on('keyup', function(){ 
+           $("#PersonPersPrimApellido").val(conMayusculas($(this).val()));
+        });
+        $("#PersonPersDireccion").on('keyup', function(){ 
+           $("#PersonPersDireccion").val(conMayusculas($(this).val()));
+        });
+        $("#PersonPersExpedicion").on('keyup', function(){ 
+           $("#PersonPersExpedicion").val(conMayusculas($(this).val()));
+        });
+        $("#PersonCiudad").on('keyup', function(){ 
+           $("#PersonCiudad").val(conMayusculas($(this).val()));
+        });
+        $("#PersonPersMail").on('keyup', function(){ 
+           $("#PersonPersMail").val(conMayusculas($(this).val()));
+        });
+        $("#PersonPersInstitucion").on('keyup', function(){ 
+           $("#PersonPersInstitucion").val(conMayusculas($(this).val()));
+        });
+        $("#PersonPersCargo").on('keyup', function(){ 
+           $("#PersonPersCargo").val(conMayusculas($(this).val()));
         });
     });
 

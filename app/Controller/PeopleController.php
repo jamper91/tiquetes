@@ -136,7 +136,7 @@ class PeopleController extends AppController {
                     App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                     $this->layout = 'pdf'; //this will use the pdf.ctp layout
                     $this->set('fpdf', new FPDF('L', 'mm', array('60', '40')));
-                    $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'apellido' => $data['Person']['pers_primApellido'], /* 'categoria' => $categoria, */ 'empresa' => $data['Person']['pers_empresa'], 'ciudad' => $data['Person']['ciudad'], 'codigo' => $cadena);
+                    $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'apellido' => $data['Person']['pers_primApellido'], /* 'categoria' => $categoria, */ 'empresa' => $data['Person']['pers_institucion'], 'ciudad' => $data['Person']['ciudad'], 'codigo' => $cadena);
 
                     //debug($informacion);
                     $this->set('data', $informacion);
@@ -183,16 +183,17 @@ class PeopleController extends AppController {
             } else {
                 $this->loadModel("Person");
                 $data = $this->request->data;
-                $doc = $data['Person']['pers_documento'];
-                $nom = $data['Person']['pers_primNombre'];
-                $ape = $data['Person']['pers_primApellido'];
-                $ciu = $data['Person']['ciudad'];
-                $dir = $data['Person']['pers_direccion'];
+                $doc = strtoupper($data['Person']['pers_documento']);
+                $nom = strtoupper($data['Person']['pers_primNombre']);
+                $ape = strtoupper($data['Person']['pers_primApellido']);
+                $ciu = strtoupper($data['Person']['ciudad']);
+                $dir = strtoupper($data['Person']['pers_direccion']);
                 $tel = $data['Person']['pers_telefono'];
-                $mai = $data['Person']['pers_mail'];
-                $emp = $data['Person']['pers_empresa'];
-
-                $sql = "UPDATE `people` SET `pers_primNombre`='$nom',`pers_primApellido`='$ape',`pers_direccion`='$dir',`pers_telefono`=$tel,`pers_mail`='$mai',`pers_empresa`='$emp',`ciudad`='$ciu' WHERE `pers_documento` = '$doc'";
+                $mai = strtoupper($data['Person']['pers_mail']);
+                $emp = strtoupper($data['Person']['pers_institucion']);
+                $car = strtoupper($data['Person']['pers_cargo']);
+                $exp = strtoupper($data['Person']['pers_expedicion']);
+                $sql = "UPDATE `people` SET `pers_primNombre`='$nom',`pers_primApellido`='$ape',`pers_direccion`='$dir',`pers_telefono`=$tel,`pers_mail`='$mai',`pers_institucion`='$emp',`ciudad`='$ciu',`pers_cargo`='$car', `pers_expedicion` = '$exp' WHERE `pers_documento` = '$doc'";
                 $this->Person->query($sql);
                 $sql2 = "SELECT id FROM people WHERE pers_documento = '$doc'";
                 $res = $this->Person->query($sql2);
@@ -226,7 +227,7 @@ class PeopleController extends AppController {
                     App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                     $this->layout = 'pdf'; //this will use the pdf.ctp layout
                     $this->set('fpdf', new FPDF('L', 'mm', array('60', '40')));
-                    $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'apellido' => $data['Person']['pers_primApellido'], /* 'categoria' => $categoria, */ 'empresa' => $data['Person']['pers_empresa'], 'ciudad' => $data['Person']['ciudad'], 'codigo' => $cadena);
+                    $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'apellido' => $data['Person']['pers_primApellido'], /* 'categoria' => $categoria, */ 'empresa' => $data['Person']['pers_institucion'], 'ciudad' => $data['Person']['ciudad'], 'codigo' => $cadena);
                     $this->set('data', $informacion);
                     $this->render('pdf');
                 } else {
@@ -234,7 +235,7 @@ class PeopleController extends AppController {
                     App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                     $this->layout = 'pdf'; //this will use the pdf.ctp layout
                     $this->set('fpdf', new FPDF('L', 'mm', array('60', '40')));
-                    $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'apellido' => $data['Person']['pers_primApellido'], /* 'categoria' => $categoria, */ 'empresa' => $data['Person']['pers_empresa'], 'ciudad' => $data['Person']['ciudad'], 'codigo' => $cadena);
+                    $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'apellido' => $data['Person']['pers_primApellido'], /* 'categoria' => $categoria, */ 'empresa' => $data['Person']['pers_institucion'], 'ciudad' => $data['Person']['ciudad'], 'codigo' => $cadena);
 
                     //debug($informacion);
                     $this->set('data', $informacion);
@@ -338,7 +339,7 @@ class PeopleController extends AppController {
                     'nombre' => $data['Person']['pers_primNombre'],
                     'apellido' => $data['Person']['pers_primApellido'],
 //                    'categoria' => $categoria,
-                    'empresa' => $data['Person']['pers_empresa'],
+                    'empresa' => $data['Person']['pers_institucion'],
                     'ciudad' => $data['Person']['ciudad']);
 
                 //debug($informacion);
@@ -522,31 +523,34 @@ class PeopleController extends AppController {
     public function cargarUsuarios() {
         if ($this->request->is("POST")) {
             $datos = $this->request->data;
-//            debug($datos);
+//            debug($datos); DIE;
             $tam = $datos['size'];
             $inicio = "Se registraron  ";
             $medio = "Y se actualizaron las personas con los siguientes numeros de documento: ";
             $repetidos = "";
             $cont = 0;
             for ($i = 1; $i <= $tam; $i++) {
-
                 $doc = $datos["doc$i"];
+                $exp = $datos["exp$i"];
                 $nom = $datos["nom$i"];
                 $ape = $datos["ape$i"];
+                $ciu = $datos["ciu$i"];
                 $dir = $datos["dir$i"];
                 $tel = $datos["tel$i"];
                 $mail = $datos["mail$i"];
+                $ins = $datos["ins$i"];
+                $car = $datos["car$i"];
 
                 $sql1 = "SELECT id FROM people WHERE pers_documento='" . $doc . "'";
                 $id = $this->Person->query($sql1);
                 if ($id == array()) {
                     $cont = $cont + 1;
-                    $sql = "INSERT INTO people (pers_documento, pers_primNombre, pers_primApellido, pers_direccion, pers_telefono, pers_mail) VALUES ('$doc','$nom','$ape','$dir','$tel', '$mail')";
+                    $sql = "INSERT INTO people (pers_documento, pers_primNombre, pers_primApellido, pers_direccion, pers_telefono, pers_mail, pers_expedicion, pers_institucion, pers_cargo, ciUdad) VALUES ('$doc','$nom','$ape','$dir','$tel', '$mail', '$exp', '$ins', '$car', '$ciu')";
                     $this->Person->query($sql);
                     $this->Session->setFlash($inicio . $cont . " nuevas Personas", 'good');
                 } else {
                     $repetidos = $repetidos . ", " . $doc;
-                    $sql2 = "UPDATE `people` SET `pers_primNombre`='$nom',`pers_primApellido`='$ape',`pers_direccion`='$dir',`pers_telefono`=$tel,`pers_mail`='$mail' WHERE `pers_documento` = '$doc'";
+                    $sql2 = "UPDATE `people` SET `pers_primNombre`='$nom',`pers_primApellido`='$ape',`pers_direccion`='$dir',`pers_telefono`=$tel,`pers_mail`='$mail', `pers_expedicion` = '$exp', `pers_institucion`= '$ins', `pers_cargo`= '$car', `ciudad`='$ciu' WHERE `pers_documento` = '$doc'";
                     $this->Person->query($sql2);
                     $this->Session->setFlash($inicio . $cont . " nuevas personas. " . $medio . $repetidos . ".", 'good');
                 }
@@ -561,14 +565,14 @@ class PeopleController extends AppController {
         if ($this->request->is("POST")) {
             $data = $this->request->data;
             $doc = $data['Person']['pers_documento'];
-            $sql = "SELECT id, pers_primNombre, Pers_primApellido, pers_empresa, ciudad FROM people WHERE pers_documento = '$doc'";
+            $sql = "SELECT id, pers_primNombre, Pers_primApellido, pers_institucion, ciudad FROM people WHERE pers_documento = '$doc'";
             $eve = 3;
             $res = $this->Person->query($sql);
             if ($res != array()) {
                 $id = $res[0]['people']['id'];
                 $nom = $res[0]['people']['pers_primNombre'];
                 $ape = $res[0]['people']['Pers_primApellido'];
-                $emp = $res[0]['people']['pers_empresa'];
+                $emp = $res[0]['people']['pers_institucion'];
                 $ciu = $res[0]['people']['ciudad'];
                 $sql2 = "SELECT entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve";
                 $res2 = $this->Input->query($sql2);
@@ -589,139 +593,169 @@ class PeopleController extends AppController {
         }
     }
 
-    public function certificate() {
+   public function certificate() {
 
         if ($this->request->is("POST")) {
             $datos = $this->request->data;
             $codigo = $datos["Person"]["codigo"];
+            $codigo = substr($codigo, 0, -1);
+//            debug($codigo);
+//            die;
             $validar = "";
             $sqlexiste = "SELECT i.id FROM `inputs` i WHERE i.entr_codigo=$codigo";
             $existe = $this->Person->query($sqlexiste);
 //            if ($existe[0]['i']['id'] != "") {
 //                $sqlexiste = "SELECT i.id FROM `inputs` i WHERE i.entr_codigo=$codigo AND i.certificate is NULL";
 //                $existe = $this->Person->query($sqlexiste);
-            
+
             if ($existe != array()) {
                 $validar = $existe[0]['i']['id'];
             }
             if ($validar != "") {
-                $sql = "SELECT p.pers_documento,p.pers_primNombre,p.pers_primApellido,c.descripcion, e.even_nombre, e.even_fechInicio, e.even_fechFinal, city.name FROM `people` p INNER JOIN `inputs` i ON i.person_id=p.id INNER JOIN `categorias` c ON i.categoria_id=c.id INNER JOIN `events_categorias` ec ON ec.categoria_id=c.id INNER JOIN `events` e ON ec.event_id = e.id INNER JOIN `stages` s ON s.id=e.stage_id INNER JOIN `cities` city ON s.city_id = city.id WHERE i.entr_codigo=" . $codigo;
+//                $sql = "SELECT p.pers_documento,p.pers_primNombre,p.pers_primApellido,c.descripcion, e.even_nombre, e.even_fechInicio, e.even_fechFinal, city.name FROM `people` p INNER JOIN `inputs` i ON i.person_id=p.id INNER JOIN `categorias` c ON i.categoria_id=c.id INNER JOIN `events_categorias` ec ON ec.categoria_id=c.id INNER JOIN `events` e ON ec.event_id = e.id INNER JOIN `stages` s ON s.id=e.stage_id INNER JOIN `cities` city ON s.city_id = city.id WHERE i.entr_codigo=" . $codigo;  
+                $sql = "SELECT p.pers_documento,p.pers_primNombre,p.pers_primApellido FROM `people` p INNER JOIN `inputs` i ON i.person_id=p.id WHERE i.entr_codigo =" . $codigo;
                 $datos = $this->Person->query($sql);
                 $identificacion = $datos[0]['p']['pers_documento'];
                 $nombre = $datos[0]['p']['pers_primNombre'];
                 $apellido = $datos[0]['p']['pers_primApellido'];
-                $categoria = $datos[0]['c']['descripcion'];
-                $evento = $datos[0]['e']['even_nombre'];
-                $fechainicial = $datos[0]['e']['even_fechInicio'];
-                $fechafinal = $datos[0]['e']['even_fechFinal'];
-                $ciudad = $datos[0]['city']['name'];
+                $numero='';
+                if (strlen($identificacion) == 12) {
+                    $numero = substr($identificacion, -12, 1) . substr($identificacion, -11, 1) . substr($identificacion, -10, 1) . '.' . substr($identificacion, -9, 1) . substr($identificacion, -8, 1) . substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
+                } elseif (strlen($identificacion) == 11) {
+                    $numero = substr($identificacion, -11, 1) . substr($identificacion, -10, 1) . '.' . substr($identificacion, -9, 1) . substr($identificacion, -8, 1) . substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
+                    substr($identificacion, -10) . '.' . substr($identificacion, -9) . substr($identificacion, -8) . substr($identificacion, -7) . '.' . substr($identificacion, -6) . substr($identificacion, -5) . substr($identificacion, -4) . '.' . substr($identificacion, -3) . substr($identificacion, -2) . substr($identificacion, -1);
+                } elseif (strlen($identificacion) == 10) {
+                    $numero = substr($identificacion, -10, 1) . '.' . substr($identificacion, -9, 1) . substr($identificacion, -8, 1) . substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
+                    debug($numero);
+                } elseif (strlen($identificacion) == 9) {
+                    $numero = substr($identificacion, -9, 1) . substr($identificacion, -8, 1) . substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
+                } elseif (strlen($identificacion) == 8) {
+                    $numero = substr($identificacion, -8, 1) . substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
+                } elseif (strlen($identificacion) == 7) {
+                    $numero = substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
+                } elseif (strlen($identificacion) == 6) {
+                    $numero = substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
+                } elseif (strlen($identificacion) == 5) {
+                    $numero = substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
+                } elseif (strlen($identificacion) == 4) {
+                    $numero = substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
+                } else {
+                    $numero = $identificacion;
+                } 
+//                debug($numero);
+//                die();
 
-                $sql = "SELECT DAYOFMONTH('$fechainicial') AS dia ,MONTH('$fechainicial') AS mes ,YEAR('$fechainicial') AS ano";
-                $fecha = $this->Person->query($sql);
-                $diainicial = $fecha[0][0]['dia'];
-                $mesinicial = $fecha[0][0]['mes'];
-                $anoinicial = $fecha[0][0]['ano'];
-                $sql = "SELECT DAYOFMONTH('$fechafinal') AS dia ,MONTH('$fechafinal') AS mes ,YEAR('$fechafinal') AS ano";
-                $fecha = $this->Person->query($sql);
-                $diafinal = $fecha[0][0]['dia'];
-                $mesfinal = $fecha[0][0]['mes'];
-                $anofinal = $fecha[0][0]['ano'];
-
-                switch ($mesinicial) {
-                    case '1':
-                        $mesinicial = 'Enero';
-                        break;
-                    case '2':
-                        $mesinicial = 'Febrero';
-                        break;
-                    case '3':
-                        $mesinicial = 'Marzo';
-                        break;
-                    case '4':
-                        $mesinicial = 'Abril';
-                        break;
-                    case '5':
-                        $mesinicial = 'Mayo';
-                        break;
-                    case '6':
-                        $mesinicial = 'Junio';
-                        break;
-                    case '7':
-                        $mesinicial = 'Julio';
-                        break;
-                    case '8':
-                        $mesinicial = 'Agosto';
-                        break;
-                    case '9';
-                        $mesinicial = 'Septiembre';
-                        break;
-                    case '10';
-                        $mesinicial = 'Octubre';
-                        break;
-                    case '11';
-                        $mesinicial = 'Noviembre';
-                        break;
-                    case '12';
-                        $mesinicial = 'Diciembre';
-                        break;
-                    default:
-                        break;
-                }
-                switch ($mesfinal) {
-                    case '1':
-                        $mesfinal = 'Enero';
-                        break;
-                    case '2':
-                        $mesfinal = 'Febrero';
-                        break;
-                    case '3':
-                        $mesfinal = 'Marzo';
-                        break;
-                    case '4':
-                        $mesfinal = 'Abril';
-                        break;
-                    case '5':
-                        $mesfinal = 'Mayo';
-                        break;
-                    case '6':
-                        $mesfinal = 'Junio';
-                        break;
-                    case '7':
-                        $mesfinal = 'Julio';
-                        break;
-                    case '8':
-                        $mesfinal = 'Agosto';
-                        break;
-                    case '9';
-                        $mesfinal = 'Septiembre';
-                        break;
-                    case '10';
-                        $mesfinal = 'Octubre';
-                        break;
-                    case '11';
-                        $mesfinal = 'Noviembre';
-                        break;
-                    case '12';
-                        $mesfinal = 'Diciembre';
-                        break;
-                    default:
-                        break;
-                }
+//                $categoria = $datos[0]['c']['descripcion'];
+//                $evento = $datos[0]['e']['even_nombre'];
+//                $fechainicial = $datos[0]['e']['even_fechInicio'];
+//                $fechafinal = $datos[0]['e']['even_fechFinal'];
+//                $ciudad = $datos[0]['city']['name'];
+//                $sql = "SELECT DAYOFMONTH('$fechainicial') AS dia ,MONTH('$fechainicial') AS mes ,YEAR('$fechainicial') AS ano";
+//                $fecha = $this->Person->query($sql);
+//                $diainicial = $fecha[0][0]['dia'];
+//                $mesinicial = $fecha[0][0]['mes'];
+//                $anoinicial = $fecha[0][0]['ano'];
+//                $sql = "SELECT DAYOFMONTH('$fechafinal') AS dia ,MONTH('$fechafinal') AS mes ,YEAR('$fechafinal') AS ano";
+//                $fecha = $this->Person->query($sql);
+//                $diafinal = $fecha[0][0]['dia'];
+//                $mesfinal = $fecha[0][0]['mes'];
+//                $anofinal = $fecha[0][0]['ano'];
+//
+//                switch ($mesinicial) {
+//                    case '1':
+//                        $mesinicial = 'Enero';
+//                        break;
+//                    case '2':
+//                        $mesinicial = 'Febrero';
+//                        break;
+//                    case '3':
+//                        $mesinicial = 'Marzo';
+//                        break;
+//                    case '4':
+//                        $mesinicial = 'Abril';
+//                        break;
+//                    case '5':
+//                        $mesinicial = 'Mayo';
+//                        break;
+//                    case '6':
+//                        $mesinicial = 'Junio';
+//                        break;
+//                    case '7':
+//                        $mesinicial = 'Julio';
+//                        break;
+//                    case '8':
+//                        $mesinicial = 'Agosto';
+//                        break;
+//                    case '9';
+//                        $mesinicial = 'Septiembre';
+//                        break;
+//                    case '10';
+//                        $mesinicial = 'Octubre';
+//                        break;
+//                    case '11';
+//                        $mesinicial = 'Noviembre';
+//                        break;
+//                    case '12';
+//                        $mesinicial = 'Diciembre';
+//                        break;
+//                    default:
+//                        break;
+//                }
+//                switch ($mesfinal) {
+//                    case '1':
+//                        $mesfinal = 'Enero';
+//                        break;
+//                    case '2':
+//                        $mesfinal = 'Febrero';
+//                        break;
+//                    case '3':
+//                        $mesfinal = 'Marzo';
+//                        break;
+//                    case '4':
+//                        $mesfinal = 'Abril';
+//                        break;
+//                    case '5':
+//                        $mesfinal = 'Mayo';
+//                        break;
+//                    case '6':
+//                        $mesfinal = 'Junio';
+//                        break;
+//                    case '7':
+//                        $mesfinal = 'Julio';
+//                        break;
+//                    case '8':
+//                        $mesfinal = 'Agosto';
+//                        break;
+//                    case '9';
+//                        $mesfinal = 'Septiembre';
+//                        break;
+//                    case '10';
+//                        $mesfinal = 'Octubre';
+//                        break;
+//                    case '11';
+//                        $mesfinal = 'Noviembre';
+//                        break;
+//                    case '12';
+//                        $mesfinal = 'Diciembre';
+//                        break;
+//                    default:
+//                        break;
+//                }
                 App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf_1.php'));
                 $this->layout = 'certificado'; //this will use the pdf.ctp layout
-                $informacion = array('documento' => $identificacion,
+                $informacion = array('documento' => $numero,
                     'nombre' => $nombre,
                     'apellido' => $apellido,
-                    'categoria' => $categoria,
-                    'evento' => $evento,
-                    'ciudad' => $ciudad,
-                    'diainicio' => $diainicial,
-                    'diafinal' => $diafinal,
-                    'mesinicial' => $mesinicial,
-                    'mesfinal' => $mesfinal,
-                    'ano' => $anoinicial
+//                    'categoria' => $categoria,
+//                    'evento' => $evento,
+//                    'ciudad' => $ciudad,
+//                    'diainicio' => $diainicial,
+//                    'diafinal' => $diafinal,
+//                    'mesinicial' => $mesinicial,
+//                    'mesfinal' => $mesfinal,
+//                    'ano' => $anoinicial
                 );
-                $this->set('fpdf_1', new FPDF('L', 'mm', array('160', '100')));
+                $this->set('fpdf_1', new FPDF('L', 'mm', array('279.4', '215.9')));
                 //debug($informacion);
                 $this->set('data', $informacion);
                 $this->render('certificado');
@@ -733,7 +767,6 @@ class PeopleController extends AppController {
                 $this->Session->setFlash("La escarapela no es valida", 'error');
             }
         }
-        
     }
 
 }

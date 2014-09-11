@@ -374,7 +374,7 @@ class EntradasController extends AppController {
                 ON 
                     person.id = input.person_id
                 WHERE
-                    person.id IS NOT null
+                    person.id IS NOT null AND input.event_id = 3
                 ";
 
         $datos = $this->Entrada->query($sql);
@@ -459,7 +459,7 @@ class EntradasController extends AppController {
                     "EntradasInput.ingresos"
                 ),
                 "conditions" => array(
-                    "EntradasInput.fecha" => '2014-08-11 00:00:00',
+                    "EntradasInput.fecha" => '2014-09-11 00:00:00',
                     "EntradasInput.input_id" => $dato["input"]["id"]
                 ),
                 "recursive" => -1
@@ -483,7 +483,7 @@ class EntradasController extends AppController {
                     "EntradasInput.ingresos"
                 ),
                 "conditions" => array(
-                    "EntradasInput.fecha" => '2014-08-12 00:00:00',
+                    "EntradasInput.fecha" => '2014-09-12 00:00:00',
                     "EntradasInput.input_id" => $dato["input"]["id"]
                 ),
                 "recursive" => -1
@@ -507,7 +507,7 @@ class EntradasController extends AppController {
                     "EntradasInput.ingresos"
                 ),
                 "conditions" => array(
-                    "EntradasInput.fecha" => '2014-08-13 00:00:00',
+                    "EntradasInput.fecha" => '2014-09-13 00:00:00',
                     "EntradasInput.input_id" => $dato["input"]["id"]
                 ),
                 "recursive" => -1
@@ -584,22 +584,27 @@ class EntradasController extends AppController {
 //            $i++;
 //            $pos++;
 //        }
+            $this->loadModel("Input");
+            $id = $dato["input"]["categoria_id"];
+            $sql = "SELECT descripcion FROM categorias WHERE id= $id ";
+            $res = $this->Input->query($sql);
+            $categoria = $res[0]['categorias']['descripcion'];
             $aux = array(
-                "Cedula" => $dato["person"]["pers_documento"],
-                "Nombre" => $dato["person"]["pers_primNombre"],
+                "Fecha" => $dato["person"]["diligenciamiento"],
+                 "Nombre" => $dato["person"]["pers_primNombre"],
                 "Apellido" => $dato["person"]["pers_primApellido"],
-                "Ciudad" => $dato["person"]["ciudad"],
-                "Direccion" => $dato["person"]["pers_direccion"],
+                "Documento" => $dato["person"]["pers_documento"],
+                "Lugar" => $dato["person"]["pers_expedicion"],
+                "Tipo" => $categoria,
                 "Telefono" => $dato["person"]["pers_telefono"],
                 "Email" => $dato["person"]["pers_mail"],
-                "Empresa" => $dato["person"]["pers_empresa"],
-                "Manilla" => $dato["input"]["entr_identificador"],
-                "Chip" => $dato["input"]["entr_codigo"],
+                "Direccion" => $dato["person"]["pers_direccion"],
+                "Municipio" => $dato["person"]["ciudad"],                
+                "Institucion" => $dato["person"]["pers_institucion"],
+                "Cargo" => $dato["person"]["pers_cargo"],                
                 "Agosto-1" => $fecha1,
                 "Agosto-2" => $fecha2,
-                "Agosto-3" => $fecha3,
-                "Agosto-4" => $fecha4,
-                "Agosto-5" => $fecha5
+                "Agosto-3" => $fecha3,                
             );
             $datos2[$i] = $aux;
             $i++;

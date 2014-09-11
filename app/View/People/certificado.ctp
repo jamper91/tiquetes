@@ -7,58 +7,65 @@
 $fpdf_1->SetAutoPageBreak(true, 0.3);
 $fpdf_1->AddPage();
 
-$fpdf_1->Image('../webroot/img/events1/minions barca - copia.jpg',0,0,$fpdf_1->w,$fpdf_1->h);
+//$fpdf_1->Image('../webroot/img/certificate/derecho.jpg',0,0,$fpdf_1->w,$fpdf_1->h);
 
-$fpdf_1->SetY(-80);
-$fpdf_1->SetFont('Arial', 'B', 16);
-$fpdf_1->Cell(0, 2, 'Certifica que:', 0, 0, 'C');
-$fpdf_1->Ln(2);
 
 if ($data['nombre']) {
     $ncompleto = $data['nombre'] . ' ' . $data['apellido'];
-    $fpdf_1->SetY(-74);
-    $fpdf_1->SetFont('Arial', 'B', 14);
+    $fpdf_1->SetY(-130);
+    $fpdf_1->SetFont('Arial', 'B', 26);
+    $fpdf_1->Cell(-30);
     $fpdf_1->Cell(0, 2, $ncompleto, 0, 0, 'C');
     $fpdf_1->Ln(2);
 }
 
+//if ($data['documento']) {
+////    $cedula = 'Identificado con ';
+//    $fpdf_1->SetY(-125);
+//    $fpdf_1->SetFont('Arial', '', 10);
+//    $fpdf_1->Cell(-30);
+//    $fpdf_1->Cell(0, 2, , 0, 0, 'C');
+//    $fpdf_1->Ln(2);
+//}
+
 if ($data['documento']) {
-    $cedula = 'Con identificacion C.C ';
-    $fpdf_1->SetY(-68);
-    $fpdf_1->SetFont('Arial', '', 12);
-    $fpdf_1->Cell(0, 2, $cedula.$data['documento'], 0, 0, 'C');
+//    $cedula = 'Identificado con ';
+    $fpdf_1->SetY(-120);
+    $fpdf_1->SetFont('Arial', 'B', 16);
+    $fpdf_1->Cell(-30);
+    $fpdf_1->Cell(0, 2, 'C.C: '.$data['documento'], 0, 0, 'C');
     $fpdf_1->Ln(2);
 }
 
-if ($data['categoria']) {
-    
-        $fpdf_1->SetY(-62);
-        $fpdf_1->SetFont('Arial', 'B', 12);
-        $fpdf_1->Cell(0, 2, 'asistio en calidad de '.$data['categoria'] .' al', 0, 0, 'C');
-        $fpdf_1->Ln(2);
-    
-}
-if ($data['evento']) {
-    $fpdf_1->SetY(-56);
-    $fpdf_1->SetFont('Arial', '', 12);
-    $fpdf_1->Cell(0, 2,$data['evento'], 0, 0, 'C');
-    $fpdf_1->Ln(2);
-}
-
-if ($data['ciudad']) {
-    $fpdf_1->SetY(-48);
-    $fpdf_1->SetFont('Arial', '', 12);
-    $fpdf_1->Cell(0, 2,'realizado en la ciudad de '. $data['ciudad'].' ,Colombia en los dias comprendidos', 0, 0, 'C');
-    $fpdf_1->Ln(2);
-}
-
-if ($data['diainicio']) {
-    if($data['mesinicial']==$data['mesfinal'])
-    $fpdf_1->SetY(-40);
-    $fpdf_1->SetFont('Arial', '', 12);
-    $fpdf_1->Cell(0, 2,'entre el '. $data['diainicio'].' y el '. $data['diafinal'].' de '. $data['mesinicial'].' de '. $data['ano'], 0, 0, 'C');
-    $fpdf_1->Ln(2);
-}
+//if ($data['categoria']) {
+//    
+//        $fpdf_1->SetY(-62);
+//        $fpdf_1->SetFont('Arial', 'B', 12);
+//        $fpdf_1->Cell(0, 2, 'asistio en calidad de '.$data['categoria'] .' al', 0, 0, 'C');
+//        $fpdf_1->Ln(2);
+//    
+//}
+//if ($data['evento']) {
+//    $fpdf_1->SetY(-56);
+//    $fpdf_1->SetFont('Arial', '', 12);
+//    $fpdf_1->Cell(0, 2,$data['evento'], 0, 0, 'C');
+//    $fpdf_1->Ln(2);
+//}
+//
+//if ($data['ciudad']) {
+//    $fpdf_1->SetY(-48);
+//    $fpdf_1->SetFont('Arial', '', 12);
+//    $fpdf_1->Cell(0, 2,'realizado en la ciudad de '. $data['ciudad'].' ,Colombia en los dias comprendidos', 0, 0, 'C');
+//    $fpdf_1->Ln(2);
+//}
+//
+//if ($data['diainicio']) {
+//    if($data['mesinicial']==$data['mesfinal'])
+//    $fpdf_1->SetY(-40);
+//    $fpdf_1->SetFont('Arial', '', 12);
+//    $fpdf_1->Cell(0, 2,'entre el '. $data['diainicio'].' y el '. $data['diafinal'].' de '. $data['mesinicial'].' de '. $data['ano'], 0, 0, 'C');
+//    $fpdf_1->Ln(2);
+//}
 
 
 
