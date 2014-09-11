@@ -38,13 +38,13 @@ if ($data['nombre']) {
 
 if ($data['documento']) {
     $cedula = 'C.C ' . $data['documento'];
-    $pdf->SetY(-17);
+    $pdf->SetY(-16);
     $pdf->SetFont('Arial', '', 8);
     $pdf->Cell(0, 2, $cedula, 0, 0, 'C');
     $pdf->Ln(2);
 }
 if ($data['empresa']) {
-    $pdf->SetY(-14);
+    $pdf->SetY(-13);
     $pdf->SetFont('Arial', '', 8);
     $pdf->Cell(0, 2, $data['empresa'], 0, 0, 'C');
     $pdf->Ln(2);
