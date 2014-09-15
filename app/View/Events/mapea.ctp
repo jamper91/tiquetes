@@ -34,10 +34,10 @@ foreach ($locations as $key => $value) {
     /*$this->Html->link($value["loca_nombre"], array(
         'controller'=>'Events','action'=>'mapea',$parametros[0],$value["id"]))."</b>";*/
 
-     /*echo ($value["coord"]!=" ")? "(SI) ":" (NO) ";
+     /*echo ($value["coord"]!=" ")? "(SI) ":" (NO) ";*/
 
      echo $this->Html->link('Cuadricula', array(
-        'controller'=>'Events','action'=>'grid',$parametros[0],$value["id"]),array('class'=>'btn btn-mini btn-success'));*/
+        'controller'=>'Events','action'=>'grid',$parametros[0],$value["id"]),array('class'=>'btn btn-mini btn-success'));
      echo $this->Html->link('Editar', array(
         'controller'=>'Events','action'=>'mapea',$parametros[0],$value["id"]),array('class'=>'btn btn-mini btn-warning'));
      echo $this->Html->link('Borrar', array(
