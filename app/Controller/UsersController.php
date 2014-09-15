@@ -19,7 +19,7 @@ class UsersController extends AppController {
 
     public function beforeFilter() {
         $this->set('authUser', $this->Auth->user());
-        //$this->Auth->allow('add');
+        $this->Auth->allow('add');
 
         parent:: beforeFilter();
 //        if ($this->Auth->user('role') == 'admin') {
@@ -114,7 +114,6 @@ class UsersController extends AppController {
                 $this->User->save($newUser);
                 $this->Session->setFlash('Usuario registrado con exito', 'good');
                 return $this->redirect(array('action' => 'index'));
-                
             } else {
                 $nombre = $data['People']['pers_primNombre'];
                 $apellido = $data['People']['pers_primApellido'];
@@ -146,7 +145,6 @@ class UsersController extends AppController {
                 $this->User->save($newUser);
                 $this->Session->setFlash('Usuario registrado con exito', 'good');
                 return $this->redirect(array('action' => 'index'));
-                
             }
 
 
@@ -834,23 +832,14 @@ class UsersController extends AppController {
                             $this->request->data["Input"]["id"] = $newInputId;
 
                             $this->request->data["Input"]["person_id"] = $newPeopleId;
-//                    $this->request->data["Input"]["events_registration_type_id"] = $this->request->data["User"]["registration_type_id"];
                             $this->loadModel("Input");
-//                    debug($this->request->data["Input"]);
                             $this->Input->save($this->request->data);
-//                        $newInputId = $this->Input->getLastInsertId();
-//                        $this->Session->setFlash('Registro realizado con exito', 'good');
-//                        $mensaje = "Registro realizado con exito";
                             $mensaje = array(
                                 "codigo" => 0,
                                 "mensaje" => "Registro realizado con exito",
                                 "person_id" => $newPeopleId,
                                 "input_id" => $newInputId
                             );
-//                    } else {
-////                        $this->Session->setFlash('La tarjeta no concuerda con la categoria', 'error');
-//                        $mensaje = "La tarjeta no concuerda con la categoria";
-//                    }
                         } catch (Exception $exc) {
                             $error2 = $exc->getCode();
                             $mensaje2 = $exc->getMessage();
@@ -904,20 +893,43 @@ class UsersController extends AppController {
                 if (true) {
                     $this->loadModel("Input");
                     $this->Input->id = $this->request->data["Informacion"]["input_id"];
-                    $this->Input->set('entr_codigo', $this->request->data['Input']['entr_codigo']);
-                    $this->Input->set('entr_identificador', $this->request->data['Input']['entr_identificador']);
-                    $this->Input->save();
+                    if ($this->Input->id != 0) {
+                        $this->Input->set('entr_codigo', $this->request->data['Input']['entr_codigo']);
+                        $this->Input->set('entr_identificador', $this->request->data['Input']['entr_identificador']);
+                        $this->Input->save();
+                        $newInputId = $this->request->data["Informacion"]["input_id"];
+                    } else {
+                        $newInput = $this->Input->create();
+                        $newInput = array(
+                            'Input' => array(
+                                'entr_identificador' => $this->request->data['Input']['entr_identificador'],
+                                'entr_codigo' => $this->request->data['Input']['entr_codigo'],
+                                'categoria_id' => 2,
+                            )
+                        );
+                        $this->Input->save($newInput);
+                        $newInputId = $this->Input->getLastInsertId();
+                    }
+
 
                     try {
-                        $newInputId = $this->request->data["Informacion"]["input_id"];
+                        
 
                         $this->loadModel('People');
 
                         //Actualizo a la persona
-                        $this->People->id = $this->request->data["Informacion"]["person_id"];
+                        if($this->request->data["Informacion"]["person_id"]!=0)
+                            $this->People->id = $this->request->data["Informacion"]["person_id"];
+                        else
+                            $this->People->id = $this->request->data["Person"]["pers_id"];
                         $this->People->set('pers_documento', $this->request->data['People']['pers_documento']);
+                        $this->People->set('pers_primNombre', $this->request->data['People']['pers_primNombre']);
+                        $this->People->set('pers_primApellido', $this->request->data['People']['pers_primApellido']);
+                        $this->People->set('pers_direccion', $this->request->data['People']['pers_direccion']);
+                        $this->People->set('pers_telefono', $this->request->data['People']['pers_telefono']);
+                        $this->People->set('pers_mail', $this->request->data['People']['pers_mail']);
                         $this->People->save();
-                        $newPeopleId = $this->request->data["Informacion"]["person_id"];
+                        $newPeopleId =  $this->People->id;
 
                         //Almaceno la informacion de la persona
                         $this->loadModel('Data');
@@ -927,16 +939,6 @@ class UsersController extends AppController {
                             $cont++;
                         }
                         $this->Data->saveAll($this->request->data['Data']);
-//                        $this->request->data["Input"]["id"] = $newInputId;
-//
-//                        $this->request->data["Input"]["person_id"] = $newPeopleId;
-//                    $this->request->data["Input"]["events_registration_type_id"] = $this->request->data["User"]["registration_type_id"];
-//                        $this->loadModel("Input");
-//                    debug($this->request->data["Input"]);
-//                        $this->Input->save($this->request->data);
-//                        $newInputId = $this->Input->getLastInsertId();
-//                        $this->Session->setFlash('Registro realizado con exito', 'good');
-//                        $mensaje = "Registro realizado con exito";
                         $mensaje = array(
                             "codigo" => 0,
                             "mensaje" => "Actualizacion realizada con exito",

@@ -136,7 +136,7 @@ class CategoriasController extends AppController {
     public function delete($id = null) {
         $this->Categoria->id = $id;
         
-        if ($id != "1" && $id != "2" && $id != "16") {
+        if ($id != "1" && $id != "2" && $id != "3") {
         if (!$this->Categoria->exists()) {
             throw new NotFoundException('Categoria invalida'.'error');
         }

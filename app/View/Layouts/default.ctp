@@ -132,8 +132,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                             <ul>
                                 <li><a href="<?= $this->Html->url(array("controller" => "Companies", "action" => "add")); ?>">Crear Empresa</a></li>
                                 <li><a href="<?= $this->Html->url(array("controller" => "Companies", "action" => "index")); ?>">Listar Empresas</a></li>
-                                <li><a href="<?= $this->Html->url(array("controller" => "rolecompanies", "action" => "add")); ?>">Crear Petrocinador</a></li>
-                                <li><a href="<?= $this->Html->url(array("controller" => "rolecompanies", "action" => "index")); ?>">Listar Patrocinadores</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "RoleCompanies", "action" => "add")); ?>">Crear Petrocinador</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "RoleCompanies", "action" => "index")); ?>">Listar Patrocinadores</a></li>
                             </ul>
                         </li>
                     <?php } ?>
@@ -149,7 +149,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                                 <li><a href="<?= $this->Html->url(array("controller" => "EventTypes", "action" => "add")); ?>">Crear Tipos de Evento</a></li>
                                 <li><a href="<?= $this->Html->url(array("controller" => "Events", "action" => "add")); ?>">Crear Evento</a></li>
                                 <li><a href="<?= $this->Html->url(array("controller" => "Locations", "action" => "add")); ?>">Crear Localidad</a></li>
-                                <li><a href="<?= $this->Html->url(array("controller" => "Categorias", "action" => "add")); ?>">Crear Categorias</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "Categorias", "action" => "add")); ?>">Crear Categorias</a></li>                                
+                                <li><a href="<?= $this->Html->url(array("controller" => "Categorias", "action" => "index")); ?>">Lista Categorias</a></li>
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "Shelves", "action" => "add")); ?>">Crear Grupo de Estan</a></li>-->
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "Inputs", "action" => "add")); ?>">Crear entradas por Evento</a></li>-->
 
@@ -192,8 +193,10 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                                 <span>Gestionar Personas</span>
                             </a>
                             <ul>
-                                <!--<li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "add")); ?>">Crear Persona</a></li>-->
-                                <li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "registrar")); ?>">Crear Persona</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "add")); ?>">Crear Persona</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "reimprimir")); ?>">Reimprimir Escarapela</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "certificate")); ?>">Imprimir Certificado</a></li>
+                                <!--<li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "registrar")); ?>">Crear Persona</a></li>-->
                                 <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "importarUsuarios")); ?>">registrar desde excel</a></li>
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador2")); ?>">Asociar Tarjeta a Persona</a></li>-->
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador")); ?>">Buscar Persona</a></li>-->

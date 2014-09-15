@@ -196,7 +196,7 @@
                     direccion = $("pers_direccion", obj).text();
                     telefono = $("pers_telefono", obj).text();
                     if(nombre !== null){                        
-                        $("#CompanyPers_id").val(id);
+                        $("#PeoplePers_id").val(id);
                         $("#CompanyPersPrimNombre").val(nombre);
                         $("#CompanyPersPrimApellido").val(apellido);
                         $("#CompanyCityId option[value="+ciudad+"]").attr("selected",true);

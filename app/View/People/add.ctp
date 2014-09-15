@@ -40,6 +40,9 @@ echo $this->Form->input('CommitteesEvent');
         echo $this->Form->input('pers_documento', array(
             'label' => 'Identificación',
         ));
+        echo $this->Form->input('pers_expedicion', array(
+            'label' => 'Lugar de Expedición',
+        ));
         echo $this->Form->input('pers_primNombre', array(
             'label' => 'Nombres',
         ));
@@ -61,8 +64,11 @@ echo $this->Form->input('CommitteesEvent');
             'label' => 'E-mail',
             'type' => 'email'
         ));
-        echo $this->Form->input('pers_empresa', array(
-            'label' => 'Empresa',
+        echo $this->Form->input('pers_institucion', array(
+            'label' => 'Institución',
+        ));
+        echo $this->Form->input('pers_cargo', array(
+            'label' => 'Cargo',
         ));
         ?>       
         <div id="adicionales" name="adicionales" style="display: none;" >
@@ -74,25 +80,25 @@ echo $this->Form->input('CommitteesEvent');
 //                "multiple" => "checkbox",
 //                'options' => $products,
 //            ));
-            echo $this->Form->input('stand', array(
-                'label' => 'Número de Stand'
-            ));
-            ?>            
+//            echo $this->Form->input('stand', array(
+//                'label' => 'Número de Stand'
+//            ));
+            ?>
+            <input type="hidden" name="data[people][pers_id]" id="PeoplePers_id">
         </div>
         <?php
 //        echo $this->Form->input('pers_tipoSangre', array(
 //            'label' => 'Tipo de Sangre',
 //        ));
-
-        echo $this->form->input('input_identificador', array(
-            'label' => 'Identificador de Escarapela',
-            'required' => 'true'
-        ));
-        echo $this->form->input('input_codigo', array(
-            'label' => 'Codigo RFID',
-            'required' => 'true',
-            'type' => 'password'
-        ));
+//        echo $this->form->input('input_identificador', array(
+//            'label' => 'Identificador de Escarapela',
+//            'required' => 'true'
+//        ));
+//        echo $this->form->input('input_codigo', array(
+//            'label' => 'Codigo RFID',
+//            'required' => 'true',
+//            'type' => 'password'
+//        ));
         ?>
 
     </fieldset>
@@ -133,15 +139,15 @@ echo $this->Form->input('CommitteesEvent');
                 var apellido2 = "";
                 var nombre = "";
                 var sangre = "";
-               // alert($('#PersonPistola').val().length);
-			   var sw=0;
+                // alert($('#PersonPistola').val().length);
+                var sw = 0;
                 for (var i = 0; i < $('#PersonPistola').val().length; i++) {
                     if (i >= 48 && i < 58) {
                         var letra = $('#PersonPistola').val()[i].toString();
-                        if(letra != "0" || sw == 1){
-							sw=1;
-							documento = documento + letra;
-						}
+                        if (letra != "0" || sw == 1) {
+                            sw = 1;
+                            documento = documento + letra;
+                        }
                     }
                     if (i >= 58 && i < 81) {
                         var letra = $('#PersonPistola').val()[i].toString();
@@ -171,13 +177,84 @@ echo $this->Form->input('CommitteesEvent');
                 }
                 $('#PersonPersDocumento').val(documento);
                 $('#PersonPersPrimNombre').val(nombre);
-                $('#PersonPersPrimApellido').val(apellido1 ); //+ " " + apellido2
+                $('#PersonPersPrimApellido').val(apellido1); //+ " " + apellido2
 //                $('#PersonPersTipoSangre').val(sangre);
                 $('#PersonPistola').val("");
                 $('#PersonCategoriaId').focus();
 //                        var url = "validar_admin.jsp"; // the script where you handle the form input. 
 
             }
+        });
+        $("#PersonPersDocumento").keyup(function() {
+//            alert("aasd");
+            var url = urlbase + "companies/search.xml";
+            var datos = {
+                documento: $(this).val()
+            };
+            ajax(url, datos, function(xml) {
+                $("datos", xml).each(function() {
+                    var obj = $(this).find("Person");
+                    var nombre, apellido, ciudad, direccion, telefono, exp, ciu, mail, ins, car;
+                    id = $("id", obj).text();
+                    nombre = $("pers_primNombre", obj).text();
+                    apellido = $("pers_primApellido", obj).text();
+                    ciudad = $("city_id", obj).text();
+                    direccion = $("pers_direccion", obj).text();
+                    telefono = $("pers_telefono", obj).text();
+                    mail = $("pers_mail", obj).text();
+                    ciu = $("ciudad", obj).text();
+                    ins = $("pers_institucion", obj).text();
+                    car =  $("pers_cargo", obj).text();
+                    exp = $("pers_expedicion", obj).text();
+//                    alert(ciu+ins+car+exp+mail);
+                    if (nombre !== null) {
+                        $("#CompanyPers_id").val(id);
+                        $("#PersonPersPrimNombre").val(nombre);
+                        $("#PersonPersPrimApellido").val(apellido);
+                        $("#PersonPersDireccion").val(direccion);
+                        $("#PersonPersTelefono").val(telefono);
+                        $("#PersonPersExpedicion").val(exp);
+                        $("#PersonCiudad").val(ciu);
+                        $("#PersonPersMail").val(mail);
+                        $("#PersonPersInstitucion").val(ins);
+                        $("#PersonPersCargo").val(car);
+                    } else {
+                        $("#PersonPersPrimNombre").val();
+                        $("#PersonPersPrimApellido").val();
+                        $("#PersonPersDireccion").val();
+                        $("#PersonPersTelefono").val();
+                        $("#PersonPersExpedicion").val();
+                        $("#PersonCiudad").val();
+                        $("#PersonPersMail").val();
+                        $("#PersonPersInstitucion").val();
+                        $("#PersonPersCargo").val();
+                    }
+                });
+            });
+        });
+        $("#PersonPersPrimNombre").on('keyup', function(){ 
+           $("#PersonPersPrimNombre").val(conMayusculas($(this).val()));
+        });
+        $("#PersonPersPrimApellido").on('keyup', function(){ 
+           $("#PersonPersPrimApellido").val(conMayusculas($(this).val()));
+        });
+        $("#PersonPersDireccion").on('keyup', function(){ 
+           $("#PersonPersDireccion").val(conMayusculas($(this).val()));
+        });
+        $("#PersonPersExpedicion").on('keyup', function(){ 
+           $("#PersonPersExpedicion").val(conMayusculas($(this).val()));
+        });
+        $("#PersonCiudad").on('keyup', function(){ 
+           $("#PersonCiudad").val(conMayusculas($(this).val()));
+        });
+        $("#PersonPersMail").on('keyup', function(){ 
+           $("#PersonPersMail").val(conMayusculas($(this).val()));
+        });
+        $("#PersonPersInstitucion").on('keyup', function(){ 
+           $("#PersonPersInstitucion").val(conMayusculas($(this).val()));
+        });
+        $("#PersonPersCargo").on('keyup', function(){ 
+           $("#PersonPersCargo").val(conMayusculas($(this).val()));
         });
     });
 
