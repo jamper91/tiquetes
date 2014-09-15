@@ -59,6 +59,28 @@ class EventsController extends AppController {
     }
 
 
+    public function guardagrid(){
+        echo "<pre>";
+        var_dump($_POST);
+        echo "</pre>";
+
+        $existe= $this->Event->query('SELECT * FROM grid_location WHERE id_location='.$_POST["loca"].' AND fila='.$_POST["fil"].' AND columna='.$_POST["col"].'  '); // Traemos datos 
+
+        if($existe!=null){
+            echo "Existe";
+            $this->Event->query('UPDATE  grid_location SET  val =  "'.$_POST["tipo"].'"  WHERE id_location='.$_POST["loca"].' AND fila='.$_POST["fil"].' AND columna='.$_POST["col"].'  ');  
+        }else{
+            echo "No Existe";
+            $this->Event->query('INSERT INTO grid_location (`id`, `id_location`, `fila`, `columna`, `val`, `merge`) VALUES (NULL, "'.$_POST["loca"].'", "'.$_POST["fil"].'", "'.$_POST["col"].'", "'.$_POST["tipo"].'", NULL)');  
+        }
+        var_dump($existe);
+
+        return $this->redirect($this->referer());
+
+    }
+
+
+
     public function borracoords($id = null) {
         $parametros=$this->request->params["pass"];
         $id=$parametros[1];
