@@ -31,7 +31,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         echo $this->Html->css(array('bootstrap.min', 'bootstrap-responsive.min', 'matrix-style', 'matrix-media', 'jquery.gritter', "select2"));
         echo $this->Html->css(array('colorpicker', 'datepicker.css', 'uniform', 'bootstrap-wysihtml5'));
 //        echo $this->Html->script(array('jquery.min', 'menu_jquery2', 'operaciones'));
-        echo $this->Html->script(array('excanvas.min', 'jquery.min', 'operaciones', 'jquery.ui.custom', 'bootstrap.min', 'jquery.flot.min', 'jquery.flot.resize.min', 'jquery.peity.min', 'fullcalendar.min'));
+        echo $this->Html->script(array('excanvas.min', 'jquery.min', 'operaciones', 'jquery.ui.custom', 'bootstrap','bootstrap-modal', 'jquery.flot.min', 'jquery.flot.resize.min', 'jquery.peity.min', 'fullcalendar.min'));
         echo $this->Html->script(array('matrix', 'matrix.dashboard', 'jquery.gritter.min', 'matrix.interface', 'matrix.chat', 'jquery.validate', 'matrix.form_validation', 'jquery.wizard', 'jquery.uniform'));
         echo $this->Html->script(array('select2.min', 'matrix.popover', 'jquery.dataTables.min', 'matrix.tables'));
         ?>
