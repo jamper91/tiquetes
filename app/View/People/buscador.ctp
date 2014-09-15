@@ -71,7 +71,10 @@
                           
                             <td>
                                 <?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $dato['people']['id']),array('class'=>'btn btn-warning')); ?>
-
+                                <?php if (in_array('eliminar', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
+                                <?php echo $this->Form->postLink(__('Imprimir Certificado'), array('action' => 'certificate2', $dato['people']['id']), array('class' => 'btn btn-info'), __('Seguro que desea imprimir el certificado de %s?', $dato["people"]["pers_primNombre"])); ?>
+                                <?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $dato['people']['id']), array('class' => 'btn btn-danger'), __('Esta seguro que desea eliminar esta persona', $dato['people']['id'])); ?>
+                                <?php } ?>
                             </td>
                         </tr>
 

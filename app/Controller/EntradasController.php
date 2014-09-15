@@ -295,7 +295,7 @@ class EntradasController extends AppController {
                 case "INGRESO":
                     $estado = "VALIDO";
                     BREAK;
-            }           
+            }
 
             $datetimearray = explode(" ", $dato["l_t"]["fecha"]);
             $time = $datetimearray[1];
@@ -378,7 +378,7 @@ class EntradasController extends AppController {
                 ";
 
         $datos = $this->Entrada->query($sql);
-
+//        debug($datos); die;
         $pos = 0;
         $i = 0;
         $person_id_ant = "";
@@ -585,13 +585,24 @@ class EntradasController extends AppController {
 //            $pos++;
 //        }
             $this->loadModel("Input");
+            $this->loadModel("User");
             $id = $dato["input"]["categoria_id"];
+            $id2 = $dato["input"]["usuariocertificate"];
+            $sql2 = "SELECT username FROM users WHERE id = $id2";
             $sql = "SELECT descripcion FROM categorias WHERE id= $id ";
             $res = $this->Input->query($sql);
-            $categoria = $res[0]['categorias']['descripcion'];
+            $res2 = $this->User->query($sql2);
+            $usuario = "";
+//            debug($dato["person"]["diligenciamiento"]); die;
+            if($res2 != array()){
+            $usuario = $res2[0]['users']['username'];
+            }
+            if ($res != array()) {
+                $categoria = $res[0]['categorias']['descripcion'];
+            }
             $aux = array(
                 "Fecha" => $dato["person"]["diligenciamiento"],
-                 "Nombre" => $dato["person"]["pers_primNombre"],
+                "Nombre" => $dato["person"]["pers_primNombre"],
                 "Apellido" => $dato["person"]["pers_primApellido"],
                 "Documento" => $dato["person"]["pers_documento"],
                 "Lugar" => $dato["person"]["pers_expedicion"],
@@ -599,12 +610,14 @@ class EntradasController extends AppController {
                 "Telefono" => $dato["person"]["pers_telefono"],
                 "Email" => $dato["person"]["pers_mail"],
                 "Direccion" => $dato["person"]["pers_direccion"],
-                "Municipio" => $dato["person"]["ciudad"],                
+                "Municipio" => $dato["person"]["ciudad"],
                 "Institucion" => $dato["person"]["pers_institucion"],
-                "Cargo" => $dato["person"]["pers_cargo"],                
+                "Cargo" => $dato["person"]["pers_cargo"],
+                "Fecha2" => $dato['input']['fechacertificate'],
+                "Impreso"=>$usuario ,
                 "Agosto-1" => $fecha1,
                 "Agosto-2" => $fecha2,
-                "Agosto-3" => $fecha3,                
+                "Agosto-3" => $fecha3,
             );
             $datos2[$i] = $aux;
             $i++;

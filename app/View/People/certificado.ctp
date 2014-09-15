@@ -67,7 +67,11 @@ if ($data['documento']) {
 //    $fpdf_1->Ln(2);
 //}
 
-
+$fpdf_1->SetY(-62);
+    $fpdf_1->SetFont('Arial', '', 13);
+    $fpdf_1->Cell(-30);
+    $fpdf_1->Cell(0, 2, 'con una intensidad de 20 horas', 0, 0, 'C');
+    $fpdf_1->Ln(2);
 
 
 
@@ -77,4 +81,5 @@ if ($data['documento']) {
 //$fpdf->Cell(0,5,'Page '.'1',0,0,'C');
 //$fpdf->Image(WWW_ROOT."/img/body_bg.jpg",-20,10,30,22); 
 $fpdf_1->Output('prueba', 'I');
+
 ?>

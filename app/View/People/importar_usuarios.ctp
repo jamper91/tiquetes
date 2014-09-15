@@ -101,16 +101,16 @@
 								
 							</tr>
 						';
-                $doc = $objCelda['A'];
-                $exp = $objCelda['B'];
-                $nom = $objCelda['C'];
-                $ape = $objCelda['D'];
+                $doc = $objCelda['A'];                
+                $exp = $objCelda['B'];                
+                $nom = $objCelda['C'];                
+                $ape = $objCelda['D']; 
                 $ciu = $objCelda['E'];
-                $dir = $objCelda['F'];
-                $tel = $objCelda['G'];
-                $mail = $objCelda['H'];
-                $ins = $objCelda['I'];
-                $car = $objCelda['J'];
+                $dir = $objCelda['F'];                
+                $tel = $objCelda['G'];                
+                $mail = $objCelda['H'];                
+                $ins = $objCelda['I'];                
+                $car = $objCelda['J'];                
 //                $desde = $objCelda['J'];
 //            $hasta = $objCelda['K'];
 //            $ide = $objCelda['L'];
