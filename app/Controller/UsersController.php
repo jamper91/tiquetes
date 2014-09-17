@@ -710,11 +710,15 @@ class UsersController extends AppController {
 //             }
 //         }
         //Listo los eventos
+        $fecha = date("Y-m-d");
         $this->loadModel("Event");
         $events = $this->Event->find("list", array(
             "fields" => array(
                 "Event.id",
                 "Event.even_nombre"
+            ),
+            "conditions"=>array(
+                "Event.even_fechFinal >= "=>$fecha
             )
         ));
         $this->set('events', $events);

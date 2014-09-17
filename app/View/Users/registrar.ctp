@@ -35,6 +35,18 @@ echo $this->Html->css(array('multi-select'));
                 ));
                 ?>
                 <?php
+                echo $this->Form->input('categoria_id', array(
+                    "div" => array(
+                        "class" => "controls"
+                    ),
+                    "label" => "",
+                    "empty" => "Seleccione un evento",
+                    "style" => array(
+                        "display:block"
+                    )
+                ));
+                ?>
+                <?php
                 echo $this->Form->input('registration_type_id', array(
                     "div" => array(
                         "class" => "controls"
@@ -68,7 +80,7 @@ echo $this->Html->css(array('multi-select'));
                             <td><input type="text" id="PeoplePers_primApellido" required="true" name="data[People][pers_primApellido]"/></td>
                         </tr>            
                         <tr>
- 
+
                             <td>Dirección:</td>
                             <td><input type="text" id="PeoplePers_direccion" name="data[People][pers_direccion]"/></td>
                         </tr>
@@ -160,13 +172,43 @@ echo $this->Html->css(array('multi-select'));
 
         $("#UserEventId").change(function()
         {
+            cargarCategorias();
             actualizarForm();
         });
         (function()
         {
 //            actualizarForm();
         })();
+        function cargarCategorias()
+        {
+            var event_id = $("#UserEventId").val();
+            var url = urlbase + "events_categorias/getCategoriasByEvent.xml";
+            var datos = {
+                event_id: event_id
+            }
+            ajax(url, datos, function(xml)
+            {
+                //Elimino lo que contiene este select
+                $("#UserCategoriaId").html("<option>Seleccione...</option>");
+                if (xml)
+                {
+                    $("datos", xml).each(function()
+                    {
+                        var obj = $(this).find("Categoria");
+                        if (obj)
+                        {
+                            var valor, texto;
+                            valor = $("id", obj).text();
+                            texto = $("descripcion", obj).text();
+                            $("#UserCategoriaId").append("<option value='"+valor+"'>"+texto+"</option>");
+                            
+                        }
 
+                    });
+                }
+            });
+
+        }
         function actualizarForm()
         {
 //            $("#formulario").html("Cargando...");
@@ -284,14 +326,14 @@ echo $this->Html->css(array('multi-select'));
 //                            formulario += "<input style='display:none' type='text' name='data[Input][category_id]' value='-1' id='InputCategoryId'></input>";
                             formulario += "<input style='display:none' type='text' name='data[Input][person_id]' value='-1'></input>";
                             $("#formulario2").append(formulario);
-                            $("#formulario2").css("display","block");
+                            $("#formulario2").css("display", "block");
 //                            $("#formulario").html(formulario);
                         }
                     });
                 }
             });
         }
-        
+
         $("#PeopleDocumento").keyup(function() {
 //            alert("aasd");
             var url = urlbase + "companies/search.xml";
@@ -309,7 +351,7 @@ echo $this->Html->css(array('multi-select'));
                     direccion = $("pers_direccion", obj).text();
                     telefono = $("pers_telefono", obj).text();
                     email = $("pers_mail", obj).text();
-                    
+
                     if (nombre !== null) {
                         $("#PeoplePers_id").val(id);
                         $("#PeoplePers_primNombre").val(nombre);
