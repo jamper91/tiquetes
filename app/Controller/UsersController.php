@@ -710,6 +710,14 @@ class UsersController extends AppController {
 //             }
 //         }
         //Listo los eventos
+        $this ->loadModel("DocumentType");
+        $DocumentType = $this->DocumentType->find("list", array(
+            "fields"=>array(
+                "DocumentType.id",
+                "DocumentType.tido_descripcion"
+            )
+        ));
+//       debug($DocumentType); die;
         $fecha = date("Y-m-d");
         $this->loadModel("Event");
         $events = $this->Event->find("list", array(
@@ -721,7 +729,7 @@ class UsersController extends AppController {
                 "Event.even_fechFinal >= "=>$fecha
             )
         ));
-        $this->set('events', $events);
+        $this->set(compact('events', $events, 'DocumentType', $DocumentType));
     }
 
     public function getPersonalDataByEvent() {

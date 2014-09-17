@@ -28,7 +28,7 @@ echo $this->Html->css(array('multi-select'));
                     ),
                     "label" => "",
                     "options" => $events,
-                    "empty" => "Seleccione",
+                    "empty" => "Seleccione un evento",
                     "style" => array(
                         "display:block"
                     )
@@ -40,7 +40,7 @@ echo $this->Html->css(array('multi-select'));
                         "class" => "controls"
                     ),
                     "label" => "",
-                    "empty" => "Seleccione un evento",
+                    "empty" => "Seleccione una categoria",
                     "style" => array(
                         "display:block"
                     )
@@ -62,35 +62,47 @@ echo $this->Html->css(array('multi-select'));
 
 
                 <div id="formulario" >
-                    <label style="text-align: center">
-                        Seleccione un evento
-                    </label>
+                    <!--                    <label style="text-align: center">
+                                            Seleccione un evento
+                                        </label>-->
                     <table id="formulario2" style="display: none">
+                        <tr>                           
+                            <td colspan="2" align="left" ><?php
+                                echo $this->Form->input('documentType_id', array(
+                                    "div" => array(
+                                        "class" => "controls"
+                                    ),
+                                    "label" => "Tipo de Documento",
+                                    "options" => $DocumentType,
+                                    "empty" => "Seleccione un tipo de documento",                                    
+                                ));
+                                ?></td>
+                        </tr>
                         <tr>
 
-                            <td>Número de Documento:  </td>
-                            <td colspan="1"><input type="text" required="true" id="PeopleDocumento" name="data[People][pers_documento]"/><input type="hidden" name="data[Person][pers_id]" id="PeoplePers_id"></td>
+                            <td align="right">Número de Documento:  </td>
+                            <td colspan="1" align="right"><input type="text" required="true" id="PeopleDocumento" name="data[People][pers_documento]"/><input type="hidden" name="data[Person][pers_id]" id="PeoplePers_id"></td>
                         </tr>
                         <tr>
-                            <td>Nombres</td>
-                            <td><input type="text" required="true" id="PeoplePers_primNombre" name="data[People][pers_primNombre]"/></td>
+                            <td align="right">Nombres</td>
+                            <td align="right"><input type="text" required="true" id="PeoplePers_primNombre" name="data[People][pers_primNombre]"/></td>
                         </tr>
                         <tr>
-                            <td>Apellidos</td>
-                            <td><input type="text" id="PeoplePers_primApellido" required="true" name="data[People][pers_primApellido]"/></td>
+                            <td align="right">Apellidos</td>
+                            <td align="right"><input type="text" id="PeoplePers_primApellido" required="true" name="data[People][pers_primApellido]"/></td>
                         </tr>            
                         <tr>
 
-                            <td>Dirección:</td>
-                            <td><input type="text" id="PeoplePers_direccion" name="data[People][pers_direccion]"/></td>
+                            <td align="right">Dirección:</td>
+                            <td align="right"><input type="text" id="PeoplePers_direccion" name="data[People][pers_direccion]"/></td>
                         </tr>
                         <tr>
-                            <td>Teléfono</td>
-                            <td><input type="text" id="PeoplePers_telefono" name="data[People][pers_telefono]"/></td>
+                            <td align="right">Teléfono</td>
+                            <td align="right"><input type="text" id="PeoplePers_telefono" name="data[People][pers_telefono]"/></td>
                         </tr>
                         <tr>
-                            <td>Email</td>
-                            <td><input type="email" id="PeoplePers_mail" name="data[People][pers_mail]"/></td>
+                            <td align="right">Email</td>
+                            <td align="right"><input type="email" id="PeoplePers_mail" name="data[People][pers_mail]"/></td>
                         </tr>            
                     </table>
 
@@ -200,8 +212,8 @@ echo $this->Html->css(array('multi-select'));
                             var valor, texto;
                             valor = $("id", obj).text();
                             texto = $("descripcion", obj).text();
-                            $("#UserCategoriaId").append("<option value='"+valor+"'>"+texto+"</option>");
-                            
+                            $("#UserCategoriaId").append("<option value='" + valor + "'>" + texto + "</option>");
+
                         }
 
                     });

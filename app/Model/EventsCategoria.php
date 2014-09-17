@@ -15,7 +15,7 @@ class EventsCategoria extends AppModel {
  * belongsTo associations
  *
  * @var array
- */
+ */   
 	public $belongsTo = array(
 		'Categoria' => array(
 			'className' => 'Categoria',
