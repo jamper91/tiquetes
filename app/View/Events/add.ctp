@@ -274,7 +274,35 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                         ?>
                     </td>
                 </tr>
-                
+                <tr>
+                    <td></td>
+                    <td>
+                        <!--id="EventsCategorias"-->
+                        <div class="control-group"  >
+                            <label class="control-label">Categorias</label>
+                            <?php
+                            echo $this->Form->input('Categoria', array(
+                                "div" => array(
+                                    "class" => "controls"
+                                ),
+                                "label" => "",
+                                "options" => $categorias,
+                                "multiple" => true
+                            ));
+//                    
+                            ?>
+                        </div>
+                        <?php
+                        ?>
+                    </td>
+                    <td></td>
+                    <td>
+                        <!--id="EventsHotel"-->
+                        
+                        <?php
+                        ?>
+                    </td>
+                </tr>
                 <tr>
                     <td><br></td>
                     <td>
@@ -403,6 +431,13 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
             });
 
         });
+    });
+    $('#Categoria').multiSelect({
+        afterSelect: function(values) {
+            //  alert("Select value: " + values);
+//            console.log($('#FormPersonalDatumId option[value="' + values + '"]').html());
+            $('#Categoria option[value="' + values + '"]').attr("selected", "selected")
+        }
     });
     $('#Payment').multiSelect({
         afterSelect: function(values) {

@@ -5,10 +5,11 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
 <div class="events form">
     <?php echo $this->Form->create('Event', array('enctype' => 'multipart/form-data')); ?>
     <fieldset>
-        <legend><?php echo __('Editar Evento');
+        <legend><?php
+            echo __('Editar Evento');
 
-    CakeSession::write('sw', '0');
-    ?></legend>
+            CakeSession::write('sw', '0');
+            ?></legend>
         <?php
 //        echo $this->Form->input('id');
 //        echo $this->Form->input('stage_id');
@@ -185,14 +186,13 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
 //                    $sename =$this->Session->read('nameimage'); 
                     ?></td>
                 <td>
-                    <?php ?>
+<?php ?>
                     <img width="100px" style=""  id="imgprev1" name="imgprev1" src="<?php echo $this->webroot . '/img/events1/' . $nombrese1 ?>" >
                     <input type="hidden" id="nameImage1" name="nameImage1" value="<?php echo $nombrese1 ?>"
                 </td>
                 <td></td>
                 <td>
-                    <?php
-                    ?>
+                    <?php ?>
                     <img width="100px" style=""  id="imgprev2" name="imgprev2" src="<?php echo $this->webroot . '/img/events2/' . $nombrese2 ?>" >
                     <input type="hidden" id="nameImage2" name="nameImage2" value="<?php echo $nombrese2 ?>"
                 </td>
@@ -343,7 +343,35 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                     ?>
                 </td>
             </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <!--id="EventsCategorias"-->
+                    <div class="control-group"  >
+                        <label class="control-label">Categorias</label>
+                        <?php
+                        echo $this->Form->input('Categoria', array(
+                            "div" => array(
+                                "class" => "controls"
+                            ),
+                            "label" => "",
+                            "options" => $categorias,
+                            "multiple" => true
+                        ));
+//                    
+                        ?>
+                    </div>
+                    <?php
+                    ?>
+                </td>
+                <td></td>
+                <td>
+                    <!--id="EventsHotel"-->
 
+                    <?php
+                    ?>
+                </td>
+            </tr>
             <tr>
                 <td><br></td>
                 <td>
@@ -472,39 +500,46 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
 
         });
     });
+    $('#CategoriaCategoria').multiSelect({
+        afterSelect: function(values) {
+            //  alert("Select value: " + values);
+//            console.log($('#FormPersonalDatumId option[value="' + values + '"]').html());
+            $('#CategoriaCategoria option[value="' + values + '"]').attr("selected", "selected")
+        }
+    });
     $('#PaymentPayment').multiSelect({
         afterSelect: function(values) {
             //  alert("Select value: " + values);
 //            console.log($('#FormPersonalDatumId option[value="' + values + '"]').html());
-            $('#Payment option[value="' + values + '"]').attr("selected", "selected")
+            $('#PaymentPayment option[value="' + values + '"]').attr("selected", "selected")
         }
     });//
     $('#CommitteeCommittee').multiSelect({
         afterSelect: function(values) {
             //  alert("Select value: " + values);
 //            console.log($('#FormPersonalDatumId option[value="' + values + '"]').html());
-            $('#Committee option[value="' + values + '"]').attr("selected", "selected")
+            $('#CommitteeCommittee option[value="' + values + '"]').attr("selected", "selected")
         }
     });
     $('#CompanyCompany').multiSelect({
         afterSelect: function(values) {
             //  alert("Select value: " + values);
 //            console.log($('#FormPersonalDatumId option[value="' + values + '"]').html());
-            $('#Company option[value="' + values + '"]').attr("selected", "selected")
+            $('#CompanyCompany option[value="' + values + '"]').attr("selected", "selected")
         }
     });
     $('#HotelHotel').multiSelect({
         afterSelect: function(values) {
             //  alert("Select value: " + values);
 //            console.log($('#FormPersonalDatumId option[value="' + values + '"]').html());
-            $('#Hotel option[value="' + values + '"]').attr("selected", "selected")
+            $('#HotelHotel option[value="' + values + '"]').attr("selected", "selected")
         }
     });
     $('#RegistrationTypeRegistrationType').multiSelect({
         afterSelect: function(values) {
             //  alert("Select value: " + values);
 //            console.log($('#FormPersonalDatumId option[value="' + values + '"]').html());
-            $('#RegistrationType option[value="' + values + '"]').attr("selected", "selected")
+            $('#RegistrationTypeRegistrationType option[value="' + values + '"]').attr("selected", "selected")
         }
     });
 </script>

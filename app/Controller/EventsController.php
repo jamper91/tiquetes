@@ -28,8 +28,6 @@ class EventsController extends AppController {
 //        $eventos = $this->Event->query($sql);
 //        $this->set(compact('eventos'));
         $this->set('events', $this->Paginator->paginate());
-        
-        
     }
 
     public function mapea($id = null) {
@@ -43,47 +41,41 @@ class EventsController extends AppController {
     }
 
     // $id es el id del evento al que pertenece la cuadricula
-    public function grid($id=null){
+    public function grid($id = null) {
         if (!$this->Event->exists($id)) {
             throw new NotFoundException(__('Invalid Event'));
         }
 
-        $parametros=$this->request->params["pass"];
-        $id_loc=$parametros[1];
+        $parametros = $this->request->params["pass"];
+        $id_loc = $parametros[1];
         $this->loadModel('Location');
         $this->set('location', $this->Location->find("first", array("conditions" => array('Location.id' => $id_loc))));
-        $grid=$this->Location->query('SELECT * FROM grid_location WHERE id_location='.$parametros[1]); // Traemos datos 
-        $this->set('grid',$grid);
-
-
+        $grid = $this->Location->query('SELECT * FROM grid_location WHERE id_location=' . $parametros[1]); // Traemos datos 
+        $this->set('grid', $grid);
     }
 
-
-    public function guardagrid(){
+    public function guardagrid() {
         echo "<pre>";
         var_dump($_POST);
         echo "</pre>";
 
-        $existe= $this->Event->query('SELECT * FROM grid_location WHERE id_location='.$_POST["loca"].' AND fila='.$_POST["fil"].' AND columna='.$_POST["col"].'  '); // Traemos datos 
+        $existe = $this->Event->query('SELECT * FROM grid_location WHERE id_location=' . $_POST["loca"] . ' AND fila=' . $_POST["fil"] . ' AND columna=' . $_POST["col"] . '  '); // Traemos datos 
 
-        if($existe!=null){
+        if ($existe != null) {
             echo "Existe";
-            $this->Event->query('UPDATE  grid_location SET  val =  "'.$_POST["tipo"].'"  WHERE id_location='.$_POST["loca"].' AND fila='.$_POST["fil"].' AND columna='.$_POST["col"].'  ');  
-        }else{
+            $this->Event->query('UPDATE  grid_location SET  val =  "' . $_POST["tipo"] . '"  WHERE id_location=' . $_POST["loca"] . ' AND fila=' . $_POST["fil"] . ' AND columna=' . $_POST["col"] . '  ');
+        } else {
             echo "No Existe";
-            $this->Event->query('INSERT INTO grid_location (`id`, `id_location`, `fila`, `columna`, `val`, `merge`) VALUES (NULL, "'.$_POST["loca"].'", "'.$_POST["fil"].'", "'.$_POST["col"].'", "'.$_POST["tipo"].'", NULL)');  
+            $this->Event->query('INSERT INTO grid_location (`id`, `id_location`, `fila`, `columna`, `val`, `merge`) VALUES (NULL, "' . $_POST["loca"] . '", "' . $_POST["fil"] . '", "' . $_POST["col"] . '", "' . $_POST["tipo"] . '", NULL)');
         }
         var_dump($existe);
 
         return $this->redirect($this->referer());
-
     }
 
-
-
     public function borracoords($id = null) {
-        $parametros=$this->request->params["pass"];
-        $id=$parametros[1];
+        $parametros = $this->request->params["pass"];
+        $id = $parametros[1];
 
         $this->loadModel('Location');
         $this->Location->id = $id;
@@ -92,19 +84,18 @@ class EventsController extends AppController {
         }
 
         //$this->Location->coord=" ";
-        $this->Location->saveField("coord"," ");;
+        $this->Location->saveField("coord", " ");
+        ;
 
 
-        /*$this->request->allowMethod('post', 'delete');
-        if ($this->Location->delete()) {
-            $this->Session->setFlash(__('The Location has been deleted.'));
-        } else {
-            $this->Session->setFlash(__('The Location could not be deleted. Please, try again.'));
-        }*/
-        return $this->redirect(array('action' => 'mapea',$parametros[0],0));
+        /* $this->request->allowMethod('post', 'delete');
+          if ($this->Location->delete()) {
+          $this->Session->setFlash(__('The Location has been deleted.'));
+          } else {
+          $this->Session->setFlash(__('The Location could not be deleted. Please, try again.'));
+          } */
+        return $this->redirect(array('action' => 'mapea', $parametros[0], 0));
     }
-
-
 
     public function guardacoords() {
 
@@ -254,6 +245,19 @@ class EventsController extends AppController {
                                         }
                                     }
 
+                                    if ($data['Categoria'] != "") {
+                                        foreach ($data['Categoria'] as $Categoria_id) {
+                                            $newEventsCategoria = $this->Event->EventsCategoria->create();
+                                            $newEventsCategoria = array(
+                                                'EventsCategoria' => array(
+                                                    'categoria_id' => $Categoria_id,
+                                                    'event_id' => $newEventId
+                                                )
+                                            );
+                                            $this->Event->EventsCategoria->save($newEventsCategoria);
+                                        }
+                                    }
+
                                     return $this->redirect(array('action' => 'index'));
                                 } catch (Exception $ex) {
                                     $error2 = $ex->getCode();
@@ -349,6 +353,20 @@ class EventsController extends AppController {
                                     }
                                 }
 
+                                if ($data['Categoria'] != "") {
+                                    foreach ($data['Categoria'] as $Categoria_id) {
+                                        $newEventsCategoria = $this->Event->EventsCategoria->create();
+                                        $newEventsCategoria = array(
+                                            'EventsCategoria' => array(
+                                                'categoria_id' => $Categoria_id,
+                                                'event_id' => $newEventId
+                                            )
+                                        );
+                                        $this->Event->EventsCategoria->save($newEventsCategoria);
+                                    }
+                                }
+
+
                                 return $this->redirect(array('action' => 'index'));
                             } catch (Exception $ex) {
                                 $error2 = $ex->getCode();
@@ -392,13 +410,19 @@ class EventsController extends AppController {
 //        $hotels = $this->Event->Stage->find('list');
 //        $this->set(compact('hotels'));
 
+        $categorias = $this->Event->Categoria->find('list', array(
+            "fields" => array(
+                "Categoria.descripcion"
+            ),
+            "recursive" => -2
+        ));
+
         $eventTypesName = $this->Event->EventType->find('list', array(
             "fields" => array(
                 "EventType.nombre"
             ),
             "recursive" => -2
         ));
-
 
         $committees = $this->Event->Committee->find('list', array(
             "fields" => array(
@@ -436,7 +460,7 @@ class EventsController extends AppController {
         ));
 
 //        $registrationTypes = $this->Event->RegistrationType->find('list');
-        $this->set(compact('stages', 'eventTypes', 'committees', 'companies', 'hotels', 'paymentsName', 'registrationTypes'));
+        $this->set(compact('stages', 'eventTypes', 'committees', 'companies', 'hotels', 'paymentsName', 'registrationTypes', 'categorias'));
 
         $this->set("eventTypesName", $eventTypesName);
     }
@@ -568,6 +592,22 @@ class EventsController extends AppController {
                                 }
                             }
 
+                            $sqlOld = "DELETE FROM events_categorias WHERE event_id=" . $newEventId;
+                            $this->Event->EventsCategoria->query($sqlOld);
+                            if ($data['Categoria'] != "") {
+                                foreach ($data['Categoria'] as $Categoria_id) {
+                                    $newEventsCategoria = $this->Event->EventsCategoria->create();
+                                    $newEventsCategoria = array(
+                                        'EventsCategoria' => array(
+                                            'categoria_id' => $Categoria_id,
+                                            'event_id' => $newEventId
+                                        )
+                                    );
+                                    $this->Event->EventsCategoria->save($newEventsCategoria);
+                                }
+                            }
+
+
                             if ($this->Event->save($this->request->data)) {
                                 CakeSession::write('sw', '0');
                                 $this->Session->setFlash(__('The event has been saved.'));
@@ -651,6 +691,21 @@ class EventsController extends AppController {
                                     )
                                 );
                                 $this->Event->EventsPayment->save($newEventsPayment);
+                            }
+                        }
+
+                        $sqlOld = "DELETE FROM events_categorias WHERE event_id=" . $newEventId;
+                        $this->Event->EventsCategoria->query($sqlOld);
+                        if ($data['Categoria'] != "") {
+                            foreach ($data['Categoria'] as $Categoria_id) {
+                                $newEventsCategoria = $this->Event->EventsCategoria->create();
+                                $newEventsCategoria = array(
+                                    'EventsCategoria' => array(
+                                        'categoria_id' => $Categoria_id,
+                                        'event_id' => $newEventId
+                                    )
+                                );
+                                $this->Event->EventsCategoria->save($newEventsCategoria);
                             }
                         }
 
@@ -758,6 +813,21 @@ class EventsController extends AppController {
                             }
                         }
 
+                        $sqlOld = "DELETE FROM events_categorias WHERE event_id=" . $newEventId;
+                        $this->Event->EventsCategoria->query($sqlOld);
+                        if ($data['Categoria'] != "") {
+                            foreach ($data['Categoria'] as $Categoria_id) {
+                                $newEventsCategoria = $this->Event->EventsCategoria->create();
+                                $newEventsCategoria = array(
+                                    'EventsCategoria' => array(
+                                        'categoria_id' => $Categoria_id,
+                                        'event_id' => $newEventId
+                                    )
+                                );
+                                $this->Event->EventsCategoria->save($newEventsCategoria);
+                            }
+                        }
+
                         if ($this->Event->save($this->request->data)) {
                             CakeSession::write('sw', '0');
                             $this->Session->setFlash(__('The event has been saved.'));
@@ -843,6 +913,21 @@ class EventsController extends AppController {
                         }
                     }
 
+                    $sqlOld = "DELETE FROM events_categorias WHERE event_id=" . $newEventId;
+                    $this->Event->EventsCategoria->query($sqlOld);
+                    if ($data['Categoria'] != "") {
+                        foreach ($data['Categoria'] as $Categoria_id) {
+                            $newEventsCategoria = $this->Event->EventsCategoria->create();
+                            $newEventsCategoria = array(
+                                'EventsCategoria' => array(
+                                    'categoria_id' => $Categoria_id,
+                                    'event_id' => $newEventId
+                                )
+                            );
+                            $this->Event->EventsCategoria->save($newEventsCategoria);
+                        }
+                    }
+                    
                     if ($this->Event->save($this->request->data)) {
                         CakeSession::write('sw', '0');
                         $this->Session->setFlash(__('The event has been saved.'));
@@ -924,9 +1009,16 @@ class EventsController extends AppController {
                 "RegistrationType.nombre"
             )
         ));
+        
+        $categorias = $this->Event->Categoria->find('list', array(
+            "fields" => array(
+                "Categoria.descripcion"
+            ),
+            "recursive" => -2
+        ));
 
 //        $registrationTypes = $this->Event->RegistrationType->find('list');
-        $this->set(compact('stages', 'eventTypes', 'committees', 'companies', 'hotels', 'payments', 'registrationTypes'));
+        $this->set(compact('stages', 'eventTypes', 'committees', 'companies', 'hotels', 'payments', 'registrationTypes', 'categorias'));
         $this->set("eventTypesName", $eventTypesName);
 //        $this->set("eventTypesName", $eventTypesName);
 //        $stages = $this->Event->Stage->find('list');
