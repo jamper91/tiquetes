@@ -3,15 +3,15 @@
     <fieldset>
         <legend><?php echo __('Reportes'); ?></legend><br>
 
-        <div class="btn-group">
+<!--        <div class="btn-group">
             <button data-toggle="dropdown" class="btn btn-success dropdown-toggle">Exportar <span class="caret"></span></button>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu">-->
 <!--                <li><a href="<?= $this->Html->url("exportar") ?>">Reportes Generales</a></li>
                 <li><a href="<?= $this->Html->url("exportar2") ?>">Reportes Usuarios</a></li>
                 <li><a href="<?= $this->Html->url("exportar3") ?>">Reportes Ventas</a></li>
                 <li><a href="<?= $this->Html->url("exportar4") ?>">Reportes Registro</a></li>-->
                 <li><a href="<?= $this->Html->url("exportar5") ?>">Reporte Ingreso Detallado</a></li>
-            </ul>
+            <!--</ul>-->
         </div>
 <!--        <table>
         <tr>

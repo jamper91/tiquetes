@@ -28,7 +28,19 @@ echo $this->Html->css(array('multi-select'));
                     ),
                     "label" => "",
                     "options" => $events,
-                    "empty" => "Seleccione",
+                    "empty" => "Seleccione un evento",
+                    "style" => array(
+                        "display:block"
+                    )
+                ));
+                ?>
+                <?php
+                echo $this->Form->input('categoria_id', array(
+                    "div" => array(
+                        "class" => "controls"
+                    ),
+                    "label" => "",
+                    "empty" => "Seleccione una categoria",
                     "style" => array(
                         "display:block"
                     )
@@ -50,35 +62,47 @@ echo $this->Html->css(array('multi-select'));
 
 
                 <div id="formulario" >
-                    <label style="text-align: center">
-                        Seleccione un evento
-                    </label>
+                    <!--                    <label style="text-align: center">
+                                            Seleccione un evento
+                                        </label>-->
                     <table id="formulario2" style="display: none">
+                        <tr>                           
+                            <td colspan="2" align="left" ><?php
+                                echo $this->Form->input('documentType_id', array(
+                                    "div" => array(
+                                        "class" => "controls"
+                                    ),
+                                    "label" => "Tipo de Documento",
+                                    "options" => $DocumentType,
+                                    "empty" => "Seleccione un tipo de documento",                                    
+                                ));
+                                ?></td>
+                        </tr>
                         <tr>
 
-                            <td>Número de Documento:  </td>
-                            <td colspan="1"><input type="text" required="true" id="PeopleDocumento" name="data[People][pers_documento]"/><input type="hidden" name="data[Person][pers_id]" id="PeoplePers_id"></td>
+                            <td align="right">Número de Documento:  </td>
+                            <td colspan="1" align="right"><input type="text" required="true" id="PeopleDocumento" name="data[People][pers_documento]"/><input type="hidden" name="data[Person][pers_id]" id="PeoplePers_id"></td>
                         </tr>
                         <tr>
-                            <td>Nombres</td>
-                            <td><input type="text" required="true" id="PeoplePers_primNombre" name="data[People][pers_primNombre]"/></td>
+                            <td align="right">Nombres</td>
+                            <td align="right"><input type="text" required="true" id="PeoplePers_primNombre" name="data[People][pers_primNombre]"/></td>
                         </tr>
                         <tr>
-                            <td>Apellidos</td>
-                            <td><input type="text" id="PeoplePers_primApellido" required="true" name="data[People][pers_primApellido]"/></td>
+                            <td align="right">Apellidos</td>
+                            <td align="right"><input type="text" id="PeoplePers_primApellido" required="true" name="data[People][pers_primApellido]"/></td>
                         </tr>            
                         <tr>
- 
-                            <td>Dirección:</td>
-                            <td><input type="text" id="PeoplePers_direccion" name="data[People][pers_direccion]"/></td>
+
+                            <td align="right">Dirección:</td>
+                            <td align="right"><input type="text" id="PeoplePers_direccion" name="data[People][pers_direccion]"/></td>
                         </tr>
                         <tr>
-                            <td>Teléfono</td>
-                            <td><input type="text" id="PeoplePers_telefono" name="data[People][pers_telefono]"/></td>
+                            <td align="right">Teléfono</td>
+                            <td align="right"><input type="text" id="PeoplePers_telefono" name="data[People][pers_telefono]"/></td>
                         </tr>
                         <tr>
-                            <td>Email</td>
-                            <td><input type="email" id="PeoplePers_mail" name="data[People][pers_mail]"/></td>
+                            <td align="right">Email</td>
+                            <td align="right"><input type="email" id="PeoplePers_mail" name="data[People][pers_mail]"/></td>
                         </tr>            
                     </table>
 
@@ -160,13 +184,43 @@ echo $this->Html->css(array('multi-select'));
 
         $("#UserEventId").change(function()
         {
+            cargarCategorias();
             actualizarForm();
         });
         (function()
         {
 //            actualizarForm();
         })();
+        function cargarCategorias()
+        {
+            var event_id = $("#UserEventId").val();
+            var url = urlbase + "events_categorias/getCategoriasByEvent.xml";
+            var datos = {
+                event_id: event_id
+            }
+            ajax(url, datos, function(xml)
+            {
+                //Elimino lo que contiene este select
+                $("#UserCategoriaId").html("<option>Seleccione...</option>");
+                if (xml)
+                {
+                    $("datos", xml).each(function()
+                    {
+                        var obj = $(this).find("Categoria");
+                        if (obj)
+                        {
+                            var valor, texto;
+                            valor = $("id", obj).text();
+                            texto = $("descripcion", obj).text();
+                            $("#UserCategoriaId").append("<option value='" + valor + "'>" + texto + "</option>");
 
+                        }
+
+                    });
+                }
+            });
+
+        }
         function actualizarForm()
         {
 //            $("#formulario").html("Cargando...");
@@ -284,14 +338,14 @@ echo $this->Html->css(array('multi-select'));
 //                            formulario += "<input style='display:none' type='text' name='data[Input][category_id]' value='-1' id='InputCategoryId'></input>";
                             formulario += "<input style='display:none' type='text' name='data[Input][person_id]' value='-1'></input>";
                             $("#formulario2").append(formulario);
-                            $("#formulario2").css("display","block");
+                            $("#formulario2").css("display", "block");
 //                            $("#formulario").html(formulario);
                         }
                     });
                 }
             });
         }
-        
+
         $("#PeopleDocumento").keyup(function() {
 //            alert("aasd");
             var url = urlbase + "companies/search.xml";
@@ -309,7 +363,7 @@ echo $this->Html->css(array('multi-select'));
                     direccion = $("pers_direccion", obj).text();
                     telefono = $("pers_telefono", obj).text();
                     email = $("pers_mail", obj).text();
-                    
+
                     if (nombre !== null) {
                         $("#PeoplePers_id").val(id);
                         $("#PeoplePers_primNombre").val(nombre);
