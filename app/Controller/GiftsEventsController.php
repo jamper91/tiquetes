@@ -56,7 +56,7 @@ class GiftsEventsController extends AppController {
 
             $this->GiftsEvent->create();
             if ($this->GiftsEvent->save($this->request->data)) {
-                $this->Session->setFlash(__('The gifts event has been saved.'));
+                $this->Session->setFlash('Se registro el consumible para el evento.','good');
                 return $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash(__('The gifts event could not be saved. Please, try again.'));
@@ -94,7 +94,7 @@ class GiftsEventsController extends AppController {
         }
         if ($this->request->is(array('post', 'put'))) {
             if ($this->GiftsEvent->save($this->request->data)) {
-                $this->Session->setFlash(__('The gifts event has been saved.'));
+                $this->Session->setFlash('Se actualizo el consumible para el evento', 'good');
                 return $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash(__('The gifts event could not be saved. Please, try again.'));
@@ -103,11 +103,12 @@ class GiftsEventsController extends AppController {
             $options = array('conditions' => array('GiftsEvent.' . $this->GiftsEvent->primaryKey => $id));
             $this->request->data = $this->GiftsEvent->find('first', $options);
         }
+        $this->loadModel("Person");
         $gifts = $this->GiftsEvent->Gift->find('list');
         $events = $this->GiftsEvent->Event->find('list');
-        $categorias = $this->GiftsEvent->Categorium->find('list');
-        $people = $this->GiftsEvent->Person->find('list');
-        $this->set(compact('gifts', 'events', 'categorias', 'people'));
+        $categorias = $this->GiftsEvent->Categoria->find('list');
+        
+        $this->set(compact('gifts', 'events', 'categorias'));
     }
 
     /**

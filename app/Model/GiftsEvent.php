@@ -39,13 +39,6 @@ class GiftsEvent extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		),
-		'People' => array(
-			'className' => 'People',
-			'foreignKey' => 'people_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
+		),		
 	);
 }

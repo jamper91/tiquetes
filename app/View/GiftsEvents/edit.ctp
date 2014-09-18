@@ -1,32 +1,83 @@
 <div class="giftsEvents form">
-<?php echo $this->Form->create('GiftsEvent'); ?>
-	<fieldset>
-		<legend><?php echo __('Edit Gifts Event'); ?></legend>
-	<?php
-		echo $this->Form->input('id');
-		echo $this->Form->input('gift_id');
-		echo $this->Form->input('event_id');
-		echo $this->Form->input('cantidad');
-		echo $this->Form->input('control');
-		echo $this->Form->input('categoria_id');
-		echo $this->Form->input('people_id');
-	?>
-	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
+    <?php echo $this->Form->create('GiftsEvent'); ?>
+    <fieldset>
+        <legend><?php echo __('Editar consumible por Evento'); ?></legend>
+        <?php
+        echo $this->Form->input('event_id', array(
+            "div" => array(
+                "class" => "controls"
+            ),
+            "label" => "Evento",
+            "options" => $events,
+            "empty" => "Seleccione un evento",
+            "style" => array(
+                "display:block"
+            )
+        ));
 
-		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('GiftsEvent.id')), array(), __('Are you sure you want to delete # %s?', $this->Form->value('GiftsEvent.id'))); ?></li>
-		<li><?php echo $this->Html->link(__('List Gifts Events'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Gifts'), array('controller' => 'gifts', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Gift'), array('controller' => 'gifts', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Events'), array('controller' => 'events', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Event'), array('controller' => 'events', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Categorias'), array('controller' => 'categorias', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Categoria'), array('controller' => 'categorias', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List People'), array('controller' => 'people', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New People'), array('controller' => 'people', 'action' => 'add')); ?> </li>
-	</ul>
+        echo $this->Form->input('categoria_id', array("label" => "Categoria"));
+        echo $this->Form->input('gift_id', array("label" => "Consumible"));
+        echo $this->Form->input('dia', array("label" => "Día del Evento", "type"=>"select"));
+              
+        ?>
+    </fieldset>
+    <?php echo $this->Form->end(__('Registrar')); ?>
 </div>
+<script>
+    $(document).ready(function() {
+        $("#GiftsEventEventId").change(function() {
+            var url2 = urlbase + "gifts/getGiftWhitoutEvent.xml";
+            var datos2 = {
+                event_id: $(this).val()
+            };
+            ajax(url2, datos2, function(xml) {
+                $("#GiftsEventGiftId").html("<option>Seleccione un consumible</option>");
+                $("datos", xml).each(function() {
+                    var obj = $(this).find("g");
+                    var valor, texto;
+                    valor = $("id", obj).text();
+                    texto = $("name", obj).text();
+                    if (valor) {
+                        var html = "<option value='$1'>$2</option>";
+                        html = html.replace("$1", valor);
+                        html = html.replace("$2", texto);
+                        $("#GiftsEventGiftId").append(html);
+                    }
+                });
+            });
+            var url = urlbase + "categorias/getCategoriesByEvent.xml";            
+            ajax(url, datos2, function(xml) {
+                $("#GiftsEventCategoriaId").html("<option>Seleccione una categoria</option>");
+                $("datos", xml).each(function() {
+                    var obj = $(this).find("c");
+                    var valor, texto;
+                    valor = $("id", obj).text();
+                    texto = $("name", obj).text();
+                    if (valor) {
+                        var html = "<option value='$1'>$2</option>";
+                        html = html.replace("$1", valor);
+                        html = html.replace("$2", texto);
+                        $("#GiftsEventCategoriaId").append(html);
+                    }
+                });
+            });
+            
+            var url = urlbase + "events/getDaysByEvent.xml";            
+            ajax(url, datos2, function(xml) {
+                $("#GiftsEventDia").html("<option>Seleccione un día</option>");
+                $("datos", xml).each(function() {
+                    var obj = $(this).find("g");
+                    var valor, texto;
+                    valor = $("id", obj).text();
+                    texto = $("name", obj).text();
+                    if (valor) {
+                        var html = "<option value='$1'>$2</option>";
+                        html = html.replace("$1", valor);
+                        html = html.replace("$2", texto);
+                        $("#GiftsEventDia").append(html);
+                    }
+                });
+            });
+        });
+    });
+</script>

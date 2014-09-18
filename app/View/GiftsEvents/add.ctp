@@ -15,9 +15,10 @@
             )
         ));
 
-        echo $this->Form->input('gift_id', array("label" => "Consumible"));
         echo $this->Form->input('categoria_id', array("label" => "Categoria"));
-        echo $this->Form->input('cantidad', array("type" => "text"));
+        echo $this->Form->input('gift_id', array("label" => "Consumible"));
+        echo $this->Form->input('dia', array("label" => "Día del Evento", "type"=>"select"));
+              
         ?>
     </fieldset>
     <?php echo $this->Form->end(__('Registrar')); ?>
@@ -57,6 +58,23 @@
                         html = html.replace("$1", valor);
                         html = html.replace("$2", texto);
                         $("#GiftsEventCategoriaId").append(html);
+                    }
+                });
+            });
+            
+            var url = urlbase + "events/getDaysByEvent.xml";            
+            ajax(url, datos2, function(xml) {
+                $("#GiftsEventDia").html("<option>Seleccione un día</option>");
+                $("datos", xml).each(function() {
+                    var obj = $(this).find("g");
+                    var valor, texto;
+                    valor = $("id", obj).text();
+                    texto = $("name", obj).text();
+                    if (valor) {
+                        var html = "<option value='$1'>$2</option>";
+                        html = html.replace("$1", valor);
+                        html = html.replace("$2", texto);
+                        $("#GiftsEventDia").append(html);
                     }
                 });
             });
