@@ -65,44 +65,78 @@ echo $this->Html->css(array('multi-select'));
                     <!--                    <label style="text-align: center">
                                             Seleccione un evento
                                         </label>-->
-                    <table id="formulario2" style="display: none">
+                    <table id="formulario2" style="display: none; padding-left: 10px">
                         <tr>                           
-                            <td colspan="2" align="left" ><?php
-                                echo $this->Form->input('documentType_id', array(
-                                    "div" => array(
-                                        "class" => "controls"
-                                    ),
-                                    "label" => "Tipo de Documento",
-                                    "options" => $DocumentType,
-                                    "empty" => "Seleccione un tipo de documento",                                    
-                                ));
-                                ?></td>
+                            <td colspan="2" align="center" >
+                                <input type="radio" name="data[User][tipoE]" value="RFDI" onclick="visibleCampos()" />RFDI
+                                <input type="radio" name="data[User][tipoE]" value="Codigo Barra" onclick="ocultarCampos()" />Codigo Barra
+                            </td>
+                        </tr>
+                        <tr>                           
+                            <td colspan="2 ><?php
+                            echo $this->Form->input('documentType_id', array(
+                                "div" => array(
+                                    "class" => "controls"
+                                ),
+                                "label" => "Tipo de Documento",
+                                "options" => $DocumentType,
+                                "empty" => "Seleccione un tipo de documento",
+                            ));
+                            ?></td>
+                                </tr>
+                                <tr>
+
+                                <td colspan="2">
+                                <div class="input text">
+                                    <label for="PeoplePers_id">Número de Documento</label>
+                                    <input type="text" required="true" id="PeopleDocumento" name="data[People][pers_documento]"/>
+                                    <input type="hidden" name="data[Person][pers_id]" id="PeoplePers_id">    
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="input text">
+                                    <label for="PeoplePers_primNombre">Nombre</label>
+                                <input type="text" required="true" id="PeoplePers_primNombre" name="data[People][pers_primNombre]"/></td>
+                            </div>
+
                         </tr>
                         <tr>
 
-                            <td align="right">Número de Documento:  </td>
-                            <td colspan="1" align="right"><input type="text" required="true" id="PeopleDocumento" name="data[People][pers_documento]"/><input type="hidden" name="data[Person][pers_id]" id="PeoplePers_id"></td>
-                        </tr>
-                        <tr>
-                            <td align="right">Nombres</td>
-                            <td align="right"><input type="text" required="true" id="PeoplePers_primNombre" name="data[People][pers_primNombre]"/></td>
-                        </tr>
-                        <tr>
-                            <td align="right">Apellidos</td>
-                            <td align="right"><input type="text" id="PeoplePers_primApellido" required="true" name="data[People][pers_primApellido]"/></td>
+                            <td colspan="2">
+                                <div class="input text">
+                                    <label for="PeoplePers_primApellido">Apellidos</label>
+                                    <input type="text" id="PeoplePers_primApellido" required="true" name="data[People][pers_primApellido]"/>
+                                </div>
+
+                            </td>
                         </tr>            
                         <tr>
 
-                            <td align="right">Dirección:</td>
-                            <td align="right"><input type="text" id="PeoplePers_direccion" name="data[People][pers_direccion]"/></td>
+                            <td colspan="2">
+                                <div class="input text">
+                                    <label for="PeoplePers_direccion">Direccion</label>
+                                    <input type="text" id="PeoplePers_direccion" name="data[People][pers_direccion]"/>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
-                            <td align="right">Teléfono</td>
-                            <td align="right"><input type="text" id="PeoplePers_telefono" name="data[People][pers_telefono]"/></td>
+                            <td colspan="2">
+                                <div class="input text">
+                                    <label for="PeoplePers_telefono">Telefono</label>
+                                    <input type="text" id="PeoplePers_telefono" name="data[People][pers_telefono]"/>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
-                            <td align="right">Email</td>
-                            <td align="right"><input type="email" id="PeoplePers_mail" name="data[People][pers_mail]"/></td>
+                        <tr>
+                            <td colspan="2">
+                                <div class="input text">
+                                    <label for="PeoplePers_mail">Correo</label>
+                                    <input type="email" id="PeoplePers_mail" name="data[People][pers_mail]"/>
+                                </div>
+                            </td>
                         </tr>            
                     </table>
 
@@ -131,6 +165,16 @@ echo $this->Html->css(array('multi-select'));
 </div>
 <script>
     var actualizar = 0, inputId = 0, personId = 0;
+    function visibleCampos()
+    {
+        $("#divIden").css("display","block");
+        $("#divCodi").css("display","block");
+    }
+    function ocultarCampos()
+    {
+        $("#divIden").css("display","none");
+        $("#divCodi").css("display","none");
+    }
     $(document).ready(function()
     {
         $("#btnNuevo").click(function()
@@ -165,17 +209,31 @@ echo $this->Html->css(array('multi-select'));
                         mensaje = $("mensaje", this).text();
 
                         alert(mensaje);
-                        if (mensaje == "Registro realizado con exito")
+                        if (codigo == 1)
                         {
                             personId = $("person_id", this).text();
                             inputId = $("input_id", this).text();
                             actualizar = 1;
                             $("input[type='submit']").attr("value", "Actualizar");
                             $("#btnNuevo").css("display", "block");
+                        } else if (codigo == 2)
+                        {
+                            personId = $("person_id", this).text();
+                            inputId = $("input_id", this).text();
+                            var person_document = $("person_document", this).text();
+                            var event_id = $("event_id", this).text();
+                            actualizar = 1;
+                            $("input[type='submit']").attr("value", "Actualizar");
+                            $("#btnNuevo").css("display", "block");
+                            var answer = confirm("Imprimir escarapela?.");
+                            if (answer) {
+                                window.location = "http://localhost/tiquetes/people/reimprimir/" + person_document + "/" + event_id;
+                            }
                         }
-
                     });
+
                 });
+
             } else {
                 console.log("no paso la validacion");
             }
@@ -290,8 +348,7 @@ echo $this->Html->css(array('multi-select'));
                                     var html = "";
 //                                    html += "<div class='controls'>";
                                     html += "<tr>";
-                                    html += "<td colspan='1'><label for='Form$1'>$1</label></td>";
-                                    html += "<td colspan='1'><input type='$2' name='data[Data][$5][descripcion]' $6></input>";
+                                    html += "<td colspan='2'><div class='input text'><label for='Form$1'>$1</label><input type='$2' name='data[Data][$5][descripcion]' $6></input></div>";
                                     html += "<input style='display:none' type='text' name='data[Data][$5][forms_personal_datum_id]' value='$4'></input>";
                                     html += "<input style='display:none' type='text' name='data[Data][$5][person_id]' value='-1'></input></td>";
                                     html += "</tr>";
@@ -314,16 +371,14 @@ echo $this->Html->css(array('multi-select'));
                             //Agrego el campo de la tarjeta
 //                            formulario += "<div class='controls'>";
                             formulario += "<tr>";
-                            formulario += "<td colspan='1'><label for='PersonDocumento'>Identificador Manilla</label></rd>";
-                            formulario += "<td colspan='1'><input id='PersonDocumento' type='text' name='data[Input][entr_identificador]'></input></td>";
+                            formulario += "<td colspan='2'><div id='divIden' style='display:none' class='input text'><label for='PersonDocumento'>Identificador Manilla</label><input id='PersonDocumento' type='text' name='data[Input][entr_identificador]'></input></div></td>";
                             formulario += "</tr>";
 //                            formulario += "</div>";
 
                             //Agrego el campo de la tarjeta
 //                            formulario += "<div class='controls'>";
                             formulario += "<tr>";
-                            formulario += "<td colspan='1'><label for='PersonDocumento'>Codigo Manilla</label></td>";
-                            formulario += "<td colspan='1'><input id='PersonDocumento' type='password' name='data[Input][entr_codigo]'></input></td>";
+                            formulario += "<td colspan='2'><div id='divCodi' style='display:none' class='input text'><label for='PersonDocumento'>Codigo Manilla</label><input id='PersonDocumento' type='password' name='data[Input][entr_codigo]'></input></div></td>";
                             formulario += "</tr>";
 //                            formulario += "</div>";
 
@@ -372,7 +427,7 @@ echo $this->Html->css(array('multi-select'));
                         $("#PeoplePers_direccion").val(direccion);
                         $("#PeoplePers_telefono").val(telefono);
                         $("#PeoplePers_mail").val(email);
-                        actualizar = 1;
+//                        actualizar = 1;
                     } else {
                         $("#PeoplePers_id").val();
                         $("#UserCityId option[value='']").attr("selected", true);
@@ -381,10 +436,15 @@ echo $this->Html->css(array('multi-select'));
                         $("#PeoplePers_direccion").val();
                         $("#PeoplePers_telefono").val();
                         $("#PeoplePers_mail").val();
+                        actualizar = 0;
                     }
+                    console.log("actualizar: " + actualizar);
                 });
             });
         });
+
+
+
     });
 
 </script>
