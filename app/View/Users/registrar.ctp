@@ -17,7 +17,7 @@ echo $this->Html->css(array('multi-select'));
                     "class" => "form-horizontal"
                 ));
                 ?>
-                <input style='display:none' type='text' name='data[Informacion][actualizar]' id='inputActualizar' value='0'></input>
+                <input  type='text' name='data[Informacion][actualizar]' id='inputActualizar' value='0'></input>
                 <input style='display:none' type='text' name='data[Informacion][person_id]' id='inputPersonId' value='0'></input>
                 <input style='display:none' type='text' name='data[Informacion][input_id]' id='inputInputId' value='0'></input>
 
@@ -67,6 +67,12 @@ echo $this->Html->css(array('multi-select'));
                                         </label>-->
                     <table id="formulario2" style="display: none">
                         <tr>                           
+                            <td colspan="2" align="left" >
+                                <input type="radio" name="data[User][tipoE]" value="RFDI" />RFDI
+                                <input type="radio" name="data[User][tipoE]" value="Codigo Barra" />Codigo Barra
+                            </td>
+                        </tr>
+                        <tr>                           
                             <td colspan="2" align="left" ><?php
                                 echo $this->Form->input('documentType_id', array(
                                     "div" => array(
@@ -74,7 +80,7 @@ echo $this->Html->css(array('multi-select'));
                                     ),
                                     "label" => "Tipo de Documento",
                                     "options" => $DocumentType,
-                                    "empty" => "Seleccione un tipo de documento",                                    
+                                    "empty" => "Seleccione un tipo de documento",
                                 ));
                                 ?></td>
                         </tr>
@@ -165,17 +171,31 @@ echo $this->Html->css(array('multi-select'));
                         mensaje = $("mensaje", this).text();
 
                         alert(mensaje);
-                        if (mensaje == "Registro realizado con exito")
+                        if (codigo == 1)
                         {
                             personId = $("person_id", this).text();
                             inputId = $("input_id", this).text();
                             actualizar = 1;
                             $("input[type='submit']").attr("value", "Actualizar");
                             $("#btnNuevo").css("display", "block");
+                        } else if (codigo == 2)
+                        {
+                            personId = $("person_id", this).text();
+                            inputId = $("input_id", this).text();
+                            var person_document = $("person_document", this).text();
+                            var event_id = $("event_id", this).text();
+                            actualizar = 1;
+                            $("input[type='submit']").attr("value", "Actualizar");
+                            $("#btnNuevo").css("display", "block");
+                            var answer = confirm("Imprimir escarapela?.");
+                            if (answer){
+                                window.location = "http://localhost/tiquetes/people/reimprimir/"+person_document+"/"+event_id;
+                            }
                         }
+                    });
 
                     });
-                });
+             
             } else {
                 console.log("no paso la validacion");
             }
@@ -372,7 +392,7 @@ echo $this->Html->css(array('multi-select'));
                         $("#PeoplePers_direccion").val(direccion);
                         $("#PeoplePers_telefono").val(telefono);
                         $("#PeoplePers_mail").val(email);
-                        actualizar = 1;
+//                        actualizar = 1;
                     } else {
                         $("#PeoplePers_id").val();
                         $("#UserCityId option[value='']").attr("selected", true);
@@ -381,7 +401,9 @@ echo $this->Html->css(array('multi-select'));
                         $("#PeoplePers_direccion").val();
                         $("#PeoplePers_telefono").val();
                         $("#PeoplePers_mail").val();
+                        actualizar = 0;
                     }
+                    console.log("actualizar: " + actualizar);
                 });
             });
         });
