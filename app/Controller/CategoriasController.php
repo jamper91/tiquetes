@@ -155,20 +155,11 @@ class CategoriasController extends AppController {
 
     public function getCategoriesByEvent() {
         $this->layout = "webservices";
-        $even_id = $this->request->data["even_id"];
-        $options = array(
-            "conditions" => array(
-                "Categoria.event_id" => $even_id
-            ),
-            "fields" => array(
-                "Categoria.id",
-                "Categoria.descripcion as name"
-            ),
-            "recursive" => 0
-        );
-        $eventos = $this->Categoria->find("all", $options);
-        $log = $this->Categoria->getDataSource()->getLog(false, false);
-        //debug($log);
+        $event = $this->request->data["event_id"];
+        $options = "SELECT c.`id`, c.`descripcion` AS name FROM `categorias` c INNER JOIN `events_categorias` e ON e.`categoria_id` = c.`id` WHERE e.`event_id` = $event order by c.`descripcion` asc ";
+        $eventos = $this->Categoria->query($options);
+//        $log = $this->Categoria->getDataSource()->getLog(false, false);
+//        debug($log);
 //        var_dump($cities);
         $this->set(
                 array(
