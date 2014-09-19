@@ -43,7 +43,8 @@ echo $this->Html->css(array('multi-select'));
                     "empty" => "Seleccione una categoria",
                     "style" => array(
                         "display:block"
-                    )
+                    ),
+                    "required"=>true
                 ));
                 ?>
                 <?php
@@ -68,8 +69,8 @@ echo $this->Html->css(array('multi-select'));
                     <table id="formulario2" style="display: none; padding-left: 10px">
                         <tr>                           
                             <td colspan="2" align="center" >
-                                <input type="radio" name="data[User][tipoE]" value="RFDI" onclick="visibleCampos()" />RFDI
-                                <input type="radio" name="data[User][tipoE]" value="Codigo Barra" onclick="ocultarCampos()" />Codigo Barra
+                                <input type="radio" name="data[User][tipoE]" required="true" value="RFDI" onclick="visibleCampos()" />RFDI
+                                <input type="radio" name="data[User][tipoE]" required="true" value="Codigo Barra" onclick="ocultarCampos()" />Codigo Barra
                             </td>
                         </tr>
                         <tr>                           
@@ -418,8 +419,9 @@ echo $this->Html->css(array('multi-select'));
                     direccion = $("pers_direccion", obj).text();
                     telefono = $("pers_telefono", obj).text();
                     email = $("pers_mail", obj).text();
-
-                    if (nombre !== null) {
+                    console.log("nombre:|"+nombre+"|");
+                    if (nombre !== "") {
+                        console.log("Entre al if");
                         $("#PeoplePers_id").val(id);
                         $("#PeoplePers_primNombre").val(nombre);
                         $("#PeoplePers_primApellido").val(apellido);
@@ -427,8 +429,9 @@ echo $this->Html->css(array('multi-select'));
                         $("#PeoplePers_direccion").val(direccion);
                         $("#PeoplePers_telefono").val(telefono);
                         $("#PeoplePers_mail").val(email);
-//                        actualizar = 1;
+                        actualizar = 1;
                     } else {
+                        console.log("Entre al else");
                         $("#PeoplePers_id").val();
                         $("#UserCityId option[value='']").attr("selected", true);
                         $("#PeoplePers_primNombre").val();
