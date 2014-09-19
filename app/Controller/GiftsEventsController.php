@@ -181,8 +181,8 @@ class GiftsEventsController extends AppController {
             $data = $this->request->data;
             $event_id = $data['GiftsEvent']['event_id'];
             $documento = $data['GiftsEvent']['documento'];
-            $rfid = $data['GiftsEvent']['rfid'];
-            $barcode = $data['GiftsEvent']['barcode'];
+//            $rfid = $data['GiftsEvent']['rfid'];
+//            $barcode = $data['GiftsEvent']['barcode'];
             $fecha = date("2014-09-19");
             $gift = $data['GiftsEvent']['gift_id'];
 //            debug($data);die;
@@ -191,28 +191,39 @@ class GiftsEventsController extends AppController {
             } else {
                 if ($documento != '') {
                     $this->loadModel("Person");
+                    $this->loadModel("Input");
                     $people_id = $this->Person->query("SELECT id FROM people WHERE pers_documento = $documento");
                     $id = $people_id[0]['people']['id'];
 //                    debug($id); die;
-                    $p = $this->Person->query("SELECT id FROM ` gift_events_people` WHERE gift_id = $gift AND event_id = $event_id AND people_id = $id");
+                    $g = $this->Person->query("SELECT id FROM `gifts_events` WHERE gift_id = $gift AND event_id = $event_id");
+                    $ge = $g[0]['gifts_events']['id'];
+                    $p = $this->Person->query("SELECT id FROM ` gift_events_people` WHERE gift_event_id = $ge AND event_id = $event_id AND people_id = $id");
+                    $c = $this->Input->query("SELECT categoria_id FROM inputs WHERE person_id = $id AND event_id = $event_id");
                     if ($p == array()) {
                         if ($people_id != array()) {
-                            $consumible = $this->GiftsEvent->Event->query("SELECT `id`, `descripcion` FROM `gifts` WHERE `id` NOT IN (SELECT gi.`id` FROM `gifts` gi  INNER JOIN `gifts_events` g ON gi.id = g.gift_id INNER JOIN `inputs` i ON i.event_id =g.`event_id`  INNER JOIN ` gift_events_people` ge ON ge.`gift_id` = g.`id`  INNER JOIN `people` p ON p.id = ge.`people_id`  INNER JOIN `events_categorias` e ON e.id = i.categoria_id  WHERE p.`pers_documento` ='$documento' AND i.event_id = $event_id AND g.`dia`='$fecha' AND g.id = $gift)");
+                            $in = $this->Input->query("SELECT id FROM inputs WHERE person_id = $id AND event_id =$event_id");
+                            if ($in != array()) {
+                                 $cat = $c[0]['inputs']['categoria_id'];
+                                $consumible = $this->GiftsEvent->Event->query("SELECT DISTINCT id, descripcion FROM gifts WHERE id NOT IN (SELECT DISTINCT g.`id` FROM gifts g     INNER JOIN gifts_events ge ON ge.gift_id = g.id     INNER JOIN ` gift_events_people` gp ON gp.gift_event_id = ge.id     WHERE gp.event_id = $event_id AND gp.people_id = $id AND ge.dia ='$fecha' AND ge.categoria_id = $cat AND g.id = $gift )");
+//                            $consumible = $this->GiftsEvent->Event->query("SELECT `id`, `descripcion` FROM `gifts` WHERE `id` NOT IN (SELECT gi.`id` FROM `gifts` gi  INNER JOIN `gifts_events` g ON gi.id = g.gift_id INNER JOIN `inputs` i ON i.event_id =g.`event_id`  INNER JOIN ` gift_events_people` ge ON ge.`gift_id` = g.`id`  INNER JOIN `people` p ON p.id = ge.`people_id`  INNER JOIN `events_categorias` e ON e.categoria_id = i.categoria_id  WHERE p.`pers_documento` ='$documento' AND i.event_id = $event_id AND g.`dia`='$fecha' AND g.id = $gift)");
 //                        debug($consumible); die;
-                            if ($consumible != array()) {
+                                if ($consumible != array()) {
 //                            $gift = $consumible[0]['gifts']['id'];
-                                $name = $consumible[0]['gifts']['descripcion'];
-                                $mensaje = "Se ha redimido el consumible $name para la fecha $fecha";
-                                $sql = "INSERT INTO ` gift_events_people`(`gift_id`, `event_id`, `people_id`) VALUES ($gift,$event_id, $id)";
-                                $this->GiftsEvent->query($sql);
-                                $this->Session->setFlash($mensaje, 'good');
-                            } else {
-                                $this->Session->setFlash('No existe consumible disponible para esta persona', 'error');
+                                    $name = $consumible[0]['gifts']['descripcion'];
+                                    $mensaje = "Se ha redimido el consumible $name para la fecha $fecha";
+                                    $sql = "INSERT INTO ` gift_events_people`(`gift_id`, `event_id`, `people_id`) VALUES ($gift,$event_id, $id)";
+                                    $this->GiftsEvent->query($sql);
+                                    $this->Session->setFlash($mensaje, 'good');
+                                } else {
+                                    $this->Session->setFlash('No existe consumible disponible para esta persona', 'error');
+                                }
+                            }else{
+                                 $this->Session->setFlash('La persona no se encuentra registrada para este evento', 'error');
                             }
                         } else {
                             $this->Session->setFlash('Esta persona no esta registrada en al base de datos', 'error');
                         }
-                    } else{
+                    } else {
                         $this->Session->setFlash('El consumible seleccionado ya fue redimido por esta persona', 'error');
                     }
                 }

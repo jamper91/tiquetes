@@ -46,6 +46,7 @@
     $(document).ready(function() {
         $('#GiftsEventEventId').val($('#GiftsEventEventId > option:first').val());
         $('#GiftsEventGiftId').val($('#GiftsEventGiftId > option:first').val());
+        $('#GiftsEventDocumento').val("");
         $("#GiftsEventEventId").change(function() {
             var datos2 = {
                 event_id: $(this).val()

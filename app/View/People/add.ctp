@@ -207,7 +207,7 @@ echo $this->Form->input('CommitteesEvent');
                     car =  $("pers_cargo", obj).text();
                     exp = $("pers_expedicion", obj).text();
 //                    alert(ciu+ins+car+exp+mail);
-                    if (nombre !== null) {
+                    if (nombre !== "") {
                         $("#CompanyPers_id").val(id);
                         $("#PersonPersPrimNombre").val(nombre);
                         $("#PersonPersPrimApellido").val(apellido);
@@ -219,15 +219,16 @@ echo $this->Form->input('CommitteesEvent');
                         $("#PersonPersInstitucion").val(ins);
                         $("#PersonPersCargo").val(car);
                     } else {
-                        $("#PersonPersPrimNombre").val();
-                        $("#PersonPersPrimApellido").val();
-                        $("#PersonPersDireccion").val();
-                        $("#PersonPersTelefono").val();
-                        $("#PersonPersExpedicion").val();
-                        $("#PersonCiudad").val();
-                        $("#PersonPersMail").val();
-                        $("#PersonPersInstitucion").val();
-                        $("#PersonPersCargo").val();
+                        console.log("asdasd");
+                        $("#PersonPersPrimNombre").val("");
+                        $("#PersonPersPrimApellido").val("");
+                        $("#PersonPersDireccion").val("");
+                        $("#PersonPersTelefono").val("");
+                        $("#PersonPersExpedicion").val("");
+                        $("#PersonCiudad").val("");
+                        $("#PersonPersMail").val("");
+                        $("#PersonPersInstitucion").val("");
+                        $("#PersonPersCargo").val("");
                     }
                 });
             });
