@@ -181,6 +181,7 @@ echo $this->Html->css(array('multi-select'));
         $("#btnNuevo").click(function()
         {
             actualizar = 0;
+            $("#PeopleDocumento").val("");
             $("input[type='submit']").attr("value", "Registrar");
             $("#btnNuevo").css("display", "none");
 //            inputId = 0;
@@ -380,7 +381,7 @@ echo $this->Html->css(array('multi-select'));
                             //Agrego el campo de la tarjeta
 //                            formulario += "<div class='controls'>";
                             formulario += "<tr>";
-                            formulario += "<td colspan='2'><div id='divCodi' style='display:none' class='input text'><label for='PersonDocumento'>Codigo Manilla</label><input id='PersonDocumento' type='password' name='data[Input][entr_codigo]'></input></div></td>";
+                            formulario += "<td colspan='2'><div id='divCodi' style='display:none' class='input text'><label for='PersonRfid'>Codigo Manilla</label><input id='PersonRfid' type='password' name='data[Input][entr_codigo]'></input></div></td>";
                             formulario += "</tr>";
 //                            formulario += "</div>";
 
@@ -443,7 +444,7 @@ echo $this->Html->css(array('multi-select'));
 
         function limpiar()
         {
-            $("#PeopleDocumento").val("");
+            
             $("#PeoplePers_id").val("");
             $("#UserCityId option[value='']").attr("selected", true);
             $("#PeoplePers_primNombre").val("");
@@ -451,6 +452,8 @@ echo $this->Html->css(array('multi-select'));
             $("#PeoplePers_direccion").val("");
             $("#PeoplePers_telefono").val("");
             $("#PeoplePers_mail").val("");
+            $("#PersonDocumento").val("");
+            $("#PersonRfid").val("");
         }
 
     });
