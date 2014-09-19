@@ -1012,6 +1012,8 @@ class UsersController extends AppController {
 
                 if (true) {
                     //Si se llega aqui por que se quiere ingresar por codigo de barras, esto no se hace
+
+                    $aux1 = 0;
                     if ($tipoE == "RFDI") {
                         $this->loadModel("Input");
                         $this->Input->id = $this->request->data["Informacion"]["input_id"];
@@ -1033,7 +1035,7 @@ class UsersController extends AppController {
                             $this->Input->save($newInput);
                             $newInputId = $this->Input->getLastInsertId();
                         }
-                    }else{
+                    } else {
                         $this->loadModel("Input");
                         $this->Input->id = $this->request->data["Informacion"]["input_id"];
                         if ($this->Input->id != 0) {
@@ -1041,6 +1043,7 @@ class UsersController extends AppController {
                             $this->Input->save();
                             $newInputId = $this->request->data["Informacion"]["input_id"];
                         } else {
+                            $aux = 1;
                             $newInput = $this->Input->create();
                             $newInput = array(
                                 'Input' => array(
@@ -1087,6 +1090,24 @@ class UsersController extends AppController {
                             "person_id" => $newPeopleId,
                             "input_id" => $newInputId
                         );
+
+                        if ($aux1 == 0) {
+                            $mensaje = array(
+                                "codigo" => 0,
+                                "mensaje" => "Actualizacion realizada con exito",
+                                "person_id" => $newPeopleId,
+                                "input_id" => $newInputId
+                            );
+                        } else {
+                            $mensaje = array(
+                                "codigo" => 2,
+                                "mensaje" => "Actualizacion realizada con exito",
+                                "person_id" => $newPeopleId,
+                                "input_id" => $newInputId,
+                                "person_document" => $this->request->data['People']["pers_documento"],
+                                "event_id" => $this->request->data["User"]["event_id"]
+                            );
+                        }
                         //comienzo con el log
                         $this->loadModel("Log");
                         $user_id = $this->Session->read("User.id");
