@@ -830,6 +830,42 @@ class UsersController extends AppController {
         
     }
 
+    public function obtenerRFDI($documento, $evento) {
+        $this->loadModel("Input");
+        $this->loadModel("Person");
+        $doc = $documento;
+        $sql = "SELECT id, pers_primNombre, Pers_primApellido, pers_institucion, ciudad FROM people WHERE pers_documento = '$doc'";
+        $eve = $evento;
+        $res = $this->Person->query($sql);
+        if ($res != array()) {
+            $id = $res[0]['people']['id'];
+            $nom = $res[0]['people']['pers_primNombre'];
+            $ape = $res[0]['people']['Pers_primApellido'];
+            $emp = $res[0]['people']['pers_institucion'];
+            $ciu = $res[0]['people']['ciudad'];
+            $sql2 = "SELECT entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve";
+            $res2 = $this->Input->find("first", array(
+                "conditions" => array(
+                    "Input.person_id" => $id,
+                    "Input.event_id" => $eve,
+                    "Input.tipo_entrada" => 1,
+                ),
+                "fields" => array(
+                    "Input.entr_codigo",
+                    "Input.id"
+                )
+            ));
+//            $res2 = $this->Input->query($sql2);
+            if ($res2 != array()) {
+                $this->request->data["Informacion"]["input_id"] = $res2["Input"]["id"];
+            } else {
+                $this->request->data["Informacion"]["input_id"] = 0;
+            }
+        } else {
+            
+        }
+    }
+
     public function obtenerCodigoBarra($documento, $evento) {
         $this->loadModel("Input");
         $this->loadModel("Person");
@@ -844,10 +880,23 @@ class UsersController extends AppController {
             $emp = $res[0]['people']['pers_institucion'];
             $ciu = $res[0]['people']['ciudad'];
             $sql2 = "SELECT entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve";
-            $res2 = $this->Input->query($sql2);
+            $res2 = $this->Input->find("first", array(
+                "conditions" => array(
+                    "Input.person_id" => $id,
+                    "Input.event_id" => $eve,
+                    "Input.tipo_entrada" => 2,
+                ),
+                "fields" => array(
+                    "Input.entr_codigo",
+                    "Input.id"
+                )
+            ));
+//            $res2 = $this->Input->query($sql2);
             if ($res2 != array()) {
                 $codigo = "-1";
+                $this->request->data["Informacion"]["input_id"] = $res2["Input"]["id"];
             } else {
+                $this->request->data["Informacion"]["input_id"] = 0;
                 $codigo = $this->generarCodigo();
             }
         } else {
@@ -866,10 +915,14 @@ class UsersController extends AppController {
             //Determino si se va a ingresar por RFDI o pdf
             $tipoE = $this->request->data["User"]["tipoE"];
             $entr_codigo = "";
+            $tipo_entrada = "";
             if ($tipoE == "RFDI") {
+                $this->obtenerRFDI($this->request->data['People']['pers_documento'], $this->request->data['User']['event_id']);
                 $entr_codigo = $this->request->data['Input']['entr_codigo'];
+                $tipo_entrada = 1;
             } else {
                 $entr_codigo = $this->obtenerCodigoBarra($this->request->data['People']['pers_documento'], $this->request->data['User']['event_id']);
+                $tipo_entrada = 2;
             }
             //Si obtenerCodigoBarra me retorna -2, es porque el usuario ya tiene una entrada, en ese caso
             //hago un update de datos
@@ -895,14 +948,16 @@ class UsersController extends AppController {
                             'Input' => array(
                                 'entr_identificador' => $this->request->data['Input']['entr_identificador'],
                                 'entr_codigo' => $entr_codigo,
-                                'categoria_id' => $this->request->data['User']['categoria_id']
+                                'categoria_id' => $this->request->data['User']['categoria_id'],
+                                'tipo_entrada' => $tipo_entrada,
                             )
                         );
                     } else {
                         $newInput = array(
                             'Input' => array(
                                 'entr_codigo' => $entr_codigo,
-                                'categoria_id' => $this->request->data['User']['categoria_id']
+                                'categoria_id' => $this->request->data['User']['categoria_id'],
+                                'tipo_entrada' => $tipo_entrada,
                             )
                         );
                     }
@@ -1030,8 +1085,9 @@ class UsersController extends AppController {
                                     'entr_identificador' => $this->request->data['Input']['entr_identificador'],
                                     'entr_codigo' => $entr_codigo,
                                     'categoria_id' => $this->request->data['User']['categoria_id'],
-                                    'person_id' => $this->request->data['Person']['pers_id'],
+                                    'person_id' => $this->request->data['Informacion']['person_id'],
                                     'event_id' => $this->request->data['User']['event_id'],
+                                    'tipo_entrada' => $tipo_entrada
                                 )
                             );
                             $this->Input->save($newInput);
@@ -1051,8 +1107,9 @@ class UsersController extends AppController {
                                 'Input' => array(
                                     'categoria_id' => $this->request->data['User']['categoria_id'],
                                     'entr_codigo' => $entr_codigo,
-                                    'person_id' => $this->request->data['Person']['pers_id'],
+                                    'person_id' => $this->request->data['Informacion']['person_id'],
                                     'event_id' => $this->request->data['User']['event_id'],
+                                    'tipo_entrada' => $tipo_entrada
                                 )
                             );
                             $this->Input->save($newInput);
@@ -1071,7 +1128,7 @@ class UsersController extends AppController {
                         if ($this->request->data["Informacion"]["person_id"] != 0)
                             $this->People->id = $this->request->data["Informacion"]["person_id"];
                         else
-                            $this->People->id = $this->request->data["Person"]["pers_id"];
+                            $this->People->id = $this->request->data["Informacion"]["person_id"];
                         $this->People->set('pers_documento', $this->request->data['People']['pers_documento']);
                         $this->People->set('pers_primNombre', $this->request->data['People']['pers_primNombre']);
                         $this->People->set('pers_primApellido', $this->request->data['People']['pers_primApellido']);
