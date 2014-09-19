@@ -1,22 +1,21 @@
 <div class="torniquetes index">
-	<h2><?php echo __('Torniquetes'); ?></h2>
+	<h2><?php echo __('Accesos'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<thead>
 	<tr>
-			<th><?php echo $this->Paginator->sort('id'); ?></th>
-			<th><?php echo $this->Paginator->sort('name'); ?></th>
-			<th class="actions"><?php echo __('Actions'); ?></th>
+			<th><?php echo $this->Paginator->sort('id'); ?>&nbsp;&nbsp;&nbsp;</th>
+			<th><?php echo $this->Paginator->sort('name','nombre'); ?>&nbsp;&nbsp;&nbsp;</th>
+			<th class="actions"><?php echo __('Opciones'); ?></th>
 	</tr>
 	</thead>
 	<tbody>
 	<?php foreach ($torniquetes as $torniquete): ?>
 	<tr>
-		<td><?php echo h($torniquete['Torniquete']['id']); ?>&nbsp;</td>
-		<td><?php echo h($torniquete['Torniquete']['name']); ?>&nbsp;</td>
+		<td><?php echo h($torniquete['Torniquete']['id']); ?>&nbsp;&nbsp;&nbsp;</td>
+		<td><?php echo h($torniquete['Torniquete']['name']); ?>&nbsp;&nbsp;&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $torniquete['Torniquete']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $torniquete['Torniquete']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $torniquete['Torniquete']['id']), array(), __('Are you sure you want to delete # %s?', $torniquete['Torniquete']['id'])); ?>
+			<?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $torniquete['Torniquete']['id']),array('class' => 'btn btn-warning btn-mini')); ?>
+			<?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $torniquete['Torniquete']['id']), array('class' => 'btn btn-danger btn-mini'), __('Are you sure you want to delete # %s?', $torniquete['Torniquete']['id'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>
@@ -35,12 +34,4 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Torniquete'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Entradas'), array('controller' => 'entradas', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Entrada'), array('controller' => 'entradas', 'action' => 'add')); ?> </li>
-	</ul>
 </div>
