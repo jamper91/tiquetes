@@ -16,7 +16,7 @@
         ));
 
         echo $this->Form->input('categoria_id', array("label" => "Categoria"));
-        echo $this->Form->input('gift_id', array("label" => "Consumible"));
+        echo $this->Form->input('gift_id', array("label" => "Consumible", "empty" => "Seleccione un consumible"));
         echo $this->Form->input('dia', array("label" => "Día del Evento", "type"=>"select"));
               
         ?>
@@ -25,26 +25,12 @@
 </div>
 <script>
     $(document).ready(function() {
-        $("#GiftsEventEventId").change(function() {
-            var url2 = urlbase + "gifts/getGiftWhitoutEvent.xml";
+        $('#GiftsEventEventId').val($('#GiftsEventEventId > option:first').val());
+        $('#GiftsEventGiftId').val($('#GiftsEventGiftId > option:first').val());
+        $("#GiftsEventEventId").change(function() {            
             var datos2 = {
                 event_id: $(this).val()
-            };
-            ajax(url2, datos2, function(xml) {
-                $("#GiftsEventGiftId").html("<option>Seleccione un consumible</option>");
-                $("datos", xml).each(function() {
-                    var obj = $(this).find("g");
-                    var valor, texto;
-                    valor = $("id", obj).text();
-                    texto = $("name", obj).text();
-                    if (valor) {
-                        var html = "<option value='$1'>$2</option>";
-                        html = html.replace("$1", valor);
-                        html = html.replace("$2", texto);
-                        $("#GiftsEventGiftId").append(html);
-                    }
-                });
-            });
+            };           
             var url = urlbase + "categorias/getCategoriesByEvent.xml";            
             ajax(url, datos2, function(xml) {
                 $("#GiftsEventCategoriaId").html("<option>Seleccione una categoria</option>");

@@ -1,7 +1,21 @@
 <div class="giftsEvents form">
-    <?php echo $this->Form->create('GiftsEvent'); ?>
+    <?php
+    echo $this->Form->create('GiftsEvent');
+    if (CakeSession::read('idEvent')== '') {
+        CakeSession::write('idEvent', $this->Form->data['GiftsEvent']['event_id']);
+    }
+    ?>
+
     <fieldset>
-        <legend><?php echo __('Editar consumible por Evento'); ?></legend>
+        <legend><?php
+            echo __('Editar consumible por Evento');
+//            debug($this->Form->data['GiftsEvent']['event_id']);
+////            if (CakeSession::read('idEvent') != $this->Form->data['GiftsEvent']['event_id'] && CakeSession::read('sw')!='1') {
+//                CakeSession::write('idEvent', $this->Form->data['GiftsEvent']['event_id']);
+//                CakeSession::write('sw', '1');
+//            }
+            ?></legend>
+        <input type="hidden" id="event" name="event" value="<?php echo CakeSession::read('idEvent') ?>">
         <?php
         echo $this->Form->input('event_id', array(
             "div" => array(
@@ -10,18 +24,25 @@
             "label" => "Evento",
             "options" => $events,
             "empty" => "Seleccione un evento",
+            'disabled' => 'true',
             "style" => array(
-                "display:block"
+                "display:block",
             )
         ));
-
-        echo $this->Form->input('categoria_id', array("label" => "Categoria"));
+        echo $this->Form->input('categoria_id', array(
+            "label" => "Categoria",
+            "options" => $cat,
+            "required" => "true"
+        ));
         echo $this->Form->input('gift_id', array("label" => "Consumible"));
-        echo $this->Form->input('dia', array("label" => "Día del Evento", "type"=>"select"));
-              
+        echo $this->Form->input('dia', array(
+            "label" => "Día del Evento",
+            "type" => "text",
+            'readonly' => 'readonly',
+        ));
         ?>
     </fieldset>
-    <?php echo $this->Form->end(__('Registrar')); ?>
+<?php echo $this->Form->end(__('Registrar')); ?>
 </div>
 <script>
     $(document).ready(function() {
@@ -45,7 +66,7 @@
                     }
                 });
             });
-            var url = urlbase + "categorias/getCategoriesByEvent.xml";            
+            var url = urlbase + "categorias/getCategoriesByEvent.xml";
             ajax(url, datos2, function(xml) {
                 $("#GiftsEventCategoriaId").html("<option>Seleccione una categoria</option>");
                 $("datos", xml).each(function() {
@@ -61,8 +82,8 @@
                     }
                 });
             });
-            
-            var url = urlbase + "events/getDaysByEvent.xml";            
+
+            var url = urlbase + "events/getDaysByEvent.xml";
             ajax(url, datos2, function(xml) {
                 $("#GiftsEventDia").html("<option>Seleccione un día</option>");
                 $("datos", xml).each(function() {
