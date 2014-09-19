@@ -1012,11 +1012,11 @@ class UsersController extends AppController {
 
                 if (true) {
                     //Si se llega aqui por que se quiere ingresar por codigo de barras, esto no se hace
-                    if (!$tipoE == "RFDI") {
+                    if ($tipoE == "RFDI") {
                         $this->loadModel("Input");
                         $this->Input->id = $this->request->data["Informacion"]["input_id"];
                         if ($this->Input->id != 0) {
-                            $this->Input->set('entr_codigo', $this->request->data['Input']['entr_codigo']);
+                            $this->Input->set('entr_codigo', $entr_codigo);
                             $this->Input->set('entr_identificador', $this->request->data['Input']['entr_identificador']);
                             $this->Input->set('categoria_id', $this->request->data['User']['categoria_id']);
                             $this->Input->save();
@@ -1026,7 +1026,26 @@ class UsersController extends AppController {
                             $newInput = array(
                                 'Input' => array(
                                     'entr_identificador' => $this->request->data['Input']['entr_identificador'],
-                                    'entr_codigo' => $this->request->data['Input']['entr_codigo'],
+                                    'entr_codigo' => $entr_codigo,
+                                    'categoria_id' => $this->request->data['User']['categoria_id'],
+                                )
+                            );
+                            $this->Input->save($newInput);
+                            $newInputId = $this->Input->getLastInsertId();
+                        }
+                    }else{
+                        $this->loadModel("Input");
+                        $this->Input->id = $this->request->data["Informacion"]["input_id"];
+                        if ($this->Input->id != 0) {
+                            $this->Input->set('entr_codigo', $entr_codigo);
+                            $this->Input->set('categoria_id', $this->request->data['User']['categoria_id']);
+                            $this->Input->save();
+                            $newInputId = $this->request->data["Informacion"]["input_id"];
+                        } else {
+                            $newInput = $this->Input->create();
+                            $newInput = array(
+                                'Input' => array(
+                                    'entr_codigo' => $entr_codigo,
                                     'categoria_id' => $this->request->data['User']['categoria_id'],
                                 )
                             );

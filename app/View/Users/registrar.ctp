@@ -432,13 +432,13 @@ echo $this->Html->css(array('multi-select'));
                         actualizar = 1;
                     } else {
                         console.log("Entre al else");
-                        $("#PeoplePers_id").val();
+                        $("#PeoplePers_id").val("");
                         $("#UserCityId option[value='']").attr("selected", true);
-                        $("#PeoplePers_primNombre").val();
-                        $("#PeoplePers_primApellido").val();
-                        $("#PeoplePers_direccion").val();
-                        $("#PeoplePers_telefono").val();
-                        $("#PeoplePers_mail").val();
+                        $("#PeoplePers_primNombre").val("");
+                        $("#PeoplePers_primApellido").val("");
+                        $("#PeoplePers_direccion").val("");
+                        $("#PeoplePers_telefono").val("");
+                        $("#PeoplePers_mail").val("");
                         actualizar = 0;
                     }
                     console.log("actualizar: " + actualizar);
