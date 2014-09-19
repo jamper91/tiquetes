@@ -1037,7 +1037,6 @@ class UsersController extends AppController {
                         $this->loadModel("Input");
                         $this->Input->id = $this->request->data["Informacion"]["input_id"];
                         if ($this->Input->id != 0) {
-                            $this->Input->set('entr_codigo', $entr_codigo);
                             $this->Input->set('categoria_id', $this->request->data['User']['categoria_id']);
                             $this->Input->save();
                             $newInputId = $this->request->data["Informacion"]["input_id"];
@@ -1045,7 +1044,6 @@ class UsersController extends AppController {
                             $newInput = $this->Input->create();
                             $newInput = array(
                                 'Input' => array(
-                                    'entr_codigo' => $entr_codigo,
                                     'categoria_id' => $this->request->data['User']['categoria_id'],
                                 )
                             );
