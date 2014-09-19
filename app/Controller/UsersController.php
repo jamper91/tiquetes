@@ -710,9 +710,9 @@ class UsersController extends AppController {
 //             }
 //         }
         //Listo los eventos
-        $this ->loadModel("DocumentType");
+        $this->loadModel("DocumentType");
         $DocumentType = $this->DocumentType->find("list", array(
-            "fields"=>array(
+            "fields" => array(
                 "DocumentType.id",
                 "DocumentType.tido_descripcion"
             )
@@ -725,8 +725,8 @@ class UsersController extends AppController {
                 "Event.id",
                 "Event.even_nombre"
             ),
-            "conditions"=>array(
-                "Event.even_fechFinal >= "=>$fecha
+            "conditions" => array(
+                "Event.even_fechFinal >= " => $fecha
             )
         ));
         $this->set(compact('events', $events, 'DocumentType', $DocumentType));
@@ -792,30 +792,176 @@ class UsersController extends AppController {
         }
     }
 
+    public function generarCodigo() {
+        $caracteres = "0123456789"; //posibles caracteres a usar
+        $numerodeletras = 12; //numero de letras para generar el texto
+        $cadena = ""; //variable para almacenar la cadena generada
+        $while = TRUE;
+        while ($while) {
+            for ($i = 0; $i < $numerodeletras; $i++) {
+                $cadena = $cadena . substr($caracteres, rand(0, strlen($caracteres)), 1); /* Extraemos 1 caracter de los caracteres
+                  entre el rango 0 a Numero de letras que tiene la cadena */
+            }
+            $ejemplo = strlen($cadena);
+            $if = TRUE;
+            while ($if) {
+                if ($ejemplo < 12) {
+                    $numerodado = rand(0, 9);
+                    $cadena = $cadena . $numerodado;
+                    $ejemplo = strlen($cadena);
+//                        debug($numerodado);
+                } else {
+                    $if = FALSE;
+                }
+            }
+            $ejemplo = strlen($cadena);
+            $sql = "SELECT id FROM inputs WHERE entr_codigo = $cadena";
+            $id = $this->Input->query($sql);
+//                                debug ($id);
+            if ($id == array()) {
+                $while = FALSE;
+            }
+        }
+        return $cadena;
+        $eve = 3;
+    }
+
+    public function generarpdf() {
+        
+    }
+
+    public function obtenerRFDI($documento, $evento) {
+        $this->loadModel("Input");
+        $this->loadModel("Person");
+        $doc = $documento;
+        $sql = "SELECT id, pers_primNombre, Pers_primApellido, pers_institucion, ciudad FROM people WHERE pers_documento = '$doc'";
+        $eve = $evento;
+        $res = $this->Person->query($sql);
+        if ($res != array()) {
+            $id = $res[0]['people']['id'];
+            $nom = $res[0]['people']['pers_primNombre'];
+            $ape = $res[0]['people']['Pers_primApellido'];
+            $emp = $res[0]['people']['pers_institucion'];
+            $ciu = $res[0]['people']['ciudad'];
+            $sql2 = "SELECT entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve";
+            $res2 = $this->Input->find("first", array(
+                "conditions" => array(
+                    "Input.person_id" => $id,
+                    "Input.event_id" => $eve,
+                    "Input.tipo_entrada" => 1,
+                ),
+                "fields" => array(
+                    "Input.entr_codigo",
+                    "Input.id"
+                )
+            ));
+//            $res2 = $this->Input->query($sql2);
+            if ($res2 != array()) {
+                $this->request->data["Informacion"]["input_id"] = $res2["Input"]["id"];
+            } else {
+                $this->request->data["Informacion"]["input_id"] = 0;
+            }
+        } else {
+            
+        }
+    }
+
+    public function obtenerCodigoBarra($documento, $evento) {
+        $this->loadModel("Input");
+        $this->loadModel("Person");
+        $doc = $documento;
+        $sql = "SELECT id, pers_primNombre, Pers_primApellido, pers_institucion, ciudad FROM people WHERE pers_documento = '$doc'";
+        $eve = $evento;
+        $res = $this->Person->query($sql);
+        if ($res != array()) {
+            $id = $res[0]['people']['id'];
+            $nom = $res[0]['people']['pers_primNombre'];
+            $ape = $res[0]['people']['Pers_primApellido'];
+            $emp = $res[0]['people']['pers_institucion'];
+            $ciu = $res[0]['people']['ciudad'];
+            $sql2 = "SELECT entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve";
+            $res2 = $this->Input->find("first", array(
+                "conditions" => array(
+                    "Input.person_id" => $id,
+                    "Input.event_id" => $eve,
+                    "Input.tipo_entrada" => 2,
+                ),
+                "fields" => array(
+                    "Input.entr_codigo",
+                    "Input.id"
+                )
+            ));
+//            $res2 = $this->Input->query($sql2);
+            if ($res2 != array()) {
+                $codigo = "-1";
+                $this->request->data["Informacion"]["input_id"] = $res2["Input"]["id"];
+            } else {
+                $this->request->data["Informacion"]["input_id"] = 0;
+                $codigo = $this->generarCodigo();
+            }
+        } else {
+            $codigo = $this->generarCodigo();
+        }
+        return $codigo;
+    }
+
     public function registrar2() {
         $mensaje = "";
         $this->layout = "webservice";
         $this->loadModel("Input");
         if ($this->request->is("POST")) {
+
+
+            //Determino si se va a ingresar por RFDI o pdf
+            $tipoE = $this->request->data["User"]["tipoE"];
+            $entr_codigo = "";
+            $tipo_entrada = "";
+            if ($tipoE == "RFDI") {
+                $this->obtenerRFDI($this->request->data['People']['pers_documento'], $this->request->data['User']['event_id']);
+                $entr_codigo = $this->request->data['Input']['entr_codigo'];
+                $tipo_entrada = 1;
+            } else {
+                $entr_codigo = $this->obtenerCodigoBarra($this->request->data['People']['pers_documento'], $this->request->data['User']['event_id']);
+                $tipo_entrada = 2;
+            }
+            //Si obtenerCodigoBarra me retorna -2, es porque el usuario ya tiene una entrada, en ese caso
+            //hago un update de datos
+            if ($entr_codigo == -1)
+                $this->request->data["Informacion"]["actualizar"] = 1;
             //determino si el formulario se envia es para actualizar
             if ($this->request->data["Informacion"]["actualizar"] == 0) {
+
                 //Primero determino si la tarjeta esta registrada en el sistema
                 $this->loadModel("Input");
                 $input = $this->Input->find('first', array(
                     "conditions" => array(
-                        "Input.entr_codigo" => $this->request->data["Input"]["entr_codigo"]
+                        "Input.entr_codigo" => $entr_codigo
                     )
                 ));
                 if (!$input) {
 
+
+
                     $newInput = $this->Input->create();
-                    $newInput = array(
-                        'Input' => array(
-                            'entr_identificador' => $this->request->data['Input']['entr_identificador'],
-                            'entr_codigo' => $this->request->data['Input']['entr_codigo'],
-                            'categoria_id' => 2,
-                        )
-                    );
+                    if ($tipoE == "RFDI") {
+                        $newInput = array(
+                            'Input' => array(
+                                'entr_identificador' => $this->request->data['Input']['entr_identificador'],
+                                'entr_codigo' => $entr_codigo,
+                                'categoria_id' => $this->request->data['User']['categoria_id'],
+                                'tipo_entrada' => $tipo_entrada,
+                            )
+                        );
+                    } else {
+                        $newInput = array(
+                            'Input' => array(
+                                'entr_codigo' => $entr_codigo,
+                                'categoria_id' => $this->request->data['User']['categoria_id'],
+                                'tipo_entrada' => $tipo_entrada,
+                            )
+                        );
+                    }
+
 
                     try {
                         $this->Input->save($newInput);
@@ -845,13 +991,29 @@ class UsersController extends AppController {
 
                             $this->request->data["Input"]["person_id"] = $newPeopleId;
                             $this->loadModel("Input");
-                            $this->Input->save($this->request->data);
-                            $mensaje = array(
-                                "codigo" => 0,
-                                "mensaje" => "Registro realizado con exito",
-                                "person_id" => $newPeopleId,
-                                "input_id" => $newInputId
-                            );
+                            $this->Input->clear();
+                            $this->Input->id = $newInputId;
+                            $this->Input->set("person_id", $newPeopleId);
+                            $this->Input->set("event_id", $this->request->data["User"]["event_id"]);
+                            $this->Input->save();
+                            if ($tipoE == "RFDI") {
+                                $mensaje = array(
+                                    "codigo" => 0,
+                                    "mensaje" => "Registro realizado con exito",
+                                    "person_id" => $newPeopleId,
+                                    "input_id" => $newInputId,
+                                    "event_id" => $this->request->data["User"]["event_id"]
+                                );
+                            } else {
+                                $mensaje = array(
+                                    "codigo" => 2,
+                                    "mensaje" => "Registro realizado con exito",
+                                    "person_id" => $newPeopleId,
+                                    "input_id" => $newInputId,
+                                    "person_document" => $this->request->data['People']["pers_documento"],
+                                    "event_id" => $this->request->data["User"]["event_id"]
+                                );
+                            }
                         } catch (Exception $exc) {
                             $error2 = $exc->getCode();
                             $mensaje2 = $exc->getMessage();
@@ -874,7 +1036,8 @@ class UsersController extends AppController {
                         $input_id = $newInputId;
                         $operacion = "VENTA";
                         $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '$operacion')";
-                        $operation = $this->Data->query($sql);
+//                        $operation = $this->Data->query($sql);
+//                        
                         //termino el log
                     } catch (Exception $exc) {
                         $error2 = $exc->getCode();
@@ -882,7 +1045,7 @@ class UsersController extends AppController {
                         if ($error2 == '23000') {
                             $mensaje = array(
                                 "codigo" => 23000,
-                                "mensaje" => "Codigo Manilla y/o Identificador de la manilla ya esta registrada"
+                                "mensaje" => "Codigo Manilla y/o Identificador de la manilla ya esta registrada*"
                             );
                         } else {
                             $mensaje = array(
@@ -903,37 +1066,69 @@ class UsersController extends AppController {
                 //Primero determino si la tarjeta esta registrada en el sistema
 
                 if (true) {
-                    $this->loadModel("Input");
-                    $this->Input->id = $this->request->data["Informacion"]["input_id"];
-                    if ($this->Input->id != 0) {
-                        $this->Input->set('entr_codigo', $this->request->data['Input']['entr_codigo']);
-                        $this->Input->set('entr_identificador', $this->request->data['Input']['entr_identificador']);
-                        $this->Input->save();
-                        $newInputId = $this->request->data["Informacion"]["input_id"];
+                    //Si se llega aqui por que se quiere ingresar por codigo de barras, esto no se hace
+
+                    $aux1 = 0;
+                    if ($tipoE == "RFDI") {
+                        $this->loadModel("Input");
+                        $this->Input->id = $this->request->data["Informacion"]["input_id"];
+                        if ($this->Input->id != 0) {
+                            $this->Input->set('entr_codigo', $entr_codigo);
+                            $this->Input->set('entr_identificador', $this->request->data['Input']['entr_identificador']);
+                            $this->Input->set('categoria_id', $this->request->data['User']['categoria_id']);
+                            $this->Input->save();
+                            $newInputId = $this->request->data["Informacion"]["input_id"];
+                        } else {
+                            $newInput = $this->Input->create();
+                            $newInput = array(
+                                'Input' => array(
+                                    'entr_identificador' => $this->request->data['Input']['entr_identificador'],
+                                    'entr_codigo' => $entr_codigo,
+                                    'categoria_id' => $this->request->data['User']['categoria_id'],
+                                    'person_id' => $this->request->data['Informacion']['person_id'],
+                                    'event_id' => $this->request->data['User']['event_id'],
+                                    'tipo_entrada' => $tipo_entrada
+                                )
+                            );
+                            $this->Input->save($newInput);
+                            $newInputId = $this->Input->getLastInsertId();
+                        }
                     } else {
-                        $newInput = $this->Input->create();
-                        $newInput = array(
-                            'Input' => array(
-                                'entr_identificador' => $this->request->data['Input']['entr_identificador'],
-                                'entr_codigo' => $this->request->data['Input']['entr_codigo'],
-                                'categoria_id' => 2,
-                            )
-                        );
-                        $this->Input->save($newInput);
-                        $newInputId = $this->Input->getLastInsertId();
+                        $this->loadModel("Input");
+                        $this->Input->id = $this->request->data["Informacion"]["input_id"];
+                        if ($this->Input->id != 0) {
+                            $this->Input->set('categoria_id', $this->request->data['User']['categoria_id']);
+                            $this->Input->save();
+                            $newInputId = $this->request->data["Informacion"]["input_id"];
+                        } else {
+                            $aux1 = 1;
+                            $newInput = $this->Input->create();
+                            $newInput = array(
+                                'Input' => array(
+                                    'categoria_id' => $this->request->data['User']['categoria_id'],
+                                    'entr_codigo' => $entr_codigo,
+                                    'person_id' => $this->request->data['Informacion']['person_id'],
+                                    'event_id' => $this->request->data['User']['event_id'],
+                                    'tipo_entrada' => $tipo_entrada
+                                )
+                            );
+                            $this->Input->save($newInput);
+                            $newInputId = $this->Input->getLastInsertId();
+                        }
                     }
 
 
+
                     try {
-                        
+
 
                         $this->loadModel('People');
 
                         //Actualizo a la persona
-                        if($this->request->data["Informacion"]["person_id"]!=0)
+                        if ($this->request->data["Informacion"]["person_id"] != 0)
                             $this->People->id = $this->request->data["Informacion"]["person_id"];
                         else
-                            $this->People->id = $this->request->data["Person"]["pers_id"];
+                            $this->People->id = $this->request->data["Informacion"]["person_id"];
                         $this->People->set('pers_documento', $this->request->data['People']['pers_documento']);
                         $this->People->set('pers_primNombre', $this->request->data['People']['pers_primNombre']);
                         $this->People->set('pers_primApellido', $this->request->data['People']['pers_primApellido']);
@@ -941,7 +1136,7 @@ class UsersController extends AppController {
                         $this->People->set('pers_telefono', $this->request->data['People']['pers_telefono']);
                         $this->People->set('pers_mail', $this->request->data['People']['pers_mail']);
                         $this->People->save();
-                        $newPeopleId =  $this->People->id;
+                        $newPeopleId = $this->People->id;
 
                         //Almaceno la informacion de la persona
                         $this->loadModel('Data');
@@ -957,13 +1152,31 @@ class UsersController extends AppController {
                             "person_id" => $newPeopleId,
                             "input_id" => $newInputId
                         );
+
+                        if ($aux1 == 0) {
+                            $mensaje = array(
+                                "codigo" => 0,
+                                "mensaje" => "Actualizacion realizada con exito",
+                                "person_id" => $newPeopleId,
+                                "input_id" => $newInputId
+                            );
+                        } else {
+                            $mensaje = array(
+                                "codigo" => 2,
+                                "mensaje" => "Actualizacion realizada con exito",
+                                "person_id" => $newPeopleId,
+                                "input_id" => $newInputId,
+                                "person_document" => $this->request->data['People']["pers_documento"],
+                                "event_id" => $this->request->data["User"]["event_id"]
+                            );
+                        }
                         //comienzo con el log
                         $this->loadModel("Log");
                         $user_id = $this->Session->read("User.id");
                         $input_id = $newInputId;
                         $operacion = "ACTUALIZACION";
                         $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '$operacion')";
-                        $operation = $this->Data->query($sql);
+//                        $operation = $this->Data->query($sql);
                         //termino el log
 //                    } else {
 ////                        $this->Session->setFlash('La tarjeta no concuerda con la categoria', 'error');

@@ -5,18 +5,15 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('descripcion'); ?></th>
-			<th><?php echo $this->Paginator->sort('cantidad'); ?></th>
-			<th><?php echo $this->Paginator->sort('categoria'); ?></th>
-			<th class="actions"><?php echo __('Actions'); ?></th>
+			
+			<th class="actions"><?php echo __('Acciones'); ?></th>
 	</tr>
 	</thead>
 	<tbody>
 	<?php foreach ($gifts as $gift): ?>
 	<tr>
 		<td><?php echo h($gift['Gift']['id']); ?>&nbsp;</td>
-		<td><?php echo h($gift['Gift']['descripcion']); ?>&nbsp;</td>
-		<td><?php echo h($gift['Gift']['cantidad']); ?>&nbsp;</td>
-		<td><?php echo h($gift['Gift']['categoria']); ?>&nbsp;</td>
+		<td><?php echo h($gift['Gift']['descripcion']); ?>&nbsp;</td>		
 		<td class="actions">
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $gift['Gift']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $gift['Gift']['id']), array(), __('Are you sure you want to delete # %s?', $gift['Gift']['id'])); ?>

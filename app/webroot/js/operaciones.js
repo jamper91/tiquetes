@@ -39,7 +39,7 @@ function soloNumeros(event) {
     {
         event.preventDefault();
     }
-    if (event.keyCode === 46 || event.keyCode === 8 || event.keyCode === 9 || event.keyCode === 10 || event.keyCode === 37 || event.keyCode === 39) {
+    if (event.keyCode === 46 || event.keyCode === 8 || event.keyCode === 9 || event.keyCode === 10 || event.keyCode === 37 || event.keyCode === 39 || event.keyCode === 17) {
     }
     else {
         if (event.keyCode < 95) {
