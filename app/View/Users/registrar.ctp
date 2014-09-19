@@ -44,7 +44,7 @@ echo $this->Html->css(array('multi-select'));
                     "style" => array(
                         "display:block"
                     ),
-                    "required"=>true
+                    "required" => true
                 ));
                 ?>
                 <?php
@@ -142,7 +142,7 @@ echo $this->Html->css(array('multi-select'));
                     </table>
 
                 </div>
-                <input type="button" id="btnNuevo" class="btn btn-success" value="Registrar Nuevo" id="btnLimpiar" style="display:none"> 
+                <input type="button" id="btnNuevo" class="btn btn-success" value="Registrar Nuevo" style="display:none"> 
                 <?php
                 echo $this->Form->end(array(
                     "div" => array(
@@ -168,22 +168,23 @@ echo $this->Html->css(array('multi-select'));
     var actualizar = 0, inputId = 0, personId = 0;
     function visibleCampos()
     {
-        $("#divIden").css("display","block");
-        $("#divCodi").css("display","block");
+        $("#divIden").css("display", "block");
+        $("#divCodi").css("display", "block");
     }
     function ocultarCampos()
     {
-        $("#divIden").css("display","none");
-        $("#divCodi").css("display","none");
+        $("#divIden").css("display", "none");
+        $("#divCodi").css("display", "none");
     }
     $(document).ready(function()
     {
         $("#btnNuevo").click(function()
         {
             actualizar = 0;
-            $("#PeopleDocumento").val("");
             $("input[type='submit']").attr("value", "Registrar");
             $("#btnNuevo").css("display", "none");
+//            inputId = 0;
+            limpiar();
         })
         $("#UserRegistrarForm").submit(function()
         {
@@ -210,7 +211,7 @@ echo $this->Html->css(array('multi-select'));
                         mensaje = $("mensaje", this).text();
 
                         alert(mensaje);
-                        if (codigo == 1)
+                        if (codigo == 0)
                         {
                             personId = $("person_id", this).text();
                             inputId = $("input_id", this).text();
@@ -260,7 +261,7 @@ echo $this->Html->css(array('multi-select'));
             ajax(url, datos, function(xml)
             {
                 //Elimino lo que contiene este select
-                $("#UserCategoriaId").html("<option>Seleccione...</option>");
+                $("#UserCategoriaId").html("");
                 if (xml)
                 {
                     $("datos", xml).each(function()
@@ -419,10 +420,11 @@ echo $this->Html->css(array('multi-select'));
                     direccion = $("pers_direccion", obj).text();
                     telefono = $("pers_telefono", obj).text();
                     email = $("pers_mail", obj).text();
-                    console.log("nombre:|"+nombre+"|");
+                    console.log("nombre:|" + nombre + "|");
                     if (nombre !== "") {
                         console.log("Entre al if");
                         $("#PeoplePers_id").val(id);
+                        personId=id;
                         $("#PeoplePers_primNombre").val(nombre);
                         $("#PeoplePers_primApellido").val(apellido);
                         $("#UserCityId option[value=" + ciudad + "]").attr("selected", true);
@@ -431,14 +433,7 @@ echo $this->Html->css(array('multi-select'));
                         $("#PeoplePers_mail").val(email);
                         actualizar = 1;
                     } else {
-                        console.log("Entre al else");
-                        $("#PeoplePers_id").val("");
-                        $("#UserCityId option[value='']").attr("selected", true);
-                        $("#PeoplePers_primNombre").val("");
-                        $("#PeoplePers_primApellido").val("");
-                        $("#PeoplePers_direccion").val("");
-                        $("#PeoplePers_telefono").val("");
-                        $("#PeoplePers_mail").val("");
+                        limpiar();
                         actualizar = 0;
                     }
                     console.log("actualizar: " + actualizar);
@@ -446,7 +441,17 @@ echo $this->Html->css(array('multi-select'));
             });
         });
 
-
+        function limpiar()
+        {
+            $("#PeopleDocumento").val("");
+            $("#PeoplePers_id").val("");
+            $("#UserCityId option[value='']").attr("selected", true);
+            $("#PeoplePers_primNombre").val("");
+            $("#PeoplePers_primApellido").val("");
+            $("#PeoplePers_direccion").val("");
+            $("#PeoplePers_telefono").val("");
+            $("#PeoplePers_mail").val("");
+        }
 
     });
 
