@@ -895,14 +895,14 @@ class UsersController extends AppController {
                             'Input' => array(
                                 'entr_identificador' => $this->request->data['Input']['entr_identificador'],
                                 'entr_codigo' => $entr_codigo,
-                                'categoria_id' => 2,
+                                'categoria_id' => $this->request->data['User']['categoria_id']
                             )
                         );
                     } else {
                         $newInput = array(
                             'Input' => array(
                                 'entr_codigo' => $entr_codigo,
-                                'categoria_id' => 2,
+                                'categoria_id' => $this->request->data['User']['categoria_id']
                             )
                         );
                     }
@@ -1018,6 +1018,7 @@ class UsersController extends AppController {
                         if ($this->Input->id != 0) {
                             $this->Input->set('entr_codigo', $this->request->data['Input']['entr_codigo']);
                             $this->Input->set('entr_identificador', $this->request->data['Input']['entr_identificador']);
+                            $this->Input->set('categoria_id', $this->request->data['User']['categoria_id']);
                             $this->Input->save();
                             $newInputId = $this->request->data["Informacion"]["input_id"];
                         } else {
@@ -1026,7 +1027,7 @@ class UsersController extends AppController {
                                 'Input' => array(
                                     'entr_identificador' => $this->request->data['Input']['entr_identificador'],
                                     'entr_codigo' => $this->request->data['Input']['entr_codigo'],
-                                    'categoria_id' => 2,
+                                    'categoria_id' => $this->request->data['User']['categoria_id'],
                                 )
                             );
                             $this->Input->save($newInput);
