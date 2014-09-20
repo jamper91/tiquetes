@@ -564,7 +564,7 @@ class PeopleController extends AppController {
         }
     }
 
-    public function reimprimir($doc1 = null, $event_id = null) {
+    public function reimprimir($doc1 = null, $event_id = null, $tipo = null) {
         $this->loadModel("Input");
         if ($this->request->is("POST")) {
             $data = $this->request->data;
@@ -675,7 +675,7 @@ class PeopleController extends AppController {
                         App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                         $this->layout = 'pdf'; //this will use the pdf.ctp layout
                         $this->set('fpdf', new FPDF('L', 'mm', array('60', '40')));
-                        $informacion = array('documento' => $doc, 'nombre' => $nom, 'apellido' => $ape, 'empresa' => $emp, 'ciudad' => $ciu, 'codigo' => $cadena);
+                        $informacion = array('documento' => $doc, 'nombre' => $nom, 'apellido' => $ape, 'empresa' => $emp, 'ciudad' => $ciu, 'codigo' => $cadena, 'tipo' => $tipo);
                         $this->set('data', $informacion);
                         $this->render('pdf');
                     } else {

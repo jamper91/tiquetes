@@ -879,7 +879,7 @@ class UsersController extends AppController {
             $ape = $res[0]['people']['Pers_primApellido'];
             $emp = $res[0]['people']['pers_institucion'];
             $ciu = $res[0]['people']['ciudad'];
-            $sql2 = "SELECT entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve";
+            $sql2 = "SELECT entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve AND tipo_entrada = 2";
             $res2 = $this->Input->find("first", array(
                 "conditions" => array(
                     "Input.person_id" => $id,
@@ -1129,6 +1129,7 @@ class UsersController extends AppController {
                             $this->People->id = $this->request->data["Informacion"]["person_id"];
                         else
                             $this->People->id = $this->request->data["Informacion"]["person_id"];
+                        $this->People->set('document_type_id', $this->request->data['User']['document_type_id']);
                         $this->People->set('pers_documento', $this->request->data['People']['pers_documento']);
                         $this->People->set('pers_primNombre', $this->request->data['People']['pers_primNombre']);
                         $this->People->set('pers_primApellido', $this->request->data['People']['pers_primApellido']);
