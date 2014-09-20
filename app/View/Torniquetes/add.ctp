@@ -1,10 +1,11 @@
 <div class="torniquetes form">
 <?php echo $this->Form->create('Torniquete'); ?>
 	<fieldset>
-		<legend><?php echo __('Crear Torniquete'); ?></legend>
+		<legend><?php echo __('Crear Acceso'); ?></legend>
 	<?php
 		echo $this->Form->input('name', array(
-                    'label' => 'Nombre'
+                    'label' => 'Nombre',
+                    'required'=>'true'
                 ));
 	?>
 	</fieldset>

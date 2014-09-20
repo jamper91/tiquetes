@@ -51,12 +51,19 @@ class EntradasController extends AppController {
     public function add() {
         $this->loadModel('Stage');
         if ($this->request->is('post')) {
-            $this->Entrada->create();
-            if ($this->Entrada->save($this->request->data)) {
-                $this->Session->setFlash(__('The entrada has been saved.'));
-                return $this->redirect(array('action' => 'index'));
+
+            $sql = "SELECT id FROM `entradas` WHERE name ='" . strtoupper($this->request->data['Entrada']['name']) . "' AND stage_id =" . $this->request->data['Entrada']['stage_id']; //
+            $id = $this->Entrada->query($sql);
+            if ($id == array()) {
+                $this->Entrada->create();
+                if ($this->Entrada->save($this->request->data)) {
+                    $this->Session->setFlash('La entrada se creo correctamente.', 'good');
+                    return $this->redirect(array('action' => 'index'));
+                } else {
+                    $this->Session->setFlash('La entrada no se guardo. Por favor, intente nuevamente.', 'error');
+                }
             } else {
-                $this->Session->setFlash(__('The entrada could not be saved. Please, try again.'));
+                $this->Session->setFlash('La entrada ya existe. Por favor, intente nuevamente.', 'error');
             }
         }
         $escenario = $this->Stage->find('list', array(
@@ -80,20 +87,41 @@ class EntradasController extends AppController {
         if (!$this->Entrada->exists($id)) {
             throw new NotFoundException(__('Invalid entrada'));
         }
+
         if ($this->request->is(array('post', 'put'))) {
-            if ($this->Entrada->save($this->request->data)) {
-                $this->Session->setFlash(__('The entrada has been saved.'));
-                return $this->redirect(array('action' => 'index'));
+            $x = '';
+            $sql = "SELECT id FROM `entradas` WHERE name ='" . strtoupper($this->request->data['Entrada']['name']) . "' AND stage_id =" . $this->request->data['Entrada']['stage_id'] . ""; //
+            $entr = $this->Entrada->query($sql);
+//            debug($entr);die;
+            if ($entr != array()) {
+                if ($entr[0]['entradas']['id'] != $id) {
+                    $x = $entr[0]['entradas']['id'];
+                }
+            }
+            if ($x == '') {
+                $this->request->data['Entrada']['name'] = strtoupper($this->request->data['Entrada']['name']);
+                if ($this->Entrada->save($this->request->data)) {
+                    $this->Session->setFlash('La entrada se actualizo.','good');
+                    return $this->redirect(array('action' => 'index'));
+                } else {
+                    $this->Session->setFlash(__('La entrada no se pudo Actualizar. Por favor, intente nuevamente.'));
+                }
             } else {
-                $this->Session->setFlash(__('The entrada could not be saved. Please, try again.'));
+                $this->Session->setFlash('La entrada ya fue asignada. Por favor, Ingrese otra.');
             }
         } else {
             $options = array('conditions' => array('Entrada.' . $this->Entrada->primaryKey => $id));
             $this->request->data = $this->Entrada->find('first', $options);
         }
-        $papers = $this->Entrada->Paper->find('list');
-        $categories = $this->Entrada->Category->find('list');
-        $this->set(compact('papers', 'categories'));
+
+        $escenario = $this->Entrada->Stage->find('list', array(
+            "fields" => array(
+                "Stage.esce_nombre"
+            )
+        ));
+        // $papers = $this->Entrada->Paper->find('list');
+        // $categories = $this->Entrada->Category->find('list');
+        $this->set(compact('escenario', 'categories'));
     }
 
     /**
@@ -594,8 +622,8 @@ class EntradasController extends AppController {
             $res2 = $this->User->query($sql2);
             $usuario = "";
 //            debug($dato["person"]["diligenciamiento"]); die;
-            if($res2 != array()){
-            $usuario = $res2[0]['users']['username'];
+            if ($res2 != array()) {
+                $usuario = $res2[0]['users']['username'];
             }
             if ($res != array()) {
                 $categoria = $res[0]['categorias']['descripcion'];
@@ -614,7 +642,7 @@ class EntradasController extends AppController {
                 "Institucion" => $dato["person"]["pers_institucion"],
                 "Cargo" => $dato["person"]["pers_cargo"],
                 "Fecha2" => $dato['input']['fechacertificate'],
-                "Impreso"=>$usuario ,
+                "Impreso" => $usuario,
                 "Agosto-1" => $fecha1,
                 "Agosto-2" => $fecha2,
                 "Agosto-3" => $fecha3,
