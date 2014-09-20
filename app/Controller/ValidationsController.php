@@ -111,7 +111,7 @@ class ValidationsController extends AppController {
                     }
                 }
                 $this->Session->setFlash('La validacion se creo correctamente.', 'good');
-                return $this->redirect(array('action' => 'index'));
+                return $this->redirect(array('action' => 'add'));
             } else {
                 $this->Session->setFlash('La validacion no se pudo crear. Por favor, intente nuevamente.', 'error');
             }
