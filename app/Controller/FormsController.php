@@ -60,12 +60,21 @@ class FormsController extends AppController {
                 $this->Session->setFlash(__('The form could not be saved. Please, try again.'));
             }
         }
-        $events = $this->Form->Event->find('list', array(
-            "fields" => array(
-                "Event.id",
-                "Event.even_nombre"
-            )
-        ));
+        $ev = $this->Form->Event->query("SELECT `id`, `even_nombre` FROM `events` WHERE `even_fechFinal` >= NOW() AND `id` NOT  IN(SELECT `event_id` FROM `forms`)");
+//        $events = $this->Form->Event->find('list', array(
+//            "fields" => array(
+//                "Event.id",
+//                "Event.even_nombre"
+//            ),
+//            "conditions" => array(
+//                "Event.even_fechFinal >= NOW()"
+//            )
+//        ));
+        $events= array();
+        foreach ($ev as $key => $e) {
+            $events[$e['events']['id']]=$e['events']['even_nombre'];
+        }
+//        debug($events); die;
         $personalData = $this->Form->PersonalDatum->find('list', array(
             "fields" => array(
                 "PersonalDatum.id",

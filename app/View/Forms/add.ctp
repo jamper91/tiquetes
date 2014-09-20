@@ -20,13 +20,26 @@ echo $this->Html->css(array('multi-select'));
                 <div class="control-group">
                     <label class="control-label">Evento</label>
                     <?php
-                    echo $this->Form->input('event_id', array(
-                        "div" => array(
-                            "class" => "controls"
-                        ),
-                        "label" => "",
-                        "options" => $events
-                    ));
+                    if ($events != array()) {
+                        echo $this->Form->input('event_id', array(
+                            "div" => array(
+                                "class" => "controls"
+                            ),
+                            "label" => "",
+                            "options" => $events,
+                            "empty" => "Seleccione un evento",
+                            "required" => "true"
+                        ));
+                    } else {
+                        echo $this->Form->input('event_id', array(
+                            "div" => array(
+                                "class" => "controls"
+                            ),
+                            "label" => "",
+                            "empty" => "Seleccione un evento",
+                            "required" => "true"
+                        ));
+                    }
                     ?>
                 </div>
                 <div class="control-group">
@@ -54,7 +67,8 @@ echo $this->Html->css(array('multi-select'));
                         "options" => $personalData,
                         "multiple" => true
                     ));
-//                    ?>
+//                    
+                    ?>
                 </div>
                 <?php
                 echo $this->Form->end(array(
