@@ -8,7 +8,7 @@
 			<th><?php echo $this->Paginator->sort('fechainicio'); ?></th>
 			<th><?php echo $this->Paginator->sort('fechafin'); ?></th>
 			<th><?php echo $this->Paginator->sort('cantidad_reingresos'); ?></th>
-			<!--<th><?php echo $this->Paginator->sort('categoria'); ?></th>-->
+			<th><?php echo $this->Paginator->sort('categoria'); ?></th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	</thead>
@@ -20,10 +20,10 @@
 		<td><?php echo h($validation['Validation']['fechainicio']); ?>&nbsp;</td>
 		<td><?php echo h($validation['Validation']['fechafin']); ?>&nbsp;</td>
 		<td><?php echo h($validation['Validation']['cantidad_reingresos']); ?>&nbsp;</td>
-		<td><?php // echo h($validation['Validation']['categoria']); ?>&nbsp;</td>
+		<td><?php echo h($validation['Categoria']['descripcion']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $validation['Validation']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $validation['Validation']['id']), array(), __('Are you sure you want to delete # %s?', $validation['Validation']['id'])); ?>
+			<?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $validation['Validation']['id']),array('class' => 'btn btn-warning btn-mini')); ?>
+			<?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $validation['Validation']['id']), array('class' => 'btn btn-danger btn-mini'), __('Are you sure you want to delete # %s?', $validation['Validation']['id'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>

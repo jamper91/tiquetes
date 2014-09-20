@@ -144,7 +144,22 @@ class EntradasController extends AppController {
         }
         return $this->redirect(array('action' => 'index'));
     }
-
+    
+    public function getEntradasByEvent() {
+        $this->layout = "webservices";
+        $event_id = $this->request->data["event_id"];        
+        $options = "SELECT e.id,e.name FROM `entradas` e INNER JOIN `stages` s ON e.stage_id=s.id INNER JOIN `events` ev ON ev.stage_id=s.id WHERE ev.id = $event_id";
+        $entradas = $this->Entrada->query($options);
+        $log = $this->Entrada->getDataSource()->getLog(false, false);
+        //debug($log);
+//        var_dump($cities);
+        $this->set(
+                array(
+                    "datos" => $entradas,
+                    "_serialize" => array("datos")
+                )
+        );
+    }
     public function getEntradasByStage() {
         $this->layout = "webservices";
         $stage_id = $this->request->data["stage_id"];
@@ -694,5 +709,6 @@ class EntradasController extends AppController {
         $entradas = $this->Entrada->find('list');
         $this->set(compact('categorias', 'entradas'));
     }
+    
 
 }

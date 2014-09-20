@@ -48,18 +48,75 @@ class ValidationsController extends AppController {
      * @return void
      */
     public function add() {
-
+        $this->loadModel('Event');
+        $this->loadModel('CategoriasEntrada');
         if ($this->request->is('post')) {
-            $this->request->data["Validation"]["categoria_id"] = 2;
-            $this->Validation->create();
-            if ($this->Validation->save($this->request->data)) {
-                $this->Session->setFlash(__('The validation has been saved.'));
+//            $this->request->data["Validation"]["categoria_id"] = 2;
+            $event_id = $this->request->data['Validation']['event_id'];
+
+
+//insert of categorias_entradas
+            //consultar los dias del evento
+            $sql = "SELECT datediff(`even_fechFinal`, `even_fechInicio`) AS cantidad FROM `events` e WHERE `id` = $event_id";
+            $cantidad = $this->Validation->query($sql);
+            $total = $cantidad[0][0]['cantidad'];
+            $sql2 = "SELECT even_fechInicio FROM events WHERE id = $event_id";
+            $fecha = $this->Validation->query($sql2);
+            $date = $fecha[0]['events']['even_fechInicio'];
+            $f = date('Y-m-d', strtotime($date));
+//       debug($date ." asdasdasd   ".$f);die;
+            $dias = array();
+            for ($i = 0; $i < $total; $i++) {
+                $dias[$i]['g']['id'] = [$f];
+                $dias[$i]['g']['name'] = [$f];
+                $f = date('Y-m-d', strtotime('+1 days', strtotime($f)));
+            }
+//            debug($dias);
+//            die;
+            $sw = 0;
+            foreach ($dias as $dia) {
+                $sw = $sw + 1;
+                $newValidation = $this->Validation->create();
+                $newValidation = array(
+                    'Validation' => array(
+                        'descripcion' => 'GENERAL',
+                        'fechainicio' => $dia['g']['id'][0],
+                        'fechafin' => $dia['g']['id'][0],
+                        'cantidad_reingresos' => $this->request->data['Validation']['cantidad_reingresos'],
+                        'entrada_id' => $this->request->data['Validation']['entrada_id'],
+                        'categoria_id' => $this->request->data['Validation']['categoria_id']
+                    )
+                );
+                $this->Validation->save($newValidation);
+            }
+            //insert de validaciones
+
+            if ($sw == $total) {
+                $sql = "SELECT id FROM categorias_entradas WHERE categoria_id=" . $this->request->data['Validation']['categoria_id'] . " AND entrada_id=" . $this->request->data['Validation']['entrada_id'] . ";";
+                $ceid = $this->Validation->query($sql);
+                $x = '';
+                if ($ceid != array()) {
+                    $x = $ceid[0]['categorias_entradas']['id'];
+                }
+                if ($x = '') {
+                    if ($this->request->data['Validation']['categoria_id'] != "") {
+                        $newCategoriasEntrada = $this->CategoriasEntrada->create();
+                        $newCategoriasEntrada = array(
+                            'CategoriasEntrada' => array(
+                                'entrada_id' => $this->request->data['Validation']['entrada_id'],
+                                'categoria_id' => $this->request->data['Validation']['categoria_id']
+                            )
+                        );
+                        $this->CategoriasEntrada->save($newCategoriasEntrada);
+                    }
+                }
+                $this->Session->setFlash('La validacion se creo correctamente.', 'good');
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('The validation could not be saved. Please, try again.'));
+                $this->Session->setFlash('La validacion no se pudo crear. Por favor, intente nuevamente.', 'error');
             }
         }
-        $events = $this->GiftsEvent->Event->find('list', array(
+        $events = $this->Event->find('list', array(
             "fields" => array(
                 "Event.id",
                 "Event.even_nombre"
@@ -68,6 +125,8 @@ class ValidationsController extends AppController {
                 "Event.even_fechFinal >= NOW()"
             )
         ));
+
+        $this->set(compact('events', 'entradas'));
     }
 
     /**
