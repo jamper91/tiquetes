@@ -1036,7 +1036,7 @@ class UsersController extends AppController {
                         $input_id = $newInputId;
                         $operacion = "VENTA";
                         $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '$operacion')";
-//                        $operation = $this->Data->query($sql);
+                        $operation = $this->Log->query($sql);
 //                        
                         //termino el log
                     } catch (Exception $exc) {
@@ -1176,7 +1176,7 @@ class UsersController extends AppController {
                         $input_id = $newInputId;
                         $operacion = "ACTUALIZACION";
                         $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '$operacion')";
-//                        $operation = $this->Data->query($sql);
+                        $operation = $this->Data->query($sql);
                         //termino el log
 //                    } else {
 ////                        $this->Session->setFlash('La tarjeta no concuerda con la categoria', 'error');
