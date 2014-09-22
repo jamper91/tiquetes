@@ -75,7 +75,7 @@ echo $this->Html->css(array('multi-select'));
                         </tr>
                         <tr>                           
                             <td colspan="2" ><?php
-                                echo $this->Form->input('document_type_id', array(
+                                echo $this->Form->input('People.document_type_id', array(
                                     "div" => array(
                                         "class" => "input text"
                                     ),
@@ -213,7 +213,7 @@ echo $this->Html->css(array('multi-select'));
                         mensaje = $("mensaje", this).text();
 
                         alert(mensaje);
-                        if (codigo == 2)
+                        if (codigo == 0)
                         {
                             personId = $("person_id", this).text();
                             inputId = $("input_id", this).text();
@@ -222,10 +222,7 @@ echo $this->Html->css(array('multi-select'));
                             actualizar = 1;
                             $("input[type='submit']").attr("value", "Actualizar");
                             $("#btnNuevo").css("display", "block");
-                            var answer = confirm("Imprimir escarapela?.");
-                            if (answer) {
-                                window.location = "http://localhost/tiquetes/people/reimprimir/" + person_document + "/" + event_id + "/" + 1;
-                            }
+                            
                         } else if (codigo == 2)
                         {
                             personId = $("person_id", this).text();
@@ -239,7 +236,21 @@ echo $this->Html->css(array('multi-select'));
                             if (answer) {
                                 window.location = "http://localhost/tiquetes/people/reimprimir/" + person_document + "/" + event_id + "/" + 2;
                             }
+                        }else if(codigo==3)
+                        {
+                            personId = $("person_id", this).text();
+                            inputId = $("input_id", this).text();
+                            var person_document = $("#PeopleDocumento").val();
+                            var event_id = $("#UserEventId").val();
+                            actualizar = 1;
+                            $("input[type='submit']").attr("value", "Actualizar");
+                            $("#btnNuevo").css("display", "block");
+                            var answer = confirm("Imprimir escarapela?.");
+                            if (answer) {
+                                window.location = "http://localhost/tiquetes/people/reimprimir/" + person_document + "/" + event_id + "/" + 1;
+                            }
                         }
+                        
                     });
 
                 });
@@ -268,6 +279,7 @@ echo $this->Html->css(array('multi-select'));
             }
             ajax(url, datos, function(xml)
             {
+                
                 //Elimino lo que contiene este select
                 $("#UserCategoriaId").html("");
                 if (xml)
