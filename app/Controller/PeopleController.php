@@ -522,6 +522,19 @@ class PeopleController extends AppController {
 
     public function importarUsuarios() {
         
+        $fecha = date("Y-m-d");
+        $this->loadModel("Event");
+        $events = $this->Event->find("list", array(
+            "fields" => array(
+                "Event.id",
+                "Event.even_nombre"
+            ),
+            "conditions" => array(
+                "Event.even_fechFinal >= " => $fecha
+            )
+        ));
+        $this->set(compact('events', $events));
+        
     }
 
     public function cargarUsuarios() {
@@ -581,7 +594,7 @@ class PeopleController extends AppController {
 //                    $newInputId = $new[0]['inputs']['id'];
                     $rfid = $this->Input->query("UPDATE inputs set entr_codigo ='$chip' WHERE person_id = $id AND event_id = $eve AND tipo_entrada = 1");
                 }
-                $res = $this->Person->query($sql);
+                $res = $this->Person->query($sql);                
                 if ($res != array()) {
                     $id = $res[0]['people']['id'];
                     $nom = $res[0]['people']['pers_primNombre'];
@@ -590,7 +603,7 @@ class PeopleController extends AppController {
                     $ciu = $res[0]['people']['ciudad'];
 
                     $sql2 = "SELECT id, entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve AND tipo_entrada = 2";
-                    $res2 = $this->Input->query($sql2);
+                    $res2 = $this->Input->query($sql2);                    
                     if ($res2 != array()) {
                         
                         $newInputId = $res2[0]['inputs']['id'];

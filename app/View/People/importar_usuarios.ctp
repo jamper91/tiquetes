@@ -5,10 +5,23 @@
 ?>
 <div align="center">
     <form action="" method="post" enctype="multipart/form-data" name="form1">
+        <?php
+        echo $this->Form->input('event_id', array(
+            "div" => array(
+                "class" => "input text"
+            ),
+            "label" => "Evento",
+            "options" => $events,
+            "empty" => "Seleccione un evento",
+            "style" => array(
+                "display:block"
+            )
+        ));
+        ?>
         <table width="90%" border="0">
             <tr>
                 <td>
-                    <strong>Agregar Archivo de Excel [Productos]</strong>
+                    <strong>Registro de personas para el evento</strong>
 
                     <input type="file" name="archivo" id="archivo">
                     <strong>Desea Actualizar la BD</strong>
@@ -37,24 +50,28 @@
     }
     ?>
     <?php echo $this->Form->create('People', array('action' => 'cargarUsuarios')); ?>
-    <table border="1" width="100%">
-        <thead>
+    <div id="letras" name="letras" style="display:none">
+        <table border="1" width="100%">
+
             <tr>
                 <th><center><strong>A</strong></center></th>
-                <th><center><strong>B</strong></center></th>
-                <th><center><strong>C</strong></center></th>
-                <th><center><strong>D</strong></center></th>
-                <th><center><strong>E</strong></center></th>
-                <th><center><strong>F</strong></center></th>
-                <th><center><strong>G</strong></center></th>
-                <th><center><strong>H</strong></center></th>
-                <th><center><strong>I</strong></center></th>
-                <th><center><strong>J</strong></center></th>
-               <!-- <th><center><strong>K</strong></center></th>
-                <th><center><strong>L</strong></center></th>-->
+                    <th><center><strong>B</strong></center></th>
+                    <th><center><strong>C</strong></center></th>
+                    <th><center><strong>D</strong></center></th>
+                    <th><center><strong>E</strong></center></th>
+                    <th><center><strong>F</strong></center></th>
+                    <th><center><strong>G</strong></center></th>
+                    <th><center><strong>H</strong></center></th>
+                    <th><center><strong>I</strong></center></th>
+                    <th><center><strong>J</strong></center></th>             
+            </tr>
+        </table>
+    </div>
+    <div id="campos" name="campos" style="display:none">
+    <table border="1" width="100%">
 
-        </tr>
             <tr> 
+            <th>TIPO DE DOCUMENTO</th>
             <th>DOCUMENTO</th>
             <th>LUGAR DE EXPEDICION</th>
             <th>NOMBRE</th>
@@ -64,29 +81,22 @@
             <th>TELEFONO</th>
             <TH>EMAIL</TH>
             <th>INSTITUCION</th>
-            <th>CARGO</th>
-<!--            <th>TELEFONO</th>
-            <th>TIPO DE USUARIO</th>
-            <th>DEPARTAMENTO</th>
-            <th>USUARIO</th>
-            <th>CONTRASEÑA</th>
-            <th>VALIDO DESDE</th>
-            <th>VALIDO HASTA</th>
-            <th>IDENTIFICADOR</th>-->
+            <th>CARGO</th>    
         </tr>
-        </thead>
-            <tbody>
+    </table>
+        </div>
+        <table>
 
-              	<?php
-            if (isset($_POST['radio'])) {
-                require_once '../vendor/PHPExcel/IOFactory.php';
+          	<?php
+        if (isset($_POST['radio'])) {
+            require_once '../vendor/PHPExcel/IOFactory.php';
 
-                $objPHPExcel = PHPExcel_IOFactory::load('../vendor/xls/datos.xls');
-                $objHoja = $objPHPExcel->getActiveSheet()->toArray(true, true, true, true, true, true, true, true, true, true);
-                $size = count($objHoja);
-                echo '<input type="hidden" name="size" id="size" value="' . $size . '">';
-                foreach ($objHoja as $iIndice => $objCelda)
-                    echo '
+            $objPHPExcel = PHPExcel_IOFactory::load('../vendor/xls/datos.xls');
+            $objHoja = $objPHPExcel->getActiveSheet()->toArray(true, true, true, true, true, true, true, true, true, true);
+            $size = count($objHoja);
+            echo '<input type="hidden" name="size" id="size" value="' . $size . '">';
+            foreach ($objHoja as $iIndice => $objCelda)
+                echo '
 							<tr>
 								<td align ="center"><input type="text" id = "doc' . $iIndice . '" name = "doc' . $iIndice . '" value ="' . $objCelda['A'] . '" style="display:none">' . $objCelda['A'] . '</td>
 								<td align ="center"><input type="text" id = "exp' . $iIndice . '" name = "exp' . $iIndice . '" value ="' . $objCelda['B'] . '" style="display:none">' . $objCelda['B'] . '</td>
@@ -101,28 +111,29 @@
 								
 							</tr>
 						';
-                $doc = $objCelda['A'];                
-                $exp = $objCelda['B'];                
-                $nom = $objCelda['C'];                
-                $ape = $objCelda['D']; 
-                $ciu = $objCelda['E'];
-                $dir = $objCelda['F'];                
-                $tel = $objCelda['G'];                
-                $mail = $objCelda['H'];                
-                $ins = $objCelda['I'];                
-                $car = $objCelda['J'];                
+            $doc = $objCelda['A'];
+            $exp = $objCelda['B'];
+            $nom = $objCelda['C'];
+            $ape = $objCelda['D'];
+            $ciu = $objCelda['E'];
+            $dir = $objCelda['F'];
+            $tel = $objCelda['G'];
+            $mail = $objCelda['H'];
+            $ins = $objCelda['I'];
+            $car = $objCelda['J'];
 //                $desde = $objCelda['J'];
 //            $hasta = $objCelda['K'];
 //            $ide = $objCelda['L'];
 
 
-                if ($_POST['radio'] == 's') {
-                }
+            if ($_POST['radio'] == 's') {
+                
             }
-            ?>
+        }
+        ?>
 
 
-                </tbody>            
+                        
     </table>        
     <?php echo $this->Form->end(__('Registrar')); ?>
 </div>
