@@ -59,7 +59,7 @@
         ajax(url2, datos2, function(xml) {
             $("#CategoriasEntradaCategoriaId").html("<option>Seleccione una categoria</option>");
             $("datos", xml).each(function() {
-                var obj = $(this).find("Categoria");
+                var obj = $(this).find("c");
                 var valor, texto;
                 valor = $("id", obj).text();
                 texto = $("name", obj).text();

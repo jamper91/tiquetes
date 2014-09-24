@@ -5,56 +5,68 @@ require_once('../Vendor/fpdf/ean13.php');
 $pdf = new PDF_EAN13();
 $pdf->SetAutoPageBreak(true, 0.3);
 $pdf->AddPage();
-
+//$pdf->Image('../webroot/img/certificate/escarapela.png', 0, 0, $pdf->w, $pdf->h);
 if ($data['tipo'] == 2) {
 
     if ($data['codigo']) {
         $codigo = $data['codigo'];
         $pdf->SetY(-24);
-        $pdf->cell(0, 2, $pdf->EAN13(8, 14.3, "$codigo"), 0, 0, 'C');
+        $pdf->cell(0, 2, $pdf->EAN13(35, 77.3, "$codigo"), 0, 0, 'C');
         $pdf->Ln(2);
     }
     if ($data['nombre']) {
-        $ncompleto = $data['nombre'] . ' ' . $data['apellido'];
-        $longitud = strlen($ncompleto);
+//        $ncompleto = $data['nombre'] . ' ' . $data['apellido'];
+        $longitud = strlen($data['nombre']);
 //    debug($longitud);die;
         if ($longitud <= 14) {
-            $pdf->SetY(-20);
+            $pdf->SetY(-63);
             $pdf->SetFont('Arial', 'B', 16);
-            $pdf->Cell(0, 2, $ncompleto, 0, 0, 'C');
+            $pdf->Cell(0, 2, $data['nombre'], 0, 0, 'C');
             $pdf->Ln(2);
         } elseif ($longitud <= 20) {
-            $pdf->SetY(-20);
+            $pdf->SetY(-63);
             $pdf->SetFont('Arial', 'B', 11);
-            $pdf->Cell(0, 2, $ncompleto, 0, 0, 'C');
+            $pdf->Cell(0, 2, $data['nombre'], 0, 0, 'C');
             $pdf->Ln(2);
         } elseif ($longitud > 20) {
-            $pdf->SetY(-20);
+            $pdf->SetY(-63);
             $pdf->SetFont('Arial', 'B', 7.5);
-            $pdf->Cell(0, 2, $ncompleto, 0, 0, 'C');
+            $pdf->Cell(0, 2, $data['nombre'], 0, 0, 'C');
             $pdf->Ln(2);
         }
+    }
+    if ($data['apellido']) {
+        $pdf->SetY(-58);
+        $pdf->SetFont('Arial', 'B', 13);
+        $pdf->Cell(0, 2, $data['apellido'], 0, 0, 'C');
+        $pdf->Ln(2);
     }
 
     if ($data['documento']) {
         $cedula = 'C.C ' . $data['documento'];
-        $pdf->SetY(-16);
+        $pdf->SetY(-54);
         $pdf->SetFont('Arial', '', 8);
         $pdf->Cell(0, 2, $cedula, 0, 0, 'C');
         $pdf->Ln(2);
     }
     if ($data['empresa']) {
-        $pdf->SetY(-13);
+        $pdf->SetY(-50);
         $pdf->SetFont('Arial', '', 8);
-        $pdf->Cell(0, 2, $data['empresa'], 0, 0, 'C');
+        $pdf->Cell(0, 2, "FEDERACION DE CAFETEROS", 0, 0, 'C');
         $pdf->Ln(2);
     }
     if ($data['empresa'] == '') {
-        $pdf->SetY(-14);
+        $pdf->SetY(-50);
         $pdf->Cell(0, 2, '', 0, 0, 'C');
         $pdf->Ln(2);
     }
-}else{
+    if ($data['categoria']) {
+        $pdf->SetY(-28);
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(0, 2, $data['categoria'], 0, 0, 'C');
+        $pdf->Ln(2);
+    }
+} else {
     if ($data['nombre']) {
         $ncompleto = $data['nombre'] . ' ' . $data['apellido'];
         $longitud = strlen($ncompleto);

@@ -830,11 +830,12 @@ class UsersController extends AppController {
         
     }
 
-    public function obtenerRFDI($documento, $evento) {
+    public function obtenerRFDI($id2, $evento) {
         $this->loadModel("Input");
         $this->loadModel("Person");
-        $doc = $documento;
-        $sql = "SELECT id, pers_primNombre, Pers_primApellido, pers_institucion, ciudad FROM people WHERE pers_documento = '$doc'";
+        $doc = $id2;
+        $sql = "SELECT id, pers_primNombre, Pers_primApellido, pers_institucion, ciudad FROM people WHERE id = $id2";
+
         $eve = $evento;
         $res = $this->Person->query($sql);
         if ($res != array()) {
@@ -866,11 +867,11 @@ class UsersController extends AppController {
         }
     }
 
-    public function obtenerCodigoBarra($documento, $evento) {
+    public function obtenerCodigoBarra($id2, $evento) {
         $this->loadModel("Input");
         $this->loadModel("Person");
-        $doc = $documento;
-        $sql = "SELECT id, pers_primNombre, Pers_primApellido, pers_institucion, ciudad FROM people WHERE pers_documento = '$doc'";
+        $doc = $id2;
+        $sql = "SELECT id, pers_primNombre, Pers_primApellido, pers_institucion, ciudad FROM people WHERE pers_documento = $id2";
         $eve = $evento;
         $res = $this->Person->query($sql);
         if ($res != array()) {
@@ -879,7 +880,7 @@ class UsersController extends AppController {
             $ape = $res[0]['people']['Pers_primApellido'];
             $emp = $res[0]['people']['pers_institucion'];
             $ciu = $res[0]['people']['ciudad'];
-            $sql2 = "SELECT entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve";
+            $sql2 = "SELECT entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve AND tipo_entrada = 2";
             $res2 = $this->Input->find("first", array(
                 "conditions" => array(
                     "Input.person_id" => $id,
@@ -917,11 +918,11 @@ class UsersController extends AppController {
             $entr_codigo = "";
             $tipo_entrada = "";
             if ($tipoE == "RFDI") {
-                $this->obtenerRFDI($this->request->data['People']['pers_documento'], $this->request->data['User']['event_id']);
+                $this->obtenerRFDI($this->request->data['Informacion']['person_id'], $this->request->data['User']['event_id']);
                 $entr_codigo = $this->request->data['Input']['entr_codigo'];
                 $tipo_entrada = 1;
             } else {
-                $entr_codigo = $this->obtenerCodigoBarra($this->request->data['People']['pers_documento'], $this->request->data['User']['event_id']);
+                $entr_codigo = $this->obtenerCodigoBarra($this->request->data['Informacion']['person_id'], $this->request->data['User']['event_id']);
                 $tipo_entrada = 2;
             }
             //Si obtenerCodigoBarra me retorna -2, es porque el usuario ya tiene una entrada, en ese caso
@@ -998,7 +999,7 @@ class UsersController extends AppController {
                             $this->Input->save();
                             if ($tipoE == "RFDI") {
                                 $mensaje = array(
-                                    "codigo" => 0,
+                                    "codigo" => 3,
                                     "mensaje" => "Registro realizado con exito",
                                     "person_id" => $newPeopleId,
                                     "input_id" => $newInputId,
@@ -1067,7 +1068,8 @@ class UsersController extends AppController {
 
                 if (true) {
                     //Si se llega aqui por que se quiere ingresar por codigo de barras, esto no se hace
-
+                    // La varialbe axu1 me permite determinar si se ingresa un nuevo
+                    // registro o se actualiza
                     $aux1 = 0;
                     if ($tipoE == "RFDI") {
                         $this->loadModel("Input");
@@ -1092,6 +1094,7 @@ class UsersController extends AppController {
                             );
                             $this->Input->save($newInput);
                             $newInputId = $this->Input->getLastInsertId();
+                            $aux1 = 1;
                         }
                     } else {
                         $this->loadModel("Input");
@@ -1129,6 +1132,7 @@ class UsersController extends AppController {
                             $this->People->id = $this->request->data["Informacion"]["person_id"];
                         else
                             $this->People->id = $this->request->data["Informacion"]["person_id"];
+                        $this->People->set('document_type_id', $this->request->data['People']['document_type_id']);
                         $this->People->set('pers_documento', $this->request->data['People']['pers_documento']);
                         $this->People->set('pers_primNombre', $this->request->data['People']['pers_primNombre']);
                         $this->People->set('pers_primApellido', $this->request->data['People']['pers_primApellido']);
@@ -1161,14 +1165,25 @@ class UsersController extends AppController {
                                 "input_id" => $newInputId
                             );
                         } else {
-                            $mensaje = array(
-                                "codigo" => 2,
-                                "mensaje" => "Actualizacion realizada con exito",
-                                "person_id" => $newPeopleId,
-                                "input_id" => $newInputId,
-                                "person_document" => $this->request->data['People']["pers_documento"],
-                                "event_id" => $this->request->data["User"]["event_id"]
-                            );
+                            if ($tipoE == "RFDI") {
+                                $mensaje = array(
+                                    "codigo" => 3,
+                                    "mensaje" => "Actualizacion realizada con exito",
+                                    "person_id" => $newPeopleId,
+                                    "input_id" => $newInputId,
+                                    "person_document" => $this->request->data['People']["pers_documento"],
+                                    "event_id" => $this->request->data["User"]["event_id"]
+                                );
+                            } else {
+                                $mensaje = array(
+                                    "codigo" => 2,
+                                    "mensaje" => "Actualizacion realizada con exito",
+                                    "person_id" => $newPeopleId,
+                                    "input_id" => $newInputId,
+                                    "person_document" => $this->request->data['People']["pers_documento"],
+                                    "event_id" => $this->request->data["User"]["event_id"]
+                                );
+                            }
                         }
                         //comienzo con el log
                         $this->loadModel("Log");

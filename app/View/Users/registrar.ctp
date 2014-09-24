@@ -24,9 +24,9 @@ echo $this->Html->css(array('multi-select'));
                 <?php
                 echo $this->Form->input('event_id', array(
                     "div" => array(
-                        "class" => "controls"
+                        "class" => "input text"
                     ),
-                    "label" => "",
+                    "label" => "Evento",
                     "options" => $events,
                     "empty" => "Seleccione un evento",
                     "style" => array(
@@ -37,9 +37,9 @@ echo $this->Html->css(array('multi-select'));
                 <?php
                 echo $this->Form->input('categoria_id', array(
                     "div" => array(
-                        "class" => "controls"
+                        "class" => "input text"
                     ),
-                    "label" => "",
+                    "label" => "Categoria",
                     "empty" => "Seleccione una categoria",
                     "style" => array(
                         "display:block"
@@ -50,7 +50,7 @@ echo $this->Html->css(array('multi-select'));
                 <?php
                 echo $this->Form->input('registration_type_id', array(
                     "div" => array(
-                        "class" => "controls"
+                        "class" => "input text"
                     ),
                     "label" => "",
                     "empty" => "Seleccione",
@@ -69,28 +69,29 @@ echo $this->Html->css(array('multi-select'));
                     <table id="formulario2" style="display: none; padding-left: 10px">
                         <tr>                           
                             <td colspan="2" align="center" >
-                                <input type="radio" name="data[User][tipoE]" required="true" value="RFDI" onclick="visibleCampos()" />RFDI
-                                <input type="radio" name="data[User][tipoE]" required="true" value="Codigo Barra" onclick="ocultarCampos()" />Codigo Barra
+                                <input type="radio" name="data[User][tipoE]" required="true" value="RFDI" onclick="visibleCampos()" />RFID
+                                <input type="radio" name="data[User][tipoE]" required="true" value="Codigo Barra" onclick="ocultarCampos()" />Código de Barras
                             </td>
                         </tr>
                         <tr>                           
-                            <td colspan="2 ><?php
-                            echo $this->Form->input('documentType_id', array(
-                                "div" => array(
-                                    "class" => "controls"
-                                ),
-                                "label" => "Tipo de Documento",
-                                "options" => $DocumentType,
-                                "empty" => "Seleccione un tipo de documento",
-                            ));
-                            ?></td>
-                                </tr>
-                                <tr>
+                            <td colspan="2" ><?php
+                                echo $this->Form->input('People.document_type_id', array(
+                                    "div" => array(
+                                        "class" => "input text"
+                                    ),
+                                    "label" => "Tipo de Documento",
+                                    "options" => $DocumentType,
+                                    "empty" => "Seleccione un tipo de documento",
+                                    "required" => "true",
+                                ));
+                                ?></td>
+                        </tr>
+                        <tr>
 
-                                <td colspan="2">
+                            <td colspan="2">
                                 <div class="input text">
                                     <label for="PeoplePers_id">Número de Documento</label>
-                                    <input type="text" required="true" id="PeopleDocumento" name="data[People][pers_documento]"/>
+                                    <input type="text" required="true" id="PeopleDocumento" name="data[People][pers_documento]"/><input type="button" id="buscar" name="buscar" value="Buscar"/>
                                     <input type="hidden" name="data[Person][pers_id]" id="PeoplePers_id">    
                                 </div>
                             </td>
@@ -216,23 +217,40 @@ echo $this->Html->css(array('multi-select'));
                         {
                             personId = $("person_id", this).text();
                             inputId = $("input_id", this).text();
+                            var person_document = $("#PeopleDocumento").val();
+                            var event_id = $("#UserEventId").val();
                             actualizar = 1;
                             $("input[type='submit']").attr("value", "Actualizar");
                             $("#btnNuevo").css("display", "block");
+                            
                         } else if (codigo == 2)
                         {
                             personId = $("person_id", this).text();
                             inputId = $("input_id", this).text();
-                            var person_document = $("person_document", this).text();
-                            var event_id = $("event_id", this).text();
+                            var person_document = $("#PeopleDocumento").val();
+                            var event_id = $("#UserEventId").val();
                             actualizar = 1;
                             $("input[type='submit']").attr("value", "Actualizar");
                             $("#btnNuevo").css("display", "block");
                             var answer = confirm("Imprimir escarapela?.");
                             if (answer) {
-                                window.location = "http://localhost/tiquetes/people/reimprimir/" + person_document + "/" + event_id;
+                                window.location = "http://localhost/tiquetes/people/reimprimir/" + person_document + "/" + event_id + "/" + 2;
+                            }
+                        }else if(codigo==3)
+                        {
+                            personId = $("person_id", this).text();
+                            inputId = $("input_id", this).text();
+                            var person_document = $("#PeopleDocumento").val();
+                            var event_id = $("#UserEventId").val();
+                            actualizar = 1;
+                            $("input[type='submit']").attr("value", "Actualizar");
+                            $("#btnNuevo").css("display", "block");
+                            var answer = confirm("Imprimir escarapela?.");
+                            if (answer) {
+                                window.location = "http://localhost/tiquetes/people/reimprimir/" + person_document + "/" + event_id + "/" + 1;
                             }
                         }
+                        
                     });
 
                 });
@@ -261,6 +279,7 @@ echo $this->Html->css(array('multi-select'));
             }
             ajax(url, datos, function(xml)
             {
+                
                 //Elimino lo que contiene este select
                 $("#UserCategoriaId").html("");
                 if (xml)
@@ -404,11 +423,12 @@ echo $this->Html->css(array('multi-select'));
             });
         }
 
-        $("#PeopleDocumento").keyup(function() {
+//        function buscar() {
+        $("#buscar").click(function() {
 //            alert("aasd");
             var url = urlbase + "companies/search.xml";
             var datos = {
-                documento: $(this).val()
+                documento: $("#PeopleDocumento").val()
             };
             ajax(url, datos, function(xml) {
                 $("datos", xml).each(function() {
@@ -425,7 +445,7 @@ echo $this->Html->css(array('multi-select'));
                     if (nombre !== "") {
                         console.log("Entre al if");
                         $("#PeoplePers_id").val(id);
-                        personId=id;
+                        personId = id;
                         $("#PeoplePers_primNombre").val(nombre);
                         $("#PeoplePers_primApellido").val(apellido);
                         $("#UserCityId option[value=" + ciudad + "]").attr("selected", true);
@@ -444,7 +464,7 @@ echo $this->Html->css(array('multi-select'));
 
         function limpiar()
         {
-            
+
             $("#PeoplePers_id").val("");
             $("#UserCityId option[value='']").attr("selected", true);
             $("#PeoplePers_primNombre").val("");
