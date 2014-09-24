@@ -54,7 +54,7 @@
     $("#CategoriasEntradaEventId").change(function() {
         var url2 = urlbase + "categorias/getCategoriesByEvent.xml";
         var datos2 = {
-            even_id: $(this).val()
+            event_id: $(this).val()
         };
         ajax(url2, datos2, function(xml) {
             $("#CategoriasEntradaCategoriaId").html("<option>Seleccione una categoria</option>");
