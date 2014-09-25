@@ -1112,28 +1112,31 @@ class EventsController extends AppController {
                 )
         );
     }
-    
+
     public function getDaysByEvent() {
         $this->layout = "webservices";
         $this->loadModel("Event");
         $event_id = $this->request->data["event_id"]; //State
-        $sql= "SELECT datediff(`even_fechFinal`, `even_fechInicio`) AS cantidad FROM `events` e WHERE `id` = $event_id";
+        $sql = "SELECT datediff(`even_fechFinal`, `even_fechInicio`) AS cantidad FROM `events` e WHERE `id` = $event_id";
         $cantidad = $this->Event->query($sql);
         $total = $cantidad[0][0]['cantidad'];
         $sql2 = "SELECT even_fechInicio FROM events WHERE id = $event_id";
         $fecha = $this->Event->query($sql2);
-        $date = $fecha[0]['events']['even_fechInicio'];
-        $f = date('Y-m-d', strtotime($date));
+        if ($fecha != array()) {
+            $date = $fecha[0]['events']['even_fechInicio'];
+            $f = date('Y-m-d', strtotime($date));
+        }
 //       debug($date ." asdasdasd   ".$f);die;
         $datos = array();
-        for($i=0; $i<$total;$i++){
-            $datos[$i]['g']['id']=[$f];
-            $datos[$i]['g']['name']=[$f];
-            $f = date('Y-m-d',strtotime('+1 days', strtotime($f)));
-            
+        if ($total > 0) {
+            for ($i = 0; $i < $total; $i++) {
+                $datos[$i]['g']['id'] = $f;
+                $datos[$i]['g']['name'] = $f;
+                $f = date('Y-m-d', strtotime('+1 days', strtotime($f)));
+            }
         }
 //        debug($datos); die;
-        
+
         $this->set(
                 array(
                     "datos" => $datos,

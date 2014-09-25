@@ -126,7 +126,7 @@ function FPDF($orientation='P', $unit='mm', $size='A4')
 	else
 		$this->Error('Incorrect unit: '.$unit);
 	// Page sizes
-	$this->StdPageSizes = array('a3'=>array(841.89,1190.55), 'a4'=>array(142,71), 'a5'=>array(420.94,595.28),
+	$this->StdPageSizes = array('a3'=>array(841.89,1190.55), 'a4'=>array(289,345), 'a5'=>array(420.94,595.28),
 		'letter'=>array(612,792), 'legal'=>array(612,1008));
 	$size = $this->_getpagesize($size);
 	$this->DefPageSize = $size;

@@ -522,6 +522,19 @@ class PeopleController extends AppController {
 
     public function importarUsuarios() {
         
+        $fecha = date("Y-m-d");
+        $this->loadModel("Event");
+        $events = $this->Event->find("list", array(
+            "fields" => array(
+                "Event.id",
+                "Event.even_nombre"
+            ),
+            "conditions" => array(
+                "Event.even_fechFinal >= " => $fecha
+            )
+        ));
+        $this->set(compact('events', $events));
+        
     }
 
     public function cargarUsuarios() {
@@ -581,7 +594,7 @@ class PeopleController extends AppController {
 //                    $newInputId = $new[0]['inputs']['id'];
                     $rfid = $this->Input->query("UPDATE inputs set entr_codigo ='$chip' WHERE person_id = $id AND event_id = $eve AND tipo_entrada = 1");
                 }
-                $res = $this->Person->query($sql);
+                $res = $this->Person->query($sql);                
                 if ($res != array()) {
                     $id = $res[0]['people']['id'];
                     $nom = $res[0]['people']['pers_primNombre'];
@@ -589,8 +602,8 @@ class PeopleController extends AppController {
                     $emp = $res[0]['people']['pers_institucion'];
                     $ciu = $res[0]['people']['ciudad'];
 
-                    $sql2 = "SELECT id, entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve AND tipo_entrada = 2";
-                    $res2 = $this->Input->query($sql2);
+                    $sql2 = "SELECT id, entr_codigo, categoria_id FROM inputs WHERE person_id = $id and event_id = $eve AND tipo_entrada = 2";
+                    $res2 = $this->Input->query($sql2);                    
                     if ($res2 != array()) {
                         
                         $newInputId = $res2[0]['inputs']['id'];
@@ -601,12 +614,15 @@ class PeopleController extends AppController {
                         $operacion = "REIMPRESION";
                         $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '$operacion')";
                         $operation = $this->Log->query($sql);
-
+                        $cadena = $res2[0]['inputs']['entr_codigo'];
+                        $cate = $res2[0]['inputs']['categoria_id'];
+                        $s = $this->Input->query("SELECT descripcion FROM categorias WHERE id = $cate");
+                        $cat = $s[0]['categorias']['descripcion'];
                         $cadena = $res2[0]['inputs']['entr_codigo'];
                         App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                         $this->layout = 'pdf'; //this will use the pdf.ctp layout
                         $this->set('fpdf', new FPDF('L', 'mm', array('60', '40')));
-                        $informacion = array('documento' => $doc, 'nombre' => $nom, 'apellido' => $ape, 'empresa' => $emp, 'ciudad' => $ciu, 'codigo' => $cadena, 'tipo' => 2);
+                        $informacion = array('documento' => $doc, 'nombre' => $nom, 'apellido' => $ape, 'empresa' => $emp, 'ciudad' => $ciu, 'codigo' => $cadena, 'categoria'=>$cat, 'tipo' => 2);
                         $this->set('data', $informacion);
                         $this->render('pdf');
 //                        $this->Session->setFlash("Operacion realizada con exito", 'good');
@@ -650,7 +666,7 @@ class PeopleController extends AppController {
                         $this->set('data', $informacion);
                         $this->render('pdf');
                     } else {
-                        $this->Session->setFlash("Lo sentimos no existe una persona con el numero de documento " . $doc . " registrada para este evento", 'error');
+                        $this->Session->setFlash("Lo sentimos no existe una persona con el numero de documento " . $doc . " registrada para este evento en especifico", 'error');
                     }
                 } else {
                     $this->Session->setFlash("Lo sentimos no existe una persona con el numero de documento " . $doc . " registrada en la base de datos", 'error');
@@ -668,21 +684,24 @@ class PeopleController extends AppController {
                     $ape = $res[0]['people']['Pers_primApellido'];
                     $emp = $res[0]['people']['pers_institucion'];
                     $ciu = $res[0]['people']['ciudad'];
-                    $sql2 = "SELECT entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve";
+                    $sql2 = "SELECT entr_codigo, categoria_id FROM inputs WHERE person_id = $id and event_id = $eve AND tipo_entrada = $tipo";
                     $res2 = $this->Input->query($sql2);
                     if ($res2 != array()) {
                         $cadena = $res2[0]['inputs']['entr_codigo'];
+                        $cate = $res2[0]['inputs']['categoria_id'];
+                        $s = $this->Input->query("SELECT descripcion FROM categorias WHERE id = $cate");
+                        $cat = $s[0]['categorias']['descripcion'];//                       
                         App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                         $this->layout = 'pdf'; //this will use the pdf.ctp layout
                         $this->set('fpdf', new FPDF('L', 'mm', array('60', '40')));
-                        $informacion = array('documento' => $doc, 'nombre' => $nom, 'apellido' => $ape, 'empresa' => $emp, 'ciudad' => $ciu, 'codigo' => $cadena, 'tipo' => $tipo);
+                        $informacion = array('documento' => $doc, 'nombre' => $nom, 'apellido' => $ape, 'empresa' => $emp, 'ciudad' => $ciu, 'codigo' => $cadena, "categoria" =>$cat, 'tipo' => $tipo);
                         $this->set('data', $informacion);
                         $this->render('pdf');
                     } else {
                         $this->Session->setFlash("Lo sentimos no existe una persona con el numero de documento " . $doc . " registrada para este evento", 'error');
                     }
                 } else {
-                    $this->Session->setFlash("Lo sentimos no existe una persona con el numero de documento " . $doc . " registrada para este evento", 'error');
+                    $this->Session->setFlash("Lo sentimos no existe una persona con el numero de documento " . $doc . " registrada en la base de datos", 'error');
                 }
             }
         }

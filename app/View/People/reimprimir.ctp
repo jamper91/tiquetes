@@ -21,7 +21,7 @@
                 <td colspan="2" align="center" >
                     <input type="radio" name="data[Person][tipoE]" required="true" value="RFID" onclick="mostrar()" />RFID
                     <input type="radio" name="data[Person][tipoE]" required="true" value="Codigo Barra" onclick="ocultar()"/>Codigo de Barras
-                    <input type="radio" name="data[Person][tipoE]" required="true" value="ambos" onclick="mostrar()" />Ambas
+                    <!--<input type="radio" name="data[Person][tipoE]" required="true" value="ambos" onclick="mostrar()" />Ambas-->
                 </td>
             </tr>
         </table>

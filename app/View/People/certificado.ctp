@@ -33,7 +33,7 @@ if ($data['documento']) {
     $fpdf_1->SetY(-120);
     $fpdf_1->SetFont('Arial', 'B', 16);
     $fpdf_1->Cell(-30);
-    $fpdf_1->Cell(0, 2, 'C.C: '.$data['documento'], 0, 0, 'C');
+    $fpdf_1->Cell(0, 2, $data['abr'].': '.$data['documento'], 0, 0, 'C');
     $fpdf_1->Ln(2);
 }
 

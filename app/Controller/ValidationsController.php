@@ -92,19 +92,21 @@ class ValidationsController extends AppController {
             //insert de validaciones
 
             if ($sw == $total) {
-                $sql = "SELECT id FROM categorias_entradas WHERE categoria_id=" . $this->request->data['Validation']['categoria_id'] . " AND entrada_id=" . $this->request->data['Validation']['entrada_id'] . ";";
+                $sql = "SELECT id FROM categorias_entradas WHERE categoria_id=" . $this->request->data['Validation']['categoria_id'] . " AND entrada_id=" . $this->request->data['Validation']['entrada_id'] . " AND event_id=".$event_id.";";
                 $ceid = $this->Validation->query($sql);
                 $x = '';
+                
                 if ($ceid != array()) {
                     $x = $ceid[0]['categorias_entradas']['id'];
                 }
-                if ($x = '') {
+                if ($x == '') {
                     if ($this->request->data['Validation']['categoria_id'] != "") {
                         $newCategoriasEntrada = $this->CategoriasEntrada->create();
                         $newCategoriasEntrada = array(
                             'CategoriasEntrada' => array(
                                 'entrada_id' => $this->request->data['Validation']['entrada_id'],
-                                'categoria_id' => $this->request->data['Validation']['categoria_id']
+                                'categoria_id' => $this->request->data['Validation']['categoria_id'],
+                                'event_id'=> $event_id
                             )
                         );
                         $this->CategoriasEntrada->save($newCategoriasEntrada);

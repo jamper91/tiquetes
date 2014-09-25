@@ -48,8 +48,8 @@
                 });
             });
             
-            var url = urlbase + "events/getDaysByEvent.xml";            
-            ajax(url, datos2, function(xml) {
+            var url2 = urlbase + "events/getDaysByEvent.xml";            
+            ajax(url2, datos2, function(xml) {
                 $("#GiftsEventDia").html("<option>Seleccione un día</option>");
                 $("datos", xml).each(function() {
                     var obj = $(this).find("g");
