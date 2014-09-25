@@ -15,25 +15,10 @@ if ($data['tipo'] == 2) {
         $pdf->Ln(2);
     }
     if ($data['nombre']) {
-//        $ncompleto = $data['nombre'] . ' ' . $data['apellido'];
-        $longitud = strlen($data['nombre']);
-//    debug($longitud);die;
-        if ($longitud <= 14) {
-            $pdf->SetY(-63);
-            $pdf->SetFont('Arial', 'B', 16);
-            $pdf->Cell(0, 2, $data['nombre'], 0, 0, 'C');
-            $pdf->Ln(2);
-        } elseif ($longitud <= 20) {
-            $pdf->SetY(-63);
-            $pdf->SetFont('Arial', 'B', 11);
-            $pdf->Cell(0, 2, $data['nombre'], 0, 0, 'C');
-            $pdf->Ln(2);
-        } elseif ($longitud > 20) {
-            $pdf->SetY(-63);
-            $pdf->SetFont('Arial', 'B', 7.5);
-            $pdf->Cell(0, 2, $data['nombre'], 0, 0, 'C');
-            $pdf->Ln(2);
-        }
+        $pdf->SetY(-63);
+        $pdf->SetFont('Arial', 'B', 19);
+        $pdf->Cell(0, 2, $data['nombre'], 0, 0, 'C');
+        $pdf->Ln(2);
     }
     if ($data['apellido']) {
         $pdf->SetY(-58);
@@ -45,24 +30,19 @@ if ($data['tipo'] == 2) {
     if ($data['documento']) {
         $cedula = 'C.C ' . $data['documento'];
         $pdf->SetY(-54);
-        $pdf->SetFont('Arial', '', 8);
+        $pdf->SetFont('Arial', '', 10);
         $pdf->Cell(0, 2, $cedula, 0, 0, 'C');
         $pdf->Ln(2);
     }
-    if ($data['empresa']) {
-        $pdf->SetY(-50);
-        $pdf->SetFont('Arial', '', 8);
-        $pdf->Cell(0, 2, "FEDERACION DE CAFETEROS", 0, 0, 'C');
-        $pdf->Ln(2);
-    }
-    if ($data['empresa'] == '') {
-        $pdf->SetY(-50);
-        $pdf->Cell(0, 2, '', 0, 0, 'C');
-        $pdf->Ln(2);
-    }
+
+    $pdf->SetY(-50);
+    $pdf->SetFont('Arial', '', 10);
+    $pdf->Cell(0, 2, "FEDERACION DE CAFETEROS", 0, 0, 'C');
+    $pdf->Ln(2);
+
     if ($data['categoria']) {
         $pdf->SetY(-28);
-        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->SetFont('Arial', 'B', 18);
         $pdf->Cell(0, 2, $data['categoria'], 0, 0, 'C');
         $pdf->Ln(2);
     }

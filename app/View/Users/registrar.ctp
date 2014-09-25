@@ -67,6 +67,14 @@ echo $this->Html->css(array('multi-select'));
                                             Seleccione un evento
                                         </label>-->
                     <table id="formulario2" style="display: none; padding-left: 10px">
+                        <tr>
+                            <td colspan="2"><?php
+                                echo $this->Form->input('pistola', array(
+                                'label' => 'Lector de Cédulas',
+                                'type' => 'password'
+                                ));
+                                ?></td>
+                        </tr>
                         <tr>                           
                             <td colspan="2" align="center" >
                                 <input type="radio" name="data[User][tipoE]" required="true" value="RFDI" onclick="visibleCampos()" />RFID
@@ -222,7 +230,7 @@ echo $this->Html->css(array('multi-select'));
                             actualizar = 1;
                             $("input[type='submit']").attr("value", "Actualizar");
                             $("#btnNuevo").css("display", "block");
-                            
+
                         } else if (codigo == 2)
                         {
                             personId = $("person_id", this).text();
@@ -235,10 +243,10 @@ echo $this->Html->css(array('multi-select'));
                             var answer = confirm("Imprimir escarapela?.");
                             if (answer) {
 
-                                window.location = urlbase+"people/reimprimir/" + person_document + "/" + event_id + "/" + 2;
+                                window.location = urlbase + "people/reimprimir/" + person_document + "/" + event_id + "/" + 2;
 
                             }
-                        }else if(codigo==3)
+                        } else if (codigo == 3)
                         {
                             personId = $("person_id", this).text();
                             inputId = $("input_id", this).text();
@@ -250,11 +258,11 @@ echo $this->Html->css(array('multi-select'));
                             var answer = confirm("Imprimir escarapela?.");
                             if (answer) {
 
-                                window.location = urlbase+"people/reimprimir/" + person_document + "/" + event_id + "/" + 1;
+                                window.location = urlbase + "people/reimprimir/" + person_document + "/" + event_id + "/" + 1;
 
                             }
                         }
-                        
+
                     });
 
                 });
@@ -283,7 +291,7 @@ echo $this->Html->css(array('multi-select'));
             }
             ajax(url, datos, function(xml)
             {
-                
+
                 //Elimino lo que contiene este select
                 $("#UserCategoriaId").html("");
                 if (xml)
@@ -469,21 +477,21 @@ echo $this->Html->css(array('multi-select'));
                         actualizar = 0;
                     }
                 });
-               url='<?=$this->Html->url(array("controller"=>"Datas","action"=>"getDataByUser.xml"))?>';
-               var datos2={
-                   person_id:$("#PeoplePers_id").val()
-               };
-               ajax(url, datos2, function(xml) {
-                $("datos", xml).each(function() {
-                    var obj = $(this).find("Data");
-                    var descripcion, id, forms_personal_datum_id;
-                    id = $("id", obj).text();
-                    descripcion = $("descripcion", obj).text();
-                    forms_personal_datum_id = $("forms_personal_datum_id", obj).text();
-                    
-                    if (id !== "") {
-                        //Ahora busco aquel input que deba tener este dato
-                        $("#DataDescripcionFPD"+forms_personal_datum_id).val(descripcion);
+                url = '<?= $this->Html->url(array("controller" => "Datas", "action" => "getDataByUser.xml")) ?>';
+                var datos2 = {
+                    person_id: $("#PeoplePers_id").val()
+                };
+                ajax(url, datos2, function(xml) {
+                    $("datos", xml).each(function() {
+                        var obj = $(this).find("Data");
+                        var descripcion, id, forms_personal_datum_id;
+                        id = $("id", obj).text();
+                        descripcion = $("descripcion", obj).text();
+                        forms_personal_datum_id = $("forms_personal_datum_id", obj).text();
+
+                        if (id !== "") {
+                            //Ahora busco aquel input que deba tener este dato
+                            $("#DataDescripcionFPD" + forms_personal_datum_id).val(descripcion);
 //                        $("#PeoplePers_id").val(id);
 //                        personId = id;
 //                        $("#PeoplePers_primNombre").val(nombre);
@@ -492,14 +500,14 @@ echo $this->Html->css(array('multi-select'));
 //                        $("#PeoplePers_direccion").val(direccion);
 //                        $("#PeoplePers_telefono").val(telefono);
 //                        $("#PeoplePers_mail").val(email);
-                        actualizar = 1;
-                    } else {
-                        limpiar();
-                        actualizar = 0;
-                    }
+                            actualizar = 1;
+                        } else {
+//                        limpiar();
+                            actualizar = 0;
+                        }
+                    });
                 });
             });
-        });
         });
         function limpiar()
         {
@@ -515,6 +523,72 @@ echo $this->Html->css(array('multi-select'));
             $("#PersonRfid").val("");
         }
 
+    });
+
+</script>
+<script>
+    $(document).ready(function() {//Esta funcion se activa cuando se este ingresando texto en el cuadro
+        $("input[type='password']").on('input', function(e) {
+            if ($('#UserPistola').val().length === 170)
+            {
+                var documento = "";
+                var apellido1 = "";
+                var apellido2 = "";
+                var nombre = "";
+                var nombre2 ="";
+                var sangre = "";
+                // alert($('#PersonPistola').val().length);
+                var sw = 0;
+                for (var i = 0; i < $('#UserPistola').val().length; i++) {
+                    if (i >= 48 && i < 58) {
+                        var letra = $('#UserPistola').val()[i].toString();
+                        if (letra != "0" || sw == 1) {
+                            sw = 1;
+                            documento = documento + letra;
+                        }
+                    }
+                    if (i >= 58 && i < 81) {
+                        var letra = $('#UserPistola').val()[i].toString();
+                        if (letra != " ") {
+                            apellido1 = apellido1 + letra;
+                        }
+                    }
+                    if (i >= 81 && i < 104) {
+                        var letra = $('#UserPistola').val()[i].toString();
+                        if (letra != " ") {
+                            apellido2 = apellido2 + letra;
+                        }
+                    }
+                    if (i >= 104 && i < 127) {
+                        var letra = $('#UserPistola').val()[i].toString();
+                        if (letra != " ") {
+                            nombre = nombre + letra;
+                        }
+                    }
+                    if (i >= 127 && i < 150) {
+                        var letra = $('#UserPistola').val()[i].toString();
+                        if (letra != " ") {
+                            nombre2 = nombre2 + letra;
+                        }
+                    }
+                    if (i >= 166 && i < 169) {
+                        var letra = $('#UserPistola').val()[i].toString();
+                        if (letra != " ") {
+                            sangre = sangre + letra;
+                        }
+                    }
+//                            $('#documento').val(documento);
+                }
+                $('#PeopleDocumento').val(documento);
+                $('#PeoplePers_primNombre').val(nombre+" "+nombre2);
+                $('#PeoplePers_primApellido').val(apellido1 + " " + apellido2); 
+//                $('#PersonPersTipoSangre').val(sangre);
+                $('#UserPistola').val("");
+//                $('#UserCategoriaId').focus();
+//                        var url = "validar_admin.jsp"; // the script where you handle the form input. 
+
+            }
+        });
     });
 
 </script>

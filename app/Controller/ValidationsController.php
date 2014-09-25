@@ -67,8 +67,8 @@ class ValidationsController extends AppController {
 //       debug($date ." asdasdasd   ".$f);die;
             $dias = array();
             for ($i = 0; $i < $total; $i++) {
-                $dias[$i]['g']['id'] = [$f];
-                $dias[$i]['g']['name'] = [$f];
+                $dias[$i]['g']['id'] = $f;
+                $dias[$i]['g']['name'] = $f;
                 $f = date('Y-m-d', strtotime('+1 days', strtotime($f)));
             }
 //            debug($dias);

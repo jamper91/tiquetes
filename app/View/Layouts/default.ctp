@@ -118,19 +118,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                             </ul>
                         </li>
                     <?php } ?>
-                    <?php if (in_array('geografia', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
-                        <!--                        <li class="submenu"  > 
-                                                    <a href="#">
-                                                        <i class="icon icon-fullscreen"></i> 
-                                                        <span>Geografia</span>
-                                                    </a>
-                                                    <ul>
-                                                        <li><a href="<?= $this->Html->url(array("controller" => "countries", "action" => "add")); ?>">Paises</a></li>
-                                                        <li><a href="<?= $this->Html->url(array("controller" => "states", "action" => "add")); ?>">Departamentos</a></li>
-                                                        <li><a href="<?= $this->Html->url(array("controller" => "cities", "action" => "add")); ?>">Ciudades</a></li>
-                                                    </ul>
-                                                </li>-->
-                    <?php } ?>
+                   
                     <?php if (in_array('escenario', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
                         <li class="submenu"  > 
                             <a href="#">
@@ -252,6 +240,19 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                                 <li><a href="<?= $this->Html->url(array("controller" => "Validations", "action" => "add")); ?>">Validaciones por Evento</a></li>
                             </ul>
                         </li>
+                    <?php } ?>
+                         <?php if (in_array('geografia', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
+                        <li class="submenu"  > 
+                                    <a href="#">
+                                        <i class="icon icon-fullscreen"></i> 
+                                        <span>Geografia</span>
+                                    </a>
+                                    <ul>
+                                        <li><a href="<?= $this->Html->url(array("controller" => "countries", "action" => "add")); ?>">Paises</a></li>
+                                        <li><a href="<?= $this->Html->url(array("controller" => "states", "action" => "add")); ?>">Departamentos</a></li>
+                                        <li><a href="<?= $this->Html->url(array("controller" => "cities", "action" => "add")); ?>">Ciudades</a></li>
+                                    </ul>
+                                </li>
                     <?php } ?>
                 </ul>
             <?php } ?> 
