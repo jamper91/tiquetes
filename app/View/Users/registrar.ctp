@@ -234,7 +234,7 @@ echo $this->Html->css(array('multi-select'));
                             $("#btnNuevo").css("display", "block");
                             var answer = confirm("Imprimir escarapela?.");
                             if (answer) {
-                                window.location = "http://localhost/tiquetes/people/reimprimir/" + person_document + "/" + event_id + "/" + 2;
+                                window.location = urlbase+"people/reimprimir/" + person_document + "/" + event_id + "/" + 2;
                             }
                         }else if(codigo==3)
                         {
@@ -247,7 +247,7 @@ echo $this->Html->css(array('multi-select'));
                             $("#btnNuevo").css("display", "block");
                             var answer = confirm("Imprimir escarapela?.");
                             if (answer) {
-                                window.location = "http://localhost/tiquetes/people/reimprimir/" + person_document + "/" + event_id + "/" + 1;
+                                window.location = urlbase+"people/reimprimir/" + person_document + "/" + event_id + "/" + 1;
                             }
                         }
                         
