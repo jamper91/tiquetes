@@ -107,4 +107,31 @@ class DatasController extends AppController {
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
+        public function getDataByUser() {
+        $this->layout = "webservices";
+        $person_id = $this->request->data["person_id"]; //State
+        $options = array(
+            "conditions" => array(
+                "Data.person_id" => $person_id
+            ),
+            "fields" => array(
+                "Data.id",
+                "Data.descripcion",
+                "Data.forms_personal_datum_id",
+                "Data.person_id",
+//                "Data.personal_datum_id",
+            ),
+        );
+        $datos = $this->Data->find("all", $options);
+//        debug($datos);
+        $log = $this->Data->getDataSource()->getLog(false, false);
+        //debug($log);
+//        var_dump($cities);
+        $this->set(
+                array(
+                    "datos" => $datos,
+                    "_serialize" => array("datos")
+                )
+        );
+    }
 }

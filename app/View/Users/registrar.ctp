@@ -362,15 +362,22 @@ echo $this->Html->css(array('multi-select'));
                                     obligatorio = "required";
                                 else
                                     obligatorio = "";
-                                console.log("obligatorio: " + obligatorio);
                                 obj = $(this).find("FormsPersonalDatum");
                                 var idFPD;
                                 idFPD = $("id", obj).text();
                                 if (id) {
                                     var html = "";
-//                                    html += "<div class='controls'>";
+                                    /**
+                                     * Al campo name='data[Data][$5][descripcion]' le agrege el atributo id id='DataDescripcionFPD$4' para cuando consulte un usuario
+                                     * y dicho usuario tenga datos en la tabla data, poder colocar la informacion en este input basado en el id de FormsPersonalDatum
+                                     * Al campo name='data[Data][$5][id]' le agrege el atributo id id='DataIdFPD$4' para cuando consulte un usuario
+                                     * y dicho usuario tenga datos en la tabla data, colocar aqui el id de la tabla Data, para que cuando se envie el formulario se actualize
+                                     * estos campos y no registre nuevos
+                                     * @returns {undefined}
+                                     */
                                     html += "<tr>";
-                                    html += "<td colspan='2'><div class='input text'><label for='Form$1'>$1</label><input type='$2' name='data[Data][$5][descripcion]' $6></input></div>";
+                                    html += "<td colspan='2'><div class='input text'><label for='Form$1'>$1</label><input id='DataDescripcionFPD$4' type='$2' name='data[Data][$5][descripcion]' $6></input></div>";
+                                    html += "<input style='display:none' id='DataIdFPD$4' type='text' name='data[Data][$5][id]' value='-1'></input>";
                                     html += "<input style='display:none' type='text' name='data[Data][$5][forms_personal_datum_id]' value='$4'></input>";
                                     html += "<input style='display:none' type='text' name='data[Data][$5][person_id]' value='-1'></input></td>";
                                     html += "</tr>";
@@ -381,13 +388,15 @@ echo $this->Html->css(array('multi-select'));
                                     html = html.replace("$2", tipo);
                                     html = html.replace("$3", id);
                                     html = html.replace("$4", idFPD);
+                                    html = html.replace("$4", idFPD);
+                                    html = html.replace("$4", idFPD);
+                                    html = html.replace("$5", con);
                                     html = html.replace("$5", con);
                                     html = html.replace("$5", con);
                                     html = html.replace("$5", con);
                                     html = html.replace("$6", obligatorio);
                                     con++;
                                     formulario += html;
-                                    console.log("html: " + html);
                                 }
                             });
                             //Agrego el campo de la tarjeta
@@ -441,9 +450,7 @@ echo $this->Html->css(array('multi-select'));
                     direccion = $("pers_direccion", obj).text();
                     telefono = $("pers_telefono", obj).text();
                     email = $("pers_mail", obj).text();
-                    console.log("nombre:|" + nombre + "|");
                     if (nombre !== "") {
-                        console.log("Entre al if");
                         $("#PeoplePers_id").val(id);
                         personId = id;
                         $("#PeoplePers_primNombre").val(nombre);
@@ -457,11 +464,39 @@ echo $this->Html->css(array('multi-select'));
                         limpiar();
                         actualizar = 0;
                     }
-                    console.log("actualizar: " + actualizar);
+                });
+               url='<?=$this->Html->url(array("controller"=>"Datas","action"=>"getDataByUser.xml"))?>';
+               var datos2={
+                   person_id:$("#PeoplePers_id").val()
+               };
+               ajax(url, datos2, function(xml) {
+                $("datos", xml).each(function() {
+                    var obj = $(this).find("Data");
+                    var descripcion, id, forms_personal_datum_id;
+                    id = $("id", obj).text();
+                    descripcion = $("descripcion", obj).text();
+                    forms_personal_datum_id = $("forms_personal_datum_id", obj).text();
+                    
+                    if (id !== "") {
+                        //Ahora busco aquel input que deba tener este dato
+                        $("#DataDescripcionFPD"+forms_personal_datum_id).val(descripcion);
+//                        $("#PeoplePers_id").val(id);
+//                        personId = id;
+//                        $("#PeoplePers_primNombre").val(nombre);
+//                        $("#PeoplePers_primApellido").val(apellido);
+//                        $("#UserCityId option[value=" + ciudad + "]").attr("selected", true);
+//                        $("#PeoplePers_direccion").val(direccion);
+//                        $("#PeoplePers_telefono").val(telefono);
+//                        $("#PeoplePers_mail").val(email);
+                        actualizar = 1;
+                    } else {
+                        limpiar();
+                        actualizar = 0;
+                    }
                 });
             });
         });
-
+        });
         function limpiar()
         {
 
