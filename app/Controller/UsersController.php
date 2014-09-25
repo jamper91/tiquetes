@@ -871,7 +871,7 @@ class UsersController extends AppController {
         $this->loadModel("Input");
         $this->loadModel("Person");
         $doc = $id2;
-        $sql = "SELECT id, pers_primNombre, Pers_primApellido, pers_institucion, ciudad FROM people WHERE pers_documento = $id2";
+        $sql = "SELECT id, pers_primNombre, Pers_primApellido, pers_institucion, ciudad FROM people WHERE id = $id2";
         $eve = $evento;
         $res = $this->Person->query($sql);
         if ($res != array()) {
