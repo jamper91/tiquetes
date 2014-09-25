@@ -666,7 +666,7 @@ class PeopleController extends AppController {
                         $this->set('data', $informacion);
                         $this->render('pdf');
                     } else {
-                        $this->Session->setFlash("Lo sentimos no existe una persona con el numero de documento " . $doc . " registrada para este evento", 'error');
+                        $this->Session->setFlash("Lo sentimos no existe una persona con el numero de documento " . $doc . " registrada para este evento en especifico", 'error');
                     }
                 } else {
                     $this->Session->setFlash("Lo sentimos no existe una persona con el numero de documento " . $doc . " registrada en la base de datos", 'error');
@@ -684,7 +684,7 @@ class PeopleController extends AppController {
                     $ape = $res[0]['people']['Pers_primApellido'];
                     $emp = $res[0]['people']['pers_institucion'];
                     $ciu = $res[0]['people']['ciudad'];
-                    $sql2 = "SELECT entr_codigo, categoria_id FROM inputs WHERE person_id = $id and event_id = $eve";
+                    $sql2 = "SELECT entr_codigo, categoria_id FROM inputs WHERE person_id = $id and event_id = $eve AND tipo_entrada = $tipo";
                     $res2 = $this->Input->query($sql2);
                     if ($res2 != array()) {
                         $cadena = $res2[0]['inputs']['entr_codigo'];
@@ -701,7 +701,7 @@ class PeopleController extends AppController {
                         $this->Session->setFlash("Lo sentimos no existe una persona con el numero de documento " . $doc . " registrada para este evento", 'error');
                     }
                 } else {
-                    $this->Session->setFlash("Lo sentimos no existe una persona con el numero de documento " . $doc . " registrada para este evento", 'error');
+                    $this->Session->setFlash("Lo sentimos no existe una persona con el numero de documento " . $doc . " registrada en la base de datos", 'error');
                 }
             }
         }

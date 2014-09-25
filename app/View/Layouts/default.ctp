@@ -187,6 +187,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                             <ul>
                                 <li><a href="<?= $this->Html->url(array("controller" => "PersonalData", "action" => "add")); ?>">Crear Campos</a></li>
                                 <li><a href="<?= $this->Html->url(array("controller" => "forms", "action" => "add")); ?>">Formularios</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "forms", "action" => "index")); ?>">Listar Formularios</a></li>
                             </ul>
                         </li>
                     <?php } ?> 
