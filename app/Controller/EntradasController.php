@@ -101,7 +101,7 @@ class EntradasController extends AppController {
             if ($x == '') {
                 $this->request->data['Entrada']['name'] = strtoupper($this->request->data['Entrada']['name']);
                 if ($this->Entrada->save($this->request->data)) {
-                    $this->Session->setFlash('La entrada se actualizo.','good');
+                    $this->Session->setFlash('La entrada se actualizo.', 'good');
                     return $this->redirect(array('action' => 'index'));
                 } else {
                     $this->Session->setFlash(__('La entrada no se pudo Actualizar. Por favor, intente nuevamente.'));
@@ -144,10 +144,10 @@ class EntradasController extends AppController {
         }
         return $this->redirect(array('action' => 'index'));
     }
-    
+
     public function getEntradasByEvent() {
         $this->layout = "webservices";
-        $event_id = $this->request->data["event_id"];        
+        $event_id = $this->request->data["event_id"];
         $options = "SELECT e.id,e.name FROM `entradas` e INNER JOIN `stages` s ON e.stage_id=s.id INNER JOIN `events` ev ON ev.stage_id=s.id WHERE ev.id = $event_id";
         $entradas = $this->Entrada->query($options);
         $log = $this->Entrada->getDataSource()->getLog(false, false);
@@ -160,6 +160,7 @@ class EntradasController extends AppController {
                 )
         );
     }
+
     public function getEntradasByStage() {
         $this->layout = "webservices";
         $stage_id = $this->request->data["stage_id"];
@@ -404,11 +405,17 @@ class EntradasController extends AppController {
         $this->set("datos", $datos);
     }
 
-    public function exportar5() {
-        $this->Entrada->virtualFields['Cantidad'] = 0;
-        $this->Entrada->virtualFields['Aux'] = 0;
-        $this->Entrada->virtualFields['Fecha'] = 0;
-        $sql = "SELECT 
+    public function exportar5($event_id=NULL) {
+//        debug($event_id);
+        if ($event_id == NULL) {
+            $this->Session->setFlash("por favor seleccione un evento para obtener el reporte", 'error');
+        } else {
+
+
+            $this->Entrada->virtualFields['Cantidad'] = 0;
+            $this->Entrada->virtualFields['Aux'] = 0;
+            $this->Entrada->virtualFields['Fecha'] = 0;
+            $sql = "SELECT 
                     *
                 FROM 
                     inputs input
@@ -417,15 +424,16 @@ class EntradasController extends AppController {
                 ON 
                     person.id = input.person_id
                 WHERE
-                    person.id IS NOT null AND input.event_id = 3
+                    person.id IS NOT null AND input.event_id = $event_id;
                 ";
 
-        $datos = $this->Entrada->query($sql);
+            $datos = $this->Entrada->query($sql);
+//          debug($datos);
 //        debug($datos); die;
-        $pos = 0;
-        $i = 0;
-        $person_id_ant = "";
-        foreach ($datos as $dato) {
+            $pos = 0;
+            $i = 0;
+            $person_id_ant = "";
+            foreach ($datos as $dato) {
 //            //Busco el nombre de la persona
 //            $options = array(
 //                "fields" => array(
@@ -495,122 +503,122 @@ class EntradasController extends AppController {
 //
 //            $datetimearray = explode(" ", $dato["EntradaInput"]["fecha"]);
 //            $time = $datetimearray[1];
-            //Busco los ingresos del primer dia
-            $fecha1 = "";
-            $options = array(
-                "fields" => array(
-                    "EntradasInput.ingresos"
-                ),
-                "conditions" => array(
-                    "EntradasInput.fecha" => '2014-09-11 00:00:00',
-                    "EntradasInput.input_id" => $dato["input"]["id"]
-                ),
-                "recursive" => -1
-            );
-            $this->loadModel("EntradasInput");
-            $fecha1 = $this->EntradasInput->find("all", $options);
+                //Busco los ingresos del primer dia
+                $fecha1 = "";
+                $options = array(
+                    "fields" => array(
+                        "EntradasInput.ingresos"
+                    ),
+                    "conditions" => array(
+                        "EntradasInput.fecha" => '2014-09-11 00:00:00',
+                        "EntradasInput.input_id" => $dato["input"]["id"]
+                    ),
+                    "recursive" => -1
+                );
+                $this->loadModel("EntradasInput");
+                $fecha1 = $this->EntradasInput->find("all", $options);
 
-            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
-            if (empty($fecha1)) {
-                $fecha1 = 0;
-            } else {
-                $fecha1 = $fecha1[0];
-                $fecha1 = $fecha1["EntradasInput"]["ingresos"];
-            }
+                //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
+                if (empty($fecha1)) {
+                    $fecha1 = 0;
+                } else {
+                    $fecha1 = $fecha1[0];
+                    $fecha1 = $fecha1["EntradasInput"]["ingresos"];
+                }
 //
 //
-            //Busco los ingresos del segundo dia
-            $fecha2 = "";
-            $options = array(
-                "fields" => array(
-                    "EntradasInput.ingresos"
-                ),
-                "conditions" => array(
-                    "EntradasInput.fecha" => '2014-09-12 00:00:00',
-                    "EntradasInput.input_id" => $dato["input"]["id"]
-                ),
-                "recursive" => -1
-            );
-            $this->loadModel("EntradasInput");
-            $fecha2 = $this->EntradasInput->find("all", $options);
+                //Busco los ingresos del segundo dia
+                $fecha2 = "";
+                $options = array(
+                    "fields" => array(
+                        "EntradasInput.ingresos"
+                    ),
+                    "conditions" => array(
+                        "EntradasInput.fecha" => '2014-09-12 00:00:00',
+                        "EntradasInput.input_id" => $dato["input"]["id"]
+                    ),
+                    "recursive" => -1
+                );
+                $this->loadModel("EntradasInput");
+                $fecha2 = $this->EntradasInput->find("all", $options);
 
-            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
-            if (empty($fecha2)) {
-                $fecha2 = 0;
-            } else {
-                $fecha2 = $fecha2[0];
-                $fecha2 = $fecha2["EntradasInput"]["ingresos"];
-            }
+                //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
+                if (empty($fecha2)) {
+                    $fecha2 = 0;
+                } else {
+                    $fecha2 = $fecha2[0];
+                    $fecha2 = $fecha2["EntradasInput"]["ingresos"];
+                }
 //
 //
-            //Busco los ingresos del tercer dia dia
-            $fecha3 = "";
-            $options = array(
-                "fields" => array(
-                    "EntradasInput.ingresos"
-                ),
-                "conditions" => array(
-                    "EntradasInput.fecha" => '2014-09-13 00:00:00',
-                    "EntradasInput.input_id" => $dato["input"]["id"]
-                ),
-                "recursive" => -1
-            );
-            $this->loadModel("EntradasInput");
-            $fecha3 = $this->EntradasInput->find("all", $options);
+                //Busco los ingresos del tercer dia dia
+                $fecha3 = "";
+                $options = array(
+                    "fields" => array(
+                        "EntradasInput.ingresos"
+                    ),
+                    "conditions" => array(
+                        "EntradasInput.fecha" => '2014-09-13 00:00:00',
+                        "EntradasInput.input_id" => $dato["input"]["id"]
+                    ),
+                    "recursive" => -1
+                );
+                $this->loadModel("EntradasInput");
+                $fecha3 = $this->EntradasInput->find("all", $options);
 
-            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
-            if (empty($fecha3)) {
-                $fecha3 = 0;
-            } else {
-                $fecha3 = $fecha3[0];
-                $fecha3 = $fecha3["EntradasInput"]["ingresos"];
-            }
+                //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
+                if (empty($fecha3)) {
+                    $fecha3 = 0;
+                } else {
+                    $fecha3 = $fecha3[0];
+                    $fecha3 = $fecha3["EntradasInput"]["ingresos"];
+                }
 
-            //Busco los ingresos del cuarto dia dia
-            $fecha4 = "";
-            $options = array(
-                "fields" => array(
-                    "EntradasInput.ingresos"
-                ),
-                "conditions" => array(
-                    "EntradasInput.fecha" => '2014-08-14 00:00:00',
-                    "EntradasInput.input_id" => $dato["input"]["id"]
-                ),
-                "recursive" => -1
-            );
-            $this->loadModel("EntradasInput");
-            $fecha4 = $this->EntradasInput->find("all", $options);
+                //Busco los ingresos del cuarto dia dia
+                $fecha4 = "";
+                $options = array(
+                    "fields" => array(
+                        "EntradasInput.ingresos"
+                    ),
+                    "conditions" => array(
+                        "EntradasInput.fecha" => '2014-08-14 00:00:00',
+                        "EntradasInput.input_id" => $dato["input"]["id"]
+                    ),
+                    "recursive" => -1
+                );
+                $this->loadModel("EntradasInput");
+                $fecha4 = $this->EntradasInput->find("all", $options);
 
-            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
-            if (empty($fecha4)) {
-                $fecha4 = 0;
-            } else {
-                $fecha4 = $fecha4[0];
-                $fecha4 = $fecha4["EntradasInput"]["ingresos"];
-            }
+                //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
+                if (empty($fecha4)) {
+                    $fecha4 = 0;
+                } else {
+                    $fecha4 = $fecha4[0];
+                    $fecha4 = $fecha4["EntradasInput"]["ingresos"];
+                }
 
-            //Busco los ingresos del quinto dia dia
-            $fecha5 = "";
-            $options = array(
-                "fields" => array(
-                    "EntradasInput.ingresos"
-                ),
-                "conditions" => array(
-                    "EntradasInput.fecha" => '2014-08-15 00:00:00',
-                    "EntradasInput.input_id" => $dato["input"]["id"]
-                ),
-                "recursive" => -1
-            );
-            $this->loadModel("EntradasInput");
-            $fecha5 = $this->EntradasInput->find("all", $options);
+                //Busco los ingresos del quinto dia dia
+                $fecha5 = "";
+                $options = array(
+                    "fields" => array(
+                        "EntradasInput.ingresos"
+                    ),
+                    "conditions" => array(
+                        "EntradasInput.fecha" => '2014-08-15 00:00:00',
+                        "EntradasInput.input_id" => $dato["input"]["id"]
+                    ),
+                    "recursive" => -1
+                );
+                $this->loadModel("EntradasInput");
+                $fecha5 = $this->EntradasInput->find("all", $options);
 
-            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
-            if (empty($fecha5)) {
-                $fecha5 = 0;
-            } else {
-                $fecha5 = $fecha5[0];
-                $fecha5 = $fecha5["EntradasInput"]["ingresos"];
-            }
+                //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
+                if (empty($fecha5)) {
+                    $fecha5 = 0;
+                } else {
+                    $fecha5 = $fecha5[0];
+                    $fecha5 = $fecha5["EntradasInput"]["ingresos"];
+                }
 
 //            $aux = array(
 //                "Cedula" => $dato["person"]["pers_documento"],
@@ -627,49 +635,51 @@ class EntradasController extends AppController {
 //            $i++;
 //            $pos++;
 //        }
-            $this->loadModel("Input");
-            $this->loadModel("User");
-            $id = $dato["input"]["categoria_id"];
-            $id2 = $dato["input"]["usuariocertificate"];
-            $sql2 = "SELECT username FROM users WHERE id = $id2";
-            $sql = "SELECT descripcion FROM categorias WHERE id= $id ";
-            $res = $this->Input->query($sql);
-            $res2 = $this->User->query($sql2);
-            $usuario = "";
+                $this->loadModel("Input");
+                $this->loadModel("User");
+                $id = $dato["input"]["categoria_id"];
+//                $id2 = $dato["input"]["usuariocertificate"];
+//                debug($dato);die;
+//                $sql2 = "SELECT username FROM users WHERE id = $id2";
+                $sql = "SELECT descripcion FROM categorias WHERE id= $id ";
+                $res = $this->Input->query($sql);
+//                $res2 = $this->User->query($sql2);
+                $usuario = "";
 //            debug($dato["person"]["diligenciamiento"]); die;
-            if ($res2 != array()) {
-                $usuario = $res2[0]['users']['username'];
+//                if ($res2 != array()) {
+//                    $usuario = $res2[0]['users']['username'];
+//                }
+                if ($res != array()) {
+                    $categoria = $res[0]['categorias']['descripcion'];
+                }
+                $aux = array(
+                    "Fecha" => $dato["person"]["diligenciamiento"],
+                    "Nombre" => $dato["person"]["pers_primNombre"],
+                    "Apellido" => $dato["person"]["pers_primApellido"],
+                    "Documento" => $dato["person"]["pers_documento"],
+                    "Lugar" => $dato["person"]["pers_expedicion"],
+                    "Tipo" => $categoria,
+                    "Telefono" => $dato["person"]["pers_telefono"],
+                    "Email" => $dato["person"]["pers_mail"],
+                    "Direccion" => $dato["person"]["pers_direccion"],
+                    "Municipio" => $dato["person"]["ciudad"],
+                    "Institucion" => $dato["person"]["pers_institucion"],
+                    "Cargo" => $dato["person"]["pers_cargo"],
+                    "Fecha2" => $dato['input']['fechacertificate'],
+                    "Impreso" => $usuario,
+                    "Agosto-1" => $fecha1,
+                    "Agosto-2" => $fecha2,
+                    "Agosto-3" => $fecha3,
+                );
+                $datos2[$i] = $aux;
+                $i++;
+                $pos++;
             }
-            if ($res != array()) {
-                $categoria = $res[0]['categorias']['descripcion'];
-            }
-            $aux = array(
-                "Fecha" => $dato["person"]["diligenciamiento"],
-                "Nombre" => $dato["person"]["pers_primNombre"],
-                "Apellido" => $dato["person"]["pers_primApellido"],
-                "Documento" => $dato["person"]["pers_documento"],
-                "Lugar" => $dato["person"]["pers_expedicion"],
-                "Tipo" => $categoria,
-                "Telefono" => $dato["person"]["pers_telefono"],
-                "Email" => $dato["person"]["pers_mail"],
-                "Direccion" => $dato["person"]["pers_direccion"],
-                "Municipio" => $dato["person"]["ciudad"],
-                "Institucion" => $dato["person"]["pers_institucion"],
-                "Cargo" => $dato["person"]["pers_cargo"],
-                "Fecha2" => $dato['input']['fechacertificate'],
-                "Impreso" => $usuario,
-                "Agosto-1" => $fecha1,
-                "Agosto-2" => $fecha2,
-                "Agosto-3" => $fecha3,
-            );
-            $datos2[$i] = $aux;
-            $i++;
-            $pos++;
-        }
 //        debug($datos2);
 
 
-        $this->set("datos", $datos2);
+            $this->set("datos", $datos2);
+        }
     }
 
     public function reportes() {
@@ -698,6 +708,17 @@ class EntradasController extends AppController {
             ),
             "recursive" => -2
         ));
+        $this->loadModel("Event");
+        $events = $this->Event->find('list', array(
+            "fields" => array(
+                "Event.id",
+                "Event.even_nombre"
+            ),
+            "conditions" => array(
+                "Event.even_fechFinal >= NOW()"
+            )
+        ));
+        $this->set(compact('events'));
         $this->set(compact('countriesName'));
 
         $this->set(compact('state'));
@@ -709,6 +730,5 @@ class EntradasController extends AppController {
         $entradas = $this->Entrada->find('list');
         $this->set(compact('categorias', 'entradas'));
     }
-    
 
 }
