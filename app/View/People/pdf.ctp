@@ -34,12 +34,12 @@ if ($data['tipo'] == 2) {
         $pdf->Cell(0, 2, $cedula, 0, 0, 'C');
         $pdf->Ln(2);
     }
-
-    $pdf->SetY(-50);
-    $pdf->SetFont('Arial', '', 10);
-    $pdf->Cell(0, 2, "FEDERACION DE CAFETEROS", 0, 0, 'C');
-    $pdf->Ln(2);
-
+    if ($data['empresa']) {
+        $pdf->SetY(-50);
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(0, 2,$data['empresa'], 0, 0, 'C');
+        $pdf->Ln(2);
+    }
     if ($data['categoria']) {
         $pdf->SetY(-28);
         $pdf->SetFont('Arial', 'B', 18);
