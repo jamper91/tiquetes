@@ -105,7 +105,34 @@ class StagesController extends AppController {
 //                                debug($height);
                 $carpeta = WWW_ROOT . "/img/escenario/";
                 $src = $carpeta . $nombre;
-                if ($tipo != 'image/jpeg') {
+                if($nombre==""){
+                    $newStage = $this->Stage->create();
+                    $newStage = array(
+                        'Stage' => array(
+                            'city_id' => $data['city_id'],
+                            'esce_nombre' => strtoupper($data['esce_nombre']),
+                            'esce_direccion' => strtoupper($data['esce_direccion']),
+                            'esce_telefono' => $data['esce_telefono'],
+                            //'esce_mapa' => $src
+                            //'esce_mapa' => $nombre
+                        )
+                    );
+                    try {
+                        $this->Stage->save($newStage);
+                        return $this->redirect(array('action' => 'index'));
+                    } catch (Exception $ex) {
+                        $error2 = $ex->getCode();
+                        if ($error2 == '23000') {
+                            $this->Session->setFlash('Error ya hay un escenario igual', 'error');
+                        }
+                    }
+                    if ($this->Stage->save($this->request->data)) {
+                        $this->Session->setFlash(__('El escenario se guardo con Exito.'));
+                        return $this->redirect(array('action' => 'index'));
+                    } else {
+                        $this->Session->setFlash(__('El escenario no pudo ser guardado. Por favor, intente de nuevo.'));
+                    }
+                }elseif ($tipo != 'image/jpeg') {
                     $this->Session->setFlash(__('El archivo no es compatible solo recibe imagenes jpg o jepg.', 'error'));
                 } elseif ($width != 500 && $height != 500) {
                     $this->Session->setFlash(__('Las dimenciones no son correctas deben ser 500px X 500px.', 'error'));

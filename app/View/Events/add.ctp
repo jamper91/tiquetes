@@ -136,7 +136,7 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                     <td></td>
                     <td>
                         <?php
-                        echo $this->Form->input('even_imagen1', array('type' => 'file', 'label' => 'Imagen 1', 'required' => 'true'));
+                        echo $this->Form->input('even_imagen1', array('type' => 'file', 'label' => 'Imagen 1'));//, 'required' => 'true'
                         ?>
                     </td>
                     <td></td>

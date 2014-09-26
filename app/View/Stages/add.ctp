@@ -66,7 +66,8 @@
                 <td><?php echo 'mapa' ?></td>
                 <td>
                     <!--<input type="file" id="doc_file" name="doc_file">-->
-                    <?php echo $this->Form->input('doc_file', array('type' => 'file', 'label' => '', 'required'=> 'true')); ?>
+                    <?php echo $this->Form->input('doc_file', array('type' => 'file', 'label' => '')); //, 'required'=> 'true'
+                    ?>
                 </td>
             </tr>
         </table>
