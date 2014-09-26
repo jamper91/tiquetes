@@ -1249,14 +1249,25 @@ class EventsController extends AppController {
         $total = $cantidad[0][0]['cantidad'];
         $sql2 = "SELECT even_fechInicio FROM events WHERE id = $event_id";
         $fecha = $this->Event->query($sql2);
-        $date = $fecha[0]['events']['even_fechInicio'];
-        $f = date('Y-m-d', strtotime($date));
+        if ($fecha != array()) {
+            $date = $fecha[0]['events']['even_fechInicio'];
+            $f = date('Y-m-d', strtotime($date));
+        }
 //       debug($date ." asdasdasd   ".$f);die;
         $datos = array();
-        for ($i = 0; $i < $total; $i++) {
-            $datos[$i]['g']['id'] = [$f];
-            $datos[$i]['g']['name'] = [$f];
-            $f = date('Y-m-d', strtotime('+1 days', strtotime($f)));
+
+//        for ($i = 0; $i < $total; $i++) {
+//            $datos[$i]['g']['id'] = [$f];
+//            $datos[$i]['g']['name'] = [$f];
+//            $f = date('Y-m-d', strtotime('+1 days', strtotime($f)));
+
+        if ($total > 0) {
+            for ($i = 0; $i < $total; $i++) {
+                $datos[$i]['g']['id'] = $f;
+                $datos[$i]['g']['name'] = $f;
+                $f = date('Y-m-d', strtotime('+1 days', strtotime($f)));
+            }
+
         }
 //        debug($datos); die;
 

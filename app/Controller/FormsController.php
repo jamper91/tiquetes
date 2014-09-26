@@ -96,7 +96,7 @@ class FormsController extends AppController {
             throw new NotFoundException(__('Invalid form'));
         }
         if ($this->request->is(array('post', 'put'))) {
-            debug($this->request->data);
+//            debug($this->request->data);
             if ($this->Form->save($this->request->data)) {
 //                $this->Session->setFlash(__('The form has been saved.'));
                 $this->Session->setFlash('Formulario Actualizado con exito', 'good');

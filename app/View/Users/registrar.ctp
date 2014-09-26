@@ -67,6 +67,14 @@ echo $this->Html->css(array('multi-select'));
                                             Seleccione un evento
                                         </label>-->
                     <table id="formulario2" style="display: none; padding-left: 10px">
+                        <tr>
+                            <td colspan="2"><?php
+                                echo $this->Form->input('pistola', array(
+                                'label' => 'Lector de Cédulas',
+                                'type' => 'password'
+                                ));
+                                ?></td>
+                        </tr>
                         <tr>                           
                             <td colspan="2" align="center" >
                                 <input type="radio" name="data[User][tipoE]" required="true" value="RFDI" onclick="visibleCampos()" />RFID
@@ -222,7 +230,7 @@ echo $this->Html->css(array('multi-select'));
                             actualizar = 1;
                             $("input[type='submit']").attr("value", "Actualizar");
                             $("#btnNuevo").css("display", "block");
-                            
+
                         } else if (codigo == 2)
                         {
                             personId = $("person_id", this).text();
@@ -234,9 +242,11 @@ echo $this->Html->css(array('multi-select'));
                             $("#btnNuevo").css("display", "block");
                             var answer = confirm("Imprimir escarapela?.");
                             if (answer) {
-                                window.location = "http://localhost/tiquetes/people/reimprimir/" + person_document + "/" + event_id + "/" + 2;
+
+                                window.location = urlbase + "people/reimprimir/" + person_document + "/" + event_id + "/" + 2;
+
                             }
-                        }else if(codigo==3)
+                        } else if (codigo == 3)
                         {
                             personId = $("person_id", this).text();
                             inputId = $("input_id", this).text();
@@ -247,10 +257,12 @@ echo $this->Html->css(array('multi-select'));
                             $("#btnNuevo").css("display", "block");
                             var answer = confirm("Imprimir escarapela?.");
                             if (answer) {
-                                window.location = "http://localhost/tiquetes/people/reimprimir/" + person_document + "/" + event_id + "/" + 1;
+
+                                window.location = urlbase + "people/reimprimir/" + person_document + "/" + event_id + "/" + 1;
+
                             }
                         }
-                        
+
                     });
 
                 });
@@ -279,7 +291,7 @@ echo $this->Html->css(array('multi-select'));
             }
             ajax(url, datos, function(xml)
             {
-                
+
                 //Elimino lo que contiene este select
                 $("#UserCategoriaId").html("");
                 if (xml)
@@ -362,15 +374,22 @@ echo $this->Html->css(array('multi-select'));
                                     obligatorio = "required";
                                 else
                                     obligatorio = "";
-                                console.log("obligatorio: " + obligatorio);
                                 obj = $(this).find("FormsPersonalDatum");
                                 var idFPD;
                                 idFPD = $("id", obj).text();
                                 if (id) {
                                     var html = "";
-//                                    html += "<div class='controls'>";
+                                    /**
+                                     * Al campo name='data[Data][$5][descripcion]' le agrege el atributo id id='DataDescripcionFPD$4' para cuando consulte un usuario
+                                     * y dicho usuario tenga datos en la tabla data, poder colocar la informacion en este input basado en el id de FormsPersonalDatum
+                                     * Al campo name='data[Data][$5][id]' le agrege el atributo id id='DataIdFPD$4' para cuando consulte un usuario
+                                     * y dicho usuario tenga datos en la tabla data, colocar aqui el id de la tabla Data, para que cuando se envie el formulario se actualize
+                                     * estos campos y no registre nuevos
+                                     * @returns {undefined}
+                                     */
                                     html += "<tr>";
-                                    html += "<td colspan='2'><div class='input text'><label for='Form$1'>$1</label><input type='$2' name='data[Data][$5][descripcion]' $6></input></div>";
+                                    html += "<td colspan='2'><div class='input text'><label for='Form$1'>$1</label><input id='DataDescripcionFPD$4' type='$2' name='data[Data][$5][descripcion]' $6></input></div>";
+                                    html += "<input style='display:none' id='DataIdFPD$4' type='text' name='data[Data][$5][id]' value='-1'></input>";
                                     html += "<input style='display:none' type='text' name='data[Data][$5][forms_personal_datum_id]' value='$4'></input>";
                                     html += "<input style='display:none' type='text' name='data[Data][$5][person_id]' value='-1'></input></td>";
                                     html += "</tr>";
@@ -381,13 +400,15 @@ echo $this->Html->css(array('multi-select'));
                                     html = html.replace("$2", tipo);
                                     html = html.replace("$3", id);
                                     html = html.replace("$4", idFPD);
+                                    html = html.replace("$4", idFPD);
+                                    html = html.replace("$4", idFPD);
+                                    html = html.replace("$5", con);
                                     html = html.replace("$5", con);
                                     html = html.replace("$5", con);
                                     html = html.replace("$5", con);
                                     html = html.replace("$6", obligatorio);
                                     con++;
                                     formulario += html;
-                                    console.log("html: " + html);
                                 }
                             });
                             //Agrego el campo de la tarjeta
@@ -441,9 +462,7 @@ echo $this->Html->css(array('multi-select'));
                     direccion = $("pers_direccion", obj).text();
                     telefono = $("pers_telefono", obj).text();
                     email = $("pers_mail", obj).text();
-                    console.log("nombre:|" + nombre + "|");
                     if (nombre !== "") {
-                        console.log("Entre al if");
                         $("#PeoplePers_id").val(id);
                         personId = id;
                         $("#PeoplePers_primNombre").val(nombre);
@@ -457,11 +476,39 @@ echo $this->Html->css(array('multi-select'));
                         limpiar();
                         actualizar = 0;
                     }
-                    console.log("actualizar: " + actualizar);
+                });
+                url = '<?= $this->Html->url(array("controller" => "Datas", "action" => "getDataByUser.xml")) ?>';
+                var datos2 = {
+                    person_id: $("#PeoplePers_id").val()
+                };
+                ajax(url, datos2, function(xml) {
+                    $("datos", xml).each(function() {
+                        var obj = $(this).find("Data");
+                        var descripcion, id, forms_personal_datum_id;
+                        id = $("id", obj).text();
+                        descripcion = $("descripcion", obj).text();
+                        forms_personal_datum_id = $("forms_personal_datum_id", obj).text();
+
+                        if (id !== "") {
+                            //Ahora busco aquel input que deba tener este dato
+                            $("#DataDescripcionFPD" + forms_personal_datum_id).val(descripcion);
+//                        $("#PeoplePers_id").val(id);
+//                        personId = id;
+//                        $("#PeoplePers_primNombre").val(nombre);
+//                        $("#PeoplePers_primApellido").val(apellido);
+//                        $("#UserCityId option[value=" + ciudad + "]").attr("selected", true);
+//                        $("#PeoplePers_direccion").val(direccion);
+//                        $("#PeoplePers_telefono").val(telefono);
+//                        $("#PeoplePers_mail").val(email);
+                            actualizar = 1;
+                        } else {
+//                        limpiar();
+                            actualizar = 0;
+                        }
+                    });
                 });
             });
         });
-
         function limpiar()
         {
 
@@ -476,6 +523,72 @@ echo $this->Html->css(array('multi-select'));
             $("#PersonRfid").val("");
         }
 
+    });
+
+</script>
+<script>
+    $(document).ready(function() {//Esta funcion se activa cuando se este ingresando texto en el cuadro
+        $("input[type='password']").on('input', function(e) {
+            if ($('#UserPistola').val().length === 170)
+            {
+                var documento = "";
+                var apellido1 = "";
+                var apellido2 = "";
+                var nombre = "";
+                var nombre2 ="";
+                var sangre = "";
+                // alert($('#PersonPistola').val().length);
+                var sw = 0;
+                for (var i = 0; i < $('#UserPistola').val().length; i++) {
+                    if (i >= 48 && i < 58) {
+                        var letra = $('#UserPistola').val()[i].toString();
+                        if (letra != "0" || sw == 1) {
+                            sw = 1;
+                            documento = documento + letra;
+                        }
+                    }
+                    if (i >= 58 && i < 81) {
+                        var letra = $('#UserPistola').val()[i].toString();
+                        if (letra != " ") {
+                            apellido1 = apellido1 + letra;
+                        }
+                    }
+                    if (i >= 81 && i < 104) {
+                        var letra = $('#UserPistola').val()[i].toString();
+                        if (letra != " ") {
+                            apellido2 = apellido2 + letra;
+                        }
+                    }
+                    if (i >= 104 && i < 127) {
+                        var letra = $('#UserPistola').val()[i].toString();
+                        if (letra != " ") {
+                            nombre = nombre + letra;
+                        }
+                    }
+                    if (i >= 127 && i < 150) {
+                        var letra = $('#UserPistola').val()[i].toString();
+                        if (letra != " ") {
+                            nombre2 = nombre2 + letra;
+                        }
+                    }
+                    if (i >= 166 && i < 169) {
+                        var letra = $('#UserPistola').val()[i].toString();
+                        if (letra != " ") {
+                            sangre = sangre + letra;
+                        }
+                    }
+//                            $('#documento').val(documento);
+                }
+                $('#PeopleDocumento').val(documento);
+                $('#PeoplePers_primNombre').val(nombre+" "+nombre2);
+                $('#PeoplePers_primApellido').val(apellido1 + " " + apellido2); 
+//                $('#PersonPersTipoSangre').val(sangre);
+                $('#UserPistola').val("");
+//                $('#UserCategoriaId').focus();
+//                        var url = "validar_admin.jsp"; // the script where you handle the form input. 
+
+            }
+        });
     });
 
 </script>

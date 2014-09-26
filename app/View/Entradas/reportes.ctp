@@ -1,22 +1,37 @@
- <div class="categoriasEntradas form">
+<div class="categoriasEntradas form">
     <?php echo $this->Form->create('Entrada'); ?>
     <fieldset>
         <legend><?php echo __('Reportes'); ?></legend><br>
-
-<!--        <div class="btn-group">
-            <button data-toggle="dropdown" class="btn btn-success dropdown-toggle">Exportar <span class="caret"></span></button>
-            <ul class="dropdown-menu">-->
-<!--                <li><a href="<?= $this->Html->url("exportar") ?>">Reportes Generales</a></li>
-                <li><a href="<?= $this->Html->url("exportar2") ?>">Reportes Usuarios</a></li>
-                <li><a href="<?= $this->Html->url("exportar3") ?>">Reportes Ventas</a></li>
-                <li><a href="<?= $this->Html->url("exportar4") ?>">Reportes Registro</a></li>-->
-                <li><a href="<?= $this->Html->url("exportar5") ?>">Reporte Ingreso Detallado</a></li>
-            <!--</ul>-->
-        </div>
-<!--        <table>
-        <tr>
-            <td>
         <?php
+        echo $this->Form->input('event_id', array(
+            "div" => array(
+                "class" => "controls"
+            ),
+            "label" => "Evento",
+            "options" => $events,
+            "empty" => "Seleccione un evento",
+            "required" => "true",
+            "style" => array(
+                "display:block"
+            )
+        ));
+        ?>
+
+        <!--        <div class="btn-group">
+                    <button data-toggle="dropdown" class="btn btn-success dropdown-toggle">Exportar <span class="caret"></span></button>
+                    <ul class="dropdown-menu">-->
+        <!--                <li><a href="<?= $this->Html->url("exportar") ?>">Reportes Generales</a></li>
+                        <li><a href="<?= $this->Html->url("exportar2") ?>">Reportes Usuarios</a></li>
+                        <li><a href="<?= $this->Html->url("exportar3") ?>">Reportes Ventas</a></li>
+                        <li><a href="<?= $this->Html->url("exportar4") ?>">Reportes Registro</a></li>-->
+        <!--<li><a href="<?= $this->Html->url("exportar5") ?>">Reporte Ingreso Detallado</a></li>-->
+        <li><a id='exportar5' name='exportar5' style="cursor:pointer">Reporte Ingreso Detallado</a></li>
+        <!--</ul>-->
+</div>
+<!--        <table>
+       <tr>
+           <td>
+<?php
 //                    echo $this->Form->input('country_id', array(
 //                        "div" => array(
 //                            "class" => "controls"
@@ -25,10 +40,10 @@
 //                        "options" => $countriesName,
 //                        "empty" => "Seleccione un País"
 //                    ));
-        ?>
-            </td>
-            <td>
-        <?php
+?>
+           </td>
+           <td>
+<?php
 //                    echo $this->Form->input('state_id', array(
 //                        "div" => array(
 //                            "class" => "controls"
@@ -36,10 +51,10 @@
 //                        "label" => "Departamento",
 //                        "empty" => "seleccione un Departamento"
 //                    ));
-        ?>
-            </td>
-            <td>
-        <?php
+?>
+           </td>
+           <td>
+<?php
 //                    echo $this->Form->input('city_id', array(
 //                        "div" => array(
 //                            "class" => "controls"
@@ -47,12 +62,12 @@
 //                        "label" => "Ciudad",
 //                        "empty" => "seleccione una ciudad"
 //                    ));
-        ?>
-            </td>
-        </tr>
-        <tr>
-            <td>
-        <?php
+?>
+           </td>
+       </tr>
+       <tr>
+           <td>
+<?php
 //                    echo $this->Form->input('stage_id', array(
 //                        "div" => array(
 //                            "class" => "controls"
@@ -60,10 +75,10 @@
 //                        "label" => "Escenario",
 //                        "options" => "Stage.esce_nombre",
 //                    ));
-        ?>
-            </td>
-            <td>
-        <?php
+?>
+           </td>
+           <td>
+<?php
 //                    echo $this->Form->input('event_id', array(
 //                        "div" => array(
 //                            "class" => "controls"
@@ -71,22 +86,26 @@
 //                        "label" => "Evento",
 //                        "options" => "event.even_nombre",
 //                    ));
-        ?>
-            </td>
-            <td>
-        <?php
+?>
+           </td>
+           <td>
+<?php
 //                        echo $this->Form->input('entrada_id');
-        ?>
-            </td>
-        </tr>
-    </table>-->
+?>
+           </td>
+       </tr>
+   </table>-->
 
-        <label id="mensaje"></label>
-    </fieldset>
-    <!--<input type="button" id="consultar" name="registrar" value="Consultar">-->
+<label id="mensaje"></label>
+</fieldset>
+<!--<input type="button" id="consultar" name="registrar" value="Consultar">-->
 </div>
 <div class="mensaje"></div>
 <script>
+    $("#exportar5").click(function(){
+        var event_id = $("#EntradaEventId").val();
+        window.location = urlbase+"entradas/exportar5/"+event_id;
+    });
     $("#EntradaEventId").change(function() {
         var url2 = urlbase + "categorias/getCategoriesByEvent.xml";
         var datos2 = {
