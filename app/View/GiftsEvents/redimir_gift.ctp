@@ -51,7 +51,7 @@
             var datos2 = {
                 event_id: $(this).val()
             };
-            var url = urlbase + "giftsevents/getGiftsByEvent.xml";
+            var url = urlbase + "giftsEvents/getGiftsByEvent.xml";
             ajax(url, datos2, function(xml) {
                 $("#GiftsEventGiftId").html("<option>Seleccione un consumible</option>");
                 $("datos", xml).each(function() {

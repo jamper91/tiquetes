@@ -42,7 +42,8 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                     <?php
                     echo $this->Form->input('city_id', array(
                         'label' => '',
-                        "empty" => "Seleccione Una Ciudad"
+                        "empty" => "Seleccione Una Ciudad",
+                        'required'=>'true'
                     ));
                     ?>
                 </td>

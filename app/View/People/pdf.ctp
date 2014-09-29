@@ -5,7 +5,7 @@ require_once('../Vendor/fpdf/ean13.php');
 $pdf = new PDF_EAN13();
 $pdf->SetAutoPageBreak(true, 0.3);
 $pdf->AddPage();
-//$pdf->Image('../webroot/img/certificate/escarapela.png', 0, 0, $pdf->w, $pdf->h);
+$pdf->Image('../webroot/img/certificate/escarapela.png', 0, 0, $pdf->w, $pdf->h);
 if ($data['tipo'] == 2) {
 
     if ($data['codigo']) {
@@ -15,34 +15,34 @@ if ($data['tipo'] == 2) {
         $pdf->Ln(2);
     }
     if ($data['nombre']) {
-        $pdf->SetY(-63);
-        $pdf->SetFont('Arial', 'B', 19);
+        $pdf->SetY(-61);
+        $pdf->SetFont('Arial', 'B', 18);
         $pdf->Cell(0, 2, $data['nombre'], 0, 0, 'C');
         $pdf->Ln(2);
     }
     if ($data['apellido']) {
-        $pdf->SetY(-58);
-        $pdf->SetFont('Arial', 'B', 13);
+        $pdf->SetY(-55);
+        $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(0, 2, $data['apellido'], 0, 0, 'C');
         $pdf->Ln(2);
     }
 
     if ($data['documento']) {
         $cedula = 'C.C ' . $data['documento'];
-        $pdf->SetY(-54);
-        $pdf->SetFont('Arial', '', 10);
+        $pdf->SetY(-51);
+        $pdf->SetFont('Arial', '', 11);
         $pdf->Cell(0, 2, $cedula, 0, 0, 'C');
         $pdf->Ln(2);
     }
-    if ($data['empresa']) {
-        $pdf->SetY(-50);
+    if ($data['empresa']!='') {
+        $pdf->SetY(-47);
         $pdf->SetFont('Arial', '', 10);
         $pdf->Cell(0, 2,$data['empresa'], 0, 0, 'C');
         $pdf->Ln(2);
     }
     if ($data['categoria']) {
-        $pdf->SetY(-28);
-        $pdf->SetFont('Arial', 'B', 18);
+        $pdf->SetY(-31);
+        $pdf->SetFont('Arial', 'B', 22);
         $pdf->Cell(0, 2, $data['categoria'], 0, 0, 'C');
         $pdf->Ln(2);
     }

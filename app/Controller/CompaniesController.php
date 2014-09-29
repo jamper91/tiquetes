@@ -199,11 +199,11 @@ class CompaniesController extends AppController {
             if ($res == array()) {
                 $ciudad = $data['Company']['city_id'];
                 $name = $data['Company']['pers_primNombre'];
-                $ape = $data['Company']['pers_primApellido'];                
+                $ape = $data['Company']['pers_primApellido'];
                 $doc = $data['Company']['pers_documento'];
                 $dir = $data['Company']['pers_direccion'];
                 $tel = $data['Company']['pers_telefono'];
-                $insert_people = "INSERT INTO `people`(`city_id`, `pers_documento`, `pers_primNombre`, `pers_primApellido`, `pers_direccion`, `pers_telefono`) VALUES (".$ciudad.",'".$doc."','".$name."','".$ape."','".$dir."',".$tel.")";
+                $insert_people = "INSERT INTO `people`(`city_id`, `pers_documento`, `pers_primNombre`, `pers_primApellido`, `pers_direccion`, `pers_telefono`) VALUES (" . $ciudad . ",'" . $doc . "','" . $name . "','" . $ape . "','" . $dir . "'," . $tel . ")";
                 $this->Person->query($insert_people);
                 $rs = $this->Person->query("SELECT MAX(id) AS id FROM people");
                 $pid = $rs [0][0]['id'];
@@ -225,11 +225,11 @@ class CompaniesController extends AppController {
             } else {
                 $ciudad = $data['Company']['city_id'];
                 $name = $data['Company']['pers_primNombre'];
-                $ape = $data['Company']['pers_primApellido'];                
+                $ape = $data['Company']['pers_primApellido'];
                 $doc = $data['Company']['pers_documento'];
                 $dir = $data['Company']['pers_direccion'];
                 $tel = $data['Company']['pers_telefono'];
-                $update_people = "UPDATE `people` SET `city_id`=".$ciudad.",`pers_documento`='".$doc."',`pers_primNombre`='".$name."',`pers_primApellido`='".$ape."',`pers_direccion`='".$dir."',`pers_telefono`=".$tel." WHERE id = ".$id_persona;
+                $update_people = "UPDATE `people` SET `city_id`=" . $ciudad . ",`pers_documento`='" . $doc . "',`pers_primNombre`='" . $name . "',`pers_primApellido`='" . $ape . "',`pers_direccion`='" . $dir . "',`pers_telefono`=" . $tel . " WHERE id = " . $id_persona;
                 $this->Company->query($update_people);
                 $ciudad = $data['Company']['city_id'];
                 $nit = $data['Company']['empr_nit'];
@@ -290,23 +290,27 @@ class CompaniesController extends AppController {
         $this->loadModel("Person");
         $this->layout = "webservices";
         $documento = $this->request->data["documento"]; //State
-        $sql = "SELECT p.id, p.pers_primNombre, p.pers_primApellido, p.city_id, p.pers_direccion, p.pers_telefono, p.pers_mail, p.ciudad, p.pers_institucion, p.pers_cargo FROM people p WHERE p.pers_documento = " . $documento;
+        $sql = "SELECT * FROM people p WHERE p.pers_documento = $documento" ;
         $options = array(
             "conditions" => array(
                 "Person.pers_documento" => $documento
             ),
             "fields" => array(
                 "Person.id",
+                "Person.document_type_id",
                 "Person.pers_primNombre",
                 "Person.pers_primApellido",
-                "Person.city_id",
+                "Person.pers_empresa",
                 "Person.pers_direccion",
                 "Person.pers_telefono",
+                "Person.pers_celular",
                 "Person.pers_mail",
                 "Person.ciudad",
-                "Person.pers_institucion",
-                "Person.pers_cargo",
-                "Person.pers_expedicion"
+                "Person.pais",
+                "Person.sector",
+                "Person.cargo",
+                "Person.stan",
+                "Person.categoria_id"
             ),
             "recursive" => 0
         );

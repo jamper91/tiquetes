@@ -90,7 +90,7 @@ function Barcode($x, $y, $barcode, $h, $w, $len)
 	}
 	//Print text uder barcode
 	$this->SetFont('Arial','',12);
-	$this->Text($x,$y+$h+11/$this->k,substr($barcode,-$len));
+//	$this->Text($x,$y+$h+11/$this->k,substr($barcode,-$len));
 }
 }
 ?>
