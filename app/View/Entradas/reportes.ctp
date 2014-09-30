@@ -212,41 +212,41 @@
     });
     (function()
     {
-        var url = "<?= $this->Html->url(array("action" => "obtenerReporte.xml")) ?>";
-        var html = '<div class="widget-box">' +
-                '<div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>' +
-                '    <h5>Estadisticas</h5>' +
-                '</div>' +
-                '<div class="widget-content nopadding">' +
-                '    <table class="table table-bordered data-table">' +
-                '        <thead>' +
-                '            <tr>' +
-                '                <th>Cantidad</th>' +
-                '                <th>Tipo</th>' +
-                '            </tr>' +
-                '        </thead>' +
-                '        <tbody>';
-        ajax(url, $('#EntradaReportesForm').serialize(), function(xml) {
-            $("datos", xml).each(function() {
-
-                var obj = $(this).find("Entrada");
-                var cantidad, tipo;
-                cantidad = $("Cantidad", obj).text();
-                tipo = $("Tipo", obj).text();
-                html += "<tr>";
-                html += "<td>";
-                html += cantidad;
-                html += "</td>";
-                html += "<td>";
-                html += tipo;
-                html += "</td>";
-                html += "</tr>";
-                console.log("html: " + html);
-
-            });
-            html += "</tbody></table>";
-            $("#mensaje").html(html);
-        });
+//        var url = "<?= $this->Html->url(array("action" => "obtenerReporte.xml")) ?>";
+//        var html = '<div class="widget-box">' +
+//                '<div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>' +
+//                '    <h5>Estadisticas</h5>' +
+//                '</div>' +
+//                '<div class="widget-content nopadding">' +
+//                '    <table class="table table-bordered data-table">' +
+//                '        <thead>' +
+//                '            <tr>' +
+//                '                <th>Cantidad</th>' +
+//                '                <th>Tipo</th>' +
+//                '            </tr>' +
+//                '        </thead>' +
+//                '        <tbody>';
+//        ajax(url, $('#EntradaReportesForm').serialize(), function(xml) {
+//            $("datos", xml).each(function() {
+//
+//                var obj = $(this).find("Entrada");
+//                var cantidad, tipo;
+//                cantidad = $("Cantidad", obj).text();
+//                tipo = $("Tipo", obj).text();
+//                html += "<tr>";
+//                html += "<td>";
+//                html += cantidad;
+//                html += "</td>";
+//                html += "<td>";
+//                html += tipo;
+//                html += "</td>";
+//                html += "</tr>";
+//                console.log("html: " + html);
+//
+//            });
+//            html += "</tbody></table>";
+//            $("#mensaje").html(html);
+//        });
 
         //$.post(url, $('#InputAddForm').serialize());
     })();
@@ -328,76 +328,76 @@
 <!--<script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="http://code.highcharts.com/modules/exporting.js"></script>-->
 <?php
-echo $this->Html->script(array("highcharts"));
+//echo $this->Html->script(array("highcharts"));
 ?>
 
 <?php
 $pos = 0;
-for ($index = 0; $index < count($datos); $index++) {
-    $dato = $datos[$index];
-    //Tomo la fecha y el tipo
-    $fecha = $dato["Entrada"]["Fecha"];
-    $tipo = $dato["Entrada"]["Tipo"];
+//for ($index = 0; $index < count($datos); $index++) {
+//    $dato = $datos[$index];
+//    //Tomo la fecha y el tipo
+//    $fecha = $dato["Entrada"]["Fecha"];
+//    $tipo = $dato["Entrada"]["Tipo"];
+//
+//    $cantidadI = 0;
+//    $cantidadR = 0;
+//    switch ($tipo) {
+//        case "RECHAZO":
+//            $tipo = "INGRESO";
+//            $cantidadR = $dato["Entrada"]["Cantidad"];
+//            break;
+//        case "INGRESO":
+//            $tipo = "RECHAZO";
+//            $cantidadI = $dato["Entrada"]["Cantidad"];
+//            break;
+//    }
+//
+//    //Ahora busco el opuesto de este
+//    $esta = false;
+//    for ($index1 = $index + 1; $index1 < count($datos); $index1++) {
+//        $d = $datos[$index1];
+//        $fecha1 = $d["Entrada"]["Fecha"];
+//        $tipo1 = $d["Entrada"]["Tipo"];
+//        if ($tipo1 == $tipo && $fecha1 == $fecha) {
+//            $esta = true;
+//            $index++;
+//            switch ($tipo1) {
+//                case "RECHAZO":
+//                    $cantidadR = $d["Entrada"]["Cantidad"];
+//                    break;
+//                case "INGRESO":
+//                    $cantidadI = $d["Entrada"]["Cantidad"];
+//                    break;
+//            }
+//            break;
+//        }
+//    }
+//    if (!$esta) {
+//        switch ($tipo) {
+//            case "RECHAZO":
+//                $cantidadR = 0;
+//                break;
+//            case "INGRESO":
+//                $cantidadI = 0;
+//                break;
+//        }
+//    }
+//    $fecha2 = explode("-", $fecha);
+//    $mons = array(1 => "Jan", 2 => "Feb", 3 => "Mar", 4 => "Apr", 5 => "May", 6 => "Jun", 7 => "Jul", 8 => "Aug", 9 => "Sep", 10 => "Oct", 11 => "Nov", 12 => "Dec");
+//    $fecha = $mons[$fecha2[0]] . " - " . $fecha2[1];
+//    ?>
+    <!--<div id="container//<?= $pos ?>" style="min-width: 40%; height: 400px; max-width: 40%; margin: 0 auto; display: inline-block"></div>-->
 
-    $cantidadI = 0;
-    $cantidadR = 0;
-    switch ($tipo) {
-        case "RECHAZO":
-            $tipo = "INGRESO";
-            $cantidadR = $dato["Entrada"]["Cantidad"];
-            break;
-        case "INGRESO":
-            $tipo = "RECHAZO";
-            $cantidadI = $dato["Entrada"]["Cantidad"];
-            break;
-    }
-
-    //Ahora busco el opuesto de este
-    $esta = false;
-    for ($index1 = $index + 1; $index1 < count($datos); $index1++) {
-        $d = $datos[$index1];
-        $fecha1 = $d["Entrada"]["Fecha"];
-        $tipo1 = $d["Entrada"]["Tipo"];
-        if ($tipo1 == $tipo && $fecha1 == $fecha) {
-            $esta = true;
-            $index++;
-            switch ($tipo1) {
-                case "RECHAZO":
-                    $cantidadR = $d["Entrada"]["Cantidad"];
-                    break;
-                case "INGRESO":
-                    $cantidadI = $d["Entrada"]["Cantidad"];
-                    break;
-            }
-            break;
-        }
-    }
-    if (!$esta) {
-        switch ($tipo) {
-            case "RECHAZO":
-                $cantidadR = 0;
-                break;
-            case "INGRESO":
-                $cantidadI = 0;
-                break;
-        }
-    }
-    $fecha2 = explode("-", $fecha);
-    $mons = array(1 => "Jan", 2 => "Feb", 3 => "Mar", 4 => "Apr", 5 => "May", 6 => "Jun", 7 => "Jul", 8 => "Aug", 9 => "Sep", 10 => "Oct", 11 => "Nov", 12 => "Dec");
-    $fecha = $mons[$fecha2[0]] . " - " . $fecha2[1];
-    ?>
-    <div id="container<?= $pos ?>" style="min-width: 40%; height: 400px; max-width: 40%; margin: 0 auto; display: inline-block"></div>
-
-    <script>
+<!--    <script>
         $(function() {
-            $('#container<?= $pos ?>').highcharts({
+            $('#container//<?= $pos ?>').highcharts({
                 chart: {
                     plotBackgroundColor: null,
                     plotBorderWidth: 1, //null,
                     plotShadow: false
                 },
                 title: {
-                    text: 'Estadisticas <?= $fecha ?>'
+                    text: 'Estadisticas //<?= $fecha ?>'
                 },
                 tooltip: {
                     pointFormat: '{series.name}: <b>{point.y}</b>'
@@ -420,20 +420,20 @@ for ($index = 0; $index < count($datos); $index++) {
                         type: 'pie',
                         name: 'Usuarios',
                         data: [
-                            ['Rechazos', <?php echo $cantidadR ?>],
-                            ['Ingresos', <?php echo $cantidadI ?>]
+                            ['Rechazos', //<?php echo $cantidadR ?>],
+                            ['Ingresos', //<?php echo $cantidadI ?>]
                         ]
                     }]
             });
         });
 
-    </script>
-    <?php
-    $pos++;
-}
+    </script>-->
+    //<?php
+//    $pos++;
+//}
 ?>
 <!--
 
 
 
-<p>Entradas <?php echo $salidas ?></p>-->
+<p>Entradas <?php // echo $salidas ?></p>-->
