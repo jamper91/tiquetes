@@ -675,6 +675,7 @@ class EntradasController extends AppController {
                 "Pais" => $dato["person"]["pais"],
                 "Sector" => $dato["person"]["sector"],
                 "Tipo" => $categoria,
+                "Stand"=> $dato["person"]["stan"],
                 "Impreso" => $usuario,
                 "Fecha2" => $dato["input"]["fechacertificate"],
                 "Agosto-1" => $fecha1,
