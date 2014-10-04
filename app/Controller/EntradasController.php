@@ -119,8 +119,8 @@ class EntradasController extends AppController {
                 "Stage.esce_nombre"
             )
         ));
-        // $papers = $this->Entrada->Paper->find('list');
-        // $categories = $this->Entrada->Category->find('list');
+// $papers = $this->Entrada->Paper->find('list');
+// $categories = $this->Entrada->Category->find('list');
         $this->set(compact('escenario', 'categories'));
     }
 
@@ -151,7 +151,7 @@ class EntradasController extends AppController {
         $options = "SELECT e.id,e.name FROM `entradas` e INNER JOIN `stages` s ON e.stage_id=s.id INNER JOIN `events` ev ON ev.stage_id=s.id WHERE ev.id = $event_id";
         $entradas = $this->Entrada->query($options);
         $log = $this->Entrada->getDataSource()->getLog(false, false);
-        //debug($log);
+//debug($log);
 //        var_dump($cities);
         $this->set(
                 array(
@@ -176,7 +176,7 @@ class EntradasController extends AppController {
         );
         $eventos = $this->Entrada->find("all", $options);
         $log = $this->Entrada->getDataSource()->getLog(false, false);
-        //debug($log);
+//debug($log);
 //        var_dump($cities);
         $this->set(
                 array(
@@ -241,7 +241,7 @@ class EntradasController extends AppController {
         $datos3 = array();
         for ($index = 0; $index < count($datos1); $index++) {
             $dato = $datos1[$index];
-            //Tomo la fecha y el tipo
+//Tomo la fecha y el tipo
             $fecha = $dato["Entrada"]["Fecha"];
             $tipo = $dato["Entrada"]["Tipo"];
 
@@ -258,7 +258,7 @@ class EntradasController extends AppController {
                     break;
             }
 
-            //Ahora busco el opuesto de este
+//Ahora busco el opuesto de este
             $esta = false;
             for ($index1 = $index + 1; $index1 < count($datos1); $index1++) {
                 $d = $datos1[$index1];
@@ -498,7 +498,7 @@ class EntradasController extends AppController {
 //
 //            $datetimearray = explode(" ", $dato["EntradaInput"]["fecha"]);
 //            $time = $datetimearray[1];
-            //Busco los ingresos del primer dia
+//Busco los ingresos del primer dia
             $fecha1 = "";
             $options = array(
                 "fields" => array(
@@ -513,7 +513,7 @@ class EntradasController extends AppController {
             $this->loadModel("EntradasInput");
             $fecha1 = $this->EntradasInput->find("all", $options);
 
-            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
+//El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
             if (empty($fecha1)) {
                 $fecha1 = 0;
             } else {
@@ -522,7 +522,7 @@ class EntradasController extends AppController {
             }
 //
 //
-            //Busco los ingresos del segundo dia
+//Busco los ingresos del segundo dia
             $fecha2 = "";
             $options = array(
                 "fields" => array(
@@ -537,7 +537,7 @@ class EntradasController extends AppController {
             $this->loadModel("EntradasInput");
             $fecha2 = $this->EntradasInput->find("all", $options);
 
-            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
+//El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
             if (empty($fecha2)) {
                 $fecha2 = 0;
             } else {
@@ -546,7 +546,7 @@ class EntradasController extends AppController {
             }
 //
 //
-            //Busco los ingresos del tercer dia dia
+//Busco los ingresos del tercer dia dia
             $fecha3 = "";
             $options = array(
                 "fields" => array(
@@ -561,7 +561,7 @@ class EntradasController extends AppController {
             $this->loadModel("EntradasInput");
             $fecha3 = $this->EntradasInput->find("all", $options);
 
-            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
+//El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
             if (empty($fecha3)) {
                 $fecha3 = 0;
             } else {
@@ -569,7 +569,7 @@ class EntradasController extends AppController {
                 $fecha3 = $fecha3["EntradasInput"]["ingresos"];
             }
 
-            //Busco los ingresos del cuarto dia dia
+//Busco los ingresos del cuarto dia dia
             $fecha4 = "";
             $options = array(
                 "fields" => array(
@@ -584,7 +584,7 @@ class EntradasController extends AppController {
             $this->loadModel("EntradasInput");
             $fecha4 = $this->EntradasInput->find("all", $options);
 
-            //El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
+//El if es para saber si encontro algo en la tabla Data o se debe sacar de la tabla input
             if (empty($fecha4)) {
                 $fecha4 = 0;
             } else {
@@ -634,11 +634,11 @@ class EntradasController extends AppController {
             $id = $dato["input"]["categoria_id"];
             $id2 = $dato["input"]["usuariocertificate"];
             $t = $dato['person']['document_type_id'];
-            $tido="";
-            if($t!= null){
+            $tido = "";
+            if ($t != null) {
                 $this->loadModel("Person");
                 $r = $this->Person->query("SELECT tido_descripcion FROM document_types WHERE id =$t");
-                if($r!= array()){
+                if ($r != array()) {
                     $tido = $r[0]['document_types']['tido_descripcion'];
                 }
             }
@@ -647,25 +647,24 @@ class EntradasController extends AppController {
                 $sql2 = "SELECT username FROM users WHERE id = $id2";
                 $res2 = $this->User->query($sql2);
                 if ($res2 != array()) {
-                $usuario = $res2[0]['users']['username'];
-            }
+                    $usuario = $res2[0]['users']['username'];
+                }
             }
             $sql = "SELECT descripcion FROM categorias WHERE id= $id ";
             $res = $this->Input->query($sql);
-            
-            
+
+
 //            debug($dato["person"]["diligenciamiento"]); die;
-            
+
             if ($res != array()) {
                 $categoria = $res[0]['categorias']['descripcion'];
             }
             $aux = array(
-                
                 "Fecha" => $dato["person"]["diligenciamiento"],
                 "Tipo2" => $tido,
                 "Documento" => $dato["person"]["pers_documento"],
                 "Nombre" => $dato["person"]["pers_primNombre"],
-                "Apellido" => $dato["person"]["pers_primApellido"],                
+                "Apellido" => $dato["person"]["pers_primApellido"],
                 "Empresa" => $dato["person"]["pers_empresa"],
                 "Cargo" => $dato["person"]["cargo"],
                 "Telefono" => $dato["person"]["pers_telefono"],
@@ -734,7 +733,7 @@ class EntradasController extends AppController {
 
         $this->set(compact('state'));
 
-        //$cities = $this->Stage->City->find('list');
+//$cities = $this->Stage->City->find('list');
         $this->set(compact('cities'));
 
         $this->set(compact('stages'));
@@ -742,4 +741,112 @@ class EntradasController extends AppController {
         $this->set(compact('categorias', 'entradas'));
     }
 
+    public function consumibles() {
+//        debug($event_id);
+        $this->Entrada->virtualFields['Cantidad'] = 0;
+        $this->Entrada->virtualFields['Aux'] = 0;
+        $this->Entrada->virtualFields['Fecha'] = 0;
+        $sql = "SELECT 
+                    *
+                FROM 
+                    inputs input
+                LEFT JOIN 
+                    people person 
+                ON 
+                    person.id = input.person_id
+                WHERE
+                    person.id IS NOT null AND input.event_id = 7;
+                ";
+
+        $datos = $this->Entrada->query($sql);
+//TRAER LOS GIFT
+        $sql = "SELECT 
+                    *
+                FROM 
+                    gifts
+                LEFT JOIN 
+                    gifts_events giftEvents
+                ON 
+                    giftEvents.gift_id = gifts.id
+                WHERE
+                    gifts.id IS NOT null AND giftEvents.event_id = 7
+                ORDER BY
+                	giftEvents.dia asc;
+                ";
+
+        $gifts = $this->Entrada->query($sql);
+//          debug($datos);
+//        debug($datos); die;
+        $pos = 0;
+        $i = 0;
+        $person_id_ant = "";
+        foreach ($datos as $dato) {
+
+            $this->loadModel("Input");
+            $this->loadModel("User");
+            $id = $dato["input"]["categoria_id"];
+            $id2 = $dato["input"]["usuariocertificate"];
+            $t = $dato['person']['document_type_id'];
+            $tido = "";
+            if ($t != null) {
+                $this->loadModel("Person");
+                $r = $this->Person->query("SELECT tido_descripcion FROM document_types WHERE id =$t");
+                if ($r != array()) {
+                    $tido = $r[0]['document_types']['tido_descripcion'];
+                }
+            }
+            $usuario = "";
+            if ($id2 != null) {
+                $sql2 = "SELECT username FROM users WHERE id = $id2";
+                $res2 = $this->User->query($sql2);
+                if ($res2 != array()) {
+                    $usuario = $res2[0]['users']['username'];
+                }
+            }
+            $sql = "SELECT descripcion FROM categorias WHERE id= $id ";
+            $res = $this->Input->query($sql);
+
+
+//            debug($dato["person"]["diligenciamiento"]); die;
+
+            if ($res != array()) {
+                $categoria = $res[0]['categorias']['descripcion'];
+            }
+            
+            foreach ($gifts as $key => $value) {
+                $g.$key=$value[$key]['gifts']['descripcion'];
+            }
+                            
+            $aux = array(
+
+//"Fecha" => $dato["person"]["diligenciamiento"],
+//"Tipo2" => $tido,
+            "Documento" => $dato["person"]["pers_documento"],
+            "Nombre" => $dato["person"]["pers_primNombre"],
+            "Apellido" => $dato["person"]["pers_primApellido"],
+            "Empresa" => $dato["person"]["pers_empresa"],
+            "Cargo" => $dato["person"]["cargo"],
+            "Telefono" => $dato["person"]["pers_telefono"],
+            "Celular" => $dato["person"]["pers_celular"],
+            "Email" => $dato["person"]["pers_mail"],
+            "Ciudad" => $dato["person"]["ciudad"],
+            "Pais" => $dato["person"]["pais"],
+            "Sector" => $dato["person"]["sector"],
+            "Tipo" => $categoria,
+            
+            //"Impreso" => $usuario,
+//"Fecha2" => $dato["input"]["fechacertificate"],
+            ).array();
+            $datos2[$i] = $aux;
+            $i++;
+            $pos++;
+        }
+//        debug($datos2);
+
+
+        $this->set("datos", $datos2);
+    }
+
 }
+
+
