@@ -5,7 +5,8 @@
         <?php
         echo $this->Form->input('pistola', array(
             'label' => 'Lector de cédulas',
-            'type' => 'password'
+            'type' => 'password',
+            'autofocus' => 'true'
         ));
 
         echo $this->Form->input('document_type_id', array(
@@ -81,7 +82,7 @@
         echo $this->Form->input('categoria_id', array(
             'label' => 'Categoría',
             'required' => 'true',
-            "options" => $categorias, 
+            "options" => $categorias,
             "empty" => "Seleccione una categoria"
         ));
         echo $this->Form->input('stan', array(
@@ -144,10 +145,10 @@
         ajax(url, datos, function(xml) {
             $("datos", xml).each(function() {
                 var obj = $(this).find("Person");
-                var nombre, td, apellido,cat, ciudad, direccion, telefono, exp, ciu, sec, mail, ins, st, car, pai, emp, cel;
+                var nombre, td, apellido, cat, ciudad, direccion, telefono, exp, ciu, sec, mail, ins, st, car, pai, emp, cel;
                 id = $("id", obj).text();
                 td = $("document_type_id", obj).text();
-                cat = $("categoria_id", obj).text(); 
+                cat = $("categoria_id", obj).text();
                 nombre = $("pers_primNombre", obj).text();
                 apellido = $("pers_primApellido", obj).text();
                 ciudad = $("city_id", obj).text();
@@ -243,8 +244,20 @@
     });
 
     $("#crear").click(function() {
-        setTimeout('limpiar()', 3000);
-
+        var documento=$("#PersonPersDocumento").val();
+        var nombre = $("#PersonPersPrimNombre").val();
+        var apellido = $("#PersonPersPrimApellido").val();
+        var categoria = $('#PersonCategoriaId').val();
+        
+        if (documento !== "") {
+            if (nombre !== "") {
+                if (apellido !== "") {
+                    if (categoria !== "") {
+                        setTimeout('limpiar()', 3000);
+                    }
+                }
+            }
+        }
     });
     function limpiar() {
         $("#PersonPistola").val("");

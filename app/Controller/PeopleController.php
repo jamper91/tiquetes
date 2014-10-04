@@ -114,10 +114,9 @@ class PeopleController extends AppController {
 //                    if (($entr_identificador == array())) {
                 $this->loadModel("Person");
                 $this->Person->create();
-
-                if ($this->Person->saveAll($this->request->data)) {
-
-
+                $var=$this->Person->saveAll($this->request->data);
+                //debug($var); die;
+                if ($var==true) {
                     $categoria = $this->Categoria->find('list', array(
                         "conditions" => array(
                             "Categoria.id" => $data['Person']['categoria_id']),
@@ -141,7 +140,7 @@ class PeopleController extends AppController {
 //                            return $this->redirect(array('action' => 'add'));
                     $this->Session->setFlash('Persona insertada correctamente.', 'good');
                 } else {
-                    $this->Session->setFlash(__('The person could not be saved. Please, try again.'));
+                    $this->Session->setFlash('The person could not be saved. Please, try again.','error');
                 }
                 $person_id = $this->Person->getLastInsertId();
                 if (!empty($data['producto'])) {
