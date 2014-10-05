@@ -1,7 +1,7 @@
 
 <?php
 
-require_once('../Vendor/fpdf/ean13.php');
+require_once('../Vendor/fpdf/ean13_1.php');
 //require_once('../Vendor/fpdf/fpdf_js.php');
 
 
