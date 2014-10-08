@@ -326,5 +326,46 @@ class CompaniesController extends AppController {
                 )
         );
     }
-
+    
+    
+//    public function search_1() {
+//        $this->loadModel("Person");
+//        $this->layout = "webservices";
+//        $documento = $this->request->data["documento"]; //State
+//        $sql = "SELECT * FROM people p WHERE p.pers_documento = $documento" ;
+//        $options = array(
+//            "conditions" => array(
+//                "Person.pers_documento" => $documento
+//            ),
+//            "fields" => array(
+//                "Person.id",
+//                "Person.document_type_id",
+//                "Person.pers_primNombre",
+//                "Person.pers_primApellido",
+//                "Person.pers_empresa",
+//                "Person.pers_direccion",
+//                "Person.pers_telefono",
+//                "Person.pers_celular",
+//                "Person.pers_mail",
+//                "Person.ciudad",
+//                "Person.pais",
+//                "Person.sector",
+//                "Person.cargo",
+//                "Person.stan",
+//                "Person.categoria_id"
+//            ),
+//            "recursive" => 0
+//        );
+//        $datos = $this->Person->find("all", $options);
+////        debug($datos);
+//        $log = $this->Person->getDataSource()->getLog(false, false);
+//        //debug($log);
+////        var_dump($cities);
+//        $this->set(
+//                array(
+//                    "datos" => $datos,
+//                    "_serialize" => array("datos")
+//                )
+//        );
+//    }
 }
