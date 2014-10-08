@@ -29,8 +29,7 @@ function ajax(url2, datos, callback)
         callback(retornar);
     });
 }
-function conMayusculas(datos) {  
-//    alert(datos);
+function conMayusculas(datos) { 
     return datos.toUpperCase();
 }
 

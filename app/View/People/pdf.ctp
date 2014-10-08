@@ -125,5 +125,5 @@ $pdf->Image('../webroot/img/certificate/escarapela.png', 0, 0, $pdf->w, $pdf->h)
 //$pdf->Image(WWW_ROOT."/img/body_bg.jpg",-20,10,30,22); 
 
 //$pdf->AutoPrint(true);
-$pdf->Output('prueba', 'I');//
+$pdf->Output();// 'prueba', 'I'
 ?>
