@@ -1,20 +1,22 @@
 <?php
-
+require_once('../Vendor/fpdf/fpdf_js.php');
 //debug($data);
 //
 //$fpdf -> SetLineWidth(5);
 //$fpdf -> SetMargins(2, 2);
+$fpdf_1 = new PDF_JavaScript();
+$fpdf_1->Open();
 $fpdf_1->SetAutoPageBreak(true, 0.3);
 $fpdf_1->AddPage();
 
-//$fpdf_1->Image('../webroot/img/certificate/derecho.jpg',0,0,$fpdf_1->w,$fpdf_1->h);
+//$fpdf_1->Image('../webroot/img/certificate/solidaridadcer.jpg',0,0,$fpdf_1->w,$fpdf_1->h);
 
 
 if ($data['nombre']) {
     $ncompleto = $data['nombre'] . ' ' . $data['apellido'];
     $fpdf_1->SetY(-130);
     $fpdf_1->SetFont('Arial', 'B', 26);
-    $fpdf_1->Cell(-30);
+//    $fpdf_1->Cell(-30);
     $fpdf_1->Cell(0, 2, $ncompleto, 0, 0, 'C');
     $fpdf_1->Ln(2);
 }
@@ -32,8 +34,17 @@ if ($data['documento']) {
 //    $cedula = 'Identificado con ';
     $fpdf_1->SetY(-120);
     $fpdf_1->SetFont('Arial', 'B', 16);
-    $fpdf_1->Cell(-30);
-    $fpdf_1->Cell(0, 2, $data['abr'].': '.$data['documento'], 0, 0, 'C');
+//    $fpdf_1->Cell(-30); 
+    $fpdf_1->Cell(0, 2, $data['abr'].' '.$data['documento'], 0, 0, 'C');
+    $fpdf_1->Ln(2);
+}
+
+if ($data['empresa']) {
+//    $cedula = 'Identificado con ';
+    $fpdf_1->SetY(-110);
+    $fpdf_1->SetFont('Arial', 'B', 16);
+//    $fpdf_1->Cell(-30); 
+    $fpdf_1->Cell(0, 2, $data['empresa'], 0, 0, 'C');
     $fpdf_1->Ln(2);
 }
 
@@ -67,11 +78,11 @@ if ($data['documento']) {
 //    $fpdf_1->Ln(2);
 //}
 
-$fpdf_1->SetY(-62);
-    $fpdf_1->SetFont('Arial', '', 13);
-    $fpdf_1->Cell(-30);
-    $fpdf_1->Cell(0, 2, 'con una intensidad de 20 horas', 0, 0, 'C');
-    $fpdf_1->Ln(2);
+//$fpdf_1->SetY(-62);
+//    $fpdf_1->SetFont('Arial', '', 13);
+//    $fpdf_1->Cell(-30);
+//    $fpdf_1->Cell(0, 2, 'con una intensidad de 20 horas', 0, 0, 'C');
+//    $fpdf_1->Ln(2);
 
 
 
@@ -80,6 +91,7 @@ $fpdf_1->SetY(-62);
 //$fpdf->SetY(-50);
 //$fpdf->Cell(0,5,'Page '.'1',0,0,'C');
 //$fpdf->Image(WWW_ROOT."/img/body_bg.jpg",-20,10,30,22); 
+$fpdf_1->AutoPrint(true);
 $fpdf_1->Output('prueba', 'I');
 
 ?>

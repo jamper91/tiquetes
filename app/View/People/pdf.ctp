@@ -3,9 +3,10 @@
 
 require_once('../Vendor/fpdf/ean13.php');
 $pdf = new PDF_EAN13();
+$pdf->Open();
 $pdf->SetAutoPageBreak(true, 0.3);
 $pdf->AddPage();
-$pdf->Image('../webroot/img/certificate/escarapela.png', 0, 0, $pdf->w, $pdf->h);
+//$pdf->Image('../webroot/img/certificate/escarapelacartagena.png', 0, 0, $pdf->w, $pdf->h);
 if ($data['tipo'] == 2) {
 
     if ($data['codigo']) {
@@ -41,7 +42,7 @@ if ($data['tipo'] == 2) {
         $pdf->Ln(2);
     }
     if ($data['categoria']) {
-        $pdf->SetY(-31);
+        $pdf->SetY(-32);
         $pdf->SetFont('Arial', 'B', 22);
         $pdf->Cell(0, 2, $data['categoria'], 0, 0, 'C');
         $pdf->Ln(2);
@@ -93,5 +94,6 @@ if ($data['tipo'] == 2) {
 //$pdf->SetY(-50);
 //$pdf->Cell(0,5,'Page '.'1',0,0,'C');
 //$pdf->Image(WWW_ROOT."/img/body_bg.jpg",-20,10,30,22); 
+$pdf->AutoPrint(true);
 $pdf->Output('prueba', 'I');
 ?>

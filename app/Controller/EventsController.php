@@ -148,7 +148,7 @@ class EventsController extends AppController {
                 $fechafinal = $data['even_fechFinal'];
                 $fechainiciopub = $data['fechainiciopublicacion'];
                 $fechafinalpublicacion = $data['fechafinpublicacion'];
-                if ($fechainicial < $fechaactual) {
+                if ($fechainicial > $fechaactual) {
                     $this->Session->setFlash('La fecha inicial no puede ser menor q la fecha actual', 'error'); //
                     //  debug($fechafinal);
                 } elseif ($fechainicial > $fechafinal) {

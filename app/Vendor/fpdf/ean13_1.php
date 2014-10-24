@@ -1,9 +1,9 @@
 <?php
-require_once('fpdf.php');
+require_once('fpdf_1.php');
 
-class PDF_EAN13 extends FPDF
+class PDF_EAN13 extends FPDF_1
+
 {
-//funciones para impresion 
  var $javascript;
 	var $n_js;
 
@@ -60,9 +60,8 @@ function AutoPrintToPrinter($server, $printer, $dialog=false)
 	$script .= "print(pp);";
 	$this->IncludeJS($script);
 }
-//fin funciones de impresion
-    
-function EAN13($x, $y, $barcode, $h=8, $w=.35)
+     
+function EAN13($x, $y, $barcode, $h=10, $w=.35)
 {
 	$this->Barcode($x,$y,$barcode,$h,$w,13);
 }

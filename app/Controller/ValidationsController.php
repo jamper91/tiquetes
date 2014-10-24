@@ -59,7 +59,7 @@ class ValidationsController extends AppController {
             //consultar los dias del evento
             $sql = "SELECT datediff(`even_fechFinal`, `even_fechInicio`) AS cantidad FROM `events` e WHERE `id` = $event_id";
             $cantidad = $this->Validation->query($sql);
-            $total = $cantidad[0][0]['cantidad'];
+            $total = $cantidad[0][0]['cantidad']+1;
             $sql2 = "SELECT even_fechInicio FROM events WHERE id = $event_id";
             $fecha = $this->Validation->query($sql2);
             $date = $fecha[0]['events']['even_fechInicio'];
@@ -74,14 +74,17 @@ class ValidationsController extends AppController {
 //            debug($dias);
 //            die;
             $sw = 0;
+            
             foreach ($dias as $dia) {
+//                debug($dia);
+//            die;
                 $sw = $sw + 1;
                 $newValidation = $this->Validation->create();
                 $newValidation = array(
                     'Validation' => array(
                         'descripcion' => 'GENERAL',
-                        'fechainicio' => $dia['g']['id'][0],
-                        'fechafin' => $dia['g']['id'][0],
+                        'fechainicio' => $dia['g']['id'],
+                        'fechafin' => $dia['g']['id'],
                         'cantidad_reingresos' => $this->request->data['Validation']['cantidad_reingresos'],
                         'entrada_id' => $this->request->data['Validation']['entrada_id'],
                         'categoria_id' => $this->request->data['Validation']['categoria_id']

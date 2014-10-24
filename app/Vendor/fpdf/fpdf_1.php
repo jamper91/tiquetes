@@ -9,7 +9,7 @@
 
 define('FPDF_VERSION','1.7');
 
-class FPDF
+class FPDF_1
 {
 var $page;               // current page number
 var $n;                  // current object number
@@ -73,7 +73,7 @@ var $PDFVersion;         // PDF version number
 *                               Public methods                                 *
 *                                                                              *
 *******************************************************************************/
-function FPDF($orientation='P', $unit='mm', $size='A4')
+function FPDF_1($orientation='L', $unit='mm', $size='letter')
 {
 	// Some checks
 	$this->_dochecks();

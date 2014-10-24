@@ -103,13 +103,13 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <li class="submenu"> 
                             <a href="#">
                                 <i class="icon icon-th-list"></i> 
-                                <span>Gestionar Personas</span>
+                                <span>REGISTRO</span>
                             </a>
                             <ul>
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "add")); ?>">Crear Persona</a></li>-->
-                                <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "add")); ?>">Gestion de Persona</a></li>
-                                <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "reimprimir")); ?>">Reimprimir Escarapela</a></li>
-                                <!--<li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "certificate")); ?>">Imprimir Certificado</a></li>-->
+                                <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "add")); ?>">Escarapela</a></li>
+                                <!--<li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "reimprimir")); ?>">Reimprimir Escarapela</a></li>-->
+                                <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "certificate")); ?>">Certificado</a></li>
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "importarUsuarios")); ?>">registrar desde excel</a></li>-->
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador2")); ?>">Asociar Tarjeta a Persona</a></li>-->
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador")); ?>">Buscar Persona</a></li>-->
@@ -120,7 +120,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                     <?php } ?>
                    <?php if (in_array('personas', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
 
-                        <li class="submenu"> 
+<!--                        <li class="submenu"> 
                             <a href="#">
                                 <i class="icon icon-th-list"></i> 
                                 <span>Gestionar Consumibles</span>
@@ -131,10 +131,10 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                                 <li><a href="<?= $this->Html->url(array("controller" => "GiftsEvents", "action" => "add")); ?>">Consumibles por Evento</a></li>
                                 <li><a href="<?= $this->Html->url(array("controller" => "GiftsEvents", "action" => "index")); ?>">Listar Consumibles por Evento</a></li>
                                 <li><a href="<?= $this->Html->url(array("controller" => "GiftsEvents", "action" => "RedimirGift")); ?>">Redimir Consumibles</a></li>
-                                <!--<li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "certificate")); ?>">Imprimir Certificado</a></li>-->
+                                <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "certificate")); ?>">Imprimir Certificado</a></li>
                                 
                             </ul>
-                        </li>
+                        </li>-->
                     <?php } ?>
                     <?php if (in_array('escenario', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
                         <li class="submenu"  > 
