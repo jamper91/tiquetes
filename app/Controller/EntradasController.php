@@ -674,7 +674,7 @@ class EntradasController extends AppController {
                 "Pais" => $dato["person"]["pais"],
                 "Sector" => $dato["person"]["sector"],
                 "Tipo" => $categoria,
-                "Stand"=> $dato["person"]["stan"],
+                "Stand" => $dato["person"]["stan"],
                 "Impreso" => $usuario,
                 "Fecha2" => $dato["input"]["fechacertificate"],
                 "Agosto-1" => $fecha1,
@@ -812,31 +812,29 @@ class EntradasController extends AppController {
             if ($res != array()) {
                 $categoria = $res[0]['categorias']['descripcion'];
             }
-            
-            foreach ($gifts as $key => $value) {
-                $g.$key=$value[$key]['gifts']['descripcion'];
-            }
-                            
-            $aux = array(
 
+            foreach ($gifts as $key => $value) {
+                $g . $key = $value[$key]['gifts']['descripcion'];
+            }
+
+            $aux = array(
 //"Fecha" => $dato["person"]["diligenciamiento"],
 //"Tipo2" => $tido,
-            "Documento" => $dato["person"]["pers_documento"],
-            "Nombre" => $dato["person"]["pers_primNombre"],
-            "Apellido" => $dato["person"]["pers_primApellido"],
-            "Empresa" => $dato["person"]["pers_empresa"],
-            "Cargo" => $dato["person"]["cargo"],
-            "Telefono" => $dato["person"]["pers_telefono"],
-            "Celular" => $dato["person"]["pers_celular"],
-            "Email" => $dato["person"]["pers_mail"],
-            "Ciudad" => $dato["person"]["ciudad"],
-            "Pais" => $dato["person"]["pais"],
-            "Sector" => $dato["person"]["sector"],
-            "Tipo" => $categoria,
-            
-            //"Impreso" => $usuario,
+                "Documento" => $dato["person"]["pers_documento"],
+                "Nombre" => $dato["person"]["pers_primNombre"],
+                "Apellido" => $dato["person"]["pers_primApellido"],
+                "Empresa" => $dato["person"]["pers_empresa"],
+                "Cargo" => $dato["person"]["cargo"],
+                "Telefono" => $dato["person"]["pers_telefono"],
+                "Celular" => $dato["person"]["pers_celular"],
+                "Email" => $dato["person"]["pers_mail"],
+                "Ciudad" => $dato["person"]["ciudad"],
+                "Pais" => $dato["person"]["pais"],
+                "Sector" => $dato["person"]["sector"],
+                "Tipo" => $categoria,
+                    //"Impreso" => $usuario,
 //"Fecha2" => $dato["input"]["fechacertificate"],
-            ).array();
+                    ) . array();
             $datos2[$i] = $aux;
             $i++;
             $pos++;
@@ -847,6 +845,33 @@ class EntradasController extends AppController {
         $this->set("datos", $datos2);
     }
 
+    public function exportar6($event_id = null) {
+        $this->loadModel("Log");
+        $datos = $this->Log->query("SELECT p.pers_primNombre, p.pers_primApellido, p.categoria_id, p.pers_documento, p.pers_empresa, l.`fecha`, l.`descripcion` FROM `people` p INNER JOIN `inputs` i ON p.`id` = i.`person_id` INNER JOIN `logs_consumibles` l ON l.`input_id` = i.`id` WHERE i.`event_id` = $event_id");
+        $i = 0;
+        $datos2 = array();
+        $categoria = "";
+        foreach ($datos as $dato) {
+            //lleno el array
+            $id = $dato['p']['categoria_id'];
+            $res = $this->Log->query("SELECT descripcion FROM categorias WHERE id= $id ");
+            if ($res != array()) {
+                $categoria = $res[0]['categorias']['descripcion'];
+            }
+            $aux = array(
+                "Categoria"=>$categoria,
+                "Documento" => $dato['p']['pers_documento'],
+                "Nombres" => $dato['p']['pers_primNombre'],
+                "Apellidos" => $dato['p']['pers_primApellido'],
+                "Empresa" => $dato['p']['pers_empresa'],                             
+                "Fecha" => $dato['l']['fecha'],
+                "Descripcion" => $dato['l']['descripcion'],
+            );
+            $datos2[$i] = $aux;
+            $i++;
+        }
+        
+        $this->set("datos", $datos2);
+    }
+
 }
-
-
