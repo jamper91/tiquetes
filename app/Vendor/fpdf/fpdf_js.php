@@ -1,5 +1,6 @@
 <?php
 
+
 require_once('fpdf_1.php');
 
 class PDF_JavaScript extends FPDF_1 {

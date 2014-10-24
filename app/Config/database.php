@@ -2,6 +2,7 @@
 
 class DATABASE_CONFIG {
 
+
     public $default = array(
         'datasource' => 'Database/Mysql',
         'persistent' => false,
@@ -15,6 +16,15 @@ class DATABASE_CONFIG {
         'prefix' => '',
     );
 
+//	public $default = array(
+//		'datasource' => 'Database/Mysql',
+//		'persistent' => false,
+//		'host' => 'betfutbol.co',
+//		'login' => 'betfutbo_tiqutes',
+//		'password' => ')f!nbRT5^qbq',
+//		'database' => 'betfutbo_tiquetes',
+//	);
+	
 }
 
 //voy a volver a generarle permisos

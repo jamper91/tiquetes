@@ -1,203 +1,63 @@
 <div class="people form">
     <?php echo $this->Form->create('Person'); ?>
     <fieldset>
+        <legend><?php echo __('Crear Persona'); ?></legend>
+        <?php
+        echo $this->Form->input('pistola', array(
+            'label' => 'Lector de cédulas',
+            'type' => 'password',
+			'autofocus' => 'true'
+        ));
 
-        <legend><?php //echo __('Crear Persona');   ?></legend>
-        <table>
-            <tr>
-                <td>
-                    <?php
-                    echo $this->Form->input('pistola', array(
-                        'label' => 'Lector de cédulas',
-                        'type' => 'password',
-                            //'autofocus' => 'true'
-                    ));
-                    ?>
-                </td>
-                <td>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <?php //echo '	 '?>
-                </td>
-                <td>
-                    <?php
-                    echo $this->Form->input('categoria_id', array(
-                        'label' => 'Categoría',
-                        'required' => 'true',
-                        "options" => $categorias,
-                        "empty" => "Seleccione una categoria",
-                        'autofocus' => 'true'
-                    ));
-                    ?>                    
-                </td>
+        echo $this->Form->input('document_type_id', array(
+            "div" => array(
+                "class" => "input text"
+            ),
+            "label" => "Tipo de Documento",
+            "options" => $documentTypes,
+//            "empty" => "Seleccione un tipo de documento",
+            "required" => "true",
+        ));
+        ?>
+        <div class="input text required">
+            <label for="PersonPersDocumento">Número de Documento</label>
+            <input id="PersonPersDocumento" type="text" required="required" maxlength="50" name="data[Person][pers_documento]"/>
+            <input id="buscar" type="button"  name="buscar" value='Buscar'/>
+        </div>
+        <?php
+        echo $this->Form->input('pers_primNombre', array(
+            'label' => 'Nombres',
+        ));
+        echo $this->Form->input('pers_primApellido', array(
+            'label' => 'Apellidos',
+        ));
+        echo $this->Form->input('pers_empresa', array(
+            'label' => 'Empresa',
+        ));
+        echo $this->Form->input('cargo', array(
+            'label' => 'Cargo',
+        ));
+        echo $this->Form->input('pers_telefono', array(
+            'label' => 'Telefono',
+        ));
+        echo $this->Form->input('pers_celular', array(
+            'label' => 'Celular',
+        ));
+        echo $this->Form->input('pers_mail', array(
+            'label' => 'E-mail',
+            'type' => 'email'
+        ));
+        echo $this->Form->input('ciudad', array(
+            'label' => 'Ciudad',
+            'value' => 'MEDELLIN',
+        ));
+        echo $this->Form->input('pais', array(
+            'label' => 'País',
+            'value' => 'COLOMBIA',
+        ));
+        ?>
 
-            </tr>
-            <tr>
-                <td>
-                    <?php
-                    echo $this->Form->input('document_type_id', array(
-                        "div" => array(
-                            "class" => "input text"
-                        ),
-                        "label" => "Tipo de Documento",
-                        "options" => $documentTypes,
-                        //            "empty" => "Seleccione un tipo de documento",
-                        "required" => "true",
-                    ));
-                    ?>
-                </td>
-                <td>
-                    <?php ?>
-                </td>
-                <td>
-                    <div class="input text required">
-                        <label for="PersonPersDocumento">Número de Documento</label>
-                        <input id="PersonPersDocumento" type="text" required="required" maxlength="50" name="data[Person][pers_documento]"/>
-                        <input id="buscar" type="button"  name="buscar" value='Buscar'/>
-                    </div>
-                    <?php ?>
-                </td>
-
-            </tr>
-            <tr>
-                <td>
-                    <?php
-                    echo $this->Form->input('pers_primNombre', array(
-                        'label' => 'Nombres',
-                    ));
-                    ?>
-                </td>
-                <td>
-                    <?php ?>
-                </td>
-                <td>
-                    <?php
-                    echo $this->Form->input('pers_primApellido', array(
-                        'label' => 'Apellidos',
-                    ));
-                    ?>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <?php
-                    echo $this->Form->input('pers_empresa', array(
-                        'label' => 'Empresa',
-                    ));
-                    ?>
-                </td>
-                <td>
-                    <?php
-                    ?>
-                </td>
-                <td>
-                    <?php
-                    echo $this->Form->input('pers_mail', array(
-                        'label' => 'E-mail',
-                        'type' => 'email'
-                    ));
-                    ?>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <?php
-                    echo $this->Form->input('pers_telefono', array(
-                        'label' => 'Telefono',
-                        'type' => 'text'
-                    ));
-                    ?>
-                </td>
-                <td>
-                    <?php ?>
-                </td>
-                <td>
-                    <?php
-                    echo $this->Form->input('pers_celular', array(
-                        'label' => 'Celular',
-                    ));
-                    ?>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <?php
-                    echo $this->Form->input('ciudad', array(
-                        'label' => 'Ciudad',
-                            //'value' => 'MEDELLIN',
-                    ));
-                    ?>
-
-                </td>
-                <td>
-                    <?php ?>
-                </td>
-                <td>
-                    <?php
-                    echo $this->Form->input('pais', array(
-                        'label' => 'País',
-                        'value' => 'COLOMBIA',
-                    ));
-                    ?>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <?php
-                    echo $this->Form->input('stan', array(
-                        'label' => 'No. Stand',
-                    ));
-                    ?>					
-                </td>
-                <td>
-                    <?php ?>
-                </td>
-                <td>
-                    <div class="input select">
-                        <label for="PersonSector">Sector</label>
-                        <select id="PersonSector"  name="data[Person][sector]">
-                            <option value="">Seleccione un sector</option>
-                            <option value="Academia">Academia</option>
-                            <option value="Alimentos y bebidas">Alimentos y bebidas</option>
-                            <option value="Caficultor">Caficultor</option>
-                            <option value="Comercializador">Comercializador</option>
-                            <option value="Comite">Comité</option>                
-                            <option value="Cooperativa">Cooperativa</option>
-                            <option value="Especialista en cafe">Especialista en cafe</option>
-                            <option value="Estudiante">Estudiante</option>
-                            <option value="Exportador">Exportador</option>
-                            <option value="Fabricante / distribuidor equipos">Fabricante / distribuidor equipos</option>
-                            <option value="Fabricante / distribuidor Insumos">Fabricante / distribuidor Insumos</option>
-                            <option value="Ferias">Ferias</option>
-                            <option value="Mercadeo y publicidad">Mercadeo y publicidad</option>
-                            <option value="Montaje">Montaje</option>
-                            <option value="Tostador">Tostador</option>              
-                            <option value="otro">otro</option>                
-                        </select>
-                    </div>
-                    <?php ?>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <?php
-                    echo $this->Form->input('cargo', array(
-                        'label' => 'Observaciones',
-                    ));
-                    ?>
-
-                </td>
-                <td>
-                    <?php ?>
-                </td>
-                <td>
-                    <?php ?>
-                </td>
-            </tr>
-        </table>
-
-<<<<<<< HEAD
-=======
-        <div class="input select">
+<!--        <div class="input select">
             <label for="PersonSector">Sector</label>
             <select id="PersonSector"  name="data[Person][sector]">
                 <option value="">Seleccione un sector</option>
@@ -218,18 +78,18 @@
                 <option value="Tostador">Tostador</option>              
                 <option value="otro">otro</option>                
             </select>
-        </div><?php
+        </div>-->
+            <?php
         echo $this->Form->input('categoria_id', array(
             'label' => 'Categoría',
             'required' => 'true',
-            "options" => $categorias,
+            "options" => $categorias, 
             "empty" => "Seleccione una categoria"
         ));
         echo $this->Form->input('stan', array(
             'label' => 'No. Stand',
         ));
         ?>       
->>>>>>> dd03e8f0cddb535da2e4f1693866a5dc215cde5f
         <div id="adicionales" name="adicionales" style="display: none;" >
             <?php
 //            echo $this->form->input('producto', array(
@@ -265,7 +125,7 @@
 </div>
 
 <script>
-    $('#PersonCategoriaId option[value="' + 2 + '"]').attr("selected", true);
+
     $("#PersonCategoriaId").change(function() {
         if ($("#PersonCategoriaId").val() === "2") {
             $("#adicionales").css("display", "block");
@@ -286,10 +146,10 @@
         ajax(url, datos, function(xml) {
             $("datos", xml).each(function() {
                 var obj = $(this).find("Person");
-                var nombre, td, apellido, cat, ciudad, direccion, telefono, exp, ciu, sec, mail, ins, st, car, pai, emp, cel;
+                var nombre, td, apellido,cat, ciudad, direccion, telefono, exp, ciu, sec, mail, ins, st, car, pai, emp, cel;
                 id = $("id", obj).text();
                 td = $("document_type_id", obj).text();
-                cat = $("categoria_id", obj).text();
+                cat = $("categoria_id", obj).text(); 
                 nombre = $("pers_primNombre", obj).text();
                 apellido = $("pers_primApellido", obj).text();
                 ciudad = $("city_id", obj).text();
@@ -304,7 +164,7 @@
                 emp = $("pers_empresa", obj).text();
                 pai = $("pais", obj).text();
                 st = $("stan", obj).text();
-                sec = $("sector", obj).text();
+//                sec = $("sector", obj).text();
 //                alert(sec);
                 if (nombre !== "") {
                     $("#PeoplePers_id").val(id);
@@ -322,28 +182,27 @@
                     $("#PersonPais").val(pai);
                     $("#PersonStan").val(st);
                     $('#PersonCategoriaId').val($('#PersonCategoriaId > option:first').val());
-                    $('#PersonSector option[value="' + sec + '"]').attr("selected", true);
+//                    $('#PersonSector option[value="' + sec + '"]').attr("selected", true);
                     $('#PersonCategoriaId option[value="' + cat + '"]').attr("selected", true);
                     $('#PersonDocumentTypeId option[value="' + td + '"]').attr("selected", true);
                 } else {
-                    $("#PeoplePers_id").val("");
-//                      console.log("asdasd");
-                    //                 $("#PersonPersPrimNombre").val("");
-                    //                 $("#PersonPersPrimApellido").val("");
+//                    console.log("asdasd");
+   //                 $("#PersonPersPrimNombre").val("");
+   //                 $("#PersonPersPrimApellido").val("");
                     $("#PersonPersDireccion").val("");
                     $("#PersonPersTelefono").val("");
                     $("#PersonPersExpedicion").val("");
-                    //                 $("#PersonCiudad").val("");
+   //                 $("#PersonCiudad").val("");
                     $("#PersonPersMail").val("");
                     $("#PersonPersInstitucion").val("");
                     $("#PersonCargo").val("");
-                    //               $("#PersonPersEmpresa").val("");
+     //               $("#PersonPersEmpresa").val("");
                     $("#PersonPersCelular").val("");
-                    //               $("#PersonPais").val("");
+     //               $("#PersonPais").val("");
                     $("#PersonStan").val("");
-                    //               $('#PersonDocumentTypeId').val($('#PersonDocumentTypeId > option:first').val());
+     //               $('#PersonDocumentTypeId').val($('#PersonDocumentTypeId > option:first').val());
                     $('#PersonCategoriaId').val($('#PersonCategoriaId > option:first').val());
-                    $('#PersonSector').val($('#PersonSector > option:first').val());
+//                    $('#PersonSector').val($('#PersonSector > option:first').val());
                     alert("No se encuentra una persona registrada con ese número de documento");
                 }
             });
@@ -386,7 +245,7 @@
     });
 
     $("#crear").click(function() {
-        var documento=$("#PersonPersDocumento").val();
+       var documento=$("#PersonPersDocumento").val();
         var nombre = $("#PersonPersPrimNombre").val();
         var apellido = $("#PersonPersPrimApellido").val();
         var categoria = $('#PersonCategoriaId').val();
@@ -395,17 +254,13 @@
             if (nombre !== "") {
                 if (apellido !== "") {
                     if (categoria !== "") {
-                        setTimeout('limpiar()', 3000);
-                        //window.scrollTo(0,0);
-//                        $('#PersonCategoriaId').val($('#PersonCategoriaId > option:2').val());
-                        $("#PersonCategoriaId").focus();
-                    }
+            setTimeout('limpiar()', 3000);
+					}
                 }
             }
         }
     });
     function limpiar() {
-        $("#PeoplePers_id").val("");
         $("#PersonPistola").val("");
         $("#PersonPersDocumento").val("");
         $("#PersonPersPrimNombre").val("");
@@ -419,7 +274,7 @@
         $("#PersonPais").val("");
         $("#PersonStan").val("");
         $('#PersonCategoriaId').val($('#PersonCategoriaId > option:first').val());
-        $('#PersonSector').val($('#PersonSector > option:first').val());
+//        $('#PersonSector').val($('#PersonSector > option:first').val());
         $('#PersonDocumentTypeId').val($('#PersonDocumentTypeId > option:first').val());
         location.reload();
     }
@@ -428,7 +283,6 @@
 
 </script>
 <script>
-
     $(document).ready(function() {//Esta funcion se activa cuando se este ingresando texto en el cuadro
         $("input[type='password']").on('input', function(e) {
             if ($('#PersonPistola').val().length === 170)
@@ -486,7 +340,6 @@
                 $('#PersonPersPrimApellido').val(apellido1 + " " + apellido2);
 //                $('#PersonPersTipoSangre').val(sangre);
                 $('#PersonPistola').val("");
-
 //                $('#UserCategoriaId').focus();
 //                        var url = "validar_admin.jsp"; // the script where you handle the form input. 
 

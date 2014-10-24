@@ -34,12 +34,14 @@ $table = array(
     array('label' => __('DIA 7'), 'width' => 'auto', 'filter' => true),
     array('label' => __('DIA 8'), 'width' => 'auto', 'filter' => true),
     array('label' => __('TOTAL'), 'width' => 'auto', 'filter' => true),
+
 );
 
 // heading
 $this->PhpExcel->addTableHeader($table, array('name' => 'Cambria', 'bold' => true));
 
 // data
+
 //if($datos != null) {
     foreach ($datos as $dato) {
         $this->PhpExcel->addTableRow(array(
@@ -74,6 +76,7 @@ $this->PhpExcel->addTableHeader($table, array('name' => 'Cambria', 'bold' => tru
         ));
     }
 //}
+
 $this->PhpExcel->addTableFooter();
 $this->PhpExcel->output("Reporte Ingreso por Asistente.xlsx");
 ?>

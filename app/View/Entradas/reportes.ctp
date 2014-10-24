@@ -25,7 +25,8 @@
                         <li><a href="<?= $this->Html->url("exportar3") ?>">Reportes Ventas</a></li>
                         <li><a href="<?= $this->Html->url("exportar4") ?>">Reportes Registro</a></li>-->
         <!--<li><a href="<?= $this->Html->url("exportar5") ?>">Reporte Ingreso Detallado</a></li>-->
-        <li><a id='exportar5' name='exportar5' style="cursor:pointer">Reporte Ingreso Detallado</a></li>
+        <li><a id='exportar5' name='exportar5' style="cursor:pointer">Asistentes y Access control</a></li>
+        <li><a id='exportar6' name='exportar6' style="cursor:pointer">Catering</a></li>
         <!--</ul>-->
 </div>
 <!--        <table>
@@ -105,6 +106,10 @@
     $("#exportar5").click(function(){
         var event_id = $("#EntradaEventId").val();
         window.location = urlbase+"entradas/exportar5/"+event_id;
+    });
+    $("#exportar6").click(function(){
+        var event_id = $("#EntradaEventId").val();
+        window.location = urlbase+"entradas/exportar6/"+event_id;
     });
     $("#EntradaEventId").change(function() {
         var url2 = urlbase + "categorias/getCategoriesByEvent.xml";

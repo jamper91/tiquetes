@@ -128,9 +128,15 @@ class PeopleController extends AppController {
                     $data['Person']['categoria_id'] = 0;
                     //debug($data['Person']['categoria_id']);die;
                 }
-                if ($this->Person->saveAll($this->request->data) == true) {
+//                if ($this->Person->saveAll($this->request->data) == true) {
 
-                    $cat = '';
+
+                $cat = '';
+
+                if ($this->Person->saveAll($this->request->data)==true) {
+
+
+
                     $categoria = $this->Categoria->find('list', array(
                         "conditions" => array(
                             "Categoria.id" => $data['Person']['categoria_id']),
@@ -325,7 +331,268 @@ class PeopleController extends AppController {
         $committeesEvents = $this->Person->CommitteesEvent->find('list');
         $this->set(compact('documentTypes', 'cities', 'committeesEvents', /* 'bloodType',  'products', */ 'categorias'));
     }
+    
+    /**
+     * add2 method
+     *
+     * @return void
+     */
+    public function add2() {
+        $this->loadModel('Categoria');
+        $this->loadModel('Product');
+        $this->loadModel('Input');
+        $this->loadModel('Person');
+        $this->loadModel('PeopleProduct');
+        $this->loadModel('Data');
+        //try {
+        $user_id = $this->Session->read("User.id");
+        if ($this->request->is('POST')) {
+            $data = $this->request->data;
+//            debug($data['people']['pers_id']);die;
+           $person_id =  $data['people']['pers_id'];
+//           debug($person_id);die;
+//           debug($data['people']['pers_id']);die;
+            if ($data['people']['pers_id']!= '' || $data['people']['pers_id'] != null) {
+//                debug(vacio);die;
+            }else{
+                $per_id = $this->Person->find("list", array(
+                    "conditions" => array(
+                        'Person.pers_documento' => $data['Person']['pers_documento']),
+                    "fields" => array(
+                        "Person.id",
+                    )                    
+                ));
+//                debug($per_id);die;
+                foreach ($per_id as $key => $v) {
+                    $person_id= $v; 
+                }
+//                debug($person_id);die;
+            }
+            $caracteres = "0123456789"; //posibles caracteres a usar
+            $numerodeletras = 12; //numero de letras para generar el texto
+            $cadena = ""; //variable para almacenar la cadena generada
+            $while = TRUE;
+            while ($while) {
+                for ($i = 0; $i < $numerodeletras; $i++) {
+                    $cadena = $cadena . substr($caracteres, rand(0, strlen($caracteres)), 1); /* Extraemos 1 caracter de los caracteres
+                      entre el rango 0 a Numero de letras que tiene la cadena */
+                }
+                $ejemplo = strlen($cadena);
+                $if = TRUE;
+                while ($if) {
+                    if ($ejemplo < 12) {
+                        $numerodado = rand(0, 9);
+                        $cadena = $cadena . $numerodado;
+                        $ejemplo = strlen($cadena);
+//                        debug($numerodado);
+                    } else {
+                        $if = FALSE;
+                    }
+                }
+                $ejemplo = strlen($cadena);
+                $sql = "SELECT id FROM inputs WHERE entr_codigo = $cadena";
+                $id = $this->Input->query($sql);
+//                                debug ($id);
+                if ($id == array()) {
+                    $while = FALSE;
+                }
+            }
+            $eve = 8;
+            if ($person_id == '') { //echo "aqui"; die();
+//                if (($entr_codigo == array())) {
+//                    if (($entr_identificador == array())) {
+                $this->loadModel("Person");
+                $this->Person->create();
 
+                if ($this->Person->saveAll($this->request->data)==true) {
+
+
+                    $categoria = $this->Categoria->find('list', array(
+                        "conditions" => array(
+                            "Categoria.id" => $data['Person']['categoria_id']),
+                        "fields" => array(
+                            "Categoria.id",
+                            "Categoria.descripcion"
+                    )));
+//                    
+                    foreach ($categoria as $key => $value) {
+                        $cat = $value;
+                    }
+//                    debug($cat);die;
+
+                    App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf_1.php'));
+                    $this->layout = 'pdf'; //this will use the pdf.ctp layout
+                    $this->set('fpdf_1', new FPDF('L', 'mm', array('105', '130')));
+                    $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'apellido' => $data['Person']['pers_primApellido'], 'categoria' => $cat, 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $cadena, 'tipo' => 2);
+                    $this->set('data', $informacion);
+
+                    $this->render('pdf_1');
+//                            return $this->redirect(array('action' => 'add'));
+                    $this->Session->setFlash('Persona insertada correctamente.', 'good');
+                } else {
+                    $this->Session->setFlash(__('The person could not be saved. Please, try again.'));
+                }
+                $person_id = $this->Person->getLastInsertId();
+                if (!empty($data['producto'])) {
+                    foreach ($data['producto'] as $va) {
+                        $sql = "INSERT INTO people_products (product_id, person_id) VALUES (" . $va . ", " . $person_id . ");";
+                        $this->Data->query($sql);
+                    }
+                }
+                try {
+//                    $identificador = $data['input_identificador'];
+//                    $codigo = $data['input_codigo'];
+
+                    $sql = "INSERT INTO inputs (person_id, entr_codigo, categoria_id, event_id, usuariocertificate, fechacertificate) values ($person_id, '$cadena', " . $data['Person']['categoria_id'] . ", $eve, $user_id, now())";
+                    $this->Input->query($sql);
+                    $newInputId = $this->Input->getLastInsertId();
+                    //comienzo con el log
+                    $this->loadModel("Log");
+                    $user_id = $this->Session->read("User.id");
+                    $input_id = $newInputId;
+                    $operacion = "VENTA";
+                    $sql3 = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '$operacion')";
+                    $operation = $this->Data->query($sql3);
+                    //termino el log
+                } catch (Exception $ex) {
+                    $error2 = $ex->getCode();
+                    if ($error2 == '23000') {
+                        $this->Session->setFlash('Error Codigo RFID ó Identificador de manilla ya estan registrados en la base de datos', 'error');
+                    }
+                }
+//                    } else {
+//                        $this->Session->setFlash('Error Identificador de manilla ya  registrado en la base de datos', 'error');
+//                    }
+//                } else {
+//                    $this->Session->setFlash('Error Codigo RFID  ya registrado en la base de datos', 'error');
+//                }
+            } else {
+
+                $this->loadModel("Person");
+                $doc = strtoupper($data['Person']['pers_documento']);
+//                $res = $this->Person->query("SELECT id FROM people WHERE pers_documento= '$doc'");
+//                $people_id = $res[0]['people']['id'];
+                $data = $this->request->data;
+                $tdoc = $data['Person']['document_type_id'];
+
+                $nom = strtoupper($data['Person']['pers_primNombre']);
+                $ape = strtoupper($data['Person']['pers_primApellido']);
+                $empr = $data['Person']['pers_empresa'];
+                $car = strtoupper($data['Person']['cargo']);
+                $tel = $data['Person']['pers_telefono'];
+                $cel = $data['Person']['pers_celular'];
+                $mail = $data['Person']['pers_mail'];
+                $ciu = strtoupper($data['Person']['ciudad']);
+                $pais = strtoupper($data['Person']['pais']);
+                $sec = '';
+                $sta = strtoupper($data['Person']['stan']);
+                $cat = $data['Person']['categoria_id'];
+                $sql = "UPDATE `people` SET `document_type_id`=$tdoc,`pers_documento`='$doc',`pers_primNombre`='$nom',`pers_primApellido`='$ape',`pers_telefono`='$tel',`pers_celular`='$cel',`pers_mail`='$mail',`pers_empresa`='$empr',`ciudad`='$ciu',`diligenciamiento`=`diligenciamiento`,`pais`='$pais',`sector`='$sec',`stan`='$sta', `cargo`='$car',  `categoria_id`=$cat  WHERE `id` = $person_id ";
+                $this->Person->query($sql);
+                $sql2 = "SELECT id FROM people WHERE pers_documento = '$doc'";
+                $res = $this->Person->query($sql2);
+                $id = $res[0]['people']['id'];
+                $sql3 = "SELECT entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve";
+                $codigo = $this->Input->query($sql3);
+
+                if ($codigo == array()) {
+                    $sql = "INSERT INTO inputs (person_id, entr_codigo, categoria_id, event_id, tipo_entrada, usuariocertificate, fechacertificate) values (" . $id . ", " . $cadena . ", " . $data['Person']['categoria_id'] . ", $eve, 2, $user_id, NOW());";
+                    $this->Input->query($sql);
+                    $sql3 = "SELECT id FROM inputs WHERE person_id = $id and event_id = $eve";
+                    $codigo2 = $this->Input->query($sql3);
+                    //comienzo con el log
+                    $this->loadModel("Log");
+                    $user_id = $this->Session->read("User.id");
+                    $input_id = $codigo2[0]['inputs']['id'];
+                    $operacion = "VENTA";
+                    $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '$operacion')";
+                    $operation = $this->Data->query($sql);
+                    //termino el log
+                    $categoria = $this->Categoria->find('list', array(
+                        "conditions" => array(
+                            "Categoria.id" => $data['Person']['categoria_id']),
+                        "fields" => array(
+                            "Categoria.id",
+                            "Categoria.descripcion"
+                    )));
+//                    debug(cat)
+                    foreach ($categoria as $key => $value) {
+                        $cat = $value;
+                    }
+                    App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf_1.php'));
+                    $this->layout = 'pdf'; //this will use the pdf.ctp layout
+                    $this->set('fpdf_1', new FPDF('L', 'mm', array('105', '130')));
+                    $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'categoria' => $cat, 'apellido' => $data['Person']['pers_primApellido'], 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $cadena, 'tipo' => 2);
+                    $this->set('data', $informacion);
+                    $this->render('pdf_1');
+                } else {
+                    $c=$codigo[0]['inputs']['entr_codigo'];
+                    $user_id = $this->Session->read("User.id");
+                    $this->Input->query("UPDATE inputs SET usuariocertificate=$user_id, fechacertificate=NOW() WHERE entr_codigo =$c");
+                    if ($codigo != array()) {
+//                    debug($codigo); die;
+                        $c = $codigo[0]['inputs']['entr_codigo'];
+                        $categoria = $this->Categoria->find('list', array(
+                            "conditions" => array(
+                                "Categoria.id" => $data['Person']['categoria_id']),
+                            "fields" => array(
+                                "Categoria.id",
+                                "Categoria.descripcion"
+                        )));
+//                    debug(cat)
+                        foreach ($categoria as $key => $value) {
+                            $cat = $value;
+                        }
+                        App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf_1.php'));
+                        $this->layout = 'pdf'; //this will use the pdf.ctp layout
+                        $this->set('fpdf_1', new FPDF('L', 'mm', array('105', '130')));
+                        $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'categoria' => $cat, 'apellido' => $data['Person']['pers_primApellido'], 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $c, 'tipo' => 2);
+                        $this->set('data', $informacion);
+                        $this->render('pdf_1');
+                    }
+//               
+                }
+
+
+//                $this->Session->setFlash('Error ya hay una persona con el mismo documento en la base de datos', 'error');
+            }
+            //$this->Session->setFlash('Datos registrados correctamente', 'good');
+            //debug($categoria);
+        }
+        /* } catch (Exception $ex) {
+          //debug($ex->getMessage());
+          $error2 = $ex->getCode();
+          if ($error2 == '23000') {
+          $this->Session->setFlash('Error ya hay una persona con el mismo documento en la base de datos', 'error');
+          }
+          } */
+
+        $options = "SELECT c.`id`, c.`descripcion` AS name FROM `categorias` c INNER JOIN `events_categorias` e ON e.`categoria_id` = c.`id` WHERE e.`event_id` = 7 order by c.`descripcion` asc ";
+        $catego = $this->Categoria->query($options);
+//      debug($catego);  
+        $categorias = array();
+        $p = count($catego);
+        if ($p != 0) {
+            for ($i = 0; $i < $p; $i++) {
+                $categorias[$catego[$i]['c']['id']] = $catego[$i]['c']['name'];
+            }
+        }
+//        debug($catego);die;
+//        $products = $this->Product->find('list', array(
+//            "fields" => array(
+//                "Product.product_id",
+//                "Product.name"
+//        )));
+//        $bloodType = Array('O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'HH');
+        $documentTypes = $this->Person->DocumentType->find('list', array(
+            "fields" => array(
+                "DocumentType.id",
+                "DocumentType.tido_descripcion"
+        )));
+        $cities = $this->Person->City->find('list');
+        $committeesEvents = $this->Person->CommitteesEvent->find('list');
+        $this->set(compact('documentTypes', 'cities', 'committeesEvents', /* 'bloodType',  'products', */ 'categorias'));
+    }
     /**
      * edit method
      *
