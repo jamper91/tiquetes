@@ -185,6 +185,15 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                     <td></td>
                     <td>
                         <?php
+                        echo $this->Form->input('escarapela_id', array(
+                            "div" => array(
+                                "class" => "controls"
+                            ),
+                            "label" => "Tipo de escarapela",
+                            "options" => $escarapelas, //"Stage.esce_nombre",
+                            "empty" => "seleccione el tipo de escarapela",
+//                            'required' => 'true'
+                        ));
                         ?>
                     </td>
                 </tr>
