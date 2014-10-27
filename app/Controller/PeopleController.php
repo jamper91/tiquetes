@@ -56,6 +56,7 @@ class PeopleController extends AppController {
         $this->loadModel('PeopleProduct');
         $this->loadModel('Data');
         //try {
+        $eve = $this->Session->read('event_id');
         $user_id = $this->Session->read("User.id");
         if ($this->request->is('POST')) {
             $data = $this->request->data;
@@ -117,7 +118,7 @@ class PeopleController extends AppController {
                     $while = FALSE;
                 }
             }
-            $eve = 8;
+            
             if ($person_id == '') { //echo "aqui"; die();
 //                if (($entr_codigo == array())) {
 //                    if (($entr_identificador == array())) {
@@ -152,7 +153,7 @@ class PeopleController extends AppController {
 
                     App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                     $this->layout = 'pdf'; //this will use the pdf.ctp layout
-                    $this->set('fpdf', new FPDF('L', 'mm', array('60', '40')));
+                    $this->set('pdf', new FPDF('P', 'mm', array('100', '123')));
                     $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'apellido' => $data['Person']['pers_primApellido'], 'categoria' => $cat, 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $cadena, 'tipo' => 2);
                     $this->set('data', $informacion);
 
@@ -255,10 +256,11 @@ class PeopleController extends AppController {
                     }
                     App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                     $this->layout = 'pdf'; //this will use the pdf.ctp layout
-                    $this->set('fpdf', new FPDF('L', 'mm', array('60', '40')));
+                    $this->set('pdf', new FPDF('P', 'mm', array('100', '123')));
                     $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'categoria' => $cat, 'apellido' => $data['Person']['pers_primApellido'], 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $cadena, 'tipo' => 2);
                     $this->set('data', $informacion);
                     $this->render('pdf');
+                    
                 } else {
                     $c = $codigo[0]['inputs']['entr_codigo'];
                     $user_id = $this->Session->read("User.id");
@@ -283,7 +285,7 @@ class PeopleController extends AppController {
                         }
                         App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                         $this->layout = 'pdf'; //this will use the pdf.ctp layout
-                        $this->set('fpdf', new FPDF('L', 'mm', array('60', '40')));
+                        $this->set('pdf', new FPDF('P', 'mm', array('100', '123')));
                         $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'categoria' => $cat, 'apellido' => $data['Person']['pers_primApellido'], 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $c, 'tipo' => 2);
                         $this->set('data', $informacion);
                         $this->render('pdf');
@@ -305,7 +307,7 @@ class PeopleController extends AppController {
           }
           } */
 
-        $options = "SELECT c.`id`, c.`descripcion` AS name FROM `categorias` c INNER JOIN `events_categorias` e ON e.`categoria_id` = c.`id` WHERE e.`event_id` = 8 order by c.`descripcion` asc ";
+        $options = "SELECT c.`id`, c.`descripcion` AS name FROM `categorias` c INNER JOIN `events_categorias` e ON e.`categoria_id` = c.`id` WHERE e.`event_id` = $eve order by c.`descripcion` asc ";
         $catego = $this->Categoria->query($options);
 //      debug($catego);  
         $categorias = array();
@@ -1070,7 +1072,7 @@ class PeopleController extends AppController {
     }
 
     public function certificate() {
-
+        $eve = $this->Session->read('event_id');
         if ($this->request->is("POST")) {
             $datos = $this->request->data;
             $codigo = $datos["Person"]["codigo"];
@@ -1080,7 +1082,7 @@ class PeopleController extends AppController {
             $cedula = $datos['Person']['cedula'];
 //            debug($codigo); die;
             if ($cedula != '') {
-                $sqlexiste = "SELECT i.entr_codigo FROM `inputs` i INNER JOIN people p ON p.id = i.person_id WHERE p.pers_documento='$cedula' AND i.event_id=8";
+                $sqlexiste = "SELECT i.entr_codigo FROM `inputs` i INNER JOIN people p ON p.id = i.person_id WHERE p.pers_documento='$cedula' AND i.event_id=$eve";
                 $existe = $this->Person->query($sqlexiste);
                 //$cod =  $existe[0]['i']['entr_codigo'];
                 if ($existe != array()) {
@@ -1108,7 +1110,7 @@ class PeopleController extends AppController {
 //            die;
                 //metodos para impresion
                 $validar = "";
-                $sqlexiste = "SELECT i.id FROM `inputs` i WHERE i.entr_codigo='$codigo' AND i.event_id = 8";
+                $sqlexiste = "SELECT i.id FROM `inputs` i WHERE i.entr_codigo='$codigo' AND i.event_id = $eve";
                 $existe = $this->Person->query($sqlexiste);
 //            if ($existe[0]['i']['id'] != "") {
 //                $sqlexiste = "SELECT i.id FROM `inputs` i WHERE i.entr_codigo=$codigo AND i.certificate is NULL";
