@@ -29,6 +29,11 @@ class UsersController extends AppController {
 //        }
     }
 
+    public function Eventsession(){
+        $this->Session->write('event_id', $this->request->data["event_id"]);
+        return $this->redirect(array('action' => '../people/add'));
+    }
+
     /**
      * index method
      *
@@ -274,7 +279,7 @@ class UsersController extends AppController {
     }
 
     public function login() {
-
+        $this->loadModel('Event');
         $this->Session->destroy();
         if ($this->request->is('post')) {
             //debug($this->request->data);
@@ -308,6 +313,20 @@ class UsersController extends AppController {
                     $user_id = $this->Session->read('User.id');
                     $this->loadModel('AuthorizationsUsers');
                     $queryDatos = "select * from authorizations_users JOIN authorizations on authorizations_users.authorization_id=authorizations.id where authorizations_users.user_id=" . $user_id . "";
+                    $date = date('Y-m-d');
+//                    debug($date);
+                    //van los eventos disponibles 
+                    $events = $this->Event->find('list', array(
+                        "fields" => array(
+                            "Event.id",
+                            "Event.even_nombre"
+                        ),
+                        "conditions" => array(
+                            "Event.even_fechFinal >= '$date'"
+                        )
+                    ));
+//                    debug($events);die;
+                    $this->Session->write('EventsList', $events);
 
                     $permisos = $this->AuthorizationsUsers->query($queryDatos);
                     //debug($permisos);
@@ -336,6 +355,7 @@ class UsersController extends AppController {
     }
 
     public function logout() {
+        $this->Session->delete('event_id');
         return $this->redirect($this->Auth->logout());
     }
 

@@ -195,41 +195,6 @@
             </tr>
         </table>
 
-<<<<<<< HEAD
-=======
-        <div class="input select">
-            <label for="PersonSector">Sector</label>
-            <select id="PersonSector"  name="data[Person][sector]">
-                <option value="">Seleccione un sector</option>
-                <option value="Academia">Academia</option>
-                <option value="Alimentos y bebidas">Alimentos y bebidas</option>
-                <option value="Caficultor">Caficultor</option>
-                <option value="Comercializador">Comercializador</option>
-                <option value="Comite">Comité</option>                
-                <option value="Cooperativa">Cooperativa</option>
-                <option value="Especialista en cafe">Especialista en cafe</option>
-                <option value="Estudiante">Estudiante</option>
-                <option value="Exportador">Exportador</option>
-                <option value="Fabricante / distribuidor equipos">Fabricante / distribuidor equipos</option>
-                <option value="Fabricante / distribuidor Insumos">Fabricante / distribuidor Insumos</option>
-                <option value="Ferias">Ferias</option>
-                <option value="Mercadeo y publicidad">Mercadeo y publicidad</option>
-                <option value="Montaje">Montaje</option>
-                <option value="Tostador">Tostador</option>              
-                <option value="otro">otro</option>                
-            </select>
-        </div><?php
-        echo $this->Form->input('categoria_id', array(
-            'label' => 'Categoría',
-            'required' => 'true',
-            "options" => $categorias,
-            "empty" => "Seleccione una categoria"
-        ));
-        echo $this->Form->input('stan', array(
-            'label' => 'No. Stand',
-        ));
-        ?>       
->>>>>>> dd03e8f0cddb535da2e4f1693866a5dc215cde5f
         <div id="adicionales" name="adicionales" style="display: none;" >
             <?php
 //            echo $this->form->input('producto', array(

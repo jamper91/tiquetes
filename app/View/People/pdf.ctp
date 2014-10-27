@@ -1,8 +1,8 @@
 
 <?php
 
-require_once('../Vendor/fpdf/ean13.php');
-require_once('../Vendor/fpdf/fpdf_js.php');
+//require_once('../Vendor/fpdf/ean13.php');
+//require_once('../Vendor/fpdf/fpdf_js.php');
 
 //class PDF_AutoPrint extends PDF_JavaScript {
 //
@@ -29,7 +29,8 @@ require_once('../Vendor/fpdf/fpdf_js.php');
 
 //$pdf = new PDF_AutoPrint();
 //$pdf->Open();
-$pdf = new PDF_EAN13();
+//$pdf = new PDF_EAN13();
+
 $pdf->Open();
 $pdf->SetAutoPageBreak(true, 0.3);
 $pdf->AddPage();

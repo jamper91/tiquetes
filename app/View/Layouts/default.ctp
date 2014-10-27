@@ -118,23 +118,23 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                             </ul>
                         </li>
                     <?php } ?>
-                   <?php if (in_array('personas', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
+                    <?php if (in_array('personas', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
 
-<!--                        <li class="submenu"> 
-                            <a href="#">
-                                <i class="icon icon-th-list"></i> 
-                                <span>Gestionar Consumibles</span>
-                            </a>
-                            <ul>
-                                <li><a href="<?= $this->Html->url(array("controller" => "Gifts", "action" => "add")); ?>">Crear Consumibles</a></li>
-                                <li><a href="<?= $this->Html->url(array("controller" => "Gifts", "action" => "index")); ?>">Listar Consumibles</a></li>
-                                <li><a href="<?= $this->Html->url(array("controller" => "GiftsEvents", "action" => "add")); ?>">Consumibles por Evento</a></li>
-                                <li><a href="<?= $this->Html->url(array("controller" => "GiftsEvents", "action" => "index")); ?>">Listar Consumibles por Evento</a></li>
-                                <li><a href="<?= $this->Html->url(array("controller" => "GiftsEvents", "action" => "RedimirGift")); ?>">Redimir Consumibles</a></li>
-                                <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "certificate")); ?>">Imprimir Certificado</a></li>
-                                
-                            </ul>
-                        </li>-->
+                        <!--                        <li class="submenu"> 
+                                                    <a href="#">
+                                                        <i class="icon icon-th-list"></i> 
+                                                        <span>Gestionar Consumibles</span>
+                                                    </a>
+                                                    <ul>
+                                                        <li><a href="<?= $this->Html->url(array("controller" => "Gifts", "action" => "add")); ?>">Crear Consumibles</a></li>
+                                                        <li><a href="<?= $this->Html->url(array("controller" => "Gifts", "action" => "index")); ?>">Listar Consumibles</a></li>
+                                                        <li><a href="<?= $this->Html->url(array("controller" => "GiftsEvents", "action" => "add")); ?>">Consumibles por Evento</a></li>
+                                                        <li><a href="<?= $this->Html->url(array("controller" => "GiftsEvents", "action" => "index")); ?>">Listar Consumibles por Evento</a></li>
+                                                        <li><a href="<?= $this->Html->url(array("controller" => "GiftsEvents", "action" => "RedimirGift")); ?>">Redimir Consumibles</a></li>
+                                                        <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "certificate")); ?>">Imprimir Certificado</a></li>
+                                                        
+                                                    </ul>
+                                                </li>-->
                     <?php } ?>
                     <?php if (in_array('escenario', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
                         <li class="submenu"  > 
@@ -258,18 +258,18 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                             </ul>
                         </li>
                     <?php } ?>
-                         <?php if (in_array('geografia', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
+                    <?php if (in_array('geografia', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
                         <li class="submenu"  > 
-                                    <a href="#">
-                                        <i class="icon icon-fullscreen"></i> 
-                                        <span>Geografia</span>
-                                    </a>
-                                    <ul>
-                                        <li><a href="<?= $this->Html->url(array("controller" => "countries", "action" => "add")); ?>">Paises</a></li>
-                                        <li><a href="<?= $this->Html->url(array("controller" => "states", "action" => "add")); ?>">Departamentos</a></li>
-                                        <li><a href="<?= $this->Html->url(array("controller" => "cities", "action" => "add")); ?>">Ciudades</a></li>
-                                    </ul>
-                                </li>
+                            <a href="#">
+                                <i class="icon icon-fullscreen"></i> 
+                                <span>Geografia</span>
+                            </a>
+                            <ul>
+                                <li><a href="<?= $this->Html->url(array("controller" => "countries", "action" => "add")); ?>">Paises</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "states", "action" => "add")); ?>">Departamentos</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "cities", "action" => "add")); ?>">Ciudades</a></li>
+                            </ul>
+                        </li>
                     <?php } ?>
                 </ul>
             <?php } ?> 
@@ -282,6 +282,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                 <?php
                 echo $this->Session->flash();
                 ?>
+                
                 <?php echo $this->fetch('content'); ?>
             </div>
 
