@@ -829,6 +829,7 @@ class EntradasController extends AppController {
                     "Impreso2" => $usuario2,
                     "Fecha3" => $dato["input"]["fechacertificate"],
                     "Codigo" =>$dato['input']['entr_codigo'],
+                    "Observaciones" => $dato["person"]["observaciones"],
                     "Agosto-1" => $fecha1,
                     "Agosto-2" => $fecha2,
                     "Agosto-3" => $fecha3,

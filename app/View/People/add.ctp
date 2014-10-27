@@ -81,7 +81,7 @@
                 <td>
                     <?php
                     echo $this->Form->input('pers_empresa', array(
-                        'label' => 'Empresa',
+                        'label' => 'Institucion',
                     ));
                     ?>
                 </td>
@@ -181,8 +181,27 @@
                 <td>
                     <?php
                     echo $this->Form->input('cargo', array(
-                        'label' => 'Observaciones',
+                        'label' => 'Cargo',
                     ));
+                    ?>
+
+                </td>
+                <td>
+                    <?php ?>
+                </td>
+                <td>
+                    <?php 
+                    echo $this->Form->input('observaciones', array(
+                        'label' => 'Observaciones',
+                        'maxlength' => '200'
+                    ));
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <?php
+                    
                     ?>
 
                 </td>
@@ -192,7 +211,7 @@
                 <td>
                     <?php ?>
                 </td>
-            </tr>
+            </tr>            
         </table>
 
         <div id="adicionales" name="adicionales" style="display: none;" >
