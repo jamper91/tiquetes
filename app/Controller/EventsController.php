@@ -210,6 +210,7 @@ class EventsController extends AppController {
                                         'even_codigo' => strtoupper($data['even_codigo']),
                                         'fechainiciopublicacion' => $data['fechainiciopublicacion'],
                                         'fechafinpublicacion' => $data['fechafinpublicacion'],
+                                        'escarapela_id' => $data['escarapela_id'],
                                     )
                                 );
                                 try {
@@ -555,6 +556,15 @@ class EventsController extends AppController {
             ),
             "recursive" => -2
         ));
+        
+        $sql = $this->Event->query("SELECT id, descripcion FROM escarapelas");
+        $escarapelas = array();
+        foreach ($sql as $key => $value) {
+            $escarapelas[$value['escarapelas']['id']] = $value['escarapelas']['descripcion'];
+        }
+//            debug($escarapelas);die;
+
+
 
         $committees = $this->Event->Committee->find('list', array(
             "fields" => array(
@@ -592,7 +602,7 @@ class EventsController extends AppController {
         ));
 
 //        $registrationTypes = $this->Event->RegistrationType->find('list');
-        $this->set(compact('stages', 'eventTypes', 'committees', 'companies', 'hotels', 'paymentsName', 'registrationTypes', 'categorias'));
+        $this->set(compact('stages', 'eventTypes', 'committees', 'companies', 'hotels', 'paymentsName', 'registrationTypes', 'categorias', 'escarapelas'));
 
         $this->set("eventTypesName", $eventTypesName);
     }
@@ -1091,10 +1101,10 @@ class EventsController extends AppController {
 
                         if ($this->Event->save($this->request->data)) {
                             CakeSession::write('sw', '0');
-                            $this->Session->setFlash('El evento se guardo correctamente.','good');
+                            $this->Session->setFlash('El evento se guardo correctamente.', 'good');
                             return $this->redirect(array('action' => 'index'));
                         } else {
-                            $this->Session->setFlash('El evento no pudo ser editado. Por favor, intente nuevamente.','error');
+                            $this->Session->setFlash('El evento no pudo ser editado. Por favor, intente nuevamente.', 'error');
                         }
                     }
                 }
@@ -1178,9 +1188,15 @@ class EventsController extends AppController {
             ),
             "recursive" => -2
         ));
+        
+        $sql = $this->Event->query("SELECT id, descripcion FROM escarapelas");
+        $escarapelas = array();
+        foreach ($sql as $key => $value) {
+            $escarapelas[$value['escarapelas']['id']] = $value['escarapelas']['descripcion'];
+        }
 
 //        $registrationTypes = $this->Event->RegistrationType->find('list');
-        $this->set(compact('stages', 'eventTypes', 'committees', 'companies', 'hotels', 'payments', 'registrationTypes', 'categorias'));
+        $this->set(compact('stages', 'eventTypes', 'committees', 'companies', 'hotels', 'payments', 'registrationTypes', 'categorias', 'escarapelas'));
         $this->set("eventTypesName", $eventTypesName);
 //        $this->set("eventTypesName", $eventTypesName);
 //        $stages = $this->Event->Stage->find('list');
@@ -1267,7 +1283,6 @@ class EventsController extends AppController {
                 $datos[$i]['g']['name'] = $f;
                 $f = date('Y-m-d', strtotime('+1 days', strtotime($f)));
             }
-
         }
 //        debug($datos); die;
 

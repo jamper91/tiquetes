@@ -1087,40 +1087,46 @@ class PeopleController extends AppController {
     }
 
     public function certificate() {
+        $this->loadModel('Categoria');
         $eve = $this->Session->read('event_id');
         if ($eve != NULL) {
             if ($this->request->is("POST")) {
                 $datos = $this->request->data;
-                $codigo = $datos["Person"]["codigo"];
-                if ($codigo != '') {
-                    $codigo = substr($codigo, 0, -1);
-                }
-                $cedula = $datos['Person']['cedula'];
-//            debug($codigo); die;
-                if ($cedula != '') {
-                    $sqlexiste = "SELECT i.entr_codigo FROM `inputs` i INNER JOIN people p ON p.id = i.person_id WHERE p.pers_documento='$cedula' AND i.event_id=$eve";
-                    $existe = $this->Person->query($sqlexiste);
-                    //$cod =  $existe[0]['i']['entr_codigo'];
-                    if ($existe != array()) {
-                        if ($codigo != '' && $existe[0]['i']['entr_codigo'] == $codigo) {
-                            $codigo = $existe[0]['i']['entr_codigo'];
-                        } else {
-                            if ($codigo == '') {
-                                $codigo = $existe[0]['i']['entr_codigo'];
-                            } else {
-                                $codigo = '';
-                                $this->Session->setFlash("La cedula buscada no coincide con el codigo de barras para certificado", 'error');
-                            }
-                            //
-                        }
-//            debug($codigo);
-//            die;
-                    } else {
-                        $codigo = '';
-                        $this->Session->setFlash("Cedula no valida para certificado", 'error');
-                    }
-                }
-                if ($codigo != '') {
+                $id= $datos['Person']['pers_id'];
+                $tipodoc= $datos['Person']['document_type_id'];
+                $nombre= $datos['Person']['pers_primNombre'];
+                $apellido= $datos['Person']['pers_primApellido'];
+                $empresa= $datos['Person']['pers_empresa'];
+//                $codigo = $datos["Person"]["codigo"];
+//                if ($codigo != '') {
+//                    $codigo = substr($codigo, 0, -1);
+//                }
+//                $cedula = $datos['Person']['cedula'];
+////            debug($codigo); die;
+//                if ($cedula != '') {
+//                    $sqlexiste = "SELECT i.entr_codigo FROM `inputs` i INNER JOIN people p ON p.id = i.person_id WHERE p.pers_documento='$cedula' AND i.event_id=$eve";
+//                    $existe = $this->Person->query($sqlexiste);
+//                    //$cod =  $existe[0]['i']['entr_codigo'];
+//                    if ($existe != array()) {
+//                        if ($codigo != '' && $existe[0]['i']['entr_codigo'] == $codigo) {
+//                            $codigo = $existe[0]['i']['entr_codigo'];
+//                        } else {
+//                            if ($codigo == '') {
+//                                $codigo = $existe[0]['i']['entr_codigo'];
+//                            } else {
+//                                $codigo = '';
+//                                $this->Session->setFlash("La cedula buscada no coincide con el codigo de barras para certificado", 'error');
+//                            }
+//                            //
+//                        }
+////            debug($codigo);
+////            die;
+//                    } else {
+//                        $codigo = '';
+//                        $this->Session->setFlash("Cedula no valida para certificado", 'error');
+//                    }
+//                }
+//                if ($codigo != '') {
 
 //            debug($codigo);
 //            die;
@@ -1299,11 +1305,36 @@ class PeopleController extends AppController {
 //                    $this->Session->setFlash("El certificado ya fue impreso", 'error');
 //                }
 //                $this->Session->setFlash("Su certificado fue exportado con exito", 'good');
-                    } else {
-                        $this->Session->setFlash("La escarapela no es valida", 'error');
-                    }
+//                    } else {
+//                        $this->Session->setFlash("La escarapela no es valida", 'error');
+//                    }
                 }
             }
+            $options = "SELECT c.`id`, c.`descripcion` AS name FROM `categorias` c INNER JOIN `events_categorias` e ON e.`categoria_id` = c.`id` WHERE e.`event_id` = $eve order by c.`descripcion` asc ";
+            $catego = $this->Categoria->query($options);
+//      debug($catego);  
+            $categorias = array();
+            $p = count($catego);
+            if ($p != 0) {
+                for ($i = 0; $i < $p; $i++) {
+                    $categorias[$catego[$i]['c']['id']] = $catego[$i]['c']['name'];
+                }
+            }
+//        debug($catego);die;
+//        $products = $this->Product->find('list', array(
+//            "fields" => array(
+//                "Product.product_id",
+//                "Product.name"
+//        )));
+//        $bloodType = Array('O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'HH');
+            $documentTypes = $this->Person->DocumentType->find('list', array(
+                "fields" => array(
+                    "DocumentType.id",
+                    "DocumentType.tido_descripcion"
+            )));
+            $cities = $this->Person->City->find('list');
+            $committeesEvents = $this->Person->CommitteesEvent->find('list');
+            $this->set(compact('documentTypes', 'cities', 'committeesEvents', /* 'bloodType',  'products', */ 'categorias'));
         } else {
             $this->Session->setFlash('Seleccione el evento al que desea realizar registros y confirme', 'error');
             return $this->redirect(array('action' => '../Pages/display'));
