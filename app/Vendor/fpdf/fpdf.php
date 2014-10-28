@@ -126,7 +126,8 @@ class FPDF {
         else
             $this->Error('Incorrect unit: ' . $unit);
         // Page sizes
-        $this->StdPageSizes = array('a3' => array(841.89, 1190.55), 'a4' => array(289, 345), 'a5' => array(420.94, 595.28),
+//        $this->StdPageSizes = array('a3' => array(841.89, 1190.55), 'a4' => array(289, 345), 'a5' => array(420.94, 595.28),
+        $this->StdPageSizes = array('a3' => array(279.4, 215.9), 'a4' => array(287, 343), 'a5' => array(420.94, 595.28),
             'letter' => array(612, 792), 'legal' => array(612, 1008));
         $size = $this->_getpagesize($size);
         $this->DefPageSize = $size;
@@ -161,7 +162,7 @@ class FPDF {
         $this->SetCompression(true);
         // Set default PDF version number
         $this->PDFVersion = '1.3';
-        //para la prueba
+        //para la prueba       
     }
 
     function SetMargins($left, $top, $right = null) {
@@ -929,10 +930,7 @@ class FPDF {
             default:
                 $this->Error('Incorrect output destination: ' . $dest);
         }
-//        $this->Open(); //
-//        $this->SetAutoPageBreak(true, 0.3);
-//                    $this->AddPage();
-        $this->AutoPrint(true);
+        
         return '';
     }
 
@@ -1631,12 +1629,12 @@ class FPDF {
         $this->_out('endobj');
     }
 
-//    function _putresources() {
-//        parent::_putresources();
-//        if (!empty($this->javascript)) {
-//            $this->_putjavascript();
-//        }
-//    }
+    function _putresources2() {
+        parent::_putresources();
+        if (!empty($this->javascript)) {
+            $this->_putjavascript();
+        }
+    }
 //    function _putcatalog() {
 //        parent::_putcatalog();
 //        if (!empty($this->javascript)) {
@@ -1746,7 +1744,7 @@ class FPDF {
                 $this->Rect($x + $i * $w, $y, $w, $h, 'F');
         }
         //Print text uder barcode
-        $this->SetFont('Arial', '', 12);
+        $this->SetFont('Arial', '', 12);        
 //	$this->Text($x,$y+$h+11/$this->k,substr($barcode,-$len));
     }
 

@@ -153,13 +153,12 @@ class PeopleController extends AppController {
                         }
 //                    debug($cat);die;
                         $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
-                            $escarapela_id= $esc_id[0]['events']['escarapela_id'];
-                            $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
-                            
+                        $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= " . $esc_id[0]['events']['escarapela_id']);
+
                         App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                         $this->layout = 'pdf'; //this will use the pdf.ctp layout
                         $this->set('pdf', new FPDF('P', 'mm', array('100', '123')));
-                        $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'apellido' => $data['Person']['pers_primApellido'], 'categoria' => $cat, 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $cadena, 'tipo' => 2, 'escarapela'=>$esc);
+                        $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'apellido' => $data['Person']['pers_primApellido'], 'categoria' => $cat, 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $cadena, 'tipo' => 2, 'escarapela' => $esc);
                         $this->set('data', $informacion);
 
                         $this->render('pdf');
@@ -261,13 +260,12 @@ class PeopleController extends AppController {
                             $cat = $value;
                         }
                         $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
-                            $escarapela_id= $esc_id[0]['events']['escarapela_id'];
-                            $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
-                            
+                        $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= " . $esc_id[0]['events']['escarapela_id']);
+
                         App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                         $this->layout = 'pdf'; //this will use the pdf.ctp layout
                         $this->set('pdf', new FPDF('P', 'mm', array('100', '123')));
-                        $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'categoria' => $cat, 'apellido' => $data['Person']['pers_primApellido'], 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $cadena, 'tipo' => 2, 'escarapela'=>$esc);
+                        $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'categoria' => $cat, 'apellido' => $data['Person']['pers_primApellido'], 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $cadena, 'tipo' => 2, 'escarapela' => $esc);
                         $this->set('data', $informacion);
                         $this->render('pdf');
                     } else {
@@ -293,13 +291,12 @@ class PeopleController extends AppController {
                                 $cat = '';
                             }
                             $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
-                            $escarapela_id= $esc_id[0]['events']['escarapela_id'];
-                            $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
-                            
+                        $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= " . $esc_id[0]['events']['escarapela_id']);
+
                             App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                             $this->layout = 'pdf'; //this will use the pdf.ctp layout
                             $this->set('pdf', new FPDF('P', 'mm', array('100', '123')));
-                            $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'categoria' => $cat, 'apellido' => $data['Person']['pers_primApellido'], 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $c, 'tipo' => 2, 'escarapela'=>$esc);
+                            $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'categoria' => $cat, 'apellido' => $data['Person']['pers_primApellido'], 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $c, 'tipo' => 2, 'escarapela' => $esc);
                             $this->set('data', $informacion);
                             $this->render('pdf');
                         }
@@ -1276,7 +1273,7 @@ class PeopleController extends AppController {
 //                    default:
 //                        break;
 //                }
-                        App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf_1.php'));
+                        App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                         $this->layout = 'certificado'; //this will use the pdf.ctp layout
                         $informacion = array('documento' => $numero,
                             'nombre' => $nombre,
@@ -1292,7 +1289,7 @@ class PeopleController extends AppController {
 //                    'mesfinal' => $mesfinal,
 //                    'ano' => $anoinicial
                         );
-                        $this->set('fpdf_1', new FPDF_1('L', 'mm', array('279.4', '215.9')));
+                        $this->set('fpdf', new FPDF('L', 'mm', 'a3'));
                         //debug($informacion);
                         $this->set('data', $informacion);
                         $this->render('certificado');
