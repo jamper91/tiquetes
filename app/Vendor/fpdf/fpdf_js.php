@@ -1,9 +1,9 @@
 <?php
 
 
-require_once('fpdf_1.php');
+require_once('fpdf.php');
 
-class PDF_JavaScript extends FPDF_1 {
+class PDF_JavaScript extends FPDF {
 
     var $javascript;
     var $n_js;

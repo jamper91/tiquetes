@@ -153,6 +153,7 @@ class PeopleController extends AppController {
                         }
 //                    debug($cat);die;
                         $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
+
                         $escarapela_id = $esc_id[0]['events']['escarapela_id'];
                         $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
 
@@ -1283,13 +1284,14 @@ class PeopleController extends AppController {
 //                    default:
 //                        break;
 //                }
-                App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf_1.php'));
-                $this->layout = 'certificado'; //this will use the pdf.ctp layout
-                $informacion = array('documento' => $numero,
-                    'nombre' => $nombre,
-                    'apellido' => $apellido,
-                    'abr' => $abr,
-                    'empresa' => $empresa
+
+                        App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
+                        $this->layout = 'certificado'; //this will use the pdf.ctp layout
+                        $informacion = array('documento' => $numero,
+                            'nombre' => $nombre,
+                            'apellido' => $apellido,
+                            'abr' => $abr,
+                            'empresa' => $empresa,
 //                    'categoria' => $categoria,
 //                    'evento' => $evento,
 //                    'ciudad' => $ciudad,
@@ -1298,13 +1300,14 @@ class PeopleController extends AppController {
 //                    'mesinicial' => $mesinicial,
 //                    'mesfinal' => $mesfinal,
 //                    'ano' => $anoinicial
-                );
-                $this->set('fpdf_1', new FPDF_1('L', 'mm', array('279.4', '215.9')));
-                //debug($informacion);
-                $this->set('data', $informacion);
-                $this->render('certificado');
-                $sqlexiste = "UPDATE `inputs` SET `certificate`=1,`fechacertificate`=CURRENT_TIMESTAMP,`usuariocertificate`=" . $this->Session->read('User.id') . " WHERE id=$validar"; //
-                $existe = $this->Person->query($sqlexiste);
+
+                        );
+                        $this->set('fpdf', new FPDF('L', 'mm', 'a3'));
+                        //debug($informacion);
+                        $this->set('data', $informacion);
+                        $this->render('certificado');
+                        $sqlexiste = "UPDATE `inputs` SET `certificate`=1,`fechacertificate`=CURRENT_TIMESTAMP,`usuariocertificate`=" . $this->Session->read('User.id') . " WHERE id=$validar"; //
+                        $existe = $this->Person->query($sqlexiste);
 //                } else {
 //                    $this->Session->setFlash("El certificado ya fue impreso", 'error');
 //                }
