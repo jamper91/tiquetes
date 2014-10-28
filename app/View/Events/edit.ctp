@@ -272,7 +272,17 @@ echo $this->Form->input('even_publicar', array('type' => 'checkbox', 'label' => 
                 </td>
                 <td></td>
                 <td>
-                    <?php ?>
+                    <?php
+                        echo $this->Form->input('escarapela_id', array(
+                            "div" => array(
+                                "class" => "controls"
+                            ),
+                            "label" => "Tipo de escarapela",
+                            "options" => $escarapelas, //"Stage.esce_nombre",
+                            "empty" => "seleccione el tipo de escarapela",
+//                            'required' => 'true'
+                        ));
+                        ?>
                 </td>
             </tr>
 

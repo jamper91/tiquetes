@@ -6,13 +6,11 @@
         <table>
             <tr>
                 <td>
-                    <?php
-                    echo $this->Form->input('pistola', array(
-                        'label' => 'Lector de cédulas',
-                        'type' => 'password',
-                            //'autofocus' => 'true'
-                    ));
-                    ?>
+                    <div class="input text required">
+                        <label for="PersonPersDocumento">Número de Documento</label>
+                        <input id="PersonPersDocumento" type="text" required="required" maxlength="50" name="data[Person][pers_documento]"/>
+                        <input id="buscar" type="button"  name="buscar" value='Buscar'/>
+                    </div>
                 </td>
                 <td>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -20,14 +18,13 @@
                 </td>
                 <td>
                     <?php
-                    echo $this->Form->input('categoria_id', array(
-                        'label' => 'Categoría',
-                        'required' => 'true',
-                        "options" => $categorias,
-                        "empty" => "Seleccione una categoria",
-                        'autofocus' => 'true'
+                    echo $this->Form->input('pistola', array(
+                        'label' => 'Lector de cédulas',
+                        'type' => 'password',
+                            //'autofocus' => 'true'
                     ));
-                    ?>                    
+                    ?>
+                                        
                 </td>
 
             </tr>
@@ -49,12 +46,16 @@
                     <?php ?>
                 </td>
                 <td>
-                    <div class="input text required">
-                        <label for="PersonPersDocumento">Número de Documento</label>
-                        <input id="PersonPersDocumento" type="text" required="required" maxlength="50" name="data[Person][pers_documento]"/>
-                        <input id="buscar" type="button"  name="buscar" value='Buscar'/>
-                    </div>
-                    <?php ?>
+                    
+                    <?php
+                    echo $this->Form->input('categoria_id', array(
+                        'label' => 'Categoría',
+                        'required' => 'true',
+                        "options" => $categorias,
+                        "empty" => "Seleccione una categoria",
+                        'autofocus' => 'true'
+                    ));
+                    ?>
                 </td>
 
             </tr>
@@ -101,9 +102,8 @@
             <tr>
                 <td>
                     <?php
-                    echo $this->Form->input('pers_telefono', array(
-                        'label' => 'Telefono',
-                        'type' => 'text'
+                    echo $this->Form->input('pers_celular', array(
+                        'label' => 'Celular',
                     ));
                     ?>
                 </td>
@@ -112,10 +112,12 @@
                 </td>
                 <td>
                     <?php
-                    echo $this->Form->input('pers_celular', array(
-                        'label' => 'Celular',
+                    echo $this->Form->input('pers_telefono', array(
+                        'label' => 'Telefono',
+                        'type' => 'text'
                     ));
                     ?>
+                    
                 </td>
             </tr>
             <tr>
@@ -181,7 +183,7 @@
                 <td>
                     <?php
                     echo $this->Form->input('cargo', array(
-                        'label' => 'Cargo',
+                        'label' => 'Profesion',
                     ));
                     ?>
 

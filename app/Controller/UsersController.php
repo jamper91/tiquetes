@@ -30,7 +30,11 @@ class UsersController extends AppController {
     }
 
     public function Eventsession(){
+        $this->loadModel('Event');
         $this->Session->write('event_id', $this->request->data["event_id"]);
+        $sql = $this->Event->query("SELECT even_nombre FROM events WHERE id = ".$this->request->data["event_id"]."");
+//        debug($sql[0]['events']['even_nombre']);die;
+        $this->Session->write('event_nombre', $sql[0]['events']['even_nombre']);
         return $this->redirect(array('action' => '../people/add'));
     }
 
@@ -302,6 +306,7 @@ class UsersController extends AppController {
                 );
 //                debug($options);
                 $this->Session->setFlash(__('Bienvenido ' . $this->request->data["User"]["username"]));
+                $this->Session->write('nameUser',$this->request->data["User"]["username"]);
                 $datos = $this->User->find('first', $options);
 //                debug($datos);
                 if ($datos === null) {

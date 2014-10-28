@@ -290,7 +290,7 @@ class CompaniesController extends AppController {
         $this->loadModel("Person");
         $this->layout = "webservices";
         $documento = $this->request->data["documento"]; //State
-        $sql = "SELECT * FROM people p WHERE p.pers_documento = $documento" ;
+        $sql = "SELECT * FROM people p WHERE p.pers_documento = $documento";
         $options = array(
             "conditions" => array(
                 "Person.pers_documento" => $documento
@@ -326,8 +326,76 @@ class CompaniesController extends AppController {
                 )
         );
     }
-    
-    
+
+    public function searchCertificate() {
+        $even = $this->Session->read('event_id');
+        $this->loadModel("Person");
+        $this->loadModel("Input");
+        $this->layout = "webservices";
+        $documento = $this->request->data["documento"]; //
+        $barras = $this->request->data["barras"]; //
+        if ($documento != '') {
+            $sql = "SELECT Person.id, Person.document_type_id, Person.pers_primNombre, Person.pers_primApellido, Person.pers_empresa, Person.pers_documento FROM people Person INNER JOIN inputs i ON i.person_id = Person.id WHERE p.pers_documento = '$documento' AND i.event_id = $even" ;
+//            $options = array(
+//                "conditions" => array(
+//                    "Person.pers_documento" => $documento
+//                ),
+//                "fields" => array(
+//                    "Person.id",
+//                    "Person.document_type_id",
+//                    "Person.pers_primNombre",
+//                    "Person.pers_primApellido",
+//                    "Person.pers_empresa",
+////                    "Person.categoria_id"
+//                ),
+//                "recursive" => 0
+//            );
+//            $datos = $this->Person->find("all", $options);
+            $datos = $this->Person->query($sql);
+//        debug($datos);
+            $log = $this->Person->getDataSource()->getLog(false, false);
+            //debug($log);
+//        var_dump($cities);
+            $this->set(
+                    array(
+                        "datos" => $datos,
+                        "_serialize" => array("datos")
+                    )
+            );
+        } elseif ($barras != '') {
+            $barras = substr($barras, 0, -1);
+//            debug($barras);
+            $sql = "SELECT Person.id, Person.document_type_id, Person.pers_primNombre, Person.pers_primApellido, Person.pers_empresa  FROM people Person INNER JOIN inputs i ON i.person_id= Person.id WHERE i.entr_codigo = '$barras' AND i.event_id = $even";
+//            $options = array(
+//                "conditions" => array(
+//                    "Input.entr_codigo" => "'$barras'",
+//                    "Input.person_id" => "person.id"
+//                ),
+//                "fields" => array(
+//                    "Person.id",
+//                    "Person.document_type_id",
+//                    "Person.pers_primNombre",
+//                    "Person.pers_primApellido",
+//                    "Person.pers_empresa",
+////                    "Person.categoria_id"
+//                ),
+//                "recursive" => -2
+//            );
+//            $datos = $this->Input->find("all", $options);
+            $datos = $this->Input->query($sql);
+//            $datos = array();
+            $log = $this->Input->getDataSource()->getLog(false, false);
+            //debug($log);
+//        var_dump($cities);
+            $this->set(
+                    array(
+                        "datos" => $datos,
+                        "_serialize" => array("datos")
+                    )
+            );
+        }
+    }
+
 //    public function search_1() {
 //        $this->loadModel("Person");
 //        $this->layout = "webservices";

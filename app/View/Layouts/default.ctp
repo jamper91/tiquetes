@@ -60,7 +60,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
             <ul class="nav">
                 <li  class="dropdown" id="profile-messages" >
                     <a title="" href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle">
-                        <i class="icon icon-user"></i>  <span class="text">Bienvenido Admin</span><b class="caret"></b></a>
+                        <i class="icon icon-user"></i>  <span class="text">Bienvenido <?php echo $this->Session->read('nameUser') ?></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#"><i class="icon-user"></i> Mi Perfil</a></li>
                         <li class="divider"></li>
@@ -68,7 +68,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <li><a href="<?= $this->Html->url(array("controller" => "users", "action" => "logout")); ?>"><i class="icon-key"></i> Cerrar Sesion</a></li>
                     </ul>
                 </li>
-                <li class="dropdown" id="menu-messages"><a href="#" data-toggle="dropdown" data-target="#menu-messages" class="dropdown-toggle"><i class="icon icon-envelope"></i> <span class="text">Mensajes</span> <span class="label label-important">5</span> <b class="caret"></b></a>
+<!--                <li class="dropdown" id="menu-messages"><a href="#" data-toggle="dropdown" data-target="#menu-messages" class="dropdown-toggle"><i class="icon icon-envelope"></i> <span class="text">Mensajes</span> <span class="label label-important">5</span> <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a class="sAdd" title="" href="#"><i class="icon-plus"></i> Crear Mensaje</a></li>
                         <li class="divider"></li>
@@ -78,8 +78,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <li class="divider"></li>
                         <li><a class="sTrash" title="" href="#"><i class="icon-trash"></i> Eliminados</a></li>
                     </ul>
-                </li>
-                <li class=""><a title="" href="#"><i class="icon icon-cog"></i> <span class="text">Settings</span></a></li>
+                </li>-->
+                <li class=""><a title="" href="#"><i class="icon icon-cog"></i> <span class="text"> <?php echo $this->Session->read('event_nombre') ?></span></a></li>
                 <li class=""><a title="" href="<?= $this->Html->url(array("controller" => "users", "action" => "logout")); ?>"><i class="icon icon-share-alt"></i> <span class="text">Cerrar Sesion</span></a></li>
             </ul>
         </div>
