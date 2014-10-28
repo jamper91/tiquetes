@@ -16,14 +16,14 @@
                     ?>
                 </td>
                 <td>
-                    <?php
+                    <input class="btn-info" id="buscar" name="buscar" value="buscar" type="button">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+                <td><?php
                     echo $this->Form->input('cedula', array(
                         'label' => 'Identificacion',
                         'required' => 'true',
                     ));
-                    ?>
-                </td>
-                <td><input class="btn-info" id="buscar" name="buscar" value="buscar" type="button"></td>
+                    ?></td>
                 <td></td>
             </tr>
             <tr>
@@ -47,6 +47,7 @@
                     ));
                     ?>
                 </td>
+                <td></td>
                 <td>
                     <?php
                     echo $this->Form->input('pers_primApellido', array(
@@ -55,13 +56,15 @@
                     ));
                     ?>
                 </td>
+            <tr>
                 <td>
                     <?php
                     echo $this->Form->input('pers_empresa', array(
-                        'label' => 'Institucion',
+                        'label' => 'Entidad',
                     ));
                     ?>
                 </td>
+                <td></td>
                 <td>
                     <?php
 //                    echo $this->Form->input('categoria_id', array(
@@ -74,6 +77,7 @@
 //                    
                     ?>
                 </td>
+                </tr>
                 <td></td>
             </tr>
             <tr>

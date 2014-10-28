@@ -1097,61 +1097,63 @@ class PeopleController extends AppController {
             if ($this->request->is("POST")) {
                 $datos = $this->request->data;
                 $id = $datos['people']['pers_id'];
-//                $tipodoc= $datos['Person']['document_type_id'];
+                $cedula= $datos['Person']['cedula'];
                 $nombre = $datos['Person']['pers_primNombre'];
                 $apellido = $datos['Person']['pers_primApellido'];
-                $empresa = '';
+                $empresa = ' ';
                 if ($datos['Person']['pers_empresa'] != '')
                     $empresa = $datos['Person']['pers_empresa'];
-                
-                $sql1 = $this->Person->query("UPDATE people SET pers_primNombre = '$nombre',pers_primApellido = '$apellido',pers_empresa = '$empresa' WHERE id = $id");
-                $codigo = $this->Person->query("SELECT i.entr_codigo FROM inputs i WHERE i.person_id = $id AND i.event_id = $eve"); 
+                try {
+
+
+                    $this->Person->query("UPDATE people SET pers_primNombre = '$nombre',pers_primApellido = '$apellido',pers_empresa = '$empresa', pers_documento = '$cedula' WHERE id = $id");
+                    $codigo = $this->Person->query("SELECT i.entr_codigo FROM inputs i WHERE i.person_id = $id AND i.event_id = $eve");
 //                debug($codigo);die;
-                $sql = "SELECT p.pers_documento,p.pers_primNombre,p.pers_primApellido,p.document_type_id, p.pers_empresa FROM `people` p INNER JOIN `inputs` i ON i.person_id=p.id WHERE i.entr_codigo =" . $codigo[0]['i']['entr_codigo'];
-                $datos = $this->Person->query($sql);
-                $identificacion = $datos[0]['p']['pers_documento'];
-                $nombre = $datos[0]['p']['pers_primNombre'];
-                $apellido = $datos[0]['p']['pers_primApellido'];
-                $doctypeid = $datos[0]['p']['document_type_id'];
-                $empresa = $datos[0]['p']['pers_empresa'];
-                $abr = '';
-                $sql = "SELECT abreviatura FROM document_types WHERE id= $doctypeid ";
-                $res = $this->Person->query($sql);
-                if ($res != array()) {
-                    $abr = $res[0]['document_types']['abreviatura'];
-                }
-                $numero = '';
-                if (strlen($identificacion) == 12) {
-                    $numero = substr($identificacion, -12, 1) . substr($identificacion, -11, 1) . substr($identificacion, -10, 1) . '.' . substr($identificacion, -9, 1) . substr($identificacion, -8, 1) . substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
-                } elseif (strlen($identificacion) == 11) {
-                    $numero = substr($identificacion, -11, 1) . substr($identificacion, -10, 1) . '.' . substr($identificacion, -9, 1) . substr($identificacion, -8, 1) . substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
-                    substr($identificacion, -10) . '.' . substr($identificacion, -9) . substr($identificacion, -8) . substr($identificacion, -7) . '.' . substr($identificacion, -6) . substr($identificacion, -5) . substr($identificacion, -4) . '.' . substr($identificacion, -3) . substr($identificacion, -2) . substr($identificacion, -1);
-                } elseif (strlen($identificacion) == 10) {
-                    $numero = substr($identificacion, -10, 1) . '.' . substr($identificacion, -9, 1) . substr($identificacion, -8, 1) . substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
+                    $sql = "SELECT p.pers_documento,p.pers_primNombre,p.pers_primApellido,p.document_type_id, p.pers_empresa FROM `people` p INNER JOIN `inputs` i ON i.person_id=p.id WHERE i.entr_codigo =" . $codigo[0]['i']['entr_codigo'];
+                    $datos = $this->Person->query($sql);
+                    $identificacion = $datos[0]['p']['pers_documento'];
+                    $nombre = $datos[0]['p']['pers_primNombre'];
+                    $apellido = $datos[0]['p']['pers_primApellido'];
+                    $doctypeid = $datos[0]['p']['document_type_id'];
+                    $empresa = $datos[0]['p']['pers_empresa'];
+                    $abr = '';
+                    $sql = "SELECT abreviatura FROM document_types WHERE id= $doctypeid ";
+                    $res = $this->Person->query($sql);
+                    if ($res != array()) {
+                        $abr = $res[0]['document_types']['abreviatura'];
+                    }
+                    $numero = '';
+                    if (strlen($identificacion) == 12) {
+                        $numero = substr($identificacion, -12, 1) . substr($identificacion, -11, 1) . substr($identificacion, -10, 1) . '.' . substr($identificacion, -9, 1) . substr($identificacion, -8, 1) . substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
+                    } elseif (strlen($identificacion) == 11) {
+                        $numero = substr($identificacion, -11, 1) . substr($identificacion, -10, 1) . '.' . substr($identificacion, -9, 1) . substr($identificacion, -8, 1) . substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
+                        substr($identificacion, -10) . '.' . substr($identificacion, -9) . substr($identificacion, -8) . substr($identificacion, -7) . '.' . substr($identificacion, -6) . substr($identificacion, -5) . substr($identificacion, -4) . '.' . substr($identificacion, -3) . substr($identificacion, -2) . substr($identificacion, -1);
+                    } elseif (strlen($identificacion) == 10) {
+                        $numero = substr($identificacion, -10, 1) . '.' . substr($identificacion, -9, 1) . substr($identificacion, -8, 1) . substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
 //                        debug($numero);
-                } elseif (strlen($identificacion) == 9) {
-                    $numero = substr($identificacion, -9, 1) . substr($identificacion, -8, 1) . substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
-                } elseif (strlen($identificacion) == 8) {
-                    $numero = substr($identificacion, -8, 1) . substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
-                } elseif (strlen($identificacion) == 7) {
-                    $numero = substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
-                } elseif (strlen($identificacion) == 6) {
-                    $numero = substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
-                } elseif (strlen($identificacion) == 5) {
-                    $numero = substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
-                } elseif (strlen($identificacion) == 4) {
-                    $numero = substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
-                } else {
-                    $numero = $identificacion;
-                }
-                
-                        App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
-                        $this->layout = 'certificado'; //this will use the pdf.ctp layout
-                        $informacion = array('documento' => $numero,
-                            'nombre' => $nombre,
-                            'apellido' => $apellido,
-                            'abr' => $abr,
-                            'empresa' => $empresa,
+                    } elseif (strlen($identificacion) == 9) {
+                        $numero = substr($identificacion, -9, 1) . substr($identificacion, -8, 1) . substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
+                    } elseif (strlen($identificacion) == 8) {
+                        $numero = substr($identificacion, -8, 1) . substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
+                    } elseif (strlen($identificacion) == 7) {
+                        $numero = substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
+                    } elseif (strlen($identificacion) == 6) {
+                        $numero = substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
+                    } elseif (strlen($identificacion) == 5) {
+                        $numero = substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
+                    } elseif (strlen($identificacion) == 4) {
+                        $numero = substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
+                    } else {
+                        $numero = $identificacion;
+                    }
+
+                    App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
+                    $this->layout = 'certificado'; //this will use the pdf.ctp layout
+                    $informacion = array('documento' => $numero,
+                        'nombre' => $nombre,
+                        'apellido' => $apellido,
+                        'abr' => $abr,
+                        'empresa' => $empresa,
 //                    'categoria' => $categoria,
 //                    'evento' => $evento,
 //                    'ciudad' => $ciudad,
@@ -1160,14 +1162,13 @@ class PeopleController extends AppController {
 //                    'mesinicial' => $mesinicial,
 //                    'mesfinal' => $mesfinal,
 //                    'ano' => $anoinicial
-
-                        );
-                        $this->set('fpdf', new FPDF('L', 'mm', 'a3'));
-                        //debug($informacion);
-                        $this->set('data', $informacion);
-                        $this->render('certificado');
-                        $sqlexiste = "UPDATE `inputs` SET `certificate`=1,`fechacertificate`=CURRENT_TIMESTAMP,`usuariocertificate`=" . $this->Session->read('User.id') . " WHERE id=$validar"; //
-                        $existe = $this->Person->query($sqlexiste);
+                    );
+                    $this->set('fpdf', new FPDF('L', 'mm', 'a3'));
+                    //debug($informacion);
+                    $this->set('data', $informacion);
+                    $this->render('certificado');
+                    $sqlexiste = "UPDATE `inputs` SET `certificate`=1,`fechacertificate`=CURRENT_TIMESTAMP,`usuariocertificate`=" . $this->Session->read('User.id') . " WHERE id=$validar"; //
+                    $existe = $this->Person->query($sqlexiste);
 //                } else {
 //                    $this->Session->setFlash("El certificado ya fue impreso", 'error');
 //                }
@@ -1175,6 +1176,13 @@ class PeopleController extends AppController {
 //                    } else {
 //                        $this->Session->setFlash("La escarapela no es valida", 'error');
 //                    }
+                } catch (Exception $exc) {
+                    $error2 = $exc->getCode();
+                        $mensaje2 = $exc->getMessage();
+                        if ($error2 == '23000') {
+                            $this->Session->setFlash('La identificacion ya existe no puede volver a ser asignada.','error');
+                        } 
+                }
             }
 //            }
             $options = "SELECT c.`id`, c.`descripcion` AS name FROM `categorias` c INNER JOIN `events_categorias` e ON e.`categoria_id` = c.`id` WHERE e.`event_id` = $eve order by c.`descripcion` asc ";

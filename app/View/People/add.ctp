@@ -7,7 +7,7 @@
             <tr>
                 <td>
                     <div class="input text required">
-                        <label for="PersonPersDocumento">Número de Documento</label>
+                        <label for="PersonPersDocumento">Identificacion</label>
                         <input id="PersonPersDocumento" type="text" required="required" maxlength="50" name="data[Person][pers_documento]"/>
                         <input id="buscar" type="button"  name="buscar" value='Buscar'/>
                     </div>
@@ -82,7 +82,7 @@
                 <td>
                     <?php
                     echo $this->Form->input('pers_empresa', array(
-                        'label' => 'Institucion',
+                        'label' => 'Entidad',
                     ));
                     ?>
                 </td>

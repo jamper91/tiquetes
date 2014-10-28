@@ -140,7 +140,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <li class="submenu"  > 
                             <a href="#">
                                 <i class="icon icon-th-list"></i> 
-                                <span>Gestionar Escenario</span>
+                                <span>Escenarios</span>
                             </a>
                             <ul>
                                 <li><a href="<?= $this->Html->url(array("controller" => "Stages", "action" => "add")); ?>">Crear Escenario</a></li>
@@ -152,7 +152,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <li class="submenu"  > 
                             <a href="#">
                                 <i class="icon icon-th-list"></i> 
-                                <span>Gestionar Empresa</span>
+                                <span>Empresa</span>
                             </a>
                             <ul>
                                 <li><a href="<?= $this->Html->url(array("controller" => "Companies", "action" => "add")); ?>">Crear Empresa</a></li>
@@ -167,7 +167,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <li class="submenu"  > 
                             <a href="#">
                                 <i class="icon icon-th-list"></i> 
-                                <span>Gestionar Eventos</span>
+                                <span>Eventos</span>
                             </a>
                             <ul>
                                 <li><a href="<?= $this->Html->url(array("controller" => "Events", "action" => "index")); ?>">Lista de eventos</a></li>
@@ -200,7 +200,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <li class="submenu"  > 
                             <a href="#">                        
                                 <i class="icon icon-fullscreen"></i> 
-                                <span>Gestionar Usuarios</span>
+                                <span>Usuarios</span>
                             </a>
                             <ul>
                                 <li><a href="<?= $this->Html->url(array("controller" => "users", "action" => "add")); ?>">Crear Usuario</a></li>
@@ -215,7 +215,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <li class="submenu"  > 
                             <a href="#">
                                 <i class="icon icon-th-list"></i> 
-                                <span>Gestionar Autorizacion</span>
+                                <span>Autorizaciones</span>
                             </a>
                             <ul>
                                 <li><a href="<?= $this->Html->url(array("controller" => "AuthorizationsUsers", "action" => "add")); ?>">Autorizar Usuarios</a></li>
@@ -237,7 +237,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <li class="submenu"  > 
                             <a href="#">
                                 <i class="icon icon-th-list"></i> 
-                                <span>Gestionar Comites</span>
+                                <span>Comites</span>
                             </a>
                             <ul>
                                 <li><a href="<?= $this->Html->url(array("controller" => "Committees", "action" => "add")); ?>">Crear comite</a></li>
