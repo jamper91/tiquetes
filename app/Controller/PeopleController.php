@@ -1096,60 +1096,18 @@ class PeopleController extends AppController {
         if ($eve != NULL) {
             if ($this->request->is("POST")) {
                 $datos = $this->request->data;
-                $id = $datos['Person']['pers_id'];
+                $id = $datos['people']['pers_id'];
 //                $tipodoc= $datos['Person']['document_type_id'];
                 $nombre = $datos['Person']['pers_primNombre'];
                 $apellido = $datos['Person']['pers_primApellido'];
                 $empresa = '';
                 if ($datos['Person']['pers_empresa'] != '')
                     $empresa = $datos['Person']['pers_empresa'];
-//                $codigo = $datos["Person"]["codigo"];
-//                if ($codigo != '') {
-//                    $codigo = substr($codigo, 0, -1);
-//                }
-//                $cedula = $datos['Person']['cedula'];
-////            debug($codigo); die;
-//                if ($cedula != '') {
-//                    $sqlexiste = "SELECT i.entr_codigo FROM `inputs` i INNER JOIN people p ON p.id = i.person_id WHERE p.pers_documento='$cedula' AND i.event_id=$eve";
-//                    $existe = $this->Person->query($sqlexiste);
-//                    //$cod =  $existe[0]['i']['entr_codigo'];
-//                    if ($existe != array()) {
-//                        if ($codigo != '' && $existe[0]['i']['entr_codigo'] == $codigo) {
-//                            $codigo = $existe[0]['i']['entr_codigo'];
-//                        } else {
-//                            if ($codigo == '') {
-//                                $codigo = $existe[0]['i']['entr_codigo'];
-//                            } else {
-//                                $codigo = '';
-//                                $this->Session->setFlash("La cedula buscada no coincide con el codigo de barras para certificado", 'error');
-//                            }
-//                            //
-//                        }
-////            debug($codigo);
-////            die;
-//                    } else {
-//                        $codigo = '';
-//                        $this->Session->setFlash("Cedula no valida para certificado", 'error');
-//                    }
-//                }
-//                if ($codigo != '') {
-//            debug($codigo);
-//            die;
-                //metodos para impresion
-//                $validar = "";
-//                $sqlexiste = "SELECT i.id FROM `inputs` i WHERE i.entr_codigo='$codigo' AND i.event_id = $eve";
-//                $existe = $this->Person->query($sqlexiste);
-//            if ($existe[0]['i']['id'] != "") {
-//                $sqlexiste = "SELECT i.id FROM `inputs` i WHERE i.entr_codigo=$codigo AND i.certificate is NULL";
-//                $existe = $this->Person->query($sqlexiste);
-//
-//                if ($existe != array()) {
-//                    $validar = $existe[0]['i']['id'];
-//                }
-//                if ($validar != "") {
-//                $sql = "SELECT p.pers_documento,p.pers_primNombre,p.pers_primApellido,c.descripcion, e.even_nombre, e.even_fechInicio, e.even_fechFinal, city.name FROM `people` p INNER JOIN `inputs` i ON i.person_id=p.id INNER JOIN `categorias` c ON i.categoria_id=c.id INNER JOIN `events_categorias` ec ON ec.categoria_id=c.id INNER JOIN `events` e ON ec.event_id = e.id INNER JOIN `stages` s ON s.id=e.stage_id INNER JOIN `cities` city ON s.city_id = city.id WHERE i.entr_codigo=" . $codigo;  
-//                    $sql = "SELECT p.pers_documento,p.pers_primNombre,p.pers_primApellido,c.descripcion, e.even_nombre, e.even_fechInicio, e.even_fechFinal, city.name FROM `people` p INNER JOIN `inputs` i ON i.person_id=p.id INNER JOIN `categorias` c ON i.categoria_id=c.id INNER JOIN `events_categorias` ec ON ec.categoria_id=c.id INNER JOIN `events` e ON ec.event_id = e.id INNER JOIN `stages` s ON s.id=e.stage_id INNER JOIN `cities` city ON s.city_id = city.id WHERE i.entr_codigo=" . $codigo;
-                $sql = "SELECT p.pers_documento,p.pers_primNombre,p.pers_primApellido,p.document_type_id, p.pers_empresa FROM `people` p INNER JOIN `inputs` i ON i.person_id=p.id WHERE i.entr_codigo =" . $codigo;
+                
+                $sql1 = $this->Person->query("UPDATE people SET pers_primNombre = '$nombre',pers_primApellido = '$apellido',pers_empresa = '$empresa' WHERE id = $id");
+                $codigo = $this->Person->query("SELECT i.entr_codigo FROM inputs i WHERE i.person_id = $id AND i.event_id = $eve"); 
+//                debug($codigo);die;
+                $sql = "SELECT p.pers_documento,p.pers_primNombre,p.pers_primApellido,p.document_type_id, p.pers_empresa FROM `people` p INNER JOIN `inputs` i ON i.person_id=p.id WHERE i.entr_codigo =" . $codigo[0]['i']['entr_codigo'];
                 $datos = $this->Person->query($sql);
                 $identificacion = $datos[0]['p']['pers_documento'];
                 $nombre = $datos[0]['p']['pers_primNombre'];
@@ -1186,105 +1144,7 @@ class PeopleController extends AppController {
                 } else {
                     $numero = $identificacion;
                 }
-//                debug($numero);
-//                die();
-//                $categoria = $datos[0]['c']['descripcion'];
-//                $evento = $datos[0]['e']['even_nombre'];
-//                $fechainicial = $datos[0]['e']['even_fechInicio'];
-//                $fechafinal = $datos[0]['e']['even_fechFinal'];
-//                $ciudad = $datos[0]['city']['name'];
-//                $sql = "SELECT DAYOFMONTH('$fechainicial') AS dia ,MONTH('$fechainicial') AS mes ,YEAR('$fechainicial') AS ano";
-//                $fecha = $this->Person->query($sql);
-//                $diainicial = $fecha[0][0]['dia'];
-//                $mesinicial = $fecha[0][0]['mes'];
-//                $anoinicial = $fecha[0][0]['ano'];
-//                $sql = "SELECT DAYOFMONTH('$fechafinal') AS dia ,MONTH('$fechafinal') AS mes ,YEAR('$fechafinal') AS ano";
-//                $fecha = $this->Person->query($sql);
-//                $diafinal = $fecha[0][0]['dia'];
-//                $mesfinal = $fecha[0][0]['mes'];
-//                $anofinal = $fecha[0][0]['ano'];
-//
-//                switch ($mesinicial) {
-//                    case '1':
-//                        $mesinicial = 'Enero';
-//                        break;
-//                    case '2':
-//                        $mesinicial = 'Febrero';
-//                        break;
-//                    case '3':
-//                        $mesinicial = 'Marzo';
-//                        break;
-//                    case '4':
-//                        $mesinicial = 'Abril';
-//                        break;
-//                    case '5':
-//                        $mesinicial = 'Mayo';
-//                        break;
-//                    case '6':
-//                        $mesinicial = 'Junio';
-//                        break;
-//                    case '7':
-//                        $mesinicial = 'Julio';
-//                        break;
-//                    case '8':
-//                        $mesinicial = 'Agosto';
-//                        break;
-//                    case '9';
-//                        $mesinicial = 'Septiembre';
-//                        break;
-//                    case '10';
-//                        $mesinicial = 'Octubre';
-//                        break;
-//                    case '11';
-//                        $mesinicial = 'Noviembre';
-//                        break;
-//                    case '12';
-//                        $mesinicial = 'Diciembre';
-//                        break;
-//                    default:
-//                        break;
-//                }
-//                switch ($mesfinal) {
-//                    case '1':
-//                        $mesfinal = 'Enero';
-//                        break;
-//                    case '2':
-//                        $mesfinal = 'Febrero';
-//                        break;
-//                    case '3':
-//                        $mesfinal = 'Marzo';
-//                        break;
-//                    case '4':
-//                        $mesfinal = 'Abril';
-//                        break;
-//                    case '5':
-//                        $mesfinal = 'Mayo';
-//                        break;
-//                    case '6':
-//                        $mesfinal = 'Junio';
-//                        break;
-//                    case '7':
-//                        $mesfinal = 'Julio';
-//                        break;
-//                    case '8':
-//                        $mesfinal = 'Agosto';
-//                        break;
-//                    case '9';
-//                        $mesfinal = 'Septiembre';
-//                        break;
-//                    case '10';
-//                        $mesfinal = 'Octubre';
-//                        break;
-//                    case '11';
-//                        $mesfinal = 'Noviembre';
-//                        break;
-//                    case '12';
-//                        $mesfinal = 'Diciembre';
-//                        break;
-//                    default:
-//                        break;
-//                }
-
+                
                         App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                         $this->layout = 'certificado'; //this will use the pdf.ctp layout
                         $informacion = array('documento' => $numero,
