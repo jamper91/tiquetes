@@ -335,7 +335,7 @@ class CompaniesController extends AppController {
         $documento = $this->request->data["documento"]; //
         $barras = $this->request->data["barras"]; //
         if ($documento != '') {
-            $sql = "SELECT Person.id, Person.document_type_id, Person.pers_primNombre, Person.pers_primApellido, Person.pers_empresa, Person.pers_documento FROM people Person INNER JOIN inputs i ON i.person_id = Person.id WHERE p.pers_documento = '$documento' AND i.event_id = $even" ;
+            $sql = "SELECT Person.id, Person.document_type_id, Person.pers_primNombre, Person.pers_primApellido, Person.pers_empresa, Person.pers_documento FROM people Person INNER JOIN inputs i ON i.person_id = Person.id WHERE Person.pers_documento = '$documento' AND i.event_id = $even" ;
 //            $options = array(
 //                "conditions" => array(
 //                    "Person.pers_documento" => $documento
@@ -365,7 +365,7 @@ class CompaniesController extends AppController {
         } elseif ($barras != '') {
             $barras = substr($barras, 0, -1);
 //            debug($barras);
-            $sql = "SELECT Person.id, Person.document_type_id, Person.pers_primNombre, Person.pers_primApellido, Person.pers_empresa  FROM people Person INNER JOIN inputs i ON i.person_id= Person.id WHERE i.entr_codigo = '$barras' AND i.event_id = $even";
+            $sql = "SELECT Person.id, Person.document_type_id, Person.pers_primNombre, Person.pers_primApellido, Person.pers_empresa, Person.pers_documento  FROM people Person INNER JOIN inputs i ON i.person_id= Person.id WHERE i.entr_codigo = '$barras' AND i.event_id = $even";
 //            $options = array(
 //                "conditions" => array(
 //                    "Input.entr_codigo" => "'$barras'",
