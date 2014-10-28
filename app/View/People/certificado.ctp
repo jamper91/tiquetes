@@ -9,7 +9,7 @@ $fpdf->Open();
 $fpdf->SetAutoPageBreak(true, 0.3);
 $fpdf->AddPage();
 
-//$fpdf->Image('../webroot/img/certificate/solidaridadcer.jpg',0,0,$fpdf->w,$fpdf->h);
+$fpdf->Image('../webroot/img/certificate/CERTIFICADO-01.jpg',0,0,$fpdf->w,$fpdf->h);
 
 
 if ($data['nombre']) {
