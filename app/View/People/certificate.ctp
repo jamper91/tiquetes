@@ -19,7 +19,7 @@
                     <?php
                     echo $this->Form->input('cedula', array(
                         'label' => 'Identificacion',
-                        'required' => 'false',
+                        'required' => 'true',
                     ));
                     ?>
                 </td>
@@ -43,6 +43,7 @@
                     <?php
                     echo $this->Form->input('pers_primNombre', array(
                         'label' => 'Nombres',
+                        'required' => 'true'
                     ));
                     ?>
                 </td>
@@ -50,6 +51,7 @@
                     <?php
                     echo $this->Form->input('pers_primApellido', array(
                         'label' => 'Apellidos',
+                        'required' => 'true'
                     ));
                     ?>
                 </td>
