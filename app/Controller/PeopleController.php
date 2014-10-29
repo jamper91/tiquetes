@@ -1081,6 +1081,7 @@ class PeopleController extends AppController {
 
     public function certificate() {
         $this->loadModel('Categoria');
+        $this->loadModel('Event');
         $eve = $this->Session->read('event_id');
         if ($eve != '') {
             if ($this->request->is("POST")) {
@@ -1146,14 +1147,17 @@ class PeopleController extends AppController {
                             } else {
                                 $numero = $identificacion;
                             }
-//               
+                            $i = $this->event->query("SELECT certificado_id FROM events WHERE id = $eve");
+                            $id = $i[0]['events']['certificado_id'];
+                            $cert = $this->Event->query("SELECT nombres, documento, empresa FROM certificados WHERE id = $id");
                             App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf_1.php'));
                             $this->layout = 'certificado'; //this will use the pdf.ctp layout
                             $informacion = array('documento' => $numero,
                                 'nombre' => $nombre,
                                 'apellido' => $apellido,
                                 'abr' => $abr,
-                                'empresa' => $empresa
+                                'empresa' => $empresa,
+                                'certificado' => $cert
 //                    'categoria' => $categoria,
 //                    'evento' => $evento,
 //                    'ciudad' => $ciudad,
@@ -1174,7 +1178,7 @@ class PeopleController extends AppController {
                         }
                     } else {
                         $this->Person->query("UPDATE people SET pers_primNombre = '$nombre',pers_primApellido = '$apellido',pers_empresa = '$empresa', pers_documento = '$cedula' WHERE id = $id");
-                        
+
                         $sqlcod = $this->Person->query("SELECT i.entr_codigo FROM inputs i WHERE i.person_id = $id AND i.event_id = $eve");
                         $codigo = '';
                         if ($sqlcod != array()) {
@@ -1201,7 +1205,6 @@ class PeopleController extends AppController {
                             substr($identificacion, -10) . '.' . substr($identificacion, -9) . substr($identificacion, -8) . substr($identificacion, -7) . '.' . substr($identificacion, -6) . substr($identificacion, -5) . substr($identificacion, -4) . '.' . substr($identificacion, -3) . substr($identificacion, -2) . substr($identificacion, -1);
                         } elseif (strlen($identificacion) == 10) {
                             $numero = substr($identificacion, -10, 1) . '.' . substr($identificacion, -9, 1) . substr($identificacion, -8, 1) . substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
-                            debug($numero);
                         } elseif (strlen($identificacion) == 9) {
                             $numero = substr($identificacion, -9, 1) . substr($identificacion, -8, 1) . substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
                         } elseif (strlen($identificacion) == 8) {
@@ -1217,14 +1220,17 @@ class PeopleController extends AppController {
                         } else {
                             $numero = $identificacion;
                         }
-//               
+                        $i = $this->Event->query("SELECT certificado_id FROM events WHERE id = $eve");
+                        $id = $i[0]['events']['certificado_id'];
+                        $cert = $this->Event->query("SELECT nombres, documento, empresa FROM certificados WHERE id = $id");
                         App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf_1.php'));
                         $this->layout = 'certificado'; //this will use the pdf.ctp layout
                         $informacion = array('documento' => $numero,
                             'nombre' => $nombre,
                             'apellido' => $apellido,
                             'abr' => $abr,
-                            'empresa' => $empresa
+                            'empresa' => $empresa,
+                            'certificado' => $cert
 //                    'categoria' => $categoria,
 //                    'evento' => $evento,
 //                    'ciudad' => $ciudad,
