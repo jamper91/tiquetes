@@ -135,11 +135,10 @@ class EventsController extends AppController {
             $id = $this->Event->query($sql);
             $x = "";
             $fechaactual = date('Y-m-d');
-            //debug($fechaactual);die;
-            if ($id != array()) {
-                $x = $id[0]['events']['id'];
-            }
-            if ($x == "") {
+//            debug($id);
+            if ($id == array()) {
+
+//                $x = $id[0]['events']['id'];
 //            if (isset($this->request->data["even_imagen1"]) && (isset($this->request->data["even_imagen2"]))) {
                 $file1 = $this->request->data["even_imagen1"];
                 $file2 = $this->request->data["even_imagen2"];
@@ -291,12 +290,12 @@ class EventsController extends AppController {
                                     }
                                 }
 //                $this->Event->create();
-                                if ($this->Event->save($this->request->data)) {
-                                    $this->Session->setFlash(__('The event has been saved.'));
-                                    return $this->redirect(array('action' => 'index'));
-                                } else {
-                                    $this->Session->setFlash(__('The event could not be saved. Please, try again.'));
-                                }
+//                                if ($this->Event->save($this->request->data)) {
+//                                    $this->Session->setFlash(__('The event has been saved.'));
+//                                    return $this->redirect(array('action' => 'index'));
+//                                } else {
+//                                    $this->Session->setFlash(__('The event could not be saved. Please, try again.'));
+//                                }
                             }
                         } else {
 
@@ -402,19 +401,19 @@ class EventsController extends AppController {
                                 }
                             }
 //                $this->Event->create();
-                            if ($this->Event->save($this->request->data)) {
-                                $this->Session->setFlash(__('The event has been saved.'));
-                                return $this->redirect(array('action' => 'index'));
-                            } else {
-                                $this->Session->setFlash(__('The event could not be saved. Please, try again.'));
-                            }
+//                            if ($this->Event->save($this->request->data)) {
+//                                $this->Session->setFlash(__('The event has been saved.'));
+//                                return $this->redirect(array('action' => 'index'));
+//                            } else {
+//                                $this->Session->setFlash(__('The event could not be saved. Please, try again.'));
+//                            }
                         }
                     }
                 } else {
                     $newEvent = $this->Event->create();
                     $newEvent = array(
                         'Event' => array(
-                            'city_id' => $data['city_id'],
+//                            'city_id' => $data['city_id'],
                             'stage_id' => $data['stage_id'],
                             'event_type_id' => $data['event_type_id'],
                             'even_nombre' => strtoupper($data['even_nombre']), // strtoupper($src2)
@@ -434,11 +433,22 @@ class EventsController extends AppController {
                             'certificado_id' => $data['certificado_id'],
                         )
                     );
-                    try {
-                        
-                        $this->Event->save($newEvent);
+                    //try {
+                        try{
+                            debug($newEvent);
+                        $preg = $this->Event->save($newEvent);
+                        debug($preg);
+                        } catch (Exception $ex) {
+                                    $error2 = $ex->getCode();
+                                    $mensaje2 = $ex->getMessage();
+                                    if ($error2 == '23000') {
+                                        $this->Session->setFlash('AQUI', 'error');
+                                    } else {
+                                        $this->Session->setFlash($mensaje2, 'error');
+                                    }
+                                }
                         $newEventId = $this->Event->getLastInsertId();
-
+                        
                         if ($data['Committee'] != "") {
                             foreach ($data['Committee'] as $Committee_id) {
                                 $newCommitteesEvent = $this->Event->CommitteesEvent->create();
@@ -475,6 +485,7 @@ class EventsController extends AppController {
                                     )
                                 );
                                 $this->Event->EventsHotel->save($newEventsHotel);
+                                
                             }
                         }
 
@@ -487,7 +498,9 @@ class EventsController extends AppController {
                                         'event_id' => $newEventId
                                     )
                                 );
+                                
                                 $this->Event->EventsPayment->save($newEventsPayment);
+                                
                             }
                         }
 
@@ -500,25 +513,28 @@ class EventsController extends AppController {
                                         'event_id' => $newEventId
                                     )
                                 );
-                                $this->Event->EventsCategoria->save($newEventsCategoria);
+                                    $this->Event->EventsCategoria->save($newEventsCategoria);
                             }
                         }
 
 
                         return $this->redirect(array('action' => 'index'));
-                    } catch (Exception $ex) {
-                        $error2 = $ex->getCode();
-                        if ($error2 == '23000') {
-                            $this->Session->setFlash('Error ya existe un evento en la base de datos', 'error');
-                        }
-                    }
+//                    } catch (Exception $ex) {
+//                        $error2 = $ex->getCode();
+//                        $mensaje2 = $ex->getMessage();
+//                        if ($error2 == '23000') {
+//                            $this->Session->setFlash('Error ya existe un evento en la base de datos', 'error');
+//                        } else {
+//                            $this->Session->setFlash($mensaje2, 'error');
+//                        }
+//                    }
 //                $this->Event->create();
-                    if ($this->Event->save($this->request->data)) {
-                        $this->Session->setFlash(__('The event has been saved.'));
-                        return $this->redirect(array('action' => 'index'));
-                    } else {
-                        $this->Session->setFlash(__('The event could not be saved. Please, try again.'));
-                    }
+//                    if ($this->Event->save($this->request->data)) {
+//                        $this->Session->setFlash(__('The event has been saved.'));
+//                        return $this->redirect(array('action' => 'index'));
+//                    } else {
+//                        $this->Session->setFlash(__('The event could not be saved. Please, try again.'));
+//                    }
                 }
 //            }
             } else {
@@ -1204,7 +1220,7 @@ class EventsController extends AppController {
         foreach ($sql as $key => $value) {
             $escarapelas[$value['escarapelas']['id']] = $value['escarapelas']['descripcion'];
         }
-        
+
         $sql2 = $this->Event->query("SELECT id, descripcion FROM certificados");
         $certificados = array();
         foreach ($sql2 as $key => $value) {

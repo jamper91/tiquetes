@@ -45,24 +45,24 @@ class Event extends AppModel {
             ),
         ),
         'even_palaClave' => array(
-            'notEmpty' => array(
-                'rule' => array('notEmpty'),
-            //'message' => 'Your custom message here',
-            //'allowEmpty' => false,
-            //'required' => false,
-            //'last' => false, // Stop validation after this rule
-            //'on' => 'create', // Limit validation to 'create' or 'update' operations
-            ),
+//            'notEmpty' => array(
+//                'rule' => array('notEmpty'),
+//            //'message' => 'Your custom message here',
+//            //'allowEmpty' => false,
+//            //'required' => false,
+//            //'last' => false, // Stop validation after this rule
+//            //'on' => 'create', // Limit validation to 'create' or 'update' operations
+//            ),
         ),
         'even_imagen1' => array(
-            'notEmpty' => array(
-                'rule' => array('notEmpty'),
-            //'message' => 'Your custom message here',
-            //'allowEmpty' => false,
-            //'required' => false,
-            //'last' => false, // Stop validation after this rule
-            //'on' => 'create', // Limit validation to 'create' or 'update' operations
-            ),
+//            'notEmpty' => array(
+//                'rule' => array('notEmpty'),
+//            //'message' => 'Your custom message here',
+//            //'allowEmpty' => false,
+//            //'required' => false,
+//            //'last' => false, // Stop validation after this rule
+//            //'on' => 'create', // Limit validation to 'create' or 'update' operations
+//            ),
         ),
         'even_fechInicio' => array(
             'date' => array(
@@ -95,14 +95,14 @@ class Event extends AppModel {
             ),
         ),
         'even_codigo' => array(
-            'notEmpty' => array(
-                'rule' => array('notEmpty'),
-            //'message' => 'Your custom message here',
-            //'allowEmpty' => false,
-            //'required' => false,
-            //'last' => false, // Stop validation after this rule
-            //'on' => 'create', // Limit validation to 'create' or 'update' operations
-            ),
+//            'notEmpty' => array(
+//                'rule' => array('notEmpty'),
+//            //'message' => 'Your custom message here',
+//            //'allowEmpty' => false,
+//            //'required' => false,
+//            //'last' => false, // Stop validation after this rule
+//            //'on' => 'create', // Limit validation to 'create' or 'update' operations
+//            ),
         ),
     );
 
