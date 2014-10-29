@@ -211,6 +211,7 @@ class EventsController extends AppController {
                                         'fechainiciopublicacion' => $data['fechainiciopublicacion'],
                                         'fechafinpublicacion' => $data['fechafinpublicacion'],
                                         'escarapela_id' => $data['escarapela_id'],
+                                        'certificado_id' => $data['certificado_id'],
                                     )
                                 );
                                 try {
@@ -319,6 +320,8 @@ class EventsController extends AppController {
                                     'even_codigo' => strtoupper($data['even_codigo']),
                                     'fechainiciopublicacion' => $data['fechainiciopublicacion'],
                                     'fechafinpublicacion' => $data['fechafinpublicacion'],
+                                    'escarapela_id' => $data['escarapela_id'],
+                                    'certificado_id' => $data['certificado_id'],
                                 )
                             );
                             try {
@@ -427,9 +430,12 @@ class EventsController extends AppController {
                             'even_codigo' => strtoupper($data['even_codigo']),
                             'fechainiciopublicacion' => $data['fechainiciopublicacion'],
                             'fechafinpublicacion' => $data['fechafinpublicacion'],
+                            'escarapela_id' => $data['escarapela_id'],
+                            'certificado_id' => $data['certificado_id'],
                         )
                     );
                     try {
+                        
                         $this->Event->save($newEvent);
                         $newEventId = $this->Event->getLastInsertId();
 
@@ -556,14 +562,18 @@ class EventsController extends AppController {
             ),
             "recursive" => -2
         ));
-        
+
         $sql = $this->Event->query("SELECT id, descripcion FROM escarapelas");
         $escarapelas = array();
         foreach ($sql as $key => $value) {
             $escarapelas[$value['escarapelas']['id']] = $value['escarapelas']['descripcion'];
         }
 //            debug($escarapelas);die;
-
+        $sql2 = $this->Event->query("SELECT id, descripcion FROM certificados");
+        $certificados = array();
+        foreach ($sql2 as $key => $value) {
+            $certificados[$value['certificados']['id']] = $value['certificados']['descripcion'];
+        }
 
 
         $committees = $this->Event->Committee->find('list', array(
@@ -602,7 +612,7 @@ class EventsController extends AppController {
         ));
 
 //        $registrationTypes = $this->Event->RegistrationType->find('list');
-        $this->set(compact('stages', 'eventTypes', 'committees', 'companies', 'hotels', 'paymentsName', 'registrationTypes', 'categorias', 'escarapelas'));
+        $this->set(compact('stages', 'eventTypes', 'committees', 'companies', 'hotels', 'paymentsName', 'registrationTypes', 'categorias', 'escarapelas', 'certificados'));
 
         $this->set("eventTypesName", $eventTypesName);
     }
@@ -1188,15 +1198,21 @@ class EventsController extends AppController {
             ),
             "recursive" => -2
         ));
-        
+
         $sql = $this->Event->query("SELECT id, descripcion FROM escarapelas");
         $escarapelas = array();
         foreach ($sql as $key => $value) {
             $escarapelas[$value['escarapelas']['id']] = $value['escarapelas']['descripcion'];
         }
+        
+        $sql2 = $this->Event->query("SELECT id, descripcion FROM certificados");
+        $certificados = array();
+        foreach ($sql2 as $key => $value) {
+            $certificados[$value['certificados']['id']] = $value['certificados']['descripcion'];
+        }
 
 //        $registrationTypes = $this->Event->RegistrationType->find('list');
-        $this->set(compact('stages', 'eventTypes', 'committees', 'companies', 'hotels', 'payments', 'registrationTypes', 'categorias', 'escarapelas'));
+        $this->set(compact('stages', 'eventTypes', 'committees', 'companies', 'hotels', 'payments', 'registrationTypes', 'categorias', 'escarapelas', 'certificados'));
         $this->set("eventTypesName", $eventTypesName);
 //        $this->set("eventTypesName", $eventTypesName);
 //        $stages = $this->Event->Stage->find('list');

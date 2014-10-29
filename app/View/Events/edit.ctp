@@ -143,7 +143,7 @@ echo $this->Form->input('event_type_id', array(
                 <td></td>
                 <td>
 <?php
-echo $this->Form->input('even_codigo', array('label' => 'Codigo del evento', 'required' => 'true'));
+echo $this->Form->input('even_codigo', array('label' => 'Codigo del evento'));//, 'required' => 'true'
 ?>
                 </td>
             </tr>
@@ -167,7 +167,7 @@ echo $this->Form->input('even_numeResolucion', array('label' => 'Numero de Resol
                 <td>
                     <label  for= "EventPalaClave" > Palabra clave </label> 
 <?php
-echo $this->Form->textarea('even_palaClave', array('escape' => false, 'autocapitalize' => 'off', 'required' => 'true', 'rows' => '2', 'cols' => '30', 'maxlength' => '20'));
+echo $this->Form->textarea('even_palaClave', array('escape' => false, 'autocapitalize' => 'off', 'rows' => '2', 'cols' => '30', 'maxlength' => '20'));//'required' => 'true',
 ?>
                 </td>
                 <td></td>
@@ -259,6 +259,36 @@ echo $this->Form->input('EvenFechainiciopublicacion', array('label' => 'Fecha in
                     ?>
                 </td>                    
             </tr>
+            <tr>
+                    <td></td>
+                    <td>
+                        <?php
+                        echo $this->Form->input('escarapela_id', array(
+                            "div" => array(
+                                "class" => "controls"
+                            ),
+                            "label" => "Tipo de escarapela",
+                            "options" => $escarapelas, //"Stage.esce_nombre",
+                            "empty" => "seleccione el tipo de escarapela",
+//                            'required' => 'true'
+                        ));
+                        ?>
+                    </td>
+                    <td></td>
+                    <td>
+                        <?php
+                        echo $this->Form->input('certificado_id', array(
+                            "div" => array(
+                                "class" => "controls"
+                            ),
+                            "label" => "Tipo de certificado",
+                            "options" => $certificados, //"Stage.esce_nombre",
+                            "empty" => "seleccione el tipo de certificado",
+//                            'required' => 'true'
+                        ));
+                        ?>
+                    </td>
+                </tr>
             <br
                 >
             <tr>
@@ -272,17 +302,7 @@ echo $this->Form->input('even_publicar', array('type' => 'checkbox', 'label' => 
                 </td>
                 <td></td>
                 <td>
-                    <?php
-                        echo $this->Form->input('escarapela_id', array(
-                            "div" => array(
-                                "class" => "controls"
-                            ),
-                            "label" => "Tipo de escarapela",
-                            "options" => $escarapelas, //"Stage.esce_nombre",
-                            "empty" => "seleccione el tipo de escarapela",
-//                            'required' => 'true'
-                        ));
-                        ?>
+                    
                 </td>
             </tr>
 
