@@ -78,11 +78,13 @@
                     ?>
                 </td>
                 </tr>
-                <td></td>
-            </tr>
+                
             <tr>
                 <td>
                     <input type="hidden" name="data[people][pers_id]" id="PeoplePers_id">
+                </td>
+                <td>
+                    <input type="hidden" name="data[people][documento]" id="PeopleDocumento">
                 </td>
             </tr>
         </table>
@@ -113,6 +115,8 @@
     function limpiar() {
         $("#PersonCodigo").val("");
         $("#PersonCedula").val("");
+        $("#PeopleDocumento").val("");
+        
         $("#PeoplePers_id").val("");
 //                      console.log("asdasd");
         $("#PersonPersPrimNombre").val("");
@@ -167,6 +171,7 @@
                 if (nombre !== "") {
                     $("#PeoplePers_id").val(id);
                     $("#PersonCedula").val(identificacion);
+                    $("#PeopleDocumento").val(identificacion);
                     $("#PersonPersPrimNombre").val(nombre);
                     $("#PersonPersPrimApellido").val(apellido);
 //                    $("#PersonPersDireccion").val(direccion);
@@ -186,6 +191,7 @@
                     $('#PersonDocumentTypeId option[value="' + td + '"]').attr("selected", true);
                 } else {
                     $("#PeoplePers_id").val("");
+                    $("#PeopleDocumento").val("");
 //                      console.log("asdasd");
                     $("#PersonPersPrimNombre").val("");
                     $("#PersonPersPrimApellido").val("");
