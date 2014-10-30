@@ -7,7 +7,6 @@ $pdf->Open();
 $pdf->SetAutoPageBreak(true, 0.3);
 $pdf->AddPage();
 
-
 $cod = $data['escarapela'][0]['escarapelas']['codigo'];
 $nombres = $data['escarapela'][0]['escarapelas']['nombres'];
 $tam_nombres = $data['escarapela'][0]['escarapelas']['tam_nombre'];
@@ -19,6 +18,29 @@ $empresa = $data['escarapela'][0]['escarapelas']['empresa'];
 $tam_empresa = $data['escarapela'][0]['escarapelas']['tam_empresa'];
 $categoria = $data['escarapela'][0]['escarapelas']['categoria'];
 $tam_categoria = $data['escarapela'][0]['escarapelas']['tam_categoria'];
+$doc = $data['documento'];
+if (strlen($doc) == 12) {
+    $numero = substr($doc, -12, 1) . substr($doc, -11, 1) . substr($doc, -10, 1) . '.' . substr($doc, -9, 1) . substr($doc, -8, 1) . substr($doc, -7, 1) . '.' . substr($doc, -6, 1) . substr($doc, -5, 1) . substr($doc, -4, 1) . '.' . substr($doc, -3, 1) . substr($doc, -2, 1) . substr($doc, -1);
+} elseif (strlen($doc) == 11) {
+    $numero = substr($doc, -11, 1) . substr($doc, -10, 1) . '.' . substr($doc, -9, 1) . substr($doc, -8, 1) . substr($doc, -7, 1) . '.' . substr($doc, -6, 1) . substr($doc, -5, 1) . substr($doc, -4, 1) . '.' . substr($doc, -3, 1) . substr($doc, -2, 1) . substr($doc, -1);
+    substr($doc, -10) . '.' . substr($doc, -9) . substr($doc, -8) . substr($doc, -7) . '.' . substr($doc, -6) . substr($doc, -5) . substr($doc, -4) . '.' . substr($doc, -3) . substr($doc, -2) . substr($doc, -1);
+} elseif (strlen($doc) == 10) {
+    $numero = substr($doc, -10, 1) . '.' . substr($doc, -9, 1) . substr($doc, -8, 1) . substr($doc, -7, 1) . '.' . substr($doc, -6, 1) . substr($doc, -5, 1) . substr($doc, -4, 1) . '.' . substr($doc, -3, 1) . substr($doc, -2, 1) . substr($doc, -1);
+} elseif (strlen($doc) == 9) {
+    $numero = substr($doc, -9, 1) . substr($doc, -8, 1) . substr($doc, -7, 1) . '.' . substr($doc, -6, 1) . substr($doc, -5, 1) . substr($doc, -4, 1) . '.' . substr($doc, -3, 1) . substr($doc, -2, 1) . substr($doc, -1);
+} elseif (strlen($doc) == 8) {
+    $numero = substr($doc, -8, 1) . substr($doc, -7, 1) . '.' . substr($doc, -6, 1) . substr($doc, -5, 1) . substr($doc, -4, 1) . '.' . substr($doc, -3, 1) . substr($doc, -2, 1) . substr($doc, -1);
+} elseif (strlen($doc) == 7) {
+    $numero = substr($doc, -7, 1) . '.' . substr($doc, -6, 1) . substr($doc, -5, 1) . substr($doc, -4, 1) . '.' . substr($doc, -3, 1) . substr($doc, -2, 1) . substr($doc, -1);
+} elseif (strlen($doc) == 6) {
+    $numero = substr($doc, -6, 1) . substr($doc, -5, 1) . substr($doc, -4, 1) . '.' . substr($doc, -3, 1) . substr($doc, -2, 1) . substr($doc, -1);
+} elseif (strlen($doc) == 5) {
+    $numero = substr($doc, -5, 1) . substr($doc, -4, 1) . '.' . substr($doc, -3, 1) . substr($doc, -2, 1) . substr($doc, -1);
+} elseif (strlen($doc) == 4) {
+    $numero = substr($doc, -4, 1) . '.' . substr($doc, -3, 1) . substr($doc, -2, 1) . substr($doc, -1);
+} else {
+    $numero = $doc;
+}
 
 if ($data['tipo'] == 2) {
 
@@ -41,7 +63,7 @@ if ($data['tipo'] == 2) {
         $pdf->Ln(2);
 //    }
 //    if ($data['documento']) {
-        $cedula = 'C.C ' . $data['documento'];
+        $cedula = 'ID: ' . $numero;
         $pdf->SetY($documento);
         $pdf->SetFont('Arial', '', $tam_documento);
         $pdf->Cell(0, 2, $cedula, 0, 0, 'C');

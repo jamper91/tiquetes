@@ -10,7 +10,7 @@ $fpdf_1->Open();
 $fpdf_1->SetAutoPageBreak(true, 0.3);
 $fpdf_1->AddPage();
 
-$fpdf_1->Image('../webroot/img/certificate/CERTIFICADO-02.jpg', 0, 0, $fpdf_1->w, $fpdf_1->h);
+//$fpdf_1->Image('../webroot/img/certificate/CERTIFICADO-02.jpg', 0, 0, $fpdf_1->w, $fpdf_1->h);
 $name = $data['certificado'][0]['certificados']['nombres'];
 $doc = $data['certificado'][0]['certificados']['documento'];
 $emp = $data['certificado'][0]['certificados']['empresa'];

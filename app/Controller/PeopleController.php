@@ -849,59 +849,50 @@ class PeopleController extends AppController {
         }
     }
 
-    public function importarUsuarios() {
-
-        $fecha = date("Y-m-d");
-        $this->loadModel("Event");
-        $events = $this->Event->find("list", array(
-            "fields" => array(
-                "Event.id",
-                "Event.even_nombre"
-            ),
-            "conditions" => array(
-                "Event.even_fechFinal >= " => $fecha
-            )
-        ));
-        $this->set(compact('events', $events));
-    }
-
-    public function cargarUsuarios() {
-        if ($this->request->is("POST")) {
+    public function excel() {
+        if ($this->request->is('POST')) {
+            
+            $llave = $this->request->data['llave'];
             $datos = $this->request->data;
-//            debug($datos); DIE;
-            $tam = $datos['size'];
+            if ($llave == 's') {
+                
+            } else{
+                $tam = $datos['size'];
             $inicio = "Se registraron  ";
             $medio = "Y se actualizaron las personas con los siguientes numeros de documento: ";
             $repetidos = "";
             $cont = 0;
             for ($i = 1; $i <= $tam; $i++) {
                 $doc = $datos["doc$i"];
-                $exp = $datos["exp$i"];
+                $ti = $datos["ti$i"];
+                $cat = $datos["cat$i"];
                 $nom = $datos["nom$i"];
                 $ape = $datos["ape$i"];
-                $ciu = $datos["ciu$i"];
-                $dir = $datos["dir$i"];
+                $ent = $datos["ent$i"];                
+                $mail = $datos["mai$i"];
+                $cel = $datos["cel$i"];
                 $tel = $datos["tel$i"];
-                $mail = $datos["mail$i"];
-                $ins = $datos["ins$i"];
-                $car = $datos["car$i"];
+                $ciu = $datos["ciu$i"];
+                $pai = $datos["pai$i"];
+                $sta = $datos["sta$i"];
+                $sec = $datos["sec$i"];
+                $pro = $datos["pro$i"];
 
                 $sql1 = "SELECT id FROM people WHERE pers_documento='" . $doc . "'";
                 $id = $this->Person->query($sql1);
                 if ($id == array()) {
                     $cont = $cont + 1;
-                    $sql = "INSERT INTO people (pers_documento, pers_primNombre, pers_primApellido, pers_direccion, pers_telefono, pers_mail, pers_expedicion, pers_institucion, pers_cargo, ciUdad) VALUES ('$doc','$nom','$ape','$dir','$tel', '$mail', '$exp', '$ins', '$car', '$ciu')";
+                    $sql = "INSERT INTO people (pers_documento,  document_type_id, categoria_id, pers_primNombre, pers_primApellido, pers_empresa, pers_mail, pers_celular, pers_telefono,  ciudad, pais, stan, sector, cargo) VALUES ('$doc', $ti, $cat,'$nom','$ape', '$ent', '$mail', '$cel', '$tel', '$ciu', '$pai', '$sta', '$sec', '$pro')";
                     $this->Person->query($sql);
                     $this->Session->setFlash($inicio . $cont . " nuevas Personas", 'good');
                 } else {
                     $repetidos = $repetidos . ", " . $doc;
-                    $sql2 = "UPDATE `people` SET `pers_primNombre`='$nom',`pers_primApellido`='$ape',`pers_direccion`='$dir',`pers_telefono`=$tel,`pers_mail`='$mail', `pers_expedicion` = '$exp', `pers_institucion`= '$ins', `pers_cargo`= '$car', `ciudad`='$ciu' WHERE `pers_documento` = '$doc'";
+                    $sql2 = "UPDATE `people` SET `document_type_id` = $ti, `categoria_id`=$cat, `pers_primNombre`='$nom',`pers_primApellido`='$ape',`pers_empresa`='$ent',`pers_mail`='$mail', `pers_celular`='$cel',`pers_telefono`='$tel',`ciudad` = '$ciu', `pais`= '$pai', `stan`= '$sta', `sector`='$sec', `cargo`='$pro' WHERE `pers_documento` = '$doc'";
                     $this->Person->query($sql2);
                     $this->Session->setFlash($inicio . $cont . " nuevas personas. " . $medio . $repetidos . ".", 'good');
                 }
             }
-
-//            debug($repetidos);
+            }
         }
     }
 
@@ -1082,6 +1073,7 @@ class PeopleController extends AppController {
     public function certificate() {
         $this->loadModel('Categoria');
         $this->loadModel('Event');
+        $this->loadModel('Input');
         $eve = $this->Session->read('event_id');
         if ($eve != '') {
             if ($this->request->is("POST")) {

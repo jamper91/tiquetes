@@ -110,7 +110,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                                 <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "add")); ?>">Escarapela</a></li>
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "reimprimir")); ?>">Reimprimir Escarapela</a></li>-->
                                 <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "certificate")); ?>">Certificado</a></li>
-                                <!--<li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "importarUsuarios")); ?>">registrar desde excel</a></li>-->
+                                <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "excel")); ?>">registrar desde excel</a></li>
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador2")); ?>">Asociar Tarjeta a Persona</a></li>-->
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador")); ?>">Buscar Persona</a></li>-->
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "buscador")); ?>">Buscar Persona</a></li>-->

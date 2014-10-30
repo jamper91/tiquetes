@@ -8,7 +8,7 @@
                 <td>
                     <div class="input text required">
                         <label for="PersonPersDocumento">Identificacion</label>
-                        <input id="PersonPersDocumento" type="text" required="required" maxlength="50" name="data[Person][pers_documento]"/>
+                        <input id="PersonPersDocumento" type="text" required="required" maxlength="50" name="data[Person][pers_documento]" autofocus="true"/>
                         <input id="buscar" type="button"  name="buscar" value='Buscar'/>
                     </div>
                 </td>
@@ -37,7 +37,6 @@
                         ),
                         "label" => "Tipo de Documento",
                         "options" => $documentTypes,
-                        //            "empty" => "Seleccione un tipo de documento",
                         "required" => "true",
                     ));
                     ?>
@@ -375,8 +374,7 @@
         var documento=$("#PersonPersDocumento").val();
         var nombre = $("#PersonPersPrimNombre").val();
         var apellido = $("#PersonPersPrimApellido").val();
-        var categoria = $('#PersonCategoriaId').val();
-        
+        var categoria = $('#PersonCategoriaId').val();        
         if (documento !== "") {
             if (nombre !== "") {
                 if (apellido !== "") {
@@ -416,6 +414,7 @@
 <script>
 
     $(document).ready(function() {//Esta funcion se activa cuando se este ingresando texto en el cuadro
+        $('#PersonPersDocumento').focus();
         $("input[type='password']").on('input', function(e) {
             if ($('#PersonPistola').val().length === 170)
             {
@@ -471,9 +470,7 @@
                 $('#PersonPersPrimNombre').val(nombre + " " + nombre2);
                 $('#PersonPersPrimApellido').val(apellido1 + " " + apellido2);
 //                $('#PersonPersTipoSangre').val(sangre);
-                $('#PersonPistola').val("");
-
-//                $('#UserCategoriaId').focus();
+                $('#PersonPistola').val("");                
 //                        var url = "validar_admin.jsp"; // the script where you handle the form input. 
 
             }
