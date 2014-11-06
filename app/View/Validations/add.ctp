@@ -15,7 +15,7 @@
                         "label" => "Evento",
                         "options" => $events,//"Event.even_nombre",
                         'required' => 'true',
-                        "empty" => "Seleccione una categoria"
+                        "empty" => "Seleccione un Evento"
                     ));
                     ?>
                 </td>

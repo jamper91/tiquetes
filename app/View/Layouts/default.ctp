@@ -79,8 +79,9 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                         <li><a class="sTrash" title="" href="#"><i class="icon-trash"></i> Eliminados</a></li>
                     </ul>
                 </li>-->
-                <li class=""><a title="" href="#"><i class="icon icon-cog"></i> <span class="text"> <?php echo $this->Session->read('event_nombre') ?></span></a></li>
+                <li class=""><a title="" href="#"><i class="icon icon-cog"></i> <span class="text"> </span></a></li>
                 <li class=""><a title="" href="<?= $this->Html->url(array("controller" => "users", "action" => "logout")); ?>"><i class="icon icon-share-alt"></i> <span class="text">Cerrar Sesion</span></a></li>
+                <li class=""><a title="" ><i class="icon icon-share-alt"></i> <span class="text"><h1><?php echo $this->Session->read('event_nombre') ?></h1></span></a></li>                
             </ul>
         </div>
         <!--close-top-Header-menu-->
@@ -110,10 +111,12 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                                 <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "add")); ?>">Escarapela</a></li>
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "reimprimir")); ?>">Reimprimir Escarapela</a></li>-->
                                 <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "certificate")); ?>">Certificado</a></li>
-                                <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "excel")); ?>">registrar desde excel</a></li>
+                                <?php if ($this->Session->read('User.type_user_id') == 1) { ?> 
+                                    <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "excel")); ?>">Importar desde excel</a></li>
+                                <?php } ?>
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador2")); ?>">Asociar Tarjeta a Persona</a></li>-->
-                                <!--<li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador")); ?>">Buscar Persona</a></li>-->
-                                <!--<li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "buscador")); ?>">Buscar Persona</a></li>-->
+                                <li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador")); ?>">Buscar Persona</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "buscador")); ?>">Buscar Persona</a></li>
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "buscar")); ?>">Asociar Tarjeta a Usuario</a></li>-->
                             </ul>
                         </li>
@@ -176,6 +179,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                                 <li><a href="<?= $this->Html->url(array("controller" => "Locations", "action" => "add")); ?>">Crear Localidad</a></li>
                                 <li><a href="<?= $this->Html->url(array("controller" => "Categorias", "action" => "add")); ?>">Crear Categorias</a></li>                                
                                 <li><a href="<?= $this->Html->url(array("controller" => "Categorias", "action" => "index")); ?>">Lista Categorias</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "Activities", "action" => "index")); ?>">Lista Actividades</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "Activities", "action" => "add")); ?>">Crear Actividades</a></li>
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "Shelves", "action" => "add")); ?>">Crear Grupo de Estan</a></li>-->
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "Inputs", "action" => "add")); ?>">Crear entradas por Evento</a></li>-->
 
@@ -282,7 +287,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                 <?php
                 echo $this->Session->flash();
                 ?>
-                
+
                 <?php echo $this->fetch('content'); ?>
             </div>
 

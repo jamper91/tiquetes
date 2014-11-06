@@ -3,9 +3,10 @@
 
 require_once('../Vendor/fpdf/ean13.php');
 $pdf = new PDF_EAN13();
+
 $pdf->Open();
 $pdf->SetAutoPageBreak(true, 0.3);
-$pdf->AddPage();
+$pdf->AddPage('P',  array('100', '120'));
 $id = $data['escarapela'][0]['escarapelas']['id'];
 $cod = $data['escarapela'][0]['escarapelas']['codigo'];
 $nombres = $data['escarapela'][0]['escarapelas']['nombres'];
@@ -41,7 +42,7 @@ if (strlen($doc) == 12) {
 } else {
     $numero = $doc;
 }
-$pdf->Image('../webroot/img/certificate/siete.jpg', 0, 0, $pdf->w, $pdf->h);
+//$pdf->Image('../webroot/img/certificate/siete.jpg', 0, 0, $pdf->w, $pdf->h);
 if ($data['tipo'] == 2) {
 
     if ($data['codigo']) {
@@ -65,7 +66,11 @@ if ($data['tipo'] == 2) {
             $x = strlen($name);
             if ($x <= 19) {
                 $tam_nombres = 20;
-            } else {
+            } else if ($x<=27){
+                $tam_nombres = 15;
+            }else if ($x<=35){
+                $tam_nombres = 11;
+            }else {
                 $tam_nombres = 10;
             }
             $pdf->SetY($nombres);

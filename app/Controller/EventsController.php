@@ -147,7 +147,7 @@ class EventsController extends AppController {
                 $fechafinal = $data['even_fechFinal'];
                 $fechainiciopub = $data['fechainiciopublicacion'];
                 $fechafinalpublicacion = $data['fechafinpublicacion'];
-                if ($fechainicial > $fechaactual) {
+                if ($fechainicial < $fechaactual) {
                     $this->Session->setFlash('La fecha inicial no puede ser menor q la fecha actual', 'error'); //
                     //  debug($fechafinal);
                 } elseif ($fechainicial > $fechafinal) {
@@ -434,91 +434,89 @@ class EventsController extends AppController {
                         )
                     );
                     //try {
-                        try{
-                            debug($newEvent);
+                    try {
+                        debug($newEvent);
                         $preg = $this->Event->save($newEvent);
                         debug($preg);
-                        } catch (Exception $ex) {
-                                    $error2 = $ex->getCode();
-                                    $mensaje2 = $ex->getMessage();
-                                    if ($error2 == '23000') {
-                                        $this->Session->setFlash('AQUI', 'error');
-                                    } else {
-                                        $this->Session->setFlash($mensaje2, 'error');
-                                    }
-                                }
-                        $newEventId = $this->Event->getLastInsertId();
-                        
-                        if ($data['Committee'] != "") {
-                            foreach ($data['Committee'] as $Committee_id) {
-                                $newCommitteesEvent = $this->Event->CommitteesEvent->create();
-                                $newCommitteesEvent = array(
-                                    'CommitteesEvent' => array(
-                                        'committee_id' => $Committee_id,
-                                        'event_id' => $newEventId
-                                    )
-                                );
-                                $this->Event->CommitteesEvent->save($newCommitteesEvent);
-                            }
+                    } catch (Exception $ex) {
+                        $error2 = $ex->getCode();
+                        $mensaje2 = $ex->getMessage();
+                        if ($error2 == '23000') {
+                            $this->Session->setFlash('AQUI', 'error');
+                        } else {
+                            $this->Session->setFlash($mensaje2, 'error');
                         }
+                    }
+                    $newEventId = $this->Event->getLastInsertId();
 
-                        if ($data['Company'] != "") {
-                            foreach ($data['Company'] as $Company_id) {
-                                $newCompaniesEvent = $this->Event->CompaniesEvent->create();
-                                $newCompaniesEvent = array(
-                                    'CompaniesEvent' => array(
-                                        'company_id' => $Company_id,
-                                        'event_id' => $newEventId
-                                    )
-                                );
-                                $this->Event->CompaniesEvent->save($newCompaniesEvent);
-                            }
+                    if ($data['Committee'] != "") {
+                        foreach ($data['Committee'] as $Committee_id) {
+                            $newCommitteesEvent = $this->Event->CommitteesEvent->create();
+                            $newCommitteesEvent = array(
+                                'CommitteesEvent' => array(
+                                    'committee_id' => $Committee_id,
+                                    'event_id' => $newEventId
+                                )
+                            );
+                            $this->Event->CommitteesEvent->save($newCommitteesEvent);
                         }
+                    }
 
-                        if ($data['Hotel'] != "") {
-                            foreach ($data['Hotel'] as $Hotel_id) {
-                                $newEventsHotel = $this->Event->EventsHotel->create();
-                                $newEventsHotel = array(
-                                    'EventsHotel' => array(
-                                        'hotel_id' => $Hotel_id,
-                                        'event_id' => $newEventId
-                                    )
-                                );
-                                $this->Event->EventsHotel->save($newEventsHotel);
-                                
-                            }
+                    if ($data['Company'] != "") {
+                        foreach ($data['Company'] as $Company_id) {
+                            $newCompaniesEvent = $this->Event->CompaniesEvent->create();
+                            $newCompaniesEvent = array(
+                                'CompaniesEvent' => array(
+                                    'company_id' => $Company_id,
+                                    'event_id' => $newEventId
+                                )
+                            );
+                            $this->Event->CompaniesEvent->save($newCompaniesEvent);
                         }
+                    }
 
-                        if ($data['Payment'] != "") {
-                            foreach ($data['Payment'] as $Payment_id) {
-                                $newEventsPayment = $this->Event->EventsPayment->create();
-                                $newEventsPayment = array(
-                                    'EventsPayment' => array(
-                                        'payment_id' => $Payment_id,
-                                        'event_id' => $newEventId
-                                    )
-                                );
-                                
-                                $this->Event->EventsPayment->save($newEventsPayment);
-                                
-                            }
+                    if ($data['Hotel'] != "") {
+                        foreach ($data['Hotel'] as $Hotel_id) {
+                            $newEventsHotel = $this->Event->EventsHotel->create();
+                            $newEventsHotel = array(
+                                'EventsHotel' => array(
+                                    'hotel_id' => $Hotel_id,
+                                    'event_id' => $newEventId
+                                )
+                            );
+                            $this->Event->EventsHotel->save($newEventsHotel);
                         }
+                    }
 
-                        if ($data['Categoria'] != "") {
-                            foreach ($data['Categoria'] as $Categoria_id) {
-                                $newEventsCategoria = $this->Event->EventsCategoria->create();
-                                $newEventsCategoria = array(
-                                    'EventsCategoria' => array(
-                                        'categoria_id' => $Categoria_id,
-                                        'event_id' => $newEventId
-                                    )
-                                );
-                                    $this->Event->EventsCategoria->save($newEventsCategoria);
-                            }
+                    if ($data['Payment'] != "") {
+                        foreach ($data['Payment'] as $Payment_id) {
+                            $newEventsPayment = $this->Event->EventsPayment->create();
+                            $newEventsPayment = array(
+                                'EventsPayment' => array(
+                                    'payment_id' => $Payment_id,
+                                    'event_id' => $newEventId
+                                )
+                            );
+
+                            $this->Event->EventsPayment->save($newEventsPayment);
                         }
+                    }
+
+                    if ($data['Categoria'] != "") {
+                        foreach ($data['Categoria'] as $Categoria_id) {
+                            $newEventsCategoria = $this->Event->EventsCategoria->create();
+                            $newEventsCategoria = array(
+                                'EventsCategoria' => array(
+                                    'categoria_id' => $Categoria_id,
+                                    'event_id' => $newEventId
+                                )
+                            );
+                            $this->Event->EventsCategoria->save($newEventsCategoria);
+                        }
+                    }
 
 
-                        return $this->redirect(array('action' => 'index'));
+                    return $this->redirect(array('action' => 'index'));
 //                    } catch (Exception $ex) {
 //                        $error2 = $ex->getCode();
 //                        $mensaje2 = $ex->getMessage();
@@ -1286,7 +1284,7 @@ class EventsController extends AppController {
                     "_serialize" => array("datos")
                 )
         );
-    }
+    }    
 
     public function getDaysByEvent() {
         $this->layout = "webservices";
@@ -1301,16 +1299,10 @@ class EventsController extends AppController {
             $date = $fecha[0]['events']['even_fechInicio'];
             $f = date('Y-m-d', strtotime($date));
         }
-//       debug($date ." asdasdasd   ".$f);die;
         $datos = array();
 
-//        for ($i = 0; $i < $total; $i++) {
-//            $datos[$i]['g']['id'] = [$f];
-//            $datos[$i]['g']['name'] = [$f];
-//            $f = date('Y-m-d', strtotime('+1 days', strtotime($f)));
-
         if ($total > 0) {
-            for ($i = 0; $i < $total; $i++) {
+            for ($i = 0; $i <=$total; $i++) {
                 $datos[$i]['g']['id'] = $f;
                 $datos[$i]['g']['name'] = $f;
                 $f = date('Y-m-d', strtotime('+1 days', strtotime($f)));
@@ -1318,6 +1310,30 @@ class EventsController extends AppController {
         }
 //        debug($datos); die;
 
+        $this->set(
+                array(
+                    "datos" => $datos,
+                    "_serialize" => array("datos")
+                )
+        );
+    }
+
+    public function getLocationsEvent() {
+        $this->layout = "webservices";
+        $this->loadModel("Location");
+        $event_id = $this->request->data["event_id"]; //State
+        $st = $this->Event->find('list', array(
+            'fields' => array('stage_id'),
+            'conditions' => array('Event.id' => $event_id),
+        ));
+        foreach ($st as $key => $value) {
+            $stage_id = $value;
+        }
+        $datos = $this->Location->find('all', array(
+            'fields' => array('Location.id', 'Location.loca_nombre as name'),
+            'conditions' => array("Location.stage_id= $stage_id", "Location.event_id=$event_id"),
+            'recursive' => 0
+        ));
         $this->set(
                 array(
                     "datos" => $datos,

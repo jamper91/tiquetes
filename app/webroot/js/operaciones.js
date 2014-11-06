@@ -4,7 +4,7 @@
  * Todos los Derechos Reservados.
  */
 var urlbase = "http://localhost/tiquetes/";
-//var urlbase = "http://192.168.0.151/tiquetes/";
+//var urlbase = "http://192.168.10.1/tiquetes/";
 function ajax(url2, datos, callback)
 {
 

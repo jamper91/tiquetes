@@ -3,7 +3,6 @@ echo $this->Html->script(array('jquery.multi-select', 'jscal2', 'es'));
 echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'));
 ?>
 <div class="events form">
-    <?php // echo $this->Form->create('Event',array('enctype'=>'multipart/form-data')); ?>
     <form method="POST" action="add" id="Event" name="Event" enctype="multipart/form-data">
         <fieldset>
             <legend><?php echo __('AGREGAR EVENTO'); ?></legend>

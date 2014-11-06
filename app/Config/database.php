@@ -7,7 +7,7 @@ class DATABASE_CONFIG {
         'datasource' => 'Database/Mysql',
         'persistent' => false,
         'host' => 'localhost', //
-        //'host' => '192.168.10.1',
+//        'host' => '192.168.10.1',
         'login' => 'root',
         'password' => '',
         //'login' => 'fabio',
