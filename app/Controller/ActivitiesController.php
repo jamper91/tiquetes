@@ -201,10 +201,10 @@ class ActivitiesController extends AppController {
                 }
                 $cupo = $aforo - $ocupado;
                 if ($cupo != 0) {
-                    $escarapela = $this->request->data['Activity']['escarapela'];
+                    $escar = $this->request->data['Activity']['escarapela'];
                     $documento = $this->request->data['Activity']['documento'];
-                    if ($escarapela != '') {
-
+                    if ($escar != '') {
+                        $escarapela = substr($escar, 0,-1);
                         $pers = $this->Input->find('list', array('conditions' => array("Input.event_id = $eve")));
                         if ($pers != array()) {
                             foreach ($pers as $key => $value) {
@@ -254,10 +254,12 @@ class ActivitiesController extends AppController {
                     return $this->redirect(array('action' => 'preregistro'));
                 }
             }
+            $hoy = date('y-m-d');
             $options = array(
                 "conditions" => array(
                     "Activity.event_id =$eve",
-                    "Activity.aforo <> 0"
+                    "Activity.aforo <> 0",
+                    "Activity.fecha >= $hoy"
                 ),
                 "fields" => array(
                     "Activity.id",
