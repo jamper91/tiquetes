@@ -1,11 +1,11 @@
 <?php
-App::uses('Activity', 'Model');
+App::uses('ActivitiesController', 'Controller');
 
 /**
- * Activity Test Case
+ * ActivitiesController Test Case
  *
  */
-class ActivityTest extends CakeTestCase {
+class ActivitiesControllerTest extends ControllerTestCase {
 
 /**
  * Fixtures
@@ -63,24 +63,48 @@ class ActivityTest extends CakeTestCase {
 	);
 
 /**
- * setUp method
+ * testIndex method
  *
  * @return void
  */
-	public function setUp() {
-		parent::setUp();
-		$this->Activity = ClassRegistry::init('Activity');
+	public function testIndex() {
+		$this->markTestIncomplete('testIndex not implemented.');
 	}
 
 /**
- * tearDown method
+ * testView method
  *
  * @return void
  */
-	public function tearDown() {
-		unset($this->Activity);
+	public function testView() {
+		$this->markTestIncomplete('testView not implemented.');
+	}
 
-		parent::tearDown();
+/**
+ * testAdd method
+ *
+ * @return void
+ */
+	public function testAdd() {
+		$this->markTestIncomplete('testAdd not implemented.');
+	}
+
+/**
+ * testEdit method
+ *
+ * @return void
+ */
+	public function testEdit() {
+		$this->markTestIncomplete('testEdit not implemented.');
+	}
+
+/**
+ * testDelete method
+ *
+ * @return void
+ */
+	public function testDelete() {
+		$this->markTestIncomplete('testDelete not implemented.');
 	}
 
 }

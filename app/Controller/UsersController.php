@@ -132,7 +132,7 @@ class UsersController extends AppController {
                 $fech = $data['People']['pers_fechNacimiento'];
                 $mail = $data['People']['pers_mail'];
                 $city = $data['User']['city_id'];
-                $sql = "UPDATE `people` SET `city_id`=$city, `pers_primNombre`='$nombre',`pers_primApellido`='$apellido',`pers_direccion`='$direccion',`pers_telefono`=$telefono,`pers_mail`='$mail' WHERE `pers_documento` ='$documento'";
+                $sql = "UPDATE `people` SET `city_id`=$city, `pers_primNombre`='$nombre',`pers_primApellido`='$apellido',`pers_direccion`='$direccion',`pers_telefono`='$telefono',`pers_mail`='$mail' WHERE `pers_documento` ='$documento'";
                 $this->People->query($sql);
                 $newUser = $this->User->create();
 

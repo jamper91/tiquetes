@@ -776,7 +776,7 @@ class EntradasController extends AppController {
             $id = $dato["input"]["categoria_id"];
             $id2 = $dato["input"]["usuarioescarapela"];
             $id3 = $dato["input"]["usuariocertificate"];
-            $t = $dato['person']['document_type_id'];            
+            $t = $dato['person']['document_type_id'];
             $tido = "";
             if ($t != null) {
                 $this->loadModel("Person");
@@ -1033,6 +1033,70 @@ class EntradasController extends AppController {
         }
 
         $this->set("datos", $datos2);
+    }
+    // este reporte es para controla r el ingreso y la salida de las persoans a las iferentes actividades dentro de un evento
+    public function exportar7($event_id = null) {
+        $this->loadModel("Log");
+        $datos = $this->Log->query(
+                "SELECT 
+                    *
+                FROM 
+                    people person
+                LEFT JOIN 
+                    activities_people activitiesPeople
+                ON 
+                    person.id = activitiesPeople.person_id
+                LEFT JOIN
+                    activities activity
+                ON
+                    activity.id = activitiesPeople.activity_id
+                WHERE
+                    person.id IS NOT null AND activity.event_id = $event_id;"
+        );        
+        $i = 0;
+        $datos2 = array();
+        $categoria = "";
+        foreach ($datos as $dato) {
+            $id = $dato['person']['categoria_id'];
+            $res = $this->Log->query("SELECT descripcion FROM categorias WHERE id= $id ");
+            if ($res != array()) {
+                $categoria = $res[0]['categorias']['descripcion'];
+            }
+            $aux = array(
+                'categoria' => $categoria,
+                'documento' => $dato['person']['pers_documento'],
+                'nombres' => $dato['person']['pers_primNombre'],
+                'apellidos' => $dato['person']['pers_primApellido'],
+                'actividad' => $dato['activity']['nombre'],
+                'ingreso' => $dato['activitiesPeople']['fecha_entrada'],
+                'salida' => $dato['activitiesPeople']['fecha_salida'],
+            );
+            $datos2[$i] = $aux;
+            $i++;
+        }
+
+        $this->set("datos", $datos2);
+    }
+
+    public function getTotalByCategory() {
+        $this->layout = "webservices";
+        $this->loadModel("EventsCategoria");
+        $this->loadModel("Categoria");
+        $event_id = $this->request->data['even_id'];
+        $total = $this->Categoria->query("select c.`descripcion`, count(*) as total FROM `people` p INNER JOIN `inputs` i ON i.person_id = p.id INNER JOIN categorias c ON c.id = i.categoria_id WHERE i.event_id= $event_id group by c.descripcion");
+        $datos = array();
+        for ($i = 0; $i < count($total); $i++) {
+            $datos[$i]['cat']['cuenta'] = count($total);
+            $datos[$i]['cat']['categoria'] = $total[$i]['c']['descripcion'];
+            $datos[$i]['cat']['total'] = $total[$i][0]['total'];
+        }
+
+        $this->set(
+                array(
+                    "datos" => $datos,
+                    "_serialize" => array("datos")
+                )
+        );
     }
 
 }

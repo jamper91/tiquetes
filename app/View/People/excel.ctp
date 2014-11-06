@@ -43,6 +43,20 @@
             ?>
             <?php echo $this->Form->create('Person'); ?>
             <input type="hidden" name="llave" id="llave" value="n"/>
+            <div align="center">
+                <?php
+                echo $this->Form->input('event_id', array(
+                    "div" => array(
+                        "class" => "controls"
+                    ),
+                    "label" => "Evento",
+                    "options" => $events,
+                    'required' => 'true',
+                    "empty" => "Seleccione un Evento"
+                ));
+                ?>
+            </div>
+            <br></br>
             <table border="1" width="100%">
                 <thead>
                     <tr>
@@ -61,7 +75,7 @@
                         <th><center><strong>M</strong></center></th>
                         <th><center><strong>N</strong></center></th></tr>
                     <tr>
-                        <th>DOCUMENTO</th>
+                        <th>IDENTIFICACIÓN</th>
                         <th>TIPO</th>
                         <th>CATEGORIA</th>
                         <th>NOMBRES</th>
@@ -69,9 +83,9 @@
                         <th>ENTIDAD</th>
                         <th>EMAIL</th>
                         <th>CELULAR</th>
-                        <th>TELEFONO</th>
+                        <th>TELÉFONO</th>
                         <th>CIUDAD</th>
-                        <th>PAIS</th>
+                        <th>PAÍS</th>
                         <th>No. STAND</th>
                         <th>SECTOR</th>
                         <th>PROFESION</th>

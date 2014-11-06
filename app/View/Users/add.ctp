@@ -43,7 +43,7 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                     echo $this->Form->input('city_id', array(
                         'label' => '',
                         "empty" => "Seleccione Una Ciudad",
-                        'required'=>'true'
+//                        'required'=>'true'
                     ));
                     ?>
                 </td>
@@ -112,7 +112,7 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
 
             </tr>
             <tr><td>Identificador</td>
-                <td><input name="data[User][Identificador]" required="true" id="UserIdentificador" type="text"></td>
+                <td><input name="data[User][Identificador]"  id="UserIdentificador" type="text"></td>
             </tr>
         </table>
 

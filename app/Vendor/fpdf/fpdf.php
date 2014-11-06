@@ -76,6 +76,7 @@ class FPDF {
      * ***************************************************************************** */
 
     function FPDF($orientation = 'P', $unit = 'mm', $size = 'A4') {
+        
         // Some checks
         $this->_dochecks();
         // Initialization of properties
@@ -127,7 +128,7 @@ class FPDF {
             $this->Error('Incorrect unit: ' . $unit);
         // Page sizes
 //        $this->StdPageSizes = array('a3' => array(841.89, 1190.55), 'a4' => array(289, 345), 'a5' => array(420.94, 595.28),
-        $this->StdPageSizes = array('a3' => array(279.4, 215.9), 'a4' => array(287, 343), 'a5' => array(420.94, 595.28),
+        $this->StdPageSizes = array('a3' => array(841.89, 1190.55), 'a4' => array(595.28, 841.89), 'a5' => array(420.94, 595.28),
             'letter' => array(612, 792), 'legal' => array(612, 1008));
         $size = $this->_getpagesize($size);
         $this->DefPageSize = $size;
@@ -930,7 +931,7 @@ class FPDF {
             default:
                 $this->Error('Incorrect output destination: ' . $dest);
         }
-        
+
         return '';
     }
 
@@ -1635,6 +1636,7 @@ class FPDF {
             $this->_putjavascript();
         }
     }
+
 //    function _putcatalog() {
 //        parent::_putcatalog();
 //        if (!empty($this->javascript)) {
@@ -1744,7 +1746,7 @@ class FPDF {
                 $this->Rect($x + $i * $w, $y, $w, $h, 'F');
         }
         //Print text uder barcode
-        $this->SetFont('Arial', '', 12);        
+        $this->SetFont('Arial', '', 12);
 //	$this->Text($x,$y+$h+11/$this->k,substr($barcode,-$len));
     }
 

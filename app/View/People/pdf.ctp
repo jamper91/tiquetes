@@ -3,10 +3,11 @@
 
 require_once('../Vendor/fpdf/ean13.php');
 $pdf = new PDF_EAN13();
+
 $pdf->Open();
 $pdf->SetAutoPageBreak(true, 0.3);
-$pdf->AddPage();
-
+$pdf->AddPage('P',  array('100', '120'));
+$id = $data['escarapela'][0]['escarapelas']['id'];
 $cod = $data['escarapela'][0]['escarapelas']['codigo'];
 $nombres = $data['escarapela'][0]['escarapelas']['nombres'];
 $tam_nombres = $data['escarapela'][0]['escarapelas']['tam_nombre'];
@@ -41,7 +42,7 @@ if (strlen($doc) == 12) {
 } else {
     $numero = $doc;
 }
-
+//$pdf->Image('../webroot/img/certificate/siete.jpg', 0, 0, $pdf->w, $pdf->h);
 if ($data['tipo'] == 2) {
 
     if ($data['codigo']) {
@@ -49,33 +50,47 @@ if ($data['tipo'] == 2) {
         $pdf->SetY(-24);
         $pdf->cell(0, 2, $pdf->EAN13(35, $cod, "$codigo"), 0, 0, 'C');
         $pdf->Ln(2);
-//    }
-//    if ($data['nombre']) {
-        $pdf->SetY($nombres);
-        $pdf->SetFont('Arial', 'B', $tam_nombres);
-        $pdf->Cell(0, 2, $data['nombre'], 0, 0, 'C');
-        $pdf->Ln(2);
-//    }
-//    if ($data['apellido']) {
-        $pdf->SetY($apellidos);
-        $pdf->SetFont('Arial', 'B', $tam_apellidos);
-        $pdf->Cell(0, 2, $data['apellido'], 0, 0, 'C');
-        $pdf->Ln(2);
-//    }
-//    if ($data['documento']) {
-        $cedula = 'ID: ' . $numero;
-        $pdf->SetY($documento);
-        $pdf->SetFont('Arial', '', $tam_documento);
-        $pdf->Cell(0, 2, $cedula, 0, 0, 'C');
-        $pdf->Ln(2);
-        // }
-//    if ($data['empresa']!='') {
+
+        if ($id != 7) {
+            $pdf->SetY($nombres);
+            $pdf->SetFont('Arial', 'B', $tam_nombres);
+            $pdf->Cell(0, 2, $data['nombre'], 0, 0, 'C');
+            $pdf->Ln(2);
+
+            $pdf->SetY($apellidos);
+            $pdf->SetFont('Arial', 'B', $tam_apellidos);
+            $pdf->Cell(0, 2, $data['apellido'], 0, 0, 'C');
+            $pdf->Ln(2);
+        } else {
+            $name = $data['nombre'] . ' ' . $data['apellido'];
+            $x = strlen($name);
+            if ($x <= 19) {
+                $tam_nombres = 20;
+            } else if ($x<=27){
+                $tam_nombres = 15;
+            }else if ($x<=35){
+                $tam_nombres = 11;
+            }else {
+                $tam_nombres = 10;
+            }
+            $pdf->SetY($nombres);
+            $pdf->SetFont('Arial', 'B', $tam_nombres);
+            $pdf->Cell(0, 2, $name, 0, 0, 'C');
+        }
+        if ($documento != null && $documento != '') {
+            $cedula = 'ID: ' . $numero;
+            $pdf->SetY($documento);
+            $pdf->SetFont('Arial', '', $tam_documento);
+            $pdf->Cell(0, 2, $cedula, 0, 0, 'C');
+            $pdf->Ln(2);
+        }
         if ($empresa != null && $empresa != '') {
             $pdf->SetY($empresa);
             $pdf->SetFont('Arial', '', $tam_empresa);
             $pdf->Cell(0, 2, $data['empresa'], 0, 0, 'C');
             $pdf->Ln(2);
         }
+
         if ($categoria != null && $categoria != '') {
             $pdf->SetY($categoria);
             $pdf->SetFont('Arial', 'B', $tam_categoria);

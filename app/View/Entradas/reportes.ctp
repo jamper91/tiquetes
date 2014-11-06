@@ -27,11 +27,18 @@
         <!--<li><a href="<?= $this->Html->url("exportar5") ?>">Reporte Ingreso Detallado</a></li>-->
         <li><a id='exportar5' name='exportar5' style="cursor:pointer">Asistentes y Access control</a></li>
         <li><a id='exportar6' name='exportar6' style="cursor:pointer">Catering</a></li>
+        <li><a id='exportar7' name='exportar7' style="cursor:pointer">Actividades</a></li>
+        <li><a id='total' name='total' style="cursor:pointer">Asistencia Por categoria</a></li>
         <!--</ul>-->
 </div>
+<br><br>
+<div align='center'>
+
+    <table class="table table-bordered data-table" id="table" name='table'></table>
+</div>
 <!--        <table>
-       <tr>
-           <td>
+   <tr>
+       <td>
 <?php
 //                    echo $this->Form->input('country_id', array(
 //                        "div" => array(
@@ -42,8 +49,8 @@
 //                        "empty" => "Seleccione un País"
 //                    ));
 ?>
-           </td>
-           <td>
+       </td>
+       <td>
 <?php
 //                    echo $this->Form->input('state_id', array(
 //                        "div" => array(
@@ -53,8 +60,8 @@
 //                        "empty" => "seleccione un Departamento"
 //                    ));
 ?>
-           </td>
-           <td>
+       </td>
+       <td>
 <?php
 //                    echo $this->Form->input('city_id', array(
 //                        "div" => array(
@@ -64,10 +71,10 @@
 //                        "empty" => "seleccione una ciudad"
 //                    ));
 ?>
-           </td>
-       </tr>
-       <tr>
-           <td>
+       </td>
+   </tr>
+   <tr>
+       <td>
 <?php
 //                    echo $this->Form->input('stage_id', array(
 //                        "div" => array(
@@ -77,8 +84,8 @@
 //                        "options" => "Stage.esce_nombre",
 //                    ));
 ?>
-           </td>
-           <td>
+       </td>
+       <td>
 <?php
 //                    echo $this->Form->input('event_id', array(
 //                        "div" => array(
@@ -88,14 +95,14 @@
 //                        "options" => "event.even_nombre",
 //                    ));
 ?>
-           </td>
-           <td>
+       </td>
+       <td>
 <?php
 //                        echo $this->Form->input('entrada_id');
 ?>
-           </td>
-       </tr>
-   </table>-->
+       </td>
+   </tr>
+</table>-->
 
 <label id="mensaje"></label>
 </fieldset>
@@ -103,13 +110,125 @@
 </div>
 <div class="mensaje"></div>
 <script>
-    $("#exportar5").click(function(){
-        var event_id = $("#EntradaEventId").val();
-        window.location = urlbase+"entradas/exportar5/"+event_id;
+
+    $("#total").click(function() {
+        var url = urlbase + "entradas/getTotalByCategory.xml";
+        var datos2 = {
+            even_id: $("#EntradaEventId").val()
+        };
+        ajax(url, datos2, function(xml) {
+            $("#table").html("var html = '<tr><th>CATEGORIA</td><td>CANTIDAD</th></tr>'");
+            var j = 0;
+            $("datos", xml).each(function() {
+                var obj = $(this).find("cat");
+                var total;
+                total = $("cuenta", obj).text();
+                var categoria = $("categoria", obj).text();
+                var cantidad = $("total", obj).text();
+                j = parseInt(cantidad) + j;
+                var html = "<tr><td>$1</td><td>$2</td></tr>"
+                html = html.replace("$1", categoria);
+                html = html.replace("$2", cantidad);
+                $("#table").append(html);
+
+            });
+            var html2 =("var html = '<tr><th>$1</td><td>$2</th></tr>'");
+            html2 = html2.replace("$1", 'TOTAL');
+            html2 = html2.replace("$2", j);
+            $("#table").append(html2);
+        });
     });
-    $("#exportar6").click(function(){
+//    function pintar(categoria, cantidad, total) {
+//
+//        chart = new Highcharts.Chart({
+//            chart: {
+//                renderTo: 'graficaCircular'
+//            },
+//            title: {
+//                text: 'Cantidad de asistente por categoria'
+//            },
+//            subtitle: {
+//                text: 'Ticket Factory Express'
+//            },
+//            plotArea: {
+//                shadow: null,
+//                borderWidth: null,
+//                backgroundColor: null
+//            },
+//            tooltip: {
+//                formatter: function() {
+//                    return '<b>' + this.point.name + '</b>: ' + this.y;
+//                }
+//            },
+//            plotOptions: {
+//                pie: {
+//                    allowPointSelect: true,
+//                    cursor: 'pointer',
+//                    dataLabels: {
+//                        enabled: true,
+//                        color: '#000000',
+//                        connectorColor: '#000000',
+//                        formatter: function() {
+//                            return '<b>' + this.point.name + '</b>: ' + this.y;
+//                        }
+//                    }
+//                }
+//            },
+//            series: [{
+//                    type: 'pie',
+//                    name: 'Browser share',
+//                    data: [
+//                        ['Entradas', 10],
+//                        ['Salidas', 20]
+//                    ]
+//                }]
+//        });
+//    }
+    function genera_tabla(x, y, t) {
+        // Obtener la referencia del elemento body
+        var body = document.getElementsByTagName("body")[0];
+
+        // Crea un elemento <table> y un elemento <tbody>
+        var tabla = document.createElement("table");
+        var tblBody = document.createElement("tbody");
+
+        // Crea las celdas
+        for (var i = 0; i < 2; i++) {
+            // Crea las hileras de la tabla
+            var hilera = document.createElement("tr");
+
+            for (var j = 0; j < 2; j++) {
+                // Crea un elemento <td> y un nodo de texto, haz que el nodo de
+                // texto sea el contenido de <td>, ubica el elemento <td> al final
+                // de la hilera de la tabla
+                var celda = document.createElement("td");
+                var textoCelda = document.createTextNode("celda en la hilera " + i + ", columna " + j);
+                celda.appendChild(textoCelda);
+                hilera.appendChild(celda);
+            }
+
+            // agrega la hilera al final de la tabla (al final del elemento tblbody)
+            tblBody.appendChild(hilera);
+        }
+
+        // posiciona el <tbody> debajo del elemento <table>
+        tabla.appendChild(tblBody);
+        // appends <table> into <body>
+        body.appendChild(tabla);
+        // modifica el atributo "border" de la tabla y lo fija a "2";
+        tabla.setAttribute("border", "2");
+    }
+    $("#exportar5").click(function() {
         var event_id = $("#EntradaEventId").val();
-        window.location = urlbase+"entradas/exportar6/"+event_id;
+        window.location = urlbase + "entradas/exportar5/" + event_id;
+    });
+    $("#exportar6").click(function() {
+        var event_id = $("#EntradaEventId").val();
+        window.location = urlbase + "entradas/exportar6/" + event_id;
+    });
+    $("#exportar7").click(function() {
+        var event_id = $("#EntradaEventId").val();
+        window.location = urlbase + "entradas/exportar7/" + event_id;
     });
     $("#EntradaEventId").change(function() {
         var url2 = urlbase + "categorias/getCategoriesByEvent.xml";
@@ -150,7 +269,6 @@
                 });
             });
         });
-
     });
     $("#EntradaStageId").change(function() {
         var url2 = urlbase + "events/getEventsByStage.xml";
@@ -286,12 +404,10 @@
                 html += "</td>";
                 html += "</tr>";
                 console.log("html: " + html);
-
             });
             html += "</tbody></table>";
             $("#mensaje").html(html);
         });
-
         //$.post(url, $('#InputAddForm').serialize());
 
     });
@@ -390,7 +506,8 @@ $pos = 0;
 //    $fecha2 = explode("-", $fecha);
 //    $mons = array(1 => "Jan", 2 => "Feb", 3 => "Mar", 4 => "Apr", 5 => "May", 6 => "Jun", 7 => "Jul", 8 => "Aug", 9 => "Sep", 10 => "Oct", 11 => "Nov", 12 => "Dec");
 //    $fecha = $mons[$fecha2[0]] . " - " . $fecha2[1];
-//    ?>
+//    
+?>
     <!--<div id="container//<?= $pos ?>" style="min-width: 40%; height: 400px; max-width: 40%; margin: 0 auto; display: inline-block"></div>-->
 
 <!--    <script>
@@ -433,7 +550,7 @@ $pos = 0;
         });
 
     </script>-->
-    <?php
+<?php
 //    $pos++;
 //}
 ?>
@@ -441,4 +558,4 @@ $pos = 0;
 
 
 
-<p>Entradas <?php // echo $salidas ?></p>-->
+<p>Entradas <?php // echo $salidas          ?></p>-->

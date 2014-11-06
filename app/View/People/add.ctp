@@ -144,48 +144,30 @@
             <tr>
                 <td>
                     <?php
-                    echo $this->Form->input('stan', array(
-                        'label' => 'No. Stand',
-                    ));
-                    ?>					
-                </td>
-                <td>
-                    <?php ?>
-                </td>
-                <td>
-                    <div class="input select">
-                        <label for="PersonSector">Sector</label>
-                        <select id="PersonSector"  name="data[Person][sector]">
-                            <option value="">Seleccione un sector</option>
-                            <option value="Academia">Academia</option>
-                            <option value="Alimentos y bebidas">Alimentos y bebidas</option>
-                            <option value="Caficultor">Caficultor</option>
-                            <option value="Comercializador">Comercializador</option>
-                            <option value="Comite">Comité</option>                
-                            <option value="Cooperativa">Cooperativa</option>
-                            <option value="Especialista en cafe">Especialista en cafe</option>
-                            <option value="Estudiante">Estudiante</option>
-                            <option value="Exportador">Exportador</option>
-                            <option value="Fabricante / distribuidor equipos">Fabricante / distribuidor equipos</option>
-                            <option value="Fabricante / distribuidor Insumos">Fabricante / distribuidor Insumos</option>
-                            <option value="Ferias">Ferias</option>
-                            <option value="Mercadeo y publicidad">Mercadeo y publicidad</option>
-                            <option value="Montaje">Montaje</option>
-                            <option value="Tostador">Tostador</option>              
-                            <option value="otro">otro</option>                
-                        </select>
-                    </div>
-                    <?php ?>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <?php
                     echo $this->Form->input('cargo', array(
                         'label' => 'Profesion',
                     ));
                     ?>
 
+                </td>                
+                <td>
+                    <?php ?>
+                </td>
+                <td>
+                    <?php
+                    echo $this->Form->input('sector', array(
+                        'label' => 'Sector',
+                    ));
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <?php
+                    echo $this->Form->input('stan', array(
+                        'label' => 'No. Stand',
+                    ));
+                    ?>					
                 </td>
                 <td>
                     <?php ?>

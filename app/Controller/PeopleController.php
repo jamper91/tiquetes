@@ -148,7 +148,7 @@ class PeopleController extends AppController {
 
                         App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                         $this->layout = 'pdf'; //this will use the pdf.ctp layout
-                        $this->set('pdf', new FPDF('P', 'mm', array('100', '123')));
+                        $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', array('287', '343')));
                         $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'apellido' => $data['Person']['pers_primApellido'], 'categoria' => $cat, 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $cadena, 'tipo' => 2, 'escarapela' => $esc);
                         $this->set('data', $informacion);
 
@@ -256,7 +256,7 @@ class PeopleController extends AppController {
 
                         App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                         $this->layout = 'pdf'; //this will use the pdf.ctp layout
-                        $this->set('pdf', new FPDF('P', 'mm', array('100', '123')));
+                        $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', 'A4', array('287', '343')));
                         $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'categoria' => $cat, 'apellido' => $data['Person']['pers_primApellido'], 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $cadena, 'tipo' => 2, 'escarapela' => $esc);
                         $this->set('data', $informacion);
                         $this->render('pdf');
@@ -288,7 +288,7 @@ class PeopleController extends AppController {
 
                             App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                             $this->layout = 'pdf'; //this will use the pdf.ctp layout
-                            $this->set('pdf', new FPDF('P', 'mm', array('100', '123')));
+                            $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', array('287', '343')));
                             $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'categoria' => $cat, 'apellido' => $data['Person']['pers_primApellido'], 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $c, 'tipo' => 2, 'escarapela' => $esc);
                             $this->set('data', $informacion);
                             $this->render('pdf');
@@ -624,9 +624,6 @@ class PeopleController extends AppController {
         if ($this->request->is(array('post', 'put'))) {
             $this->Person->id = $id;
             if ($this->Person->save($this->request->data)) {
-
-                //  echo "<pre>"; var_dump($data); echo "</pre>"; 
-
                 $sql = "DELETE FROM people_products WHERE person_id=$id";
                 $this->Person->query($sql);
                 if (!empty($data['producto'])) {
@@ -635,46 +632,8 @@ class PeopleController extends AppController {
                         $this->Person->query($sql);
                     }
                 }
-//                $identificador = $data['input_identificador'];
-//                $codigo = $data['input_codigo'];
-//                $input2 = $this->Input->find('all', array(
-//                    "fields" => array(
-//                        "Input.entr_identificador",
-//                        "Input.entr_codigo",
-//                        "Input.categoria_id"
-//                    ),
-//                    "conditions" => array("Input.person_id" => $id),
-//                    "limit" => "1"
-//                ));
-//                if ($input2 != array()) {
-////                    $sql = "UPDATE inputs  SET  entr_codigo=" . $codigo . ", entr_identificador=" . $identificador . ", categoria_id=" . $data['Person']['categoria_id'] . "   WHERE person_id=" . $id . "";
-////                    $this->Person->query($sql);
-//                    $codigo = "2";
-////                    debug($input2);
-////                    die;
-//                } else {
-//                    $sql = "INSERT INTO `inputs`(`person_id`, `entr_codigo`, `entr_identificador`,  `categoria_id`) VALUES (" . $id . "," . $codigo . "," . $identificador . "," . $data['Person']['categoria_id'] . ");";
-//                    $this->Person->query($sql);
-//                }
-
-                /* $sql = "INSERT INTO inputs (person_id, entr_codigo, entr_identificador, categoria_id) values (" . $id . ", " . $codigo . ", " . $identificador . ",".$data['Person']['categoria_id'].");";
-                  $this->Person->query($sql); */
+//               
                 $this->Session->setFlash(__('La persona se modificó satisfactoriamente.'), 'good');
-
-//                App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
-//                $this->layout = 'pdf'; //this will use the pdf.ctp layout
-//                $this->set('fpdf', new FPDF('L', 'mm', array('60', '40')));
-//                $informacion = array('documento' => $data['Person']['pers_documento'],
-//                    'nombre' => $data['Person']['pers_primNombre'],
-//                    'apellido' => $data['Person']['pers_primApellido'],
-////                    'categoria' => $categoria,
-//                    'empresa' => $data['Person']['pers_institucion'],
-//                    'ciudad' => $data['Person']['ciudad']);
-//
-//                //debug($informacion);
-//                $this->set('data', $informacion);
-//                $this->render('pdf');
-//                return $this->redirect(array('action' => 'buscador'));
             } else {
                 $this->Session->setFlash(__('The person could not be saved. Please, try again.'));
             }
@@ -694,19 +653,6 @@ class PeopleController extends AppController {
                 "Product.product_id",
                 "Product.name"
         )));
-
-
-//        $input = $this->Input->find('all', array(
-//            "fields" => array(
-//                "Input.entr_identificador",
-//                "Input.entr_codigo",
-//                "Input.categoria_id"
-//            ),
-//            "conditions" => array("Input.person_id" => $id),
-//            "limit" => "1"
-//        ));
-
-
         $products = $this->Product->find('list', array(
             "fields" => array(
                 "Product.product_id",
@@ -850,50 +796,97 @@ class PeopleController extends AppController {
     }
 
     public function excel() {
+        $this->loadModel('Event');
+        $this->loadModel('Input');
         if ($this->request->is('POST')) {
-            
+
             $llave = $this->request->data['llave'];
             $datos = $this->request->data;
             if ($llave == 's') {
                 
-            } else{
+            } else {
+                $event_id = $datos['Person']['event_id'];
                 $tam = $datos['size'];
-            $inicio = "Se registraron  ";
-            $medio = "Y se actualizaron las personas con los siguientes numeros de documento: ";
-            $repetidos = "";
-            $cont = 0;
-            for ($i = 1; $i <= $tam; $i++) {
-                $doc = $datos["doc$i"];
-                $ti = $datos["ti$i"];
-                $cat = $datos["cat$i"];
-                $nom = $datos["nom$i"];
-                $ape = $datos["ape$i"];
-                $ent = $datos["ent$i"];                
-                $mail = $datos["mai$i"];
-                $cel = $datos["cel$i"];
-                $tel = $datos["tel$i"];
-                $ciu = $datos["ciu$i"];
-                $pai = $datos["pai$i"];
-                $sta = $datos["sta$i"];
-                $sec = $datos["sec$i"];
-                $pro = $datos["pro$i"];
+                $inicio = "Se registraron  ";
+                $medio = "Y se actualizaron las personas con los siguientes numeros de documento: ";
+                $repetidos = "";
+                $cont = 0;
+                for ($i = 1; $i <= $tam; $i++) {
+                    $doc = $datos["doc$i"];
+                    $ti = $datos["ti$i"];
+                    $cat = $datos["cat$i"];
+                    $nom = $datos["nom$i"];
+                    $ape = $datos["ape$i"];
+                    $ent = $datos["ent$i"];
+                    $mail = $datos["mai$i"];
+                    $cel = $datos["cel$i"];
+                    $tel = $datos["tel$i"];
+                    $ciu = $datos["ciu$i"];
+                    $pai = $datos["pai$i"];
+                    $sta = $datos["sta$i"];
+                    $sec = $datos["sec$i"];
+                    $pro = $datos["pro$i"];
 
-                $sql1 = "SELECT id FROM people WHERE pers_documento='" . $doc . "'";
-                $id = $this->Person->query($sql1);
-                if ($id == array()) {
-                    $cont = $cont + 1;
-                    $sql = "INSERT INTO people (pers_documento,  document_type_id, categoria_id, pers_primNombre, pers_primApellido, pers_empresa, pers_mail, pers_celular, pers_telefono,  ciudad, pais, stan, sector, cargo) VALUES ('$doc', $ti, $cat,'$nom','$ape', '$ent', '$mail', '$cel', '$tel', '$ciu', '$pai', '$sta', '$sec', '$pro')";
-                    $this->Person->query($sql);
-                    $this->Session->setFlash($inicio . $cont . " nuevas Personas", 'good');
-                } else {
-                    $repetidos = $repetidos . ", " . $doc;
-                    $sql2 = "UPDATE `people` SET `document_type_id` = $ti, `categoria_id`=$cat, `pers_primNombre`='$nom',`pers_primApellido`='$ape',`pers_empresa`='$ent',`pers_mail`='$mail', `pers_celular`='$cel',`pers_telefono`='$tel',`ciudad` = '$ciu', `pais`= '$pai', `stan`= '$sta', `sector`='$sec', `cargo`='$pro' WHERE `pers_documento` = '$doc'";
-                    $this->Person->query($sql2);
-                    $this->Session->setFlash($inicio . $cont . " nuevas personas. " . $medio . $repetidos . ".", 'good');
+                    $p = $this->Person->query("SELECT id FROM people WHERE pers_documento='$doc'");
+                    $if = true;
+                    $while = true;
+                    while ($while) {
+                        $cadena = ""; //variable para almacenar la cadena generada
+                        $ejemplo = strlen($cadena);
+                        while ($if) {
+                            if ($ejemplo < 12) {
+                                $numerodado = rand(0, 9);
+                                $cadena = $cadena . $numerodado;
+                                $ejemplo = strlen($cadena);
+                            } else {
+                                $if = FALSE;
+                            }
+                        }
+                        $pdigit = substr($cadena, -12, 1);
+                        if ($pdigit != '0') {
+                            $sql = "SELECT id FROM inputs WHERE entr_codigo = $cadena";
+                            $id = $this->Input->query($sql);
+                            if ($id == array()) {
+                                $while = false;
+                            }
+                        } else {
+                            $while = true;
+                        }
+                    }
+                    if ($p != array()) {
+                        $person_id = $p[0]['people']['id'];
+                        $input = $this->Input->find('first', array('conditions' => array("Input.event_id=$event_id", "Input.person_id=$person_id"), 'fields' => array('Input.entr_codigo')));
+                        if ($input == array()) {
+                            $this->Input->query("INSERT INTO inputs (person_id, entr_codigo, categoria_id, event_id, fechaescarapela) VALUES ($person_id, '$cadena', $cat, $event_id, NULL )");
+                            $sql2 = "UPDATE `people` SET `document_type_id` = $ti, `categoria_id`=$cat, `pers_primNombre`='$nom',`pers_primApellido`='$ape',`pers_empresa`='$ent',`pers_mail`='$mail', `pers_celular`='$cel',`pers_telefono`='$tel',`ciudad` = '$ciu', `pais`= '$pai', `stan`= '$sta', `sector`='$sec', `cargo`='$pro' WHERE `pers_documento` = '$doc'";
+                            $this->Person->query($sql2);
+                        }
+                        $repetidos = $repetidos . ", " . $doc;
+                    } else {
+                        $cont = $cont + 1;
+                        $sql = "INSERT INTO people (pers_documento,  document_type_id, categoria_id, pers_primNombre, pers_primApellido, pers_empresa, pers_mail, pers_celular, pers_telefono,  ciudad, pais, stan, sector, cargo) VALUES ('$doc', $ti, $cat,'$nom','$ape', '$ent', '$mail', '$cel', '$tel', '$ciu', '$pai', '$sta', '$sec', '$pro')";
+                        $this->Person->query($sql);
+                        $person = $this->Person->query("SELECT id FROM people WHERE pers_documento='$doc'");
+                        $person_id = $person [0]['people']['id'];
+                        $this->Input->query("INSERT INTO inputs (person_id, entr_codigo, categoria_id, event_id, fechaescarapela) VALUES ($person_id, '$cadena', $cat, $event_id, NULL )");
+                    }
                 }
-            }
+                $this->Session->setFlash($inicio . $cont . " nuevas personas. " . $medio . $repetidos . ".", 'good');
             }
         }
+        $date = date('Y-m-d');
+//                    debug($date);
+        //van los eventos disponibles 
+        $events = $this->Event->find('list', array(
+            "fields" => array(
+                "Event.id",
+                "Event.even_nombre"
+            ),
+            "conditions" => array(
+                "Event.even_fechFinal >= '$date'"
+            )
+        ));
+        $this->set(compact('events'));
     }
 
     public function reimprimir($doc1 = null, $event_id = null, $tipo = null) {
@@ -1140,16 +1133,17 @@ class PeopleController extends AppController {
                                 $numero = $identificacion;
                             }
                             $i = $this->event->query("SELECT certificado_id FROM events WHERE id = $eve");
-                            $id = $i[0]['events']['certificado_id'];
-                            $cert = $this->Event->query("SELECT nombres, documento, empresa FROM certificados WHERE id = $id");
-                            App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf_1.php'));
-                            $this->layout = 'certificado'; //this will use the pdf.ctp layout
-                            $informacion = array('documento' => $numero,
-                                'nombre' => $nombre,
-                                'apellido' => $apellido,
-                                'abr' => $abr,
-                                'empresa' => $empresa,
-                                'certificado' => $cert
+                            if ($i != array()) {
+                                $id = $i[0]['events']['certificado_id'];
+                                $cert = $this->Event->query("SELECT nombres, documento, empresa FROM certificados WHERE id = $id");
+                                App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
+                                $this->layout = 'certificado'; //this will use the pdf.ctp layout
+                                $informacion = array('documento' => $numero,
+                                    'nombre' => $nombre,
+                                    'apellido' => $apellido,
+                                    'abr' => $abr,
+                                    'empresa' => $empresa,
+                                    'certificado' => $cert
 //                    'categoria' => $categoria,
 //                    'evento' => $evento,
 //                    'ciudad' => $ciudad,
@@ -1158,13 +1152,16 @@ class PeopleController extends AppController {
 //                    'mesinicial' => $mesinicial,
 //                    'mesfinal' => $mesfinal,
 //                    'ano' => $anoinicial
-                            );
-                            $this->set('fpdf_1', new FPDF_1('L', 'mm', array('279.4', '215.9')));
-                            //debug($informacion);
-                            $this->set('data', $informacion);
-                            $this->render('certificado');
-                            $sqlexiste = "UPDATE `inputs` SET `certificate`=1,`fechacertificate`=CURRENT_TIMESTAMP,`usuariocertificate`=" . $this->Session->read('User.id') . " WHERE entr_codigo='$codigo'"; //
-                            $existe = $this->Person->query($sqlexiste);
+                                );
+                                $this->set('fpdf', new FPDF('L', 'mm', array('279.4', '215.9')));
+                                //debug($informacion);
+                                $this->set('data', $informacion);
+                                $this->render('certificado');
+                                $sqlexiste = "UPDATE `inputs` SET `certificate`=1,`fechacertificate`=CURRENT_TIMESTAMP,`usuariocertificate`=" . $this->Session->read('User.id') . " WHERE entr_codigo='$codigo'"; //
+                                $existe = $this->Person->query($sqlexiste);
+                            } else {
+                                $this->Session->setFlash('Este Evento no tiene certificado asignado', 'error');
+                            }
                         } else {
                             $this->Session->setFlash('La identificacion ya existe no puede volver a ser asignada.', 'error');
                         }
@@ -1213,16 +1210,17 @@ class PeopleController extends AppController {
                             $numero = $identificacion;
                         }
                         $i = $this->Event->query("SELECT certificado_id FROM events WHERE id = $eve");
-                        $id = $i[0]['events']['certificado_id'];
-                        $cert = $this->Event->query("SELECT nombres, documento, empresa FROM certificados WHERE id = $id");
-                        App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf_1.php'));
-                        $this->layout = 'certificado'; //this will use the pdf.ctp layout
-                        $informacion = array('documento' => $numero,
-                            'nombre' => $nombre,
-                            'apellido' => $apellido,
-                            'abr' => $abr,
-                            'empresa' => $empresa,
-                            'certificado' => $cert
+                        if ($i != array()) {
+                            $id = $i[0]['events']['certificado_id'];
+                            $cert = $this->Event->query("SELECT nombres, documento, empresa FROM certificados WHERE id = $id");
+                            App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
+                            $this->layout = 'certificado'; //this will use the pdf.ctp layout
+                            $informacion = array('documento' => $numero,
+                                'nombre' => $nombre,
+                                'apellido' => $apellido,
+                                'abr' => $abr,
+                                'empresa' => $empresa,
+                                'certificado' => $cert
 //                    'categoria' => $categoria,
 //                    'evento' => $evento,
 //                    'ciudad' => $ciudad,
@@ -1231,13 +1229,16 @@ class PeopleController extends AppController {
 //                    'mesinicial' => $mesinicial,
 //                    'mesfinal' => $mesfinal,
 //                    'ano' => $anoinicial
-                        );
-                        $this->set('fpdf_1', new FPDF_1('L', 'mm', array('279.4', '215.9')));
-                        //debug($informacion);
-                        $this->set('data', $informacion);
-                        $this->render('certificado');
-                        $sqlexiste = "UPDATE `inputs` SET `certificate`=1,`fechacertificate`=CURRENT_TIMESTAMP,`usuariocertificate`=" . $this->Session->read('User.id') . " WHERE entr_codigo='$codigo'"; //
-                        $existe = $this->Person->query($sqlexiste);
+                            );
+                            $this->set('fpdf', new FPDF('L', 'mm', array('279.4', '215.9')));
+                            //debug($informacion);
+                            $this->set('data', $informacion);
+                            $this->render('certificado');
+                            $sqlexiste = "UPDATE `inputs` SET `certificate`=1,`fechacertificate`=CURRENT_TIMESTAMP,`usuariocertificate`=" . $this->Session->read('User.id') . " WHERE entr_codigo='$codigo'"; //
+                            $existe = $this->Person->query($sqlexiste);
+                        } else {
+                            $this->Session->setFlash('Este evento no tiene certificado asignado', 'error');
+                        }
                     }
                 } else {
                     $this->Session->setFlash('Datos no validos.', 'error');
@@ -1430,7 +1431,7 @@ class PeopleController extends AppController {
 //                    'mesfinal' => $mesfinal,
 //                    'ano' => $anoinicial
                     );
-                    $this->set('fpdf_1', new FPDF('L', 'mm', array('279.4', '215.9')));
+                    $this->set('fpdf', new FPDF('L', 'mm', array('279.4', '215.9')));
                     //debug($informacion);
                     $this->set('data', $informacion);
                     $this->render('certificado');
