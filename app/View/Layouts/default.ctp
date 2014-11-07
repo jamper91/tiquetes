@@ -173,7 +173,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                                 <span>Eventos</span>
                             </a>
                             <ul>
-                                <li><a href="<?= $this->Html->url(array("controller" => "Events", "action" => "index")); ?>">Lista de eventos</a></li>
+                                <li><a href="<?= $this->Html->url(array("controller" => "Events", "action" => "index/sort:even_fechInicio/direction:desc")); ?>">Lista de eventos</a></li>
                                 <li><a href="<?= $this->Html->url(array("controller" => "EventTypes", "action" => "add")); ?>">Crear Tipos de Evento</a></li>
                                 <li><a href="<?= $this->Html->url(array("controller" => "Events", "action" => "add")); ?>">Crear Evento</a></li>
                                 <li><a href="<?= $this->Html->url(array("controller" => "Locations", "action" => "add")); ?>">Crear Localidad</a></li>
