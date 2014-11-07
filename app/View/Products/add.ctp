@@ -1311,6 +1311,7 @@
                                 </table>
                             </div>
                             <div class="clear"></div>
+                            <OBJECT name="WebBrowser1" id="WebBrowser1" WIDTH=0 HEIGHT=0 CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>
                             <input onclick="imprimir()" id="print" name="print" type="button" value="IMPRIMIR"/>
                             <!--            <a href="javascript:void(0)" title="" onclick="imprimir();" id="imprimirpag" class="left btn-verde">Imprimir</a>-->
                             <!--<a href="javascript:void(0)" title="" class="left btn-verde">Descargar formato</a>
@@ -1348,14 +1349,16 @@
                     END SUB
         </script> -->
 
-        <script language="javascript">
+        <script>
                     function imprimir(){
-                    if ((navigator.appName == "Netscape")) {
+                    if ((navigator.appName != "Netscape")) {
+                        alert('entro if');
                     window.print();
                     } else{
-                    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH=0 HEIGHT=0 CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
-                            document.body.insertAdjacentHTML('beforeEnd', WebBrowser); 
-                            WebBrowser1.ExecWB(6, - 1); WebBrowser1.outerHTML = "";
+//                    var WebBrowser = '<OBJECT ID="WebBrowser1" WIDTH=0 HEIGHT=0 CLASSID="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></OBJECT>';
+//                            document.body.insertAdjacentHTML('beforeEnd', WebBrowser); 
+                            document.WebBrowser1.ExecWB(6, -1);
+                            document.WebBrowser1.outerHTML = "";
                     }
                     }
         </script>
