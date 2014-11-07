@@ -9,8 +9,8 @@ echo $this->Html->script(array('matrix.tables'));
 			<!--<th><?php echo $this->Paginator->sort('id'); ?></th>-->
 			<th><?php echo $this->Paginator->sort('event_id', 'Evento'); ?></th>
 			<th><?php echo $this->Paginator->sort('nombre', 'Actividad'); ?></th>
-			<th><?php echo $this->Paginator->sort('conferencista', 'Expositor'); ?></th>
-			<th><?php echo $this->Paginator->sort('location_id', 'salón'); ?></th>
+			<th><?php echo $this->Paginator->sort('descripcion', 'Descripcion'); ?></th>
+			<th><?php echo $this->Paginator->sort('lugar', 'salón'); ?></th>
 			<th><?php echo $this->Paginator->sort('fecha', 'Fecha'); ?></th>
 			<th><?php echo $this->Paginator->sort('hora_inicio', 'Inicio'); ?></th>
 			<th><?php echo $this->Paginator->sort('hora_fin', 'Fin'); ?></th>
@@ -30,13 +30,13 @@ echo $this->Html->script(array('matrix.tables'));
 		</td>
 		<td><?php echo h($activity['Activity']['nombre']); ?>&nbsp;</td>
 		<td>
-			<?php echo $this->Html->link($activity['Activity']['conferencista'], array('controller' => 'people', 'action' => 'view', $activity['Activity']['id'])); ?>
+			<?php echo h($activity['Activity']['descripcion']); ?>
 		</td>
-		<td><?php echo h($activity['Location']['loca_nombre']); ?>&nbsp;</td>
+		<td><?php echo h($activity['Activity']['locacion']); ?>&nbsp;</td>
 		<td><?php echo h($activity['Activity']['fecha']); ?>&nbsp;</td>
 		<td><?php echo h($activity['Activity']['hora_inicio']); ?>&nbsp;</td>
 		<td><?php echo h($activity['Activity']['hora_fin']); ?>&nbsp;</td>
-		<!--<td><?php echo h($activity['Activity']['costo']); ?>&nbsp;</td>-->
+		<!--<td><?php echo h($activity['Activity']['observaciones']); ?>&nbsp;</td>-->
 		<td><?php echo h($activity['Activity']['aforo']); ?>&nbsp;</td>
 		<td><?php echo h($activity['Activity']['alerta_aforo']); ?>&nbsp;</td>
 		<!--<td><?php echo h($activity['Activity']['control_aforo']); ?>&nbsp;</td>-->
