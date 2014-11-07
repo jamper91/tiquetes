@@ -1037,6 +1037,7 @@ class EntradasController extends AppController {
     // este reporte es para controla r el ingreso y la salida de las persoans a las iferentes actividades dentro de un evento
     public function exportar7($event_id = null) {
         $this->loadModel("Log");
+        $this->loadModel("Activity");
         $datos = $this->Log->query(
                 "SELECT 
                     *
@@ -1074,8 +1075,9 @@ class EntradasController extends AppController {
             $datos2[$i] = $aux;
             $i++;
         }
-
-        $this->set("datos", $datos2);
+        $actividades = $this->Activity->find('all', array('conditions'=>array("Activity.event_id=$event_id"), 'fields'=>array('Activity.nombre')));
+//        debug($actividades);die;
+        $this->set(compact('datos2', 'actividades'));//$this->set("datos", $datos2, 'actividades', $actividades);
     }
 
     public function getTotalByCategory() {
@@ -1085,12 +1087,16 @@ class EntradasController extends AppController {
         $event_id = $this->request->data['even_id'];
         $total = $this->Categoria->query("select c.`descripcion`, count(*) as total FROM `people` p INNER JOIN `inputs` i ON i.person_id = p.id INNER JOIN categorias c ON c.id = i.categoria_id WHERE i.event_id= $event_id group by c.descripcion");
         $datos = array();
-        for ($i = 0; $i < count($total); $i++) {
+        $full = 0;
+        for ($i = 0; $i < count($total); $i++) {            
             $datos[$i]['cat']['cuenta'] = count($total);
             $datos[$i]['cat']['categoria'] = $total[$i]['c']['descripcion'];
             $datos[$i]['cat']['total'] = $total[$i][0]['total'];
+            $full = $full+$total[$i][0]['total'];
         }
-
+        for($j = 1; $j<= count($total);$j++){
+        $datos[$i-$j]['cat']['full']=$full;
+        }
         $this->set(
                 array(
                     "datos" => $datos,

@@ -19,24 +19,15 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                     "empty" => "Seleccione un Evento",
                     'required'=>'true'
                 ));
-                ?></td>
-            <td>Locación</td>
-            <td><?php
-                echo $this->Form->input('location_id', array(
-                    "div" => array(
-                        "class" => "controls"
-                    ),
-                    'label' => '',
-                    "empty" => "Seleccione una Locación",
-                    'required'=>'true'
-                ));
-                ?></td>
+                ?></td>            
+            <td>Lugar</td>
+            <td><?php echo $this->Form->input('locacion', array ('label' => '', 'required'=>'true')); ?></td>
         </tr>
         <tr>
             <td>Actividad</td>
             <td><?php echo $this->Form->input('nombre', array('label' => '', 'required'=>'true')); ?></td>
-            <td>Conferencista</td>
-            <td><?php echo $this->Form->input('conferencista', array('label' => '')); ?></td>
+            <td>Descripcion</td>
+            <td><?php echo $this->Form->input('descripcion', array('label' => '')); ?></td>
         </tr>        
         <tr>
             <td>Día</td>
@@ -48,8 +39,8 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
         <tr>
             <td>Hora final</td>
             <td><?php echo $this->Form->input('hora_fin', array('label' => '', 'placeholder'=>'HH:MM')); ?></td>
-            <td>Costo</td>
-            <td><?php echo $this->Form->input('costo', array('label' => '', 'required'=>'true')); ?></td>
+            <td>Observaciones</td>
+            <td><?php echo $this->Form->input('observaciones', array('label' => '', 'required'=>'true')); ?></td>
         </tr>
         <tr>
             <td>Aforo</td>
@@ -58,8 +49,10 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
             <td><?php echo $this->Form->input('alerta_aforo', array('label' => '')); ?></td>
         </tr>
         <tr>
-            <td colspan="2" align="right">Reingresos </td>
-            <td colspan="2" align="left"><?php echo $this->Form->input('reingresos', array('label' => '')); ?></td>
+            <td>Reingresos </td>
+            <td><?php echo $this->Form->input('reingresos', array('label' => '')); ?></td>
+            <td>Calcular permanencia </td>
+            <td><?php echo $this->Form->input('permanencia', array('label' => '')); ?></td>
         </tr>
     </table>
     
@@ -72,25 +65,9 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
 <script>
     $("#ActivityEventId").change(function() {
         if ($(this).val() !== "") {
-            var url4 = urlbase + "events/getLocationsEvent.xml";
             var datos4 = {
                 event_id: $(this).val()
-            };
-            ajax(url4, datos4, function(xml) {
-                $("#ActivityLocationId").html("<option value=''>Seleccione una Localidad</option>");
-                $("datos", xml).each(function() {
-                    var obj = $(this).find("Location");
-                    var valor, texto;
-                    valor = $("id", obj).text();
-                    texto = $("name", obj).text();
-                    if (valor) {
-                        var html = "<option value='$1'>$2</option>";
-                        html = html.replace("$1", valor);
-                        html = html.replace("$2", texto);
-                        $("#ActivityLocationId").append(html);
-                    }
-                });
-            });
+            };            
             var url = urlbase + "events/getDaysByEvent.xml";
             ajax(url, datos4, function(xml) {
                 $("#ActivityFecha").html("<option value =''>Seleccione un Día</option>");
@@ -109,30 +86,5 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
             });
         }
     });
-    $("#buscar").click(function() {
-//            alert("aasd");
-        var url = urlbase + "companies/search.xml";
-        var datos = {
-            documento: $("#ActivityDocumento").val()
-        };
-        ajax(url, datos, function(xml) {
-            $("datos", xml).each(function() {
-                var obj = $(this).find("Person");
-                var nombre, apellido, id;
-                id = $("id", obj).text();
-                nombre = $("pers_primNombre", obj).text();
-                apellido = $("pers_primApellido", obj).text();
-                if (nombre !== "") {
-                    $("#person_id").val(id);
-                    $("#ActivityNombres").val(nombre);
-                    $("#ActivityApellidos").val(apellido);
-                } else {
-                    $("#person_id").val("");
-                    $("#ActivityNombres").val("");
-                    $("#ActivityApellidos").val("");
-                    alert("No se encuentra una persona registrada con ese número de documento");
-                }
-            });
-        });
-    });
+    
 </script>

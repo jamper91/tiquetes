@@ -122,21 +122,6 @@ class ActivitiesController extends AppController {
         foreach ($eventos as $key => $value) {
             $event_id = $key;
         }
-        $activity = $this->Activity->find('all', array('conditions' => array("Activity.id = $id"), 'fields' => array('Activity.fecha', 'Activity.hora_inicio', 'Activity.hora_fin', 'Activity.location_id'), 'recursive' => 0));
-
-        $location = $activity[0]['Activity']['location_id'];
-        $dat = $this->Location->find('all', array(
-            'fields' => array('Location.stage_id'),
-            'conditions' => array("Location.id= $location"),
-            'recursive' => 0
-        ));
-        $stage_id = $dat[0]['Location']['stage_id'];
-        $locaciones = $this->Location->find('list', array(
-            'fields' => array('Location.id', 'Location.loca_nombre'),
-            'conditions' => array("Location.stage_id= $stage_id", "Location.event_id=$event_id"),
-            'recursive' => 0
-        ));
-//        debug($locaciones);die;
         $sql = "SELECT datediff(`even_fechFinal`, `even_fechInicio`) AS cantidad FROM `events` e WHERE `id` = $event_id";
         $cantidad = $this->Event->query($sql);
         $total = $cantidad[0][0]['cantidad'];
@@ -155,7 +140,8 @@ class ActivitiesController extends AppController {
                 $f = date('Y-m-d', strtotime('+1 days', strtotime($f)));
             }
         }
-        $this->set(compact('eventos', 'datos', 'activity', 'locaciones', 'dias', 'id'));
+
+        $this->set(compact('eventos', 'datos', 'locaciones', 'dias', 'id'));
     }
 
     /**
@@ -204,7 +190,7 @@ class ActivitiesController extends AppController {
                     $escar = $this->request->data['Activity']['escarapela'];
                     $documento = $this->request->data['Activity']['documento'];
                     if ($escar != '') {
-                        $escarapela = substr($escar, 0,-1);
+                        $escarapela = substr($escar, 0, -1);
                         $pers = $this->Input->find('list', array('conditions' => array("Input.event_id = $eve")));
                         if ($pers != array()) {
                             foreach ($pers as $key => $value) {

@@ -23,13 +23,6 @@ class Activity extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		),
-		'Location' => array(
-			'className' => 'Location',
-			'foreignKey' => 'location_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
+		),		
 	);
 }
