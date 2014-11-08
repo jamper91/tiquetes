@@ -28,6 +28,21 @@ class EventsController extends AppController {
 //        $eventos = $this->Event->query($sql);
 //        $this->set(compact('eventos'));
         $this->set('events', $this->Paginator->paginate());
+        
+        $date = date('Y-m-d');
+//                    debug($date);
+                    //van los eventos disponibles 
+                    $events = $this->Event->find('list', array(
+                        "fields" => array(
+                            "Event.id",
+                            "Event.even_nombre"
+                        ),
+                        "conditions" => array(
+                            "Event.even_fechFinal >= '$date'"
+                        )
+                    ));
+//                    debug($events);die;
+                    $this->Session->write('EventsList', $events);
     }
 
     public function mapea($id = null) {
@@ -282,7 +297,7 @@ class EventsController extends AppController {
                                         }
                                     }
 
-                                    return $this->redirect(array('action' => 'index'));
+                                    return $this->redirect(array('action' => 'index/sort:even_fechInicio/direction:desc'));
                                 } catch (Exception $ex) {
                                     $error2 = $ex->getCode();
                                     if ($error2 == '23000') {
@@ -393,7 +408,7 @@ class EventsController extends AppController {
                                 }
 
 
-                                return $this->redirect(array('action' => 'index'));
+                                return $this->redirect(array('action' => 'index/sort:even_fechInicio/direction:desc'));
                             } catch (Exception $ex) {
                                 $error2 = $ex->getCode();
                                 if ($error2 == '23000') {
@@ -516,7 +531,7 @@ class EventsController extends AppController {
                     }
 
 
-                    return $this->redirect(array('action' => 'index'));
+                    return $this->redirect(array('action' => 'index/sort:even_fechInicio/direction:desc'));
 //                    } catch (Exception $ex) {
 //                        $error2 = $ex->getCode();
 //                        $mensaje2 = $ex->getMessage();
@@ -801,8 +816,12 @@ class EventsController extends AppController {
 
                                 if ($this->Event->save($this->request->data)) {
                                     CakeSession::write('sw', '0');
+                                    CakeSession::delete('fecha1');
+                                    CakeSession::delete('fecha2');
+                                    CakeSession::delete('fecha3');
+                                    CakeSession::delete('fecha4');
                                     $this->Session->setFlash(__('The event has been saved.'));
-                                    return $this->redirect(array('action' => 'index'));
+                                    return $this->redirect(array('action' => 'index/sort:even_fechInicio/direction:desc'));
                                 } else {
                                     $this->Session->setFlash(__('The event could not be saved. Please, try again.'));
                                 }
@@ -902,8 +921,12 @@ class EventsController extends AppController {
 
                             if ($this->Event->save($this->request->data)) {
                                 CakeSession::write('sw', '0');
+                                CakeSession::delete('fecha1');
+                                CakeSession::delete('fecha2');
+                                CakeSession::delete('fecha3');
+                                CakeSession::delete('fecha4');
                                 $this->Session->setFlash(__('The event has been saved.'));
-                                return $this->redirect(array('action' => 'index'));
+                                return $this->redirect(array('action' => 'index/sort:even_fechInicio/direction:desc'));
                             } else {
                                 $this->Session->setFlash(__('The event could not be saved. Please, try again.'));
                             }
@@ -1021,8 +1044,12 @@ class EventsController extends AppController {
 
                             if ($this->Event->save($this->request->data)) {
                                 CakeSession::write('sw', '0');
+                                CakeSession::delete('fecha1');
+                                CakeSession::delete('fecha2');
+                                CakeSession::delete('fecha3');
+                                CakeSession::delete('fecha4');
                                 $this->Session->setFlash(__('The event has been saved.'));
-                                return $this->redirect(array('action' => 'index'));
+                                return $this->redirect(array('action' => 'index/sort:even_fechInicio/direction:desc'));
                             } else {
                                 $this->Session->setFlash(__('The event could not be saved. Please, try again.'));
                             }
@@ -1125,8 +1152,12 @@ class EventsController extends AppController {
 
                         if ($this->Event->save($this->request->data)) {
                             CakeSession::write('sw', '0');
+                            CakeSession::delete('fecha1');
+                            CakeSession::delete('fecha2');
+                            CakeSession::delete('fecha3');
+                            CakeSession::delete('fecha4');
                             $this->Session->setFlash('El evento se guardo correctamente.', 'good');
-                            return $this->redirect(array('action' => 'index'));
+                            return $this->redirect(array('action' => 'index/sort:even_fechInicio/direction:desc'));
                         } else {
                             $this->Session->setFlash('El evento no pudo ser editado. Por favor, intente nuevamente.', 'error');
                         }
@@ -1257,7 +1288,7 @@ class EventsController extends AppController {
         } else {
             $this->Session->setFlash(__('The event could not be deleted. Please, try again.'));
         }
-        return $this->redirect(array('action' => 'index'));
+        return $this->redirect(array('action' => 'index/sort:even_fechInicio/direction:desc'));
     }
 
     public function getEventsByStage() {
@@ -1284,7 +1315,7 @@ class EventsController extends AppController {
                     "_serialize" => array("datos")
                 )
         );
-    }    
+    }
 
     public function getDaysByEvent() {
         $this->layout = "webservices";
@@ -1302,7 +1333,7 @@ class EventsController extends AppController {
         $datos = array();
 
         if ($total > 0) {
-            for ($i = 0; $i <=$total; $i++) {
+            for ($i = 0; $i <= $total; $i++) {
                 $datos[$i]['g']['id'] = $f;
                 $datos[$i]['g']['name'] = $f;
                 $f = date('Y-m-d', strtotime('+1 days', strtotime($f)));
