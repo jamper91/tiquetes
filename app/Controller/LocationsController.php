@@ -52,15 +52,51 @@ class LocationsController extends AppController {
         $this->loadModel('State');
         $this->loadModel('City');
         $this->loadModel('Stages');
+        $this->loadModel('Event');
         if ($this->request->is('post')) {
-            $this->Location->create();
+            $event_id = $this->data['Location']['event_id'];
+            debug($event_id);
+            $stage_id = $this->Event->find('list', array(
+                "fields" => array(
+                    "Event.stage_id"
+                ),
+                "conditions" => array(
+                    "Event.id = '$event_id'"
+                )
+            ));
+            debug($stage_id[$event_id]);
+            die;
+
+            $newLocation = $this->Location->create();
+            $newLocation = array(
+                'Event' => array(
+                    'stage_id' => $stage_id[$event_id],
+                    'loca_nombre' => strtoupper($this->data['Location']['loca_nombre']),
+                    'loca_fila' => $this->data['Location']['loca_fila'],
+                    'loca_colomnna' => $this->data['Location']['loca_colomnna'],
+                )
+            );
             if ($this->Location->save($this->request->data)) {
                 $this->Session->setFlash(__('The location has been saved.'));
-                return $this->redirect(array('action' => 'index'));
+                return $this->redirect(array('controller' => 'Events', 'action' => 'mapea', 1, 0));
             } else {
                 $this->Session->setFlash(__('The location could not be saved. Please, try again.'));
             }
         }
+        $date = date('Y-m-d');
+//                    debug($date);
+        //van los eventos disponibles 
+
+        $events = $this->Event->find('list', array(
+            "fields" => array(
+                "Event.id",
+                "Event.even_nombre"
+            ),
+            "conditions" => array(
+                "Event.even_fechFinal >= '$date'"
+            )
+        ));
+
         $stages = $this->Location->Stage->find('list');
         $countriesName = $this->Country->find('list', array(
             "fields" => array(
@@ -68,7 +104,7 @@ class LocationsController extends AppController {
             )
         ));
         $parentLocations = $this->Location->ParentLocation->find('list');
-        $this->set(compact('stages', 'parentLocations', 'countriesName'));
+        $this->set(compact('stages', 'parentLocations', 'countriesName', 'events'));
     }
 
     /**

@@ -3,41 +3,12 @@
     <fieldset>
         <legend><?php echo __('Crear Localidad'); ?></legend>
         <?php
-        echo $this->Form->input('country_id', array(
-            "div" => array(
-                "class" => "controls"
-            ),
-            'label' => 'País',
-            "options" => $countriesName,
-            "empty" => "Seleccione un País"
-        ));
-        echo $this->Form->input('state_id', array(
-            "div" => array(
-                "class" => "controls"
-            ),
-            "label" => "Departamento",
-            "empty" => "seleccione un Departamento"
-        ));
-        echo $this->Form->input('city_id', array(
-            "div" => array(
-                "class" => "controls"
-            ),
-            "label" => "Ciudad",
-            "empty" => "seleccione una ciudad"
-        ));
-        echo $this->Form->input('stage_id', array(
-            "div" => array(
-                "class" => "controls"
-            ),
-            "label" => "Escenario",
-            "options" => "Stage.esce_nombre",
-        ));
         echo $this->Form->input('event_id', array(
             "div" => array(
                 "class" => "controls"
             ),
             "label" => "Evento",
-            "options" => "Event.even_nombre",
+            "options" => $events,
         ));
         echo $this->Form->input('loca_nombre', array(
             "div" => array(
@@ -45,7 +16,7 @@
             ),
             'label' => 'Nombre',
         ));
-        echo $this->Form->input('parent_id',array('label'=>'localidad padre'));
+       // echo $this->Form->input('parent_id',array('label'=>'localidad padre'));
         echo $this->Form->input('loca_fila',array('label'=>'numero de filas'));
         echo $this->Form->input('loca_colomnna',array('label'=>'numero de columnas'));
         echo $this->Form->input('coord', array("value" => " ", "type" => "hidden"));
