@@ -867,6 +867,8 @@ class PeopleController extends AppController {
                         $sql = "INSERT INTO people (pers_documento,  document_type_id, categoria_id, pers_primNombre, pers_primApellido, pers_empresa, pers_mail, pers_celular, pers_telefono,  ciudad, pais, stan, sector, cargo) VALUES ('$doc', $ti, $cat,'$nom','$ape', '$ent', '$mail', '$cel', '$tel', '$ciu', '$pai', '$sta', '$sec', '$pro')";
                         $this->Person->query($sql);
                         $person = $this->Person->query("SELECT id FROM people WHERE pers_documento='$doc'");
+                        debug($sql);
+                        debug($person);die;
                         $person_id = $person [0]['people']['id'];
                         $this->Input->query("INSERT INTO inputs (person_id, entr_codigo, categoria_id, event_id, fechaescarapela) VALUES ($person_id, '$cadena', $cat, $event_id, NULL )");
                     }

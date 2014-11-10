@@ -34,7 +34,7 @@
 <br><br>
 <div align='center'>
 
-    <table class="table table-bordered data-table" id="table" name='table'></table>
+    <table  width="40%" class="table-bordered" id="table" name='table'></table>
 </div>
 <!--        <table>
    <tr>
@@ -128,14 +128,14 @@
                 var cantidad = $("total", obj).text();
                 var porcentaje = (cantidad*100)/full;                
                 j = parseInt(cantidad) + j;
-                var html = "<tr><th>$1</th><td>$2</th><td>$3 %</th></tr>"
+                var html = "<tr><th align='center'>$1</th><td align='center'>$2</td><td align='center'>$3 %</td></tr>"
                 html = html.replace("$1", categoria);
                 html = html.replace("$2", cantidad);
                 html = html.replace("$3", porcentaje.toFixed(2));
                 $("#table").append(html);
 
             });
-            var html2 =("var html = '<tr><th>$1</th><th>$2</th><td></td></tr>'");
+            var html2 =("var html = '<tr><th align='center'>$1</th align='center'><th align='center'>$2</th><td align='center'>100 %</td></tr>'");
             html2 = html2.replace("$1", 'TOTAL');
             html2 = html2.replace("$2", j);
             $("#table").append(html2);

@@ -885,9 +885,9 @@ class EntradasController extends AppController {
                 "Event.id",
                 "Event.even_nombre"
             ),
-//            "conditions" => array(
-//                "Event.even_fechFinal >= NOW()"
-//            )
+            "order" => array(
+                "even_nombre"
+            )
         ));
         $this->set(compact('events'));
         $this->set(compact('countriesName'));
@@ -1034,50 +1034,78 @@ class EntradasController extends AppController {
 
         $this->set("datos", $datos2);
     }
+
     // este reporte es para controla r el ingreso y la salida de las persoans a las iferentes actividades dentro de un evento
     public function exportar7($event_id = null) {
         $this->loadModel("Log");
         $this->loadModel("Activity");
-        $datos = $this->Log->query(
-                "SELECT 
-                    *
-                FROM 
-                    people person
-                LEFT JOIN 
-                    activities_people activitiesPeople
-                ON 
-                    person.id = activitiesPeople.person_id
-                LEFT JOIN
-                    activities activity
-                ON
-                    activity.id = activitiesPeople.activity_id
-                WHERE
-                    person.id IS NOT null AND activity.event_id = $event_id;"
-        );        
+        $dat = $this->Log->query(
+                "SELECT ap.`person_id` FROM `activities_people` ap INNER JOIN `activities` a ON a.`id` = ap.`activity_id` WHERE a.`event_id` = $event_id GROUP BY ap.`person_id` ORDER BY a.`id`  ASC"
+        );
         $i = 0;
+        $aux2 = array();
+        foreach ($dat as $key => $value) {
+            $person_id = $value ['ap']['person_id'];
+            $d = $this->Log->query("SELECT p.`categoria_id`, p.`pers_documento`, p.`pers_primNombre`, p.`pers_primApellido`, ap.`fecha_entrada`, ap.`fecha_salida`, a.`permanencia`, a.`id` FROM `people` p INNER JOIN `activities_people` ap ON ap.`person_id` = p.`id` INNER JOIN `activities` a ON a.`id` = ap.`activity_id` WHERE p.`id` = $person_id ORDER BY a.`id` ASC ");
+//          
+            $datos = array();
+            for ($i = 0; $i < count($d); $i++) {
+                if ($i == 0) {
+                    $datos['categoria'] = $d[$i]['p']['categoria_id'];
+                    $datos['documento'] = $d[$i]['p']['pers_documento'];
+                    $datos['nombre'] = $d[$i]['p']['pers_primNombre'];
+                    $datos['apellido'] = $d[$i]['p']['pers_primApellido'];
+                    $datos['entrada'] = $d[$i]['ap']['fecha_entrada'];
+                    $datos['permanencia'] = $d[$i]['a']['permanencia'];
+                    if ($d[$i]['a']['permanencia'] == true) {
+                        $datos['salida'] = $d[$i]['ap']['fecha_salida'];
+                    }
+
+                    $datos['actividad'] = $d[$i]['a']['id'];
+                } else {
+                    $datos['entrada' . $i] = $d[$i]['ap']['fecha_entrada'];
+                    $datos['permanencia' . $i] = $d[$i]['a']['permanencia'];
+                    if ($d[$i]['a']['permanencia'] == true) {
+                        $datos['salida' . $i] = $d[$i]['ap']['fecha_salida'];
+                    }
+                    $datos['actividad' . $i] = $d[$i]['a']['id'];
+                }
+            }
+            $aux2[$key] = $datos;
+        }
         $datos2 = array();
         $categoria = "";
-        foreach ($datos as $dato) {
-            $id = $dato['person']['categoria_id'];
+        foreach ($aux2 as $dato) {
+            $id = $dato['categoria'];
             $res = $this->Log->query("SELECT descripcion FROM categorias WHERE id= $id ");
             if ($res != array()) {
                 $categoria = $res[0]['categorias']['descripcion'];
             }
             $aux = array(
                 'categoria' => $categoria,
-                'documento' => $dato['person']['pers_documento'],
-                'nombres' => $dato['person']['pers_primNombre'],
-                'apellidos' => $dato['person']['pers_primApellido'],
-                'actividad' => $dato['activity']['nombre'],
-                'ingreso' => $dato['activitiesPeople']['fecha_entrada'],
-                'salida' => $dato['activitiesPeople']['fecha_salida'],
+                'documento' => $dato['documento'],
+                'nombres' => $dato['nombre'],
+                'apellidos' => $dato['apellido'],
+                'entrada' => $dato['entrada'],
+                'salida' => $dato['salida'],
+                'permanencia' => $dato['permanencia'],
+                'actividad' => $dato['actividad'],
             );
+
+            if (count($dato) > 8) {
+                for ($j = 1; $j <((count($dato) - 8) / 2); $j++) {
+                    array_push($aux, $dato['entrada' . $j]);
+                    array_push($aux, $dato['salida' . $j]);
+                    array_push($aux, $dato['permanencia' . $j]);
+                    array_push($aux, $dato['actividad' . $j]);
+                }
+            }
             $datos2[$i] = $aux;
             $i++;
         }
-        $actividades = $this->Activity->find('all', array('conditions'=>array("Activity.event_id=$event_id"), 'fields'=>array('Activity.nombre')));
+        $actividades = $this->Activity->find('all', array('conditions' => array("Activity.event_id=$event_id"), 'fields' => array('Activity.nombre', 'Activity.permanencia', 'Activity.id')));
 //        debug($actividades);die;
-        $this->set(compact('datos2', 'actividades'));//$this->set("datos", $datos2, 'actividades', $actividades);
+        $this->set(compact('datos2', 'actividades')); //$this->set("datos", $datos2, 'actividades', $actividades);
     }
 
     public function getTotalByCategory() {
@@ -1088,14 +1116,14 @@ class EntradasController extends AppController {
         $total = $this->Categoria->query("select c.`descripcion`, count(*) as total FROM `people` p INNER JOIN `inputs` i ON i.person_id = p.id INNER JOIN categorias c ON c.id = i.categoria_id WHERE i.event_id= $event_id group by c.descripcion");
         $datos = array();
         $full = 0;
-        for ($i = 0; $i < count($total); $i++) {            
+        for ($i = 0; $i < count($total); $i++) {
             $datos[$i]['cat']['cuenta'] = count($total);
             $datos[$i]['cat']['categoria'] = $total[$i]['c']['descripcion'];
             $datos[$i]['cat']['total'] = $total[$i][0]['total'];
-            $full = $full+$total[$i][0]['total'];
+            $full = $full + $total[$i][0]['total'];
         }
-        for($j = 1; $j<= count($total);$j++){
-        $datos[$i-$j]['cat']['full']=$full;
+        for ($j = 1; $j <= count($total); $j++) {
+            $datos[$i - $j]['cat']['full'] = $full;
         }
         $this->set(
                 array(
