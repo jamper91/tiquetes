@@ -1063,11 +1063,11 @@ class EntradasController extends AppController {
 
                     $datos['actividad'] = $d[$i]['a']['id'];
                 } else {
-                    $datos['entrada' . $i] = $d[$i]['ap']['fecha_entrada'];
-                    $datos['permanencia' . $i] = $d[$i]['a']['permanencia'];
+                    $datos['entrada' . $i] = $d[$i]['ap']['fecha_entrada'];                    
                     if ($d[$i]['a']['permanencia'] == true) {
                         $datos['salida' . $i] = $d[$i]['ap']['fecha_salida'];
                     }
+                    $datos['permanencia' . $i] = $d[$i]['a']['permanencia'];
                     $datos['actividad' . $i] = $d[$i]['a']['id'];
                 }
             }
@@ -1093,10 +1093,14 @@ class EntradasController extends AppController {
             );
 
             if (count($dato) > 8) {
-                for ($j = 1; $j <((count($dato) - 8) / 2); $j++) {
+                for ($j = 1; $j < ((count($dato) - 8) / 4); $j++) {
                     array_push($aux, $dato['entrada' . $j]);
-                    array_push($aux, $dato['salida' . $j]);
                     array_push($aux, $dato['permanencia' . $j]);
+                    if ($dato['permanencia' . $j] == true) {
+                        array_push($aux, $dato['salida' . $j]);
+                    } else {
+                        array_push($aux, '');
+                    }
                     array_push($aux, $dato['actividad' . $j]);
                 }
             }
