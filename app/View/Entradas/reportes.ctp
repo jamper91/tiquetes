@@ -27,8 +27,9 @@
         <!--<li><a href="<?= $this->Html->url("exportar5") ?>">Reporte Ingreso Detallado</a></li>-->
         <li><a id='exportar5' name='exportar5' style="cursor:pointer">Asistentes y Access control</a></li>
         <li><a id='exportar6' name='exportar6' style="cursor:pointer">Catering</a></li>
-        <li><a id='exportar7' name='exportar7' style="cursor:pointer">Actividades</a></li>
+        <li><a id='exportar7' name='exportar7' style="cursor:pointer">Actividades Detallado</a></li>
         <li><a id='total' name='total' style="cursor:pointer">Asistencia Por categoria</a></li>
+        <li><a id='activitiesevent' name='activitiesevent' style="cursor:pointer">Consolidado Actividades</a></li>
         <!--</ul>-->
 </div>
 <br><br>
@@ -111,6 +112,50 @@
 <div class="mensaje"></div>
 <script>
 
+    $("#activitiesevent").click(function() {
+        var url = urlbase + "entradas/getActivitiesByEvent.xml";
+        var datos2 = {
+            even_id: $("#EntradaEventId").val()
+        };
+        ajax(url, datos2, function(xml) {
+            $("#table").html("var html = '<tr><th>DESCRIPCION</th><th>LUGAR</th><th>FECHA</th><th>HORA INICIO</th><th>HORA FINAL</th><th>AFORO</th><th>INGRESOS</th><th>DISPONIBLE</th></tr>'");
+
+            $("datos", xml).each(function() {
+                var obj = $(this).find("Activity");
+                var nombre = $("nombre", obj).text();
+                var lugar = $("locacion", obj).text();
+                var fecha = $("fecha", obj).text();
+                var h1 = $("hora_inicio", obj).text();
+                var h2 = $("hora_fin", obj).text();
+                var aforo;
+                var ingreso = $("control_aforo", obj).text();
+                var disponible;
+
+                if (parseInt($("aforo", obj).text()) > 0) {
+                    aforo = $("aforo", obj).text();
+                    disponible = 0;
+                    if (parseInt($("aforo", obj).text()) >= parseInt($("control_aforo", obj).text())) {
+                        disponible = parseInt($("aforo", obj).text()) - parseInt($("control_aforo", obj).text());
+                    }
+                } else {
+                    aforo = "";
+                    disponible = "";
+                }
+                var html = "<tr><td>$1</th><td>$2</th><th>$3</th><th>$4</th><th>$5</th><th>$6</th><th><font color='blue'>$7</font></th><th>$8</th></tr>"
+                html = html.replace("$1", nombre);
+                html = html.replace("$2", lugar);
+                html = html.replace("$3", fecha);
+                html = html.replace("$4", h1);
+                html = html.replace("$5", h2);
+                html = html.replace("$6", aforo);
+                html = html.replace("$7", ingreso);
+                html = html.replace("$8", disponible);
+                $("#table").append(html);
+            });
+
+        });
+    });
+
     $("#total").click(function() {
         var url = urlbase + "entradas/getTotalByCategory.xml";
         var datos2 = {
@@ -126,7 +171,7 @@
                 var full = $("full", obj).text();
                 var categoria = $("categoria", obj).text();
                 var cantidad = $("total", obj).text();
-                var porcentaje = (cantidad*100)/full;                
+                var porcentaje = (cantidad * 100) / full;
                 j = parseInt(cantidad) + j;
                 var html = "<tr><th align='center'>$1</th><td align='center'>$2</td><td align='center'>$3 %</td></tr>"
                 html = html.replace("$1", categoria);
@@ -135,7 +180,9 @@
                 $("#table").append(html);
 
             });
+
             var html2 =("var html = '<tr><th align='center'>$1</th align='center'><th align='center'>$2</th><td align='center'>100 %</td></tr>'");
+
             html2 = html2.replace("$1", 'TOTAL');
             html2 = html2.replace("$2", j);
             $("#table").append(html2);
@@ -187,7 +234,7 @@
 //                }]
 //        });
 //    }
-    
+
     $("#exportar5").click(function() {
         var event_id = $("#EntradaEventId").val();
         window.location = urlbase + "entradas/exportar5/" + event_id;
@@ -528,4 +575,4 @@ $pos = 0;
 
 
 
-<p>Entradas <?php // echo $salidas          ?></p>-->
+<p>Entradas <?php // echo $salidas            ?></p>-->

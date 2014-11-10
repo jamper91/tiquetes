@@ -1136,5 +1136,40 @@ class EntradasController extends AppController {
                 )
         );
     }
+    
+    public function getActivitiesByEvent() {
+        $this->layout = "webservices";        
+        $this->loadModel("Activity");
+        $event_id = $this->request->data['even_id'];
+//        $total = $this->Event->query("SELECT `nombre`, `locacion`, `fecha`, `hora_inicio`, `hora_fin`,`aforo`,`control_aforo` FROM `activities` WHERE `event_id` = $event_id ORDER BY `nombre` ");
+         $options = array(
+            "conditions" => array(
+                "Activity.event_id" => $event_id
+            ),
+            "fields" => array(
+                "Activity.nombre",
+                "Activity.locacion",
+                "Activity.fecha",
+                "Activity.hora_inicio",
+                "Activity.hora_fin",
+                "Activity.aforo",
+                "Activity.control_aforo",
+//                "(Activity.aforo - Activity.control_aforo) AS disponibles",
+            ),
+             "order" => array(
+               "Activity.nombre"  
+             ),
+            "recursive" => 0
+        );
+
+        $datos = $this->Activity->find("all", $options);
+//        debug($datos);
+        $this->set(
+                array(
+                    "datos" => $datos,
+                    "_serialize" => array("datos")
+                )
+        );
+    }
 
 }
