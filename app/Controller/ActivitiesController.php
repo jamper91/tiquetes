@@ -107,6 +107,8 @@ class ActivitiesController extends AppController {
             $options = array('conditions' => array('Activity.' . $this->Activity->primaryKey => $id));
             $this->request->data = $this->Activity->find('first', $options);
         }
+        $event = $this->Activity->find('all', array('conditions'=> array("Activity.id=$id"), 'fields'=>array('Activity.event_id')));
+        $event_id = $event[0]['Activity']['event_id'];
         $hoy = date("Y-m-d");
         $options = array(
             "conditions" => array(
@@ -119,9 +121,7 @@ class ActivitiesController extends AppController {
             "recursive" => 0
         );
         $eventos = $this->Event->find("list", $options);
-        foreach ($eventos as $key => $value) {
-            $event_id = $key;
-        }
+        
         $sql = "SELECT datediff(`even_fechFinal`, `even_fechInicio`) AS cantidad FROM `events` e WHERE `id` = $event_id";
         $cantidad = $this->Event->query($sql);
         $total = $cantidad[0][0]['cantidad'];
@@ -201,7 +201,7 @@ class ActivitiesController extends AppController {
                                 foreach ($p as $key => $value) {
                                     $input_id = $value;
                                 }
-                                $control = $this->Activity->query("SELECT id FROM `cupos_activities` WHERE input_id = $input_id");
+                                $control = $this->Activity->query("SELECT id FROM `cupos_activities` WHERE input_id = $input_id AND activity_id = $activity_id");
                                 if ($control == array()) {
                                     $this->Activity->query("INSERT INTO `cupos_activities`(`activity_id`, `input_id`, `activo`) VALUES ($activity_id, $input_id, true)");
                                     $cupo = $cupo - 1;
@@ -220,7 +220,7 @@ class ActivitiesController extends AppController {
                         $i = $this->Input->query("SELECT i.`id` FROM `inputs` i INNER JOIN people p ON i.person_id = p.id WHERE p.pers_documento = '$documento' AND i.event_id = $eve ");
                         if ($i != array()) {
                             $input_id = $i[0]['i']['id'];
-                            $control = $this->Activity->query("SELECT id FROM `cupos_activities` WHERE input_id = $input_id");
+                            $control = $this->Activity->query("SELECT id FROM `cupos_activities` WHERE input_id = $input_id AND activity_id = $activity_id");
                             if ($control == array()) {
                                 $this->Activity->query("INSERT INTO `cupos_activities`(`activity_id`, `input_id`, `activo`) VALUES ($activity_id, $input_id, true)");
                                 $cupo = $cupo - 1;

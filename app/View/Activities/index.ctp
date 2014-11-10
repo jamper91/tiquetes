@@ -10,7 +10,7 @@ echo $this->Html->script(array('matrix.tables'));
 			<th><?php echo $this->Paginator->sort('event_id', 'Evento'); ?></th>
 			<th><?php echo $this->Paginator->sort('nombre', 'Actividad'); ?></th>
 			<th><?php echo $this->Paginator->sort('descripcion', 'Descripcion'); ?></th>
-			<th><?php echo $this->Paginator->sort('lugar', 'salón'); ?></th>
+			<th><?php echo $this->Paginator->sort('lugar', 'Lugar'); ?></th>
 			<th><?php echo $this->Paginator->sort('fecha', 'Fecha'); ?></th>
 			<th><?php echo $this->Paginator->sort('hora_inicio', 'Inicio'); ?></th>
 			<th><?php echo $this->Paginator->sort('hora_fin', 'Fin'); ?></th>
