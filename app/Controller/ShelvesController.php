@@ -58,7 +58,7 @@ class ShelvesController extends AppController {
             $this->Shelf->create();
             if ($this->Shelf->save($this->request->data)) {
                 $this->Session->setFlash(__('The shelf has been saved.'));
-                return $this->redirect(array('action' => 'index'));
+                return $this->redirect(array('action' => 'buscar'));
             } else {
                 $this->Session->setFlash(__('The shelf could not be saved. Please, try again.'));
             }
@@ -93,7 +93,7 @@ class ShelvesController extends AppController {
     }
 
     /**
-     * edit method
+     * e7dit method
      *
      * @throws NotFoundException
      * @param string $id
@@ -106,7 +106,7 @@ class ShelvesController extends AppController {
         if ($this->request->is(array('post', 'put'))) {
             if ($this->Shelf->save($this->request->data)) {
                 $this->Session->setFlash(__('The shelf has been saved.'));
-                return $this->redirect(array('action' => 'index'));
+                return $this->redirect(array('action' => 'buscar'));
             } else {
                 $this->Session->setFlash(__('The shelf could not be saved. Please, try again.'));
             }
@@ -136,7 +136,127 @@ class ShelvesController extends AppController {
         } else {
             $this->Session->setFlash(__('The shelf could not be deleted. Please, try again.'));
         }
-        return $this->redirect(array('action' => 'index'));
+        return $this->redirect(array('action' => 'buscar'));
+    }
+
+    public function import() {
+        $this->loadModel('Event');
+        if ($this->request->is('POST')) {
+            $llave = $this->request->data['llave'];
+            $datos = $this->request->data;
+            if ($llave == 's') {
+                
+            } else {
+                $event_id = $datos['Shelf']['event_id'];
+                $tam = $datos['size'];
+                $inicio = "Se registraron  ";
+                $medio = "Y se actualizaron los stands con los siguientes codigos: ";
+                $repetidos = "";
+                $cont = 0;
+                for ($i = 1; $i <= $tam; $i++) {
+                    $codigo = $datos["codigo$i"];
+                    $nombre = $datos["nombre$i"];
+                    $genero = $datos["genero$i"];
+                    $representante = $datos["representante$i"];
+                    $ubicacion = $datos["ubicacion$i"];
+                    $mts = $datos["mts$i"];
+                    $descripcion = $datos["descripcion$i"];
+                    $observacion = $datos["observacion$i"];
+                    $aforo = $datos["aforo$i"];
+
+                    $shelf = $this->Shelf->query("SELECT id FROM shelves WHERE codigo='$codigo' AND event_id = $event_id");
+                    if ($shelf != array()) {
+                        $shelf_id = $shelf[0]['shelves']['id'];
+                        $this->Shelf->query("UPDATE `shelves` SET `codigo`='$codigo',`esta_nombre`='$nombre',`genero`='$genero',`representante`='$representante',`ubicacion`='$ubicacion',`mts`=$mts,`descripcion`='$descripcion',`observacion`='$observacion',`aforo`=$aforo,`event_id`=$event_id WHERE `id`= $shelf_id");
+                        $repetidos = $repetidos . ", " . $codigo;
+                    } else {
+                        $cont = $cont + 1;
+                        $sql = "INSERT INTO `shelves`( `codigo`, `esta_nombre`, `genero`, `representante`, `ubicacion`, `mts`, `descripcion`, `observacion`, `aforo`, `event_id`) VALUES ('$codigo','$nombre','$genero','$representante','$ubicacion',$mts,'$descripcion','$observacion',$aforo,$event_id)";
+                        $this->Shelf->query($sql);
+                    }
+                }
+                $this->Session->setFlash($inicio . $cont . " nuevos stands. " . $medio . $repetidos . ".", 'good');
+            }
+        }
+        $date = date('Y-m-d');
+//                    debug($date);
+        //van los eventos disponibles 
+        $events = $this->Event->find('list', array(
+            "fields" => array(
+                "Event.id",
+                "Event.even_nombre"
+            ),
+            "conditions" => array(
+                "Event.even_fechFinal >= '$date'"
+            )
+        ));
+        $this->set(compact('events'));
+    }
+
+    public function buscar() {
+        $event_id = $this->Session->read('event_id');
+        if ($event_id != NULL) {
+            $datos = $this->data;
+            if ($this->request->is("POST")) {
+                $codigo = $datos["Shelf"]["codigo"];
+                $esta_nombre = $datos["Shelf"]["esta_nombre"];
+                $genero = $datos["genero"]; //
+                $representante = $datos["Shelf"]["representante"];
+                $ubicacion = $datos["ubicacion"];
+
+                $conditions = "";
+
+                if ($codigo == null && $esta_nombre == null && $genero == null && $representante == null && $ubicacion == null) {
+                    $conditions = "";
+                }
+
+                // debug($datos);
+
+                if ($codigo != null) {
+                    $conditions.=" codigo='%" . $codigo . "%' AND";
+                }
+
+                if ($esta_nombre != null) {
+//                    if ($codigo != null) {
+//                        $conditions.=" AND";
+//                    } // si busco tb por doc entonces agrego el AND
+                    $conditions.=" esta_nombre LIKE '%" . $esta_nombre . "%' AND";
+                }
+
+                if ($genero != null) {
+//                    if ($codigo != null) {
+//                        $conditions.=" AND";
+//                    } // si busco por doc o primNombre agrego el AND
+                    $conditions.=" genero LIKE '%" . $genero . "%' AND";
+                }
+
+                if ($representante != null) {
+//                    if ($codigo != null) {
+//                        $conditions.=" AND";
+//                    } // si busco tb por doc entonces agrego el AND
+                    $conditions.=" representante LIKE '%" . $representante . "%' AND";
+                }
+                
+                if ($ubicacion != null) {
+//                    if ($codigo != null) {
+//                        $conditions.=" AND";
+//                    } // si busco tb por doc entonces agrego el AND
+                    $conditions.=" ubicacion LIKE '%" . $ubicacion . "%' AND";
+                }
+                    $conditions = "SELECT * FROM shelves WHERE " . $conditions . " event_id='" . $event_id . "' ";
+
+
+
+
+
+                $datos = $this->Shelf->query($conditions);
+//            debug($datos); die;
+                $this->set("datos", $datos);
+            }
+        } else {
+            $this->Session->setFlash('Seleccione el evento al que desea realizar registros y confirme', 'error');
+            return $this->redirect(array('action' => '../Pages/display'));
+        }
     }
 
 }
