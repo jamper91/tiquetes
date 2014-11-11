@@ -62,12 +62,9 @@ class PeopleController extends AppController {
             $user_id = $this->Session->read("User.id");
             if ($this->request->is('POST')) {
                 $data = $this->request->data;
-//            debug($data['people']['pers_id']);die;
                 $person_id = $data['people']['pers_id'];
-//           debug($person_id);die;
-//           debug($data['people']['pers_id']);die;
                 if ($data['people']['pers_id'] != '' || $data['people']['pers_id'] != null) {
-//                debug(vacio);die;
+                    
                 } else {
                     $per_id = $this->Person->find("list", array(
                         "conditions" => array(
@@ -76,7 +73,6 @@ class PeopleController extends AppController {
                             "Person.id",
                         )
                     ));
-//                debug($per_id);die;
                     foreach ($per_id as $key => $v) {
                         $person_id = $v;
                     }
@@ -126,9 +122,6 @@ class PeopleController extends AppController {
                     $cat = '';
 
                     if ($this->Person->saveAll($this->request->data) == true) {
-
-
-
                         $categoria = $this->Categoria->find('list', array(
                             "conditions" => array(
                                 "Categoria.id" => $data['Person']['categoria_id']),
@@ -136,11 +129,9 @@ class PeopleController extends AppController {
                                 "Categoria.id",
                                 "Categoria.descripcion"
                         )));
-//                    
                         foreach ($categoria as $key => $value) {
                             $cat = $value;
                         }
-//                    debug($cat);die;
                         $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
 
                         $escarapela_id = $esc_id[0]['events']['escarapela_id'];
@@ -223,7 +214,7 @@ class PeopleController extends AppController {
                     $sql2 = "SELECT id FROM people WHERE pers_documento = '$doc'";
                     $res = $this->Person->query($sql2);
                     $id = $res[0]['people']['id'];
-                    $sql3 = "SELECT entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve";
+                    $sql3 = "SELECT id, entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve";
                     $codigo = $this->Input->query($sql3);
 
                     if ($codigo == array()) {
@@ -262,41 +253,74 @@ class PeopleController extends AppController {
                         $this->render('pdf');
                     } else {
                         $c = $codigo[0]['inputs']['entr_codigo'];
+                        $id = $codigo[0]['inputs']['id'];
                         $user_id = $this->Session->read("User.id");
-                        $this->Input->query("UPDATE inputs SET usuarioescarapela=$user_id, fechaescarapela=NOW(), categoria_id=$cat WHERE entr_codigo =$c");
-                        if ($codigo != array()) {
-//                    debug($codigo); die;
-                            $c = $codigo[0]['inputs']['entr_codigo'];
-                            $categoria = $this->Categoria->find('list', array(
-                                "conditions" => array(
-                                    "Categoria.id" => $data['Person']['categoria_id']),
-                                "fields" => array(
-                                    "Categoria.id",
-                                    "Categoria.descripcion"
-                            )));
+                        if ($c == null) {
+//                            dCebug($cadena);die;
+                            $this->Input->query("UPDATE inputs SET usuarioescarapela=$user_id, fechaescarapela=NOW(), categoria_id=$cat, entr_codigo = '$cadena' WHERE id =$id");
+                            
+                            if ($codigo != array()) {
+                                $categoria = $this->Categoria->find('list', array(
+                                    "conditions" => array(
+                                        "Categoria.id" => $data['Person']['categoria_id']),
+                                    "fields" => array(
+                                        "Categoria.id",
+                                        "Categoria.descripcion"
+                                )));
 //                    debug(cat)
-                            if ($categoria != array()) {
-                                foreach ($categoria as $key => $value) {
-                                    $cat = $value;
+                                if ($categoria != array()) {
+                                    foreach ($categoria as $key => $value) {
+                                        $cat = $value;
+                                    }
+                                } else {
+                                    $cat = '';
                                 }
-                            } else {
-                                $cat = '';
+                                $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
+                                $escarapela_id = $esc_id[0]['events']['escarapela_id'];
+                                $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
+
+                                App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
+                                $this->layout = 'pdf'; //this will use the pdf.ctp layout
+                                $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', array('287', '343')));
+                                $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'categoria' => $cat, 'apellido' => $data['Person']['pers_primApellido'], 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $cadena, 'tipo' => 2, 'escarapela' => $esc);
+                                $this->set('data', $informacion);
+                                $this->render('pdf');
                             }
-                            $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
-                            $escarapela_id = $esc_id[0]['events']['escarapela_id'];
-                            $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
+                        } else {
 
-                            App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
-                            $this->layout = 'pdf'; //this will use the pdf.ctp layout
-                            $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', array('287', '343')));
-                            $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'categoria' => $cat, 'apellido' => $data['Person']['pers_primApellido'], 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $c, 'tipo' => 2, 'escarapela' => $esc);
-                            $this->set('data', $informacion);
-                            $this->render('pdf');
-                        }
+                            $this->Input->query("UPDATE inputs SET usuarioescarapela=$user_id, fechaescarapela=NOW(), categoria_id=$cat WHERE entr_codigo =$c");
+                            if ($codigo != array()) {
+//                    debug($codigo); die;
+                                $c = $codigo[0]['inputs']['entr_codigo'];
+                                $categoria = $this->Categoria->find('list', array(
+                                    "conditions" => array(
+                                        "Categoria.id" => $data['Person']['categoria_id']),
+                                    "fields" => array(
+                                        "Categoria.id",
+                                        "Categoria.descripcion"
+                                )));
+//                    debug(cat)
+                                if ($categoria != array()) {
+                                    foreach ($categoria as $key => $value) {
+                                        $cat = $value;
+                                    }
+                                } else {
+                                    $cat = '';
+                                }
+                                $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
+                                $escarapela_id = $esc_id[0]['events']['escarapela_id'];
+                                $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
+
+                                App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
+                                $this->layout = 'pdf'; //this will use the pdf.ctp layout
+                                $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', array('287', '343')));
+                                $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'categoria' => $cat, 'apellido' => $data['Person']['pers_primApellido'], 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $c, 'tipo' => 2, 'escarapela' => $esc);
+                                $this->set('data', $informacion);
+                                $this->render('pdf');
+                            }
 //               
+                        }
                     }
-
-
 //                $this->Session->setFlash('Error ya hay una persona con el mismo documento en la base de datos', 'error');
                 }
                 //$this->Session->setFlash('Datos registrados correctamente', 'good');
