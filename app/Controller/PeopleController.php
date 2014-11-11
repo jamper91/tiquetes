@@ -62,12 +62,9 @@ class PeopleController extends AppController {
             $user_id = $this->Session->read("User.id");
             if ($this->request->is('POST')) {
                 $data = $this->request->data;
-//            debug($data['people']['pers_id']);die;
                 $person_id = $data['people']['pers_id'];
-//           debug($person_id);die;
-//           debug($data['people']['pers_id']);die;
                 if ($data['people']['pers_id'] != '' || $data['people']['pers_id'] != null) {
-//                debug(vacio);die;
+                    
                 } else {
                     $per_id = $this->Person->find("list", array(
                         "conditions" => array(
@@ -76,7 +73,6 @@ class PeopleController extends AppController {
                             "Person.id",
                         )
                     ));
-//                debug($per_id);die;
                     foreach ($per_id as $key => $v) {
                         $person_id = $v;
                     }
@@ -126,9 +122,6 @@ class PeopleController extends AppController {
                     $cat = '';
 
                     if ($this->Person->saveAll($this->request->data) == true) {
-
-
-
                         $categoria = $this->Categoria->find('list', array(
                             "conditions" => array(
                                 "Categoria.id" => $data['Person']['categoria_id']),
@@ -136,11 +129,9 @@ class PeopleController extends AppController {
                                 "Categoria.id",
                                 "Categoria.descripcion"
                         )));
-//                    
                         foreach ($categoria as $key => $value) {
                             $cat = $value;
                         }
-//                    debug($cat);die;
                         $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
 
                         $escarapela_id = $esc_id[0]['events']['escarapela_id'];
@@ -223,7 +214,7 @@ class PeopleController extends AppController {
                     $sql2 = "SELECT id FROM people WHERE pers_documento = '$doc'";
                     $res = $this->Person->query($sql2);
                     $id = $res[0]['people']['id'];
-                    $sql3 = "SELECT entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve";
+                    $sql3 = "SELECT id, entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve";
                     $codigo = $this->Input->query($sql3);
 
                     if ($codigo == array()) {
@@ -262,41 +253,74 @@ class PeopleController extends AppController {
                         $this->render('pdf');
                     } else {
                         $c = $codigo[0]['inputs']['entr_codigo'];
+                        $id = $codigo[0]['inputs']['id'];
                         $user_id = $this->Session->read("User.id");
-                        $this->Input->query("UPDATE inputs SET usuarioescarapela=$user_id, fechaescarapela=NOW(), categoria_id=$cat WHERE entr_codigo =$c");
-                        if ($codigo != array()) {
-//                    debug($codigo); die;
-                            $c = $codigo[0]['inputs']['entr_codigo'];
-                            $categoria = $this->Categoria->find('list', array(
-                                "conditions" => array(
-                                    "Categoria.id" => $data['Person']['categoria_id']),
-                                "fields" => array(
-                                    "Categoria.id",
-                                    "Categoria.descripcion"
-                            )));
+                        if ($c == null) {
+//                            dCebug($cadena);die;
+                            $this->Input->query("UPDATE inputs SET usuarioescarapela=$user_id, fechaescarapela=NOW(), categoria_id=$cat, entr_codigo = '$cadena' WHERE id =$id");
+                            
+                            if ($codigo != array()) {
+                                $categoria = $this->Categoria->find('list', array(
+                                    "conditions" => array(
+                                        "Categoria.id" => $data['Person']['categoria_id']),
+                                    "fields" => array(
+                                        "Categoria.id",
+                                        "Categoria.descripcion"
+                                )));
 //                    debug(cat)
-                            if ($categoria != array()) {
-                                foreach ($categoria as $key => $value) {
-                                    $cat = $value;
+                                if ($categoria != array()) {
+                                    foreach ($categoria as $key => $value) {
+                                        $cat = $value;
+                                    }
+                                } else {
+                                    $cat = '';
                                 }
-                            } else {
-                                $cat = '';
+                                $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
+                                $escarapela_id = $esc_id[0]['events']['escarapela_id'];
+                                $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
+
+                                App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
+                                $this->layout = 'pdf'; //this will use the pdf.ctp layout
+                                $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', array('287', '343')));
+                                $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'categoria' => $cat, 'apellido' => $data['Person']['pers_primApellido'], 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $cadena, 'tipo' => 2, 'escarapela' => $esc);
+                                $this->set('data', $informacion);
+                                $this->render('pdf');
                             }
-                            $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
-                            $escarapela_id = $esc_id[0]['events']['escarapela_id'];
-                            $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
+                        } else {
 
-                            App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
-                            $this->layout = 'pdf'; //this will use the pdf.ctp layout
-                            $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', array('287', '343')));
-                            $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'categoria' => $cat, 'apellido' => $data['Person']['pers_primApellido'], 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $c, 'tipo' => 2, 'escarapela' => $esc);
-                            $this->set('data', $informacion);
-                            $this->render('pdf');
-                        }
+                            $this->Input->query("UPDATE inputs SET usuarioescarapela=$user_id, fechaescarapela=NOW(), categoria_id=$cat WHERE entr_codigo =$c");
+                            if ($codigo != array()) {
+//                    debug($codigo); die;
+                                $c = $codigo[0]['inputs']['entr_codigo'];
+                                $categoria = $this->Categoria->find('list', array(
+                                    "conditions" => array(
+                                        "Categoria.id" => $data['Person']['categoria_id']),
+                                    "fields" => array(
+                                        "Categoria.id",
+                                        "Categoria.descripcion"
+                                )));
+//                    debug(cat)
+                                if ($categoria != array()) {
+                                    foreach ($categoria as $key => $value) {
+                                        $cat = $value;
+                                    }
+                                } else {
+                                    $cat = '';
+                                }
+                                $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
+                                $escarapela_id = $esc_id[0]['events']['escarapela_id'];
+                                $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
+
+                                App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
+                                $this->layout = 'pdf'; //this will use the pdf.ctp layout
+                                $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', array('287', '343')));
+                                $informacion = array('documento' => $data['Person']['pers_documento'], 'nombre' => $data['Person']['pers_primNombre'], 'categoria' => $cat, 'apellido' => $data['Person']['pers_primApellido'], 'empresa' => $data['Person']['pers_empresa'], 'codigo' => $c, 'tipo' => 2, 'escarapela' => $esc);
+                                $this->set('data', $informacion);
+                                $this->render('pdf');
+                            }
 //               
+                        }
                     }
-
-
 //                $this->Session->setFlash('Error ya hay una persona con el mismo documento en la base de datos', 'error');
                 }
                 //$this->Session->setFlash('Datos registrados correctamente', 'good');
@@ -828,36 +852,11 @@ class PeopleController extends AppController {
                     $pro = $datos["pro$i"];
 
                     $p = $this->Person->query("SELECT id FROM people WHERE pers_documento='$doc'");
-                    $if = true;
-                    $while = true;
-                    while ($while) {
-                        $cadena = ""; //variable para almacenar la cadena generada
-                        $ejemplo = strlen($cadena);
-                        while ($if) {
-                            if ($ejemplo < 12) {
-                                $numerodado = rand(0, 9);
-                                $cadena = $cadena . $numerodado;
-                                $ejemplo = strlen($cadena);
-                            } else {
-                                $if = FALSE;
-                            }
-                        }
-                        $pdigit = substr($cadena, -12, 1);
-                        if ($pdigit != '0') {
-                            $sql = "SELECT id FROM inputs WHERE entr_codigo = $cadena";
-                            $id = $this->Input->query($sql);
-                            if ($id == array()) {
-                                $while = false;
-                            }
-                        } else {
-                            $while = true;
-                        }
-                    }
                     if ($p != array()) {
                         $person_id = $p[0]['people']['id'];
                         $input = $this->Input->find('first', array('conditions' => array("Input.event_id=$event_id", "Input.person_id=$person_id"), 'fields' => array('Input.entr_codigo')));
                         if ($input == array()) {
-                            $this->Input->query("INSERT INTO inputs (person_id, entr_codigo, categoria_id, event_id, fechaescarapela) VALUES ($person_id, '$cadena', $cat, $event_id, NULL )");
+                            $this->Input->query("INSERT INTO inputs (person_id, categoria_id, event_id, fechaescarapela) VALUES ($person_id, $cat, $event_id, NULL )");
                             $sql2 = "UPDATE `people` SET `document_type_id` = $ti, `categoria_id`=$cat, `pers_primNombre`='$nom',`pers_primApellido`='$ape',`pers_empresa`='$ent',`pers_mail`='$mail', `pers_celular`='$cel',`pers_telefono`='$tel',`ciudad` = '$ciu', `pais`= '$pai', `stan`= '$sta', `sector`='$sec', `cargo`='$pro' WHERE `pers_documento` = '$doc'";
                             $this->Person->query($sql2);
                         }
@@ -866,11 +865,11 @@ class PeopleController extends AppController {
                         $cont = $cont + 1;
                         $sql = "INSERT INTO people (pers_documento,  document_type_id, categoria_id, pers_primNombre, pers_primApellido, pers_empresa, pers_mail, pers_celular, pers_telefono,  ciudad, pais, stan, sector, cargo) VALUES ('$doc', $ti, $cat,'$nom','$ape', '$ent', '$mail', '$cel', '$tel', '$ciu', '$pai', '$sta', '$sec', '$pro')";
                         $this->Person->query($sql);
-                        $person = $this->Person->query("SELECT id FROM people WHERE pers_documento='$doc'");
-                        debug($sql);
-                        debug($person);die;
-                        $person_id = $person [0]['people']['id'];
-                        $this->Input->query("INSERT INTO inputs (person_id, entr_codigo, categoria_id, event_id, fechaescarapela) VALUES ($person_id, '$cadena', $cat, $event_id, NULL )");
+                        $person = $this->Person->find('list', array('conditions' => array("Person.pers_documento='$doc'"), 'fields' => array('Person.id')));
+                        foreach ($person as $key => $value) {
+                            $person_id = $value;
+                        }
+                        $this->Input->query("INSERT INTO inputs (person_id, categoria_id, event_id, fechaescarapela) VALUES ($person_id, $cat, $event_id, NULL )");
                     }
                 }
                 $this->Session->setFlash($inicio . $cont . " nuevas personas. " . $medio . $repetidos . ".", 'good');
@@ -1097,7 +1096,7 @@ class PeopleController extends AppController {
                             if ($sqlcod != array()) {
                                 $codigo = $sqlcod[0]['i']['entr_codigo'];
                             }
-                            $sql = "SELECT p.pers_documento,p.pers_primNombre,p.pers_primApellido,p.document_type_id,p.pers_empresa FROM `people` p INNER JOIN `inputs` i ON i.person_id=p.id WHERE i.entr_codigo ='$codigo'";
+                            $sql = "SELECT p.pers_documento,p.pers_primNombre,p.pers_primApellido,p.document_type_id,p.pers_empresa, p.categoria_id FROM `people` p INNER JOIN `inputs` i ON i.person_id=p.id WHERE i.entr_codigo ='$codigo'";
                             $datos = $this->Person->query($sql);
                             $identificacion = $datos[0]['p']['pers_documento'];
                             $nombre = $datos[0]['p']['pers_primNombre'];
@@ -1105,6 +1104,18 @@ class PeopleController extends AppController {
                             $doctypeid = $datos[0]['p']['document_type_id'];
                             $empresa = $datos[0]['p']['pers_empresa'];
                             $abr = '';
+                            $cat = '';
+                            if ($datos != array()) {
+                                $c = $this->Person->find('list', array('conditions' => array("Person.pers_documento='$identificacion'"), 'fields' => array('Person.categoria_id')));
+                                foreach ($c as $key => $value) {
+                                    $cat = $value;
+                                }
+                                $this->loadModel("Categorias");
+                                $ca = $this->Categorias->find('list', array('conditions' => array("Categorias.id = $cat"), 'fields' => array('Categorias.descripcion')));
+                                foreach ($ca as $key => $value) {
+                                    $categoria = $value;
+                                }
+                            }
                             $sql = "SELECT abreviatura FROM document_types WHERE id= $doctypeid ";
                             $res = $this->Person->query($sql);
                             if ($res != array()) {
@@ -1137,7 +1148,7 @@ class PeopleController extends AppController {
                             $i = $this->event->query("SELECT certificado_id FROM events WHERE id = $eve");
                             if ($i != array()) {
                                 $id = $i[0]['events']['certificado_id'];
-                                $cert = $this->Event->query("SELECT nombres, documento, empresa FROM certificados WHERE id = $id");
+                                $cert = $this->Event->query("SELECT nombres, documento, empresa, libre FROM certificados WHERE id = $id");
                                 App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                                 $this->layout = 'certificado'; //this will use the pdf.ctp layout
                                 $informacion = array('documento' => $numero,
@@ -1145,7 +1156,8 @@ class PeopleController extends AppController {
                                     'apellido' => $apellido,
                                     'abr' => $abr,
                                     'empresa' => $empresa,
-                                    'certificado' => $cert
+                                    'certificado' => $cert,
+                                    'categoria' => $categoria
 //                    'categoria' => $categoria,
 //                    'evento' => $evento,
 //                    'ciudad' => $ciudad,
@@ -1189,6 +1201,18 @@ class PeopleController extends AppController {
                             $abr = $res[0]['document_types']['abreviatura'];
                         }
                         $numero = '';
+                        $cat = '';
+                        if ($datos != array()) {
+                            $c = $this->Person->find('list', array('conditions' => array("Person.pers_documento='$identificacion'"), 'fields' => array('Person.categoria_id')));
+                            foreach ($c as $key => $value) {
+                                $cat = $value;
+                            }
+                            $this->loadModel("Categorias");
+                            $ca = $this->Categorias->find('list', array('conditions' => array("Categorias.id = $cat"), 'fields' => array('Categorias.descripcion')));
+                            foreach ($ca as $key => $value) {
+                                $categoria = $value;
+                            }
+                        }
                         if (strlen($identificacion) == 12) {
                             $numero = substr($identificacion, -12, 1) . substr($identificacion, -11, 1) . substr($identificacion, -10, 1) . '.' . substr($identificacion, -9, 1) . substr($identificacion, -8, 1) . substr($identificacion, -7, 1) . '.' . substr($identificacion, -6, 1) . substr($identificacion, -5, 1) . substr($identificacion, -4, 1) . '.' . substr($identificacion, -3, 1) . substr($identificacion, -2, 1) . substr($identificacion, -1);
                         } elseif (strlen($identificacion) == 11) {
@@ -1214,7 +1238,7 @@ class PeopleController extends AppController {
                         $i = $this->Event->query("SELECT certificado_id FROM events WHERE id = $eve");
                         if ($i != array()) {
                             $id = $i[0]['events']['certificado_id'];
-                            $cert = $this->Event->query("SELECT nombres, documento, empresa FROM certificados WHERE id = $id");
+                            $cert = $this->Event->query("SELECT nombres, documento, empresa, libre FROM certificados WHERE id = $id");
                             App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
                             $this->layout = 'certificado'; //this will use the pdf.ctp layout
                             $informacion = array('documento' => $numero,
@@ -1222,8 +1246,8 @@ class PeopleController extends AppController {
                                 'apellido' => $apellido,
                                 'abr' => $abr,
                                 'empresa' => $empresa,
-                                'certificado' => $cert
-//                    'categoria' => $categoria,
+                                'certificado' => $cert,
+                                'categoria' => $categoria,
 //                    'evento' => $evento,
 //                    'ciudad' => $ciudad,
 //                    'diainicio' => $diainicial,

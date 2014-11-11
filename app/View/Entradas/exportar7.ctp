@@ -53,7 +53,7 @@ function resta($inicio, $fin) {
     return $dif;
 }
 
-//debug($datos2);
+debug($datos2);
 //debug($actividades);
 $b = array();
 $c = array();
@@ -62,6 +62,7 @@ for ($i = 0; $i < count($actividades); $i++) {
     $c[$i] = $actividades[$i]['Activity']['permanencia'];
 }
 //debug($b);
+//debug($c);
 //die;
 
 foreach ($datos2 as $dato) {
@@ -86,36 +87,40 @@ foreach ($datos2 as $dato) {
             $dato['apellidos'],
         );
         $r = 0;
-        $balncos = 0;
+        $blancos = 0;
         for ($l = 0; $l < count($actividades); $l++) {
-            debug($dato['actividad']);
+//            debug($dato['actividad']);
+//            debug($b[$r]);
+//            debug($blancos);
             if ($b[$r] == $dato['actividad']) {
                 if ($blancos == 0) {
                     array_push($datos, $entrada);
-                    debug($dato['permanencia']);
+//                    debug($dato['permanencia']);
                     if ($dato['permanencia'] == true) {
                         array_push($datos, $salida);
                         array_push($datos, $diferencia);
                     }
                     $l = count($actividades);
                 } else {
-                    array_push($dato, '');
-                    if ($c[$r]['permanencia'] == true) {
-                        array_push($dato, '');
-                        array_push($dato, '');
+//                    debug($c);
+                    array_push($datos, '');
+                    if ($c[0] == true) {
+                        array_push($datos, '');
+                        array_push($datos, '');
+//                        debug("ebtro");die;
+                    }
+                    array_push($datos, $entrada);
+                    if ($dato['permanencia'] == true) {
+                        array_push($datos, $salida);
+                        array_push($datos, $diferencia);
                     }
                 }
-            } else {
-                $blancos++;
-                array_push($dato, '');
-                if ($c[$ch] == true) {
-                    array_push($dato, '');
-                    array_push($dato, '');
-                }
             }
+            $blancos++;
             $r++;
         }
     } else {
+        $r = 0;
         $ch++;
         if ($ch >= count($actividades)) {
             $ch = 0;
@@ -134,47 +139,57 @@ foreach ($datos2 as $dato) {
             $dato['nombres'],
             $dato['apellidos'],
         );
-        if ($activity == $dato['actividad']) {
-            $activity = $b[$ch];
-            $ch++;
-            array_push($datos, $entrada);
-            if ($dato['permanencia'] == true) {
-                array_push($datos, $salida);
-                array_push($datos, $diferencia);
-            }
-            $k = 0;
-            for ($j = 0; $j < ((count($dato) - 8) / 4); $j++) {
-                $entrada = $dato[$k];
-                $k++;
-                $salida = $dato[$k];
-                $k++;
-                $permanencia = $dato[$k];
-                $k++;
-                $actividad = $dato[$k];
-                $k++;
-                debug($actividad);
-                debug($activity);
-                if ($activity == $actividad) {
-                    array_push($datos, $entrada);
-                    if ($permanencia == true) {
-                        array_push($datos, $salida);
-                        array_push($datos, resta($entrada, $salida));
+        $balncos = 0;
+        for ($m = 0; $m < count($actividades); $m++) {
+            if ($activity == $dato['actividad']) {
+                array_push($datos, $entrada);
+                if ($dato['permanencia'] == true) {
+                    array_push($datos, $salida);
+                    array_push($datos, $diferencia);
+                }
+                $k = 0;
+                for ($j = 0; $j < ((count($dato) - 8) / 4); $j++) {
+                    $entrada = $dato[$k];
+                    $k++;
+                    $permanencia = $dato[$k];
+                    $k++;                    
+                    $salida = $dato[$k];
+                    $k++;
+                    $actividad = $dato[$k];
+                    $k++;
+                    $activity = $b[$ch];
+                    debug($actividad);
+                    debug($activity);
+                    if ($activity == $actividad) {
+                        array_push($datos, $entrada);
+//                            debug($permanencia);die;
+                        if ($permanencia == true) {
+                            array_push($datos, $salida);
+                            array_push($datos, resta($entrada, $salida));
+                        }
+                    } else {
+                        array_push($datos, 'vacio');
+                        if ($permanencia == true) {
+                            array_push($datos, 'vacio');
+                            array_push($datos, 'vacio');
+                        }
                     }
-                } else {
-                    array_push($datos, '');
-                    if ($permanencia == true) {
-                        array_push($datos, '');
-                        array_push($datos, '');
+                    $ch++;
+                    if ($ch < count($actividades)) {
+                        $activity = $b[$ch];
                     }
                 }
             }
+
+
+            $r++;
         }
     }
     $ch++;
     $this->PhpExcel->addTableRow($datos);
 }
 
-debug($datos);
+debug($k);
 //die;
 $this->PhpExcel->addTableFooter();
 $this->PhpExcel->output("Reporte de actividades.xlsx");

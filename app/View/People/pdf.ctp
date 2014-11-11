@@ -42,7 +42,7 @@ if (strlen($doc) == 12) {
 } else {
     $numero = $doc;
 }
-//$pdf->Image('../webroot/img/certificate/siete.jpg', 0, 0, $pdf->w, $pdf->h);
+$pdf->Image('../webroot/img/certificate/tres.jpg', 0, 0, $pdf->w, $pdf->h);
 if ($data['tipo'] == 2) {
 
     if ($data['codigo']) {
@@ -54,12 +54,12 @@ if ($data['tipo'] == 2) {
         if ($id != 7) {
             $pdf->SetY($nombres);
             $pdf->SetFont('Arial', 'B', $tam_nombres);
-            $pdf->Cell(0, 2, $data['nombre'], 0, 0, 'C');
+            $pdf->Cell(0, 2, utf8_decode($data['nombre']), 0, 0, 'C');
             $pdf->Ln(2);
 
             $pdf->SetY($apellidos);
             $pdf->SetFont('Arial', 'B', $tam_apellidos);
-            $pdf->Cell(0, 2, $data['apellido'], 0, 0, 'C');
+            $pdf->Cell(0, 2, utf8_decode($data['apellido']), 0, 0, 'C');
             $pdf->Ln(2);
         } else {
             $name = $data['nombre'] . ' ' . $data['apellido'];
@@ -75,7 +75,7 @@ if ($data['tipo'] == 2) {
             }
             $pdf->SetY($nombres);
             $pdf->SetFont('Arial', 'B', $tam_nombres);
-            $pdf->Cell(0, 2, $name, 0, 0, 'C');
+            $pdf->Cell(0, 2, utf8_decode($name), 0, 0, 'C');
         }
         if ($documento != null && $documento != '') {
             $cedula = 'ID: ' . $numero;
@@ -87,14 +87,14 @@ if ($data['tipo'] == 2) {
         if ($empresa != null && $empresa != '') {
             $pdf->SetY($empresa);
             $pdf->SetFont('Arial', '', $tam_empresa);
-            $pdf->Cell(0, 2, $data['empresa'], 0, 0, 'C');
+            $pdf->Cell(0, 2, utf8_decode($data['empresa']), 0, 0, 'C');
             $pdf->Ln(2);
         }
 
         if ($categoria != null && $categoria != '') {
             $pdf->SetY($categoria);
             $pdf->SetFont('Arial', 'B', $tam_categoria);
-            $pdf->Cell(0, 2, $data['categoria'], 0, 0, 'C');
+            $pdf->Cell(0, 2, utf8_decode($data['categoria']), 0, 0, 'C');
             $pdf->Ln(2);
         }
     }

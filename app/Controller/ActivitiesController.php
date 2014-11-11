@@ -245,7 +245,7 @@ class ActivitiesController extends AppController {
                 "conditions" => array(
                     "Activity.event_id =$eve",
                     "Activity.aforo <> 0",
-                    "Activity.fecha >= $hoy"
+                    "Activity.fecha >= '$hoy'"
                 ),
                 "fields" => array(
                     "Activity.id",
