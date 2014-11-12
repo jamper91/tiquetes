@@ -57,7 +57,7 @@
                 ?>
             </div>
             <br></br>
-            <table border="1" width="100%">
+            <table border="1" width="10%">
                 <thead>
                     <tr>
                         <th><center><strong>A</strong></center></th>
@@ -73,7 +73,8 @@
                         <th><center><strong>K</strong></center></th>
                         <th><center><strong>L</strong></center></th>
                         <th><center><strong>M</strong></center></th>
-                        <th><center><strong>N</strong></center></th></tr>
+                        <th><center><strong>N</strong></center></th>
+                        <th><center><strong>O</strong></center></th>
                     <tr>
                         <th>IDENTIFICACIÓN</th>
                         <th>TIPO</th>
@@ -89,7 +90,7 @@
                         <th>No. STAND</th>
                         <th>SECTOR</th>
                         <th>PROFESION</th>
-                        <!--<th>OBSERVACIONES</th>-->
+                        <th>OBSERVACIONES</th>
                     </tr>
                 </thead>
                     <tbody>
@@ -119,6 +120,7 @@
 								<td align ="center"><input type="text" id = "sta' . $iIndice . '" name = "sta' . $iIndice . '" value ="' . $objCelda['L'] . '" style="display:none">' . $objCelda['L'] . '</td>
 								<td align ="center"><input type="text" id = "sec' . $iIndice . '" name = "sec' . $iIndice . '" value ="' . $objCelda['M'] . '" style="display:none">' . $objCelda['M'] . '</td>
 								<td align ="center"><input type="text" id = "pro' . $iIndice . '" name = "pro' . $iIndice . '" value ="' . $objCelda['N'] . '" style="display:none">' . $objCelda['N'] . '</td>															
+								<td align ="center"><input type="text" id = "obs' . $iIndice . '" name = "obs' . $iIndice . '" value ="' . $objCelda['O'] . '" style="display:none">' . $objCelda['O'] . '</td>															
 							</tr>
 						';
                         }

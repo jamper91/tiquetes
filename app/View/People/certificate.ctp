@@ -37,7 +37,7 @@
 //                        //            "empty" => "Seleccione un tipo de documento",
 //                        "required" => "true",
 //                    ));
-                    ?>
+                ?>
                 </td>-->
                 <td>
                     <?php
@@ -77,8 +77,8 @@
 //                    
                     ?>
                 </td>
-                </tr>
-                
+            </tr>
+
             <tr>
                 <td>
                     <input type="hidden" name="data[people][pers_id]" id="PeoplePers_id">
@@ -90,7 +90,7 @@
         </table>
 
     </fieldset>
-<?php //echo $this->Form->end(__('Buscar'));   ?>
+    <?php //echo $this->Form->end(__('Buscar'));   ?>
     <div class="submit">
         <input class="btn-success" id="imprimir" name="imprimir" value="Imprimir" type="submit">
     </div>
@@ -108,15 +108,20 @@
     });
 </script>
 <script>
-    $("#imprimir").click(function() {
-        setTimeout('limpiar()', 3000);
+    $("#imprimir").click(function() {       
+        var cedula =$("#PersonCedula").val();
+        var nombre =$("#PersonPersPrimNombre").val();
+        var apellido =$("#PersonPersPrimApellido").val();
+        if (cedula !== '' && nombre !== '' && apellido !== ''){
+            setTimeout('limpiar()', 3000);
+        }
         $("#PersonCodigo").focus();
     });
     function limpiar() {
         $("#PersonCodigo").val("");
         $("#PersonCedula").val("");
         $("#PeopleDocumento").val("");
-        
+
         $("#PeoplePers_id").val("");
 //                      console.log("asdasd");
         $("#PersonPersPrimNombre").val("");

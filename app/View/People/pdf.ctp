@@ -42,7 +42,7 @@ if (strlen($doc) == 12) {
 } else {
     $numero = $doc;
 }
-$pdf->Image('../webroot/img/certificate/tres.jpg', 0, 0, $pdf->w, $pdf->h);
+$pdf->Image('../webroot/img/certificate/ocho.jpg', 0, 0, $pdf->w, $pdf->h);
 if ($data['tipo'] == 2) {
 
     if ($data['codigo']) {

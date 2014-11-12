@@ -850,6 +850,7 @@ class PeopleController extends AppController {
                     $sta = $datos["sta$i"];
                     $sec = $datos["sec$i"];
                     $pro = $datos["pro$i"];
+                    $obs = $datos["obs$i"];
 
                     $p = $this->Person->query("SELECT id FROM people WHERE pers_documento='$doc'");
                     if ($p != array()) {
@@ -857,13 +858,13 @@ class PeopleController extends AppController {
                         $input = $this->Input->find('first', array('conditions' => array("Input.event_id=$event_id", "Input.person_id=$person_id"), 'fields' => array('Input.entr_codigo')));
                         if ($input == array()) {
                             $this->Input->query("INSERT INTO inputs (person_id, categoria_id, event_id, fechaescarapela) VALUES ($person_id, $cat, $event_id, NULL )");
-                            $sql2 = "UPDATE `people` SET `document_type_id` = $ti, `categoria_id`=$cat, `pers_primNombre`='$nom',`pers_primApellido`='$ape',`pers_empresa`='$ent',`pers_mail`='$mail', `pers_celular`='$cel',`pers_telefono`='$tel',`ciudad` = '$ciu', `pais`= '$pai', `stan`= '$sta', `sector`='$sec', `cargo`='$pro' WHERE `pers_documento` = '$doc'";
+                            $sql2 = "UPDATE `people` SET `document_type_id` = $ti, `categoria_id`=$cat, `pers_primNombre`='$nom',`pers_primApellido`='$ape',`pers_empresa`='$ent',`pers_mail`='$mail', `pers_celular`='$cel',`pers_telefono`='$tel',`ciudad` = '$ciu', `pais`= '$pai', `stan`= '$sta', `sector`='$sec', `cargo`='$pro',`observaciones`='$obs'  WHERE `pers_documento` = '$doc'";
                             $this->Person->query($sql2);
                         }
                         $repetidos = $repetidos . ", " . $doc;
                     } else {
                         $cont = $cont + 1;
-                        $sql = "INSERT INTO people (pers_documento,  document_type_id, categoria_id, pers_primNombre, pers_primApellido, pers_empresa, pers_mail, pers_celular, pers_telefono,  ciudad, pais, stan, sector, cargo) VALUES ('$doc', $ti, $cat,'$nom','$ape', '$ent', '$mail', '$cel', '$tel', '$ciu', '$pai', '$sta', '$sec', '$pro')";
+                        $sql = "INSERT INTO people (pers_documento,  document_type_id, categoria_id, pers_primNombre, pers_primApellido, pers_empresa, pers_mail, pers_celular, pers_telefono,  ciudad, pais, stan, sector, cargo, observaciones) VALUES ('$doc', $ti, $cat,'$nom','$ape', '$ent', '$mail', '$cel', '$tel', '$ciu', '$pai', '$sta', '$sec', '$pro', '$obs')";
                         $this->Person->query($sql);
                         $person = $this->Person->find('list', array('conditions' => array("Person.pers_documento='$doc'"), 'fields' => array('Person.id')));
                         foreach ($person as $key => $value) {
