@@ -2,20 +2,36 @@
     <?php echo $this->Form->create('Entrada'); ?>
     <fieldset>
         <legend><?php echo __('Reportes'); ?></legend><br>
-        <?php
-        echo $this->Form->input('event_id', array(
-            "div" => array(
-                "class" => "controls"
-            ),
-            "label" => "Evento",
-            "options" => $events,
-            "empty" => "Seleccione un evento",
-            "required" => "true",
-            "style" => array(
-                "display:block"
-            )
-        ));
-        ?>
+        <table><tr>
+                <td>Evento</td>
+                <td><?php
+                    echo $this->Form->input('event_id', array(
+                        "div" => array(
+                            "class" => "controls"
+                        ),
+                        "label" => "",
+                        "options" => $events,
+                        "empty" => "Seleccione un Evento",
+                        "required" => "true",
+                        "style" => array(
+                            "display:block"
+                        )
+                    ));
+                    ?>
+                </td>
+                <td>Reporte</td>
+                <td>
+                    <select name="data[Entrada][reporte]" style="display:block" id="EntradaReporte">
+                        <option value="">Seleccione un Reporte</option>
+                        <option value="1">Asistentes Detallado</option>
+                        <option value="2">Asistentes Consolidado</option>
+                        <option value="3">Actividad Detallado</option>
+                        <option value="4">Actividad Consolidado</option>
+                        <option value="5">Escarapelas y Certificados Consolidado</option>
+                    </select>
+                </td>
+            </tr></table>
+
 
         <!--        <div class="btn-group">
                     <button data-toggle="dropdown" class="btn btn-success dropdown-toggle">Exportar <span class="caret"></span></button>
@@ -25,11 +41,12 @@
                         <li><a href="<?= $this->Html->url("exportar3") ?>">Reportes Ventas</a></li>
                         <li><a href="<?= $this->Html->url("exportar4") ?>">Reportes Registro</a></li>-->
         <!--<li><a href="<?= $this->Html->url("exportar5") ?>">Reporte Ingreso Detallado</a></li>-->
-        <li><a id='exportar5' name='exportar5' style="cursor:pointer">Asistentes y Access control</a></li>
-        <li><a id='exportar6' name='exportar6' style="cursor:pointer">Catering</a></li>
-        <li><a id='exportar7' name='exportar7' style="cursor:pointer">Actividades Detallado</a></li>
-        <li><a id='total' name='total' style="cursor:pointer">Asistencia Por categoria</a></li>
-        <li><a id='activitiesevent' name='activitiesevent' style="cursor:pointer">Consolidado Actividades</a></li>
+        <!--        <li><a id='exportar5' name='exportar5' style="cursor:pointer">Asistentes y Access control</a></li>
+                <li><a id='exportar6' name='exportar6' style="cursor:pointer">Catering</a></li>
+                <li><a id='exportar7' name='exportar7' style="cursor:pointer">Actividades Detallado</a></li>
+                <li><a id='total' name='total' style="cursor:pointer">Asistencia Por categoria</a></li>
+                <li><a id='activitiesevent' name='activitiesevent' style="cursor:pointer">Consolidado Actividades</a></li>
+                <li><a id='registros' name='registros' style="cursor:pointer">Escarapelas vs Registros</a></li>-->
         <!--</ul>-->
 </div>
 <br><br>
@@ -111,15 +128,61 @@
 </div>
 <div class="mensaje"></div>
 <script>
+    $("#EntradaReporte").change(function() {
+        var reporte = $("#EntradaReporte").val();
+        var evento = $("#EntradaEventId").val();
+        if (evento !== '') {
+            if (reporte === '1') {
+                exportar5();
+            } else if (reporte === '2') {
+                total();
+            } else if (reporte === '3') {
+                exportar7();
+            } else if (reporte === '4') {
+                activitiesevent();
+            } else if (reporte === '5') {
+                registros();
+            }
+        } else {
+            alert("No sea toche seleccione un evento");
+        }
+    });
+    function registros() {
+        var url = urlbase + "entradas/getPersonWhitInput.xml";
+        var datos2 = {
+            even_id: $("#EntradaEventId").val()
+        };
+        ajax(url, datos2, function(xml) {
+            $("#table").html("var html = '<tr><th colspan='3' align= 'center'>ESCARAPELAS</th></tr><tr><th>INSCRITOS</th><th>IMPRESAS</th><th>SIN IMPRIMIR</th></tr>'");
+            $("datos", xml).each(function() {
+                var obj = $(this).find("person");
+                var reg = $("reg", obj).text();
+                var noreg = $("noreg", obj).text();
+                var total = $("total", obj).text();
+                var creg = $("creg", obj).text();
+                var cnoreg = $("cnoreg", obj).text();
+                var total2 = $("total2", obj).text();
 
-    $("#activitiesevent").click(function() {
+                var html = "<tr><td align='center'>$1</th><td  align='center'>$2</th><th align='center'>$3</th></tr>";
+                html = html.replace("$2", reg);
+                html = html.replace("$3", noreg);
+                html = html.replace("$1", total);
+                $("#table").append(html);
+                var html2 = "<tr><td colspan='3'>&nbsp;</td></tr><tr><td colspan='3'>&nbsp;</td></tr><tr><th colspan='3' align= 'center'>CERTIFICADOS</th></tr><tr><th>REGISTROS</th><th>IMPRESOS</th><th>SIN IMPRIMIR</th></tr><tr><td align='center'>$1</th><td  align='center'>$2</th><th align='center'>$3</th></tr>";
+                html2 = html2.replace("$2", creg);
+                html2 = html2.replace("$3", cnoreg);
+                html2 = html2.replace("$1", total2);
+                $("#table").append(html2);
+            });
+        });
+    }
+    function activitiesevent() {
         var url = urlbase + "entradas/getActivitiesByEvent.xml";
         var datos2 = {
             even_id: $("#EntradaEventId").val()
         };
         ajax(url, datos2, function(xml) {
             $("#table").html("var html = '<tr><th>DESCRIPCION</th><th>LUGAR</th><th>FECHA</th><th>HORA INICIO</th><th>HORA FINAL</th><th>AFORO</th><th>INGRESOS</th><th>DISPONIBLE</th></tr>'");
-
             $("datos", xml).each(function() {
                 var obj = $(this).find("Activity");
                 var nombre = $("nombre", obj).text();
@@ -130,7 +193,6 @@
                 var aforo;
                 var ingreso = $("control_aforo", obj).text();
                 var disponible;
-
                 if (parseInt($("aforo", obj).text()) > 0) {
                     aforo = $("aforo", obj).text();
                     disponible = 0;
@@ -152,11 +214,9 @@
                 html = html.replace("$8", disponible);
                 $("#table").append(html);
             });
-
         });
-    });
-
-    $("#total").click(function() {
+    }
+    function total() {
         var url = urlbase + "entradas/getTotalByCategory.xml";
         var datos2 = {
             even_id: $("#EntradaEventId").val()
@@ -178,16 +238,14 @@
                 html = html.replace("$2", cantidad);
                 html = html.replace("$3", porcentaje.toFixed(2));
                 $("#table").append(html);
-
             });
-
-            var html2 =("var html = '<tr><th align='center'>$1</th align='center'><th align='center'>$2</th><td align='center'>100 %</td></tr>'");
-
+            var html2 = ("var html = '<tr><th align='center'>$1</th align='center'><th align='center'>$2</th><td align='center'>100 %</td></tr>'");
             html2 = html2.replace("$1", 'TOTAL');
             html2 = html2.replace("$2", j);
             $("#table").append(html2);
         });
-    });
+    }
+
 //    function pintar(categoria, cantidad, total) {
 //
 //        chart = new Highcharts.Chart({
@@ -235,121 +293,19 @@
 //        });
 //    }
 
-    $("#exportar5").click(function() {
+    function exportar5() {
         var event_id = $("#EntradaEventId").val();
         window.location = urlbase + "entradas/exportar5/" + event_id;
-    });
+    }
+    ;
     $("#exportar6").click(function() {
         var event_id = $("#EntradaEventId").val();
         window.location = urlbase + "entradas/exportar6/" + event_id;
     });
-    $("#exportar7").click(function() {
+    function exportar7() {
         var event_id = $("#EntradaEventId").val();
         window.location = urlbase + "entradas/exportar7/" + event_id;
-    });
-    $("#EntradaEventId").change(function() {
-        var url2 = urlbase + "categorias/getCategoriesByEvent.xml";
-        var datos2 = {
-            even_id: $(this).val()
-        };
-        ajax(url2, datos2, function(xml) {
-            $("#EntradaCategoriaId").html("<option>Seleccione una categoria</option>");
-            $("datos", xml).each(function() {
-                var obj = $(this).find("Categoria");
-                var valor, texto;
-                valor = $("id", obj).text();
-                texto = $("name", obj).text();
-                if (valor) {
-                    var html = "<option value='$1'>$2</option>";
-                    html = html.replace("$1", valor);
-                    html = html.replace("$2", texto);
-                    $("#EntradaCategoriaId").append(html);
-                }
-            });
-            var url = urlbase + "entradas/getEntradasByStage.xml";
-            var datos = {
-                stage_id: $("#EntradaStageId").val()
-            };
-            ajax(url, datos, function(xml2) {
-                $("#EntradaEntradaId").html("<option>Seleccione una entrada</option>");
-                $("datos", xml2).each(function() {
-                    var obj = $(this).find("Entrada");
-                    var valor, texto;
-                    valor = $("id", obj).text();
-                    texto = $("name", obj).text();
-                    if (valor) {
-                        var html = "<option value='$1'>$2</option>";
-                        html = html.replace("$1", valor);
-                        html = html.replace("$2", texto);
-                        $("#EntradaEntradaId").append(html);
-                    }
-                });
-            });
-        });
-    });
-    $("#EntradaStageId").change(function() {
-        var url2 = urlbase + "events/getEventsByStage.xml";
-        var datos2 = {
-            stage_id: $(this).val()
-        };
-        ajax(url2, datos2, function(xml2) {
-            $("#EntradaEventId").html("<option>Seleccione un evento</option>");
-            $("datos", xml2).each(function() {
-                var obj = $(this).find("Event");
-                var valor, texto;
-                valor = $("id", obj).text();
-                texto = $("name", obj).text();
-                if (valor) {
-                    var html = "<option value='$1'>$2</option>";
-                    html = html.replace("$1", valor);
-                    html = html.replace("$2", texto);
-                    $("#EntradaEventId").append(html);
-                }
-            });
-        });
-    });
-    $("#EntradaCityId").change(function() {
-        var url2 = urlbase + "stages/getStagesByCity.xml";
-        var datos2 = {
-            city_id: $(this).val()
-        };
-        ajax(url2, datos2, function(xml) {
-            $("#EntradaStageId").html("<option>Seleccione un escenario</option>");
-            $("datos", xml).each(function() {
-                var obj = $(this).find("Stage");
-                var valor, texto;
-                valor = $("id", obj).text();
-                texto = $("name", obj).text();
-                if (valor) {
-                    var html = "<option value='$1'>$2</option>";
-                    html = html.replace("$1", valor);
-                    html = html.replace("$2", texto);
-                    $("#EntradaStageId").append(html);
-                }
-            });
-        });
-    });
-    $("#EntradaStateId").change(function() {
-        var url2 = urlbase + "cities/getCitiesByState.xml";
-        var datos2 = {
-            state_id: $(this).val()
-        };
-        ajax(url2, datos2, function(xml) {
-            $("#EntradaCityId").html("<option>Seleccione una ciudad</option>");
-            $("datos", xml).each(function() {
-                var obj = $(this).find("City");
-                var valor, texto;
-                valor = $("id", obj).text();
-                texto = $("name", obj).text();
-                if (valor) {
-                    var html = "<option value='$1'>$2</option>";
-                    html = html.replace("$1", valor);
-                    html = html.replace("$2", texto);
-                    $("#EntradaCityId").append(html);
-                }
-            });
-        });
-    });
+    }
     (function()
     {
 //        var url = "<?= $this->Html->url(array("action" => "obtenerReporte.xml")) ?>";
@@ -575,4 +531,4 @@ $pos = 0;
 
 
 
-<p>Entradas <?php // echo $salidas            ?></p>-->
+<p>Entradas <?php // echo $salidas                          ?></p>-->
