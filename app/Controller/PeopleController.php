@@ -120,7 +120,20 @@ class PeopleController extends AppController {
 
 
                     $cat = '';
-
+                    
+                    //mayusculas
+                    $this->request->data['Person']['pers_primNombre'] = strtoupper($data['Person']['pers_primNombre']);
+                    $this->request->data['Person']['pers_primApellido'] = strtoupper($data['Person']['pers_primApellido']);
+                    $this->request->data['Person']['pers_empresa'] = strtoupper($data['Person']['pers_empresa']);
+                    $this->request->data['Person']['cargo'] = strtoupper($data['Person']['cargo']);
+                    $this->request->data['Person']['pers_mail'] = strtoupper($data['Person']['pers_mail']);
+                    $this->request->data['Person']['ciudad'] = strtoupper($data['Person']['ciudad']);
+                    $this->request->data['Person']['pais'] = strtoupper($data['Person']['pais']);
+                    $this->request->data['Person']['sector'] = strtoupper($data['Person']['sector']);
+                    $this->request->data['Person']['stan'] = strtoupper($data['Person']['stan']);
+                    $this->request->data['Person']['observaciones'] = strtoupper($data['Person']['observaciones']);
+                    
+                    
                     if ($this->Person->saveAll($this->request->data) == true) {
                         $categoria = $this->Categoria->find('list', array(
                             "conditions" => array(
@@ -344,6 +357,16 @@ class PeopleController extends AppController {
                     $categorias[$catego[$i]['c']['id']] = $catego[$i]['c']['name'];
                 }
             }
+            
+            $shelves = $this->Shelf->find('list', array(
+                "fields" => array(
+                    "Shelf.id",
+                    "Shelf.esta_nombre"
+                ),
+                "conditions" => array(
+                    "event_id" => $eve,
+            )));
+
 //        debug($catego);die;
 //        $products = $this->Product->find('list', array(
 //            "fields" => array(
@@ -358,7 +381,7 @@ class PeopleController extends AppController {
             )));
             $cities = $this->Person->City->find('list');
             $committeesEvents = $this->Person->CommitteesEvent->find('list');
-            $this->set(compact('documentTypes', 'cities', 'committeesEvents', /* 'bloodType',  'products', */ 'categorias'));
+            $this->set(compact('documentTypes', 'cities', 'committeesEvents', /* 'bloodType',  'products', */ 'categorias', 'shelves'));
         } else {
             $this->Session->setFlash('Seleccione el evento al que desea realizar registros y confirme', 'error');
             return $this->redirect(array('action' => '../Pages/display'));

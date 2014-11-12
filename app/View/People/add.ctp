@@ -164,8 +164,11 @@
             <tr>
                 <td>
                     <?php
-                    echo $this->Form->input('stan', array(
-                        'label' => 'No. Stand',
+                    echo $this->Form->input('shelf_id', array(
+                        'label' => 'Stand',
+                        'required' => 'false',
+                        "options" => $shelves,
+                        "empty" => "Seleccione un stand",
                     ));
                     ?>					
                 </td>
