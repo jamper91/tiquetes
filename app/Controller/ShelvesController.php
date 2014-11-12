@@ -104,6 +104,13 @@ class ShelvesController extends AppController {
             throw new NotFoundException(__('Invalid shelf'));
         }
         if ($this->request->is(array('post', 'put'))) {
+            $this->data['Shelf']['codigo'] = strtoupper($this->data['Shelf']['codigo']);
+            $this->data['Shelf']['esta_nombre'] = strtoupper($this->data['Shelf']['esta_nombre']);
+            $this->data['Shelf']['genero'] = strtoupper($this->data['Shelf']['genero']);
+            $this->data['Shelf']['representante'] = strtoupper($this->data['Shelf']['representante']);
+            $this->data['Shelf']['ubicacion'] = strtoupper($this->data['Shelf']['ubicacion']);
+            $this->data['Shelf']['descripcion'] = strtoupper($this->data['Shelf']['descripcion']);
+            $this->data['Shelf']['observacion'] = strtoupper($this->data['Shelf']['observacion']);
             if ($this->Shelf->save($this->request->data)) {
                 $this->Session->setFlash(__('The shelf has been saved.'));
                 return $this->redirect(array('action' => 'buscar'));
@@ -213,7 +220,7 @@ class ShelvesController extends AppController {
                 // debug($datos);
 
                 if ($codigo != null) {
-                    $conditions.=" codigo='%" . $codigo . "%' AND";
+                    $conditions.=" codigo LIKE '%" . $codigo . "%' AND";
                 }
 
                 if ($esta_nombre != null) {
@@ -243,9 +250,9 @@ class ShelvesController extends AppController {
 //                    } // si busco tb por doc entonces agrego el AND
                     $conditions.=" ubicacion LIKE '%" . $ubicacion . "%' AND";
                 }
-                    $conditions = "SELECT * FROM shelves WHERE " . $conditions . " event_id='" . $event_id . "' ";
+                    $conditions = "SELECT * FROM shelves WHERE " . $conditions . " event_id=" . $event_id . " ";
 
-
+//                    debug($conditions);
 
 
 

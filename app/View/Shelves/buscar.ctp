@@ -38,20 +38,20 @@
                 <thead>
                     <tr>
                         <th>
-                            Stand
+                            STAND
                         </th>
                         <th>
-                            Nombre
+                            NOMBRE
                         </th>
                         <th>
-                            Genero
+                            GENERO
                         </th>
 
                         <th>
-                            Representante
+                            REPRESENTANTE
                         </th>
                         <th>
-                            Ubicacion
+                            UBICACION
                         </th>
                         
 <!--                        <th>
