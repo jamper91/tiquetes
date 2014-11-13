@@ -374,6 +374,7 @@
             if (nombre !== "") {
                 if (apellido !== "") {
                     if (categoria !== "") {
+                        $("#PersonShelfId").removeAttr("disabled");
                         setTimeout('limpiar()', 3000);
                         //window.scrollTo(0,0);
 //                        $('#PersonCategoriaId').val($('#PersonCategoriaId > option:2').val());
