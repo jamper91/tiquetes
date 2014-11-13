@@ -333,12 +333,12 @@ class PeopleController extends AppController {
                             }
                             $shelf_viejo = $this->Person->query("SELECT shelf_id FROM inputs WHERE entr_codigo =$c");
                             if ($shelf_viejo[0]['shelves']['shelf_id'] != $data['Person']['shelf_id']) {
-                                if($shelf_viejo[0]['shelves']['shelf_id'] != 0) {
+                                if ($shelf_viejo[0]['shelves']['shelf_id'] != 0) {
                                     $this->Person->query("UPDATE `shelves` SET `control_aforo`= `control_aforo`-1 WHERE id = " . $shelf_viejo[0]['shelves']['shelf_id'] . "");
                                 }
-                                if($data['Person']['shelf_id'] != 0){
+                                if ($data['Person']['shelf_id'] != 0) {
                                     $this->Person->query("UPDATE `shelves` SET `control_aforo`= `control_aforo`+1 WHERE id = " . $data['Person']['shelf_id'] . "");
-                                }                                
+                                }
                             }
                             $this->Input->query("UPDATE inputs SET shelf_id = " . $data['Person']['shelf_id'] . ", usuarioescarapela=$user_id, fechaescarapela=NOW(), categoria_id=$cat WHERE entr_codigo =$c");
                             if ($codigo != array()) {
@@ -720,7 +720,49 @@ class PeopleController extends AppController {
                         $this->Person->query($sql);
                     }
                 }
-//               
+                $input = $this->Input->find('list', array("fields" => array('Input.id', 'Input.entr_codigo'), 'conditions' => array("Input.person_id = $id", "Input.event_id = $eve")));
+                foreach ($input as $key => $value) {
+                    $person_id = $key;
+                    $codigo = $value;
+                }
+                if ($input != array()) {
+                    if ($codigo == null) {
+                        $if = true;
+                        $while = true;
+                        while ($while) {
+                            $cadena = ""; //variable para almacenar la cadena generada
+                            $ejemplo = strlen($cadena);
+                            while ($if) {
+                                if ($ejemplo < 12) {
+                                    $numerodado = rand(0, 9);
+//                        debug($numerodado);
+                                    $cadena = $cadena . $numerodado;
+                                    $ejemplo = strlen($cadena);
+                                } else {
+                                    $if = FALSE;
+                                }
+                            }
+//                    debug(strlen($cadena));die;
+                            $pdigit = substr($cadena, -12, 1);
+                            if ($pdigit != '0') {
+                                $sql = "SELECT id FROM inputs WHERE entr_codigo = $cadena";
+                                $id = $this->Input->query($sql);
+                                if ($id == array()) {
+                                    $while = false;
+                                }
+                            } else {
+                                $while = true;
+                            }
+                        }
+                    } else {
+                        
+                    }
+                }
+                if ($data['modificar'] == 'Imprimir') {
+
+
+//                    $this->Input->query("UPDATE inputs SET ");
+                }
                 $this->Session->setFlash(__('La persona se modificó satisfactoriamente.'), 'good');
             } else {
                 $this->Session->setFlash(__('The person could not be saved. Please, try again.'));
@@ -764,17 +806,17 @@ class PeopleController extends AppController {
         /* echo "<pre>";
           var_dump($products); echo "</pre>"; die(); */
         $shelves = $this->Shelf->find('list', array(
-                "fields" => array(
-                    "Shelf.id",
-                    "Shelf.codigo"
-                ),
-                "conditions" => array(
-                    "event_id" => $eve,
-            )));
-        $documentTypes = $this->Person->DocumentType->find('list', array('fields'=>array('DocumentType.tido_descripcion')));
+            "fields" => array(
+                "Shelf.id",
+                "Shelf.codigo"
+            ),
+            "conditions" => array(
+                "event_id" => $eve,
+        )));
+        $documentTypes = $this->Person->DocumentType->find('list', array('fields' => array('DocumentType.tido_descripcion')));
         $cities = $this->Person->City->find('list');
         $committeesEvents = $this->Person->CommitteesEvent->find('list');
-        $this->set(compact('documentTypes', 'cities', 'shelves','committeesEvents', 'categorias', 'products', 'products1', 'input'));
+        $this->set(compact('documentTypes', 'cities', 'shelves', 'committeesEvents', 'categorias', 'products', 'products1', 'input'));
     }
 
     /**
@@ -923,7 +965,7 @@ class PeopleController extends AppController {
                     $pro = $datos["pro$i"];
                     $obs = $datos["obs$i"];
 
-                    $p = $this->Person->find('list', array("conditions"=>array("Person.pers_documento='$doc'"), 'fields'=>array('Person.id')));
+                    $p = $this->Person->find('list', array("conditions" => array("Person.pers_documento='$doc'"), 'fields' => array('Person.id')));
 //                    $p = $this->Person->query("SELECT id FROM people WHERE pers_documento='$doc'");
                     if ($p != array()) {
 //                        $person_id = $p[0]['people']['id'];
