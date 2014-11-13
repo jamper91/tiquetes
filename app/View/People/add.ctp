@@ -235,14 +235,19 @@
 </div>
 
 <script>
-    $('#PersonCategoriaId option[value="' + 2 + '"]').attr("selected", true);
+    $('#PersonCategoriaId option[value="' + 7 + '"]').attr("selected", true);
+    $("#PersonShelfId").attr("disabled", "disabled");
     $("#PersonCategoriaId").change(function() {
-        if ($("#PersonCategoriaId").val() === "2") {
-            $("#adicionales").css("display", "block");
+        var valor = $("#PersonCategoriaId").val();
+//        alert(valor);
+        if (valor === '2') {
+            $("#PersonShelfId").attr("required",true);
+            $("#PersonShelfId").removeAttr("disabled");
         } else {
-            $("#adicionales").css("display", "none");
+            $("#PersonShelfId").attr("required", false);
+            $("#PersonShelfId").val($('#PersonShelfId > option:first').val());
+            $("#PersonShelfId").attr("disabled", "disabled");
         }
-
     });
 
 </script>
@@ -290,10 +295,15 @@
                     $("#PersonPersEmpresa").val(emp);
                     $("#PersonPersCelular").val(cel);
                     $("#PersonPais").val(pai);
-                    $("#PersonStan").val(st);
+                    $("#PersonShelfId").val($('#PersonShelfId > option:first').val());
                     $('#PersonCategoriaId').val($('#PersonCategoriaId > option:first').val());
-                    $('#PersonSector option[value="' + sec + '"]').attr("selected", true);
+                    $('#PersonSector').val(sec);
                     $('#PersonCategoriaId option[value="' + cat + '"]').attr("selected", true);
+                    if(cat == 2){
+                        $("#PersonShelfId").removeAttr("disabled");
+                        $("#PersonShelfId").attr("required",true);
+                    }
+                    $('#PersonShelfId option[value="' + st + '"]').attr("selected", true);
                     $('#PersonDocumentTypeId option[value="' + td + '"]').attr("selected", true);
                 } else {
                     $("#PeoplePers_id").val("");
@@ -310,50 +320,50 @@
                     //               $("#PersonPersEmpresa").val("");
                     $("#PersonPersCelular").val("");
                     //               $("#PersonPais").val("");
-                    $("#PersonStan").val("");
+                    $("#PersonShelfId").val($('#PersonShelfId > option:first').val());
                     //               $('#PersonDocumentTypeId').val($('#PersonDocumentTypeId > option:first').val());
                     $('#PersonCategoriaId').val($('#PersonCategoriaId > option:first').val());
-                    $('#PersonSector').val($('#PersonSector > option:first').val());
+                    $('#PersonSector').val("");
                     alert("No se encuentra una persona registrada con ese número de documento");
                 }
             });
         });
     });
 
-    $("#PersonCargo").on('keyup', function() {
-        $("#PersonCargo").val(conMayusculas($(this).val()));
-    });
-    $("#PersonPersEmpresa").on('keyup', function() {
-        $("#PersonPersEmpresa").val(conMayusculas($(this).val()));
-    });
-
-    $("#PersonPais").on('keyup', function() {
-        $("#PersonPais").val(conMayusculas($(this).val()));
-    });
-    $("#PersonPersPrimNombre").on('keyup', function() {
-        $("#PersonPersPrimNombre").val(conMayusculas($(this).val()));
-    });
-    $("#PersonPersPrimApellido").on('keyup', function() {
-        $("#PersonPersPrimApellido").val(conMayusculas($(this).val()));
-    });
-    $("#PersonPersDireccion").on('keyup', function() {
-        $("#PersonPersDireccion").val(conMayusculas($(this).val()));
-    });
-    $("#PersonPersExpedicion").on('keyup', function() {
-        $("#PersonPersExpedicion").val(conMayusculas($(this).val()));
-    });
-    $("#PersonCiudad").on('keyup', function() {
-        $("#PersonCiudad").val(conMayusculas($(this).val()));
-    });
-    $("#PersonPersMail").on('keyup', function() {
-        $("#PersonPersMail").val(conMayusculas($(this).val()));
-    });
-    $("#PersonPersInstitucion").on('keyup', function() {
-        $("#PersonPersInstitucion").val(conMayusculas($(this).val()));
-    });
-    $("#PersonPersCargo").on('keyup', function() {
-        $("#PersonPersCargo").val(conMayusculas($(this).val()));
-    });
+//    $("#PersonCargo").on('keyup', function() {
+//        $("#PersonCargo").val(conMayusculas($(this).val()));
+//    });
+//    $("#PersonPersEmpresa").on('keyup', function() {
+//        $("#PersonPersEmpresa").val(conMayusculas($(this).val()));
+//    });
+//
+//    $("#PersonPais").on('keyup', function() {
+//        $("#PersonPais").val(conMayusculas($(this).val()));
+//    });
+//    $("#PersonPersPrimNombre").on('keyup', function() {
+//        $("#PersonPersPrimNombre").val(conMayusculas($(this).val()));
+//    });
+//    $("#PersonPersPrimApellido").on('keyup', function() {
+//        $("#PersonPersPrimApellido").val(conMayusculas($(this).val()));
+//    });
+//    $("#PersonPersDireccion").on('keyup', function() {
+//        $("#PersonPersDireccion").val(conMayusculas($(this).val()));
+//    });
+//    $("#PersonPersExpedicion").on('keyup', function() {
+//        $("#PersonPersExpedicion").val(conMayusculas($(this).val()));
+//    });
+//    $("#PersonCiudad").on('keyup', function() {
+//        $("#PersonCiudad").val(conMayusculas($(this).val()));
+//    });
+//    $("#PersonPersMail").on('keyup', function() {
+//        $("#PersonPersMail").val(conMayusculas($(this).val()));
+//    });
+//    $("#PersonPersInstitucion").on('keyup', function() {
+//        $("#PersonPersInstitucion").val(conMayusculas($(this).val()));
+//    });
+//    $("#PersonPersCargo").on('keyup', function() {
+//        $("#PersonPersCargo").val(conMayusculas($(this).val()));
+//    });
 
     $("#crear").click(function() {
         var documento=$("#PersonPersDocumento").val();
@@ -386,9 +396,9 @@
         $("#PersonPersMail").val("");
         $("#PersonCiudad").val("");
         $("#PersonPais").val("");
-        $("#PersonStan").val("");
+        $("#PersonShelfId").val($('#PersonShelfId > option:first').val());
         $('#PersonCategoriaId').val($('#PersonCategoriaId > option:first').val());
-        $('#PersonSector').val($('#PersonSector > option:first').val());
+        $('#PersonSector').val("");
         $('#PersonDocumentTypeId').val($('#PersonDocumentTypeId > option:first').val());
         location.reload();
     }

@@ -312,7 +312,7 @@ class CompaniesController extends AppController {
                 "Person.stan",
                 "Person.categoria_id"
             ),
-            "recursive" => 0
+            "recursive" => -2
         );
         $datos = $this->Person->find("all", $options);
 //        debug($datos);
