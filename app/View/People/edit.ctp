@@ -6,11 +6,11 @@
         <table>
             <tr>
                 <td>
-                    <div class="input text required">
-                        <label for="PersonPersDocumento">Identificacion</label>
-                        <input id="PersonPersDocumento" type="text" required="required" maxlength="50" name="data[Person][pers_documento]" autofocus="true"/>
-                        <input id="buscar" type="button"  name="buscar" value='Buscar'/>
-                    </div>
+                    <?php
+                    echo $this->Form->input('pers_documento', array(
+                        'label' => 'Identificación',
+                    ));
+                    ?>
                 </td>
                 <td>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -164,7 +164,10 @@
                 <td>
                     <?php
                     echo $this->Form->input('stan', array(
-                        'label' => 'No. Stand',
+                        'label' => 'Stand',
+                        'required' => 'false',
+                        "options" => $shelves,
+                        "empty" => "Seleccione un stand",
                     ));
                     ?>					
                 </td>
@@ -228,10 +231,11 @@
 
     </fieldset>
     <input value="Modificar" id="modificar" name="modificar" type="submit">
+    <input value="Imprimir" id="modificar" name="modificar" type="submit">
 </div>
 
 <script>
-    $('#PersonCategoriaId option[value="' + 2 + '"]').attr("selected", true);
+//    $('#PersonCategoriaId option[value="' + 2 + '"]').attr("selected", true);
     $("#PersonCategoriaId").change(function() {
         if ($("#PersonCategoriaId").val() === "2") {
             $("#adicionales").css("display", "block");

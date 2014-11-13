@@ -235,7 +235,7 @@
 </div>
 
 <script>
-    $('#PersonCategoriaId option[value="' + 7 + '"]').attr("selected", true);
+//    $('#PersonCategoriaId option[value="' + 7 + '"]').attr("selected", true);
     $("#PersonShelfId").attr("disabled", "disabled");
     $("#PersonCategoriaId").change(function() {
         var valor = $("#PersonCategoriaId").val();

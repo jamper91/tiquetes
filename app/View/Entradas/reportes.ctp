@@ -1,4 +1,4 @@
-<div class="categoriasEntradas form">
+<div class="categoriasEntradas form" align="center">
     <?php echo $this->Form->create('Entrada'); ?>
     <fieldset>
         <legend><?php echo __('Reportes'); ?></legend><br>
@@ -30,7 +30,9 @@
                         <option value="5">Escarapelas y Certificados Consolidado</option>
                     </select>
                 </td>
-            </tr></table>
+            </tr>
+            <tr><td colspan="4" align="center"><input type="button" id="busc" name="busc" value="Generar"></td></tr>
+        </table>
 
 
         <!--        <div class="btn-group">
@@ -128,7 +130,7 @@
 </div>
 <div class="mensaje"></div>
 <script>
-    $("#EntradaReporte").change(function() {
+    $("#busc").click(function() {
         var reporte = $("#EntradaReporte").val();
         var evento = $("#EntradaEventId").val();
         if (evento !== '') {
@@ -144,7 +146,7 @@
                 registros();
             }
         } else {
-            alert("No sea toche seleccione un evento");
+            alert("Por favor seleccione un evento");
         }
     });
     function registros() {
