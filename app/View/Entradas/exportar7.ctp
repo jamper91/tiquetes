@@ -53,7 +53,7 @@ function resta($inicio, $fin) {
     return $dif;
 }
 
-debug($datos2);
+//debug($datos2);
 //debug($actividades);
 $b = array();
 $c = array();
@@ -189,7 +189,7 @@ foreach ($datos2 as $dato) {
     $this->PhpExcel->addTableRow($datos);
 }
 
-debug($k);
+//debug($k);
 //die;
 $this->PhpExcel->addTableFooter();
 $this->PhpExcel->output("Reporte de actividades.xlsx");

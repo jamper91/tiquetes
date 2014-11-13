@@ -1063,7 +1063,7 @@ class EntradasController extends AppController {
 
                     $datos['actividad'] = $d[$i]['a']['id'];
                 } else {
-                    $datos['entrada' . $i] = $d[$i]['ap']['fecha_entrada'];                    
+                    $datos['entrada' . $i] = $d[$i]['ap']['fecha_entrada'];
                     if ($d[$i]['a']['permanencia'] == true) {
                         $datos['salida' . $i] = $d[$i]['ap']['fecha_salida'];
                     }
@@ -1116,19 +1116,47 @@ class EntradasController extends AppController {
         $this->layout = "webservices";
         $this->loadModel("EventsCategoria");
         $this->loadModel("Categoria");
+        $this->loadModel("Event");
         $event_id = $this->request->data['even_id'];
         $total = $this->Categoria->query("select c.`descripcion`, count(*) as total FROM `people` p INNER JOIN `inputs` i ON i.person_id = p.id INNER JOIN categorias c ON c.id = i.categoria_id WHERE i.event_id= $event_id group by c.descripcion");
         $datos = array();
         $full = 0;
-        for ($i = 0; $i < count($total); $i++) {
-            $datos[$i]['cat']['cuenta'] = count($total);
-            $datos[$i]['cat']['categoria'] = $total[$i]['c']['descripcion'];
-            $datos[$i]['cat']['total'] = $total[$i][0]['total'];
-            $full = $full + $total[$i][0]['total'];
+        $cantidad = $this->Event->query("SELECT datediff(`even_fechFinal`, `even_fechInicio`) AS cantidad FROM `events` e WHERE `id` = $event_id");
+        $dif = $cantidad[0][0]['cantidad'];
+        $fecha = $this->Event->query("SELECT even_fechInicio FROM events WHERE id = $event_id");
+        if ($fecha != array()) {
+            $date = $fecha[0]['events']['even_fechInicio'];
+            $f = date('Y-m-d', strtotime($date));
+            for ($i = 0; $i < count($total); $i++) {
+                $datos[$i]['cat']['cuenta'] = count($total);
+                $datos[$i]['cat']['categoria'] = $total[$i]['c']['descripcion'];
+                $datos[$i]['cat']['total'] = $total[$i][0]['total'];
+                $full = $full + $total[$i][0]['total'];
+            }
+            for ($j = 1; $j <= count($total); $j++) {
+                $datos[$i - $j]['cat']['full'] = $full;
+            }
+            $datos2 = array();
+            $dia = 0;
+            for ($k = 0; $k < $dif; $k++) {
+                $total2 = $this->Categoria->query("select c.`descripcion`, count(*) as total FROM `people` p INNER JOIN `inputs` i ON i.person_id = p.id INNER JOIN categorias c ON c.id = i.categoria_id WHERE i.event_id= $event_id AND i.fechaescarapela like '$f %' group by c.descripcion ASC ");
+                $x = count($total2);
+                $y = 0;
+                if ($total == array()) {
+                    $datos2[$k] = $dia;
+                } else {
+                    if ($y < $x) {
+                        $dia = $total2[$y][0]['total'];
+                        $datos2[$k] = $dia;
+                        $y++;
+                    }
+                }
+                $f = date('Y-m-d', strtotime('+1 days', strtotime($f)));
+            }
         }
-        for ($j = 1; $j <= count($total); $j++) {
-            $datos[$i - $j]['cat']['full'] = $full;
-        }
+//        for($a=0; $a<count($datos);$a++){
+//            $datos[$a]['cat']['dia']=$datos2[$a];
+//        }
         $this->set(
                 array(
                     "datos" => $datos,
@@ -1136,13 +1164,54 @@ class EntradasController extends AppController {
                 )
         );
     }
-    
+
+    public function getPersonWhitInput() {
+        $this->layout = "webservices";
+        $event_id = $this->request->data['even_id'];
+        $this->loadModel("Input");
+        $registradas = $this->Input->query("select count(*) as total FROM inputs WHERE event_id = $event_id and fechaescarapela IS NOT NULL ");
+        $certreg = $this->Input->query("select count(*) as total FROM inputs WHERE event_id = $event_id and fechaescarapela IS NOT NULL AND fechacertificate IS NOT NULL ");
+        $noregistradas = $this->Input->query("select count(*) as total FROM inputs WHERE event_id = $event_id and fechaescarapela IS NULL ");
+        $certnoreg = $this->Input->query("select count(*) as total FROM inputs WHERE event_id = $event_id and fechaescarapela IS NOT NULL AND fechacertificate IS NULL");
+        $reg = 0;
+        $noreg = 0;
+        $creg= 0;
+        $cnoreg= 0;
+        if($registradas!= array()){
+            $reg = $registradas[0][0]['total'];
+        }
+        if($noregistradas!=array()){
+            $noreg = $noregistradas[0][0]['total'];
+        }
+        if($certreg!=array()){
+            $creg=$certreg[0][0]['total'];
+        }
+        if($certnoreg!=array()){
+            $cnoreg=$certnoreg[0][0]['total'];
+        }
+        $total = $reg+$noreg;
+        $total2 = $creg+$cnoreg;
+        $datos['person']['reg']=$reg;
+        $datos['person']['noreg']=$noreg;
+        $datos['person']['total']=$total;
+        $datos['person']['creg']=$creg;
+        $datos['person']['cnoreg']=$cnoreg;
+        $datos['person']['total2']=$total2;
+        
+        $this->set(
+                array(
+                    "datos" => $datos,
+                    "_serialize" => array("datos")
+                )
+        );
+    }
+
     public function getActivitiesByEvent() {
-        $this->layout = "webservices";        
+        $this->layout = "webservices";
         $this->loadModel("Activity");
         $event_id = $this->request->data['even_id'];
 //        $total = $this->Event->query("SELECT `nombre`, `locacion`, `fecha`, `hora_inicio`, `hora_fin`,`aforo`,`control_aforo` FROM `activities` WHERE `event_id` = $event_id ORDER BY `nombre` ");
-         $options = array(
+        $options = array(
             "conditions" => array(
                 "Activity.event_id" => $event_id
             ),
@@ -1156,9 +1225,9 @@ class EntradasController extends AppController {
                 "Activity.control_aforo",
 //                "(Activity.aforo - Activity.control_aforo) AS disponibles",
             ),
-             "order" => array(
-               "Activity.nombre"  
-             ),
+            "order" => array(
+                "Activity.nombre"
+            ),
             "recursive" => 0
         );
 
