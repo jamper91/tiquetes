@@ -235,7 +235,7 @@
 </div>
 
 <script>
-    $('#PersonCategoriaId option[value="' + 2 + '"]').attr("selected", true);
+//    $('#PersonCategoriaId option[value="' + 2 + '"]').attr("selected", true);
     $("#PersonCategoriaId").change(function() {
         if ($("#PersonCategoriaId").val() === "2") {
             $("#adicionales").css("display", "block");

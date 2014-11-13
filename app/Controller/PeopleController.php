@@ -56,6 +56,7 @@ class PeopleController extends AppController {
         $this->loadModel('PeopleProduct');
         $this->loadModel('Data');
         $this->loadModel('Event');
+        $this->loadModel('Shelf');
         //try {
         $eve = $this->Session->read('event_id');
         if ($eve != NULL) {
@@ -664,6 +665,8 @@ class PeopleController extends AppController {
         $this->loadModel('Person');
         $this->loadModel('PeopleProduct');
         $this->loadModel('Data');
+        $this->loadModel('Shelf');
+        $eve = $this->Session->read('event_id');
         $data = $this->request->data;
         if (!$this->Person->exists($id)) {
             throw new NotFoundException(__('Invalid person'));
@@ -722,11 +725,18 @@ class PeopleController extends AppController {
         );
         /* echo "<pre>";
           var_dump($products); echo "</pre>"; die(); */
-
-        $documentTypes = $this->Person->DocumentType->find('list');
+        $shelves = $this->Shelf->find('list', array(
+                "fields" => array(
+                    "Shelf.id",
+                    "Shelf.codigo"
+                ),
+                "conditions" => array(
+                    "event_id" => $eve,
+            )));
+        $documentTypes = $this->Person->DocumentType->find('list', array('fields'=>array('DocumentType.tido_descripcion')));
         $cities = $this->Person->City->find('list');
         $committeesEvents = $this->Person->CommitteesEvent->find('list');
-        $this->set(compact('documentTypes', 'cities', 'committeesEvents', 'categorias', 'products', 'products1', 'input'));
+        $this->set(compact('documentTypes', 'cities', 'shelves','committeesEvents', 'categorias', 'products', 'products1', 'input'));
     }
 
     /**
@@ -855,8 +865,8 @@ class PeopleController extends AppController {
                 $event_id = $datos['Person']['event_id'];
                 $tam = $datos['size'];
                 $inicio = "Se registraron  ";
-                $medio = "Y se actualizaron las personas con los siguientes numeros de documento: ";
-                $repetidos = "";
+                $medio = "Y se actualizaron: ";
+                $repetidos = 0;
                 $cont = 0;
                 for ($i = 1; $i <= $tam; $i++) {
                     $doc = $datos["doc$i"];
@@ -875,16 +885,20 @@ class PeopleController extends AppController {
                     $pro = $datos["pro$i"];
                     $obs = $datos["obs$i"];
 
-                    $p = $this->Person->query("SELECT id FROM people WHERE pers_documento='$doc'");
+                    $p = $this->Person->find('list', array("conditions"=>array("Person.pers_documento='$doc'"), 'fields'=>array('Person.id')));
+//                    $p = $this->Person->query("SELECT id FROM people WHERE pers_documento='$doc'");
                     if ($p != array()) {
-                        $person_id = $p[0]['people']['id'];
+//                        $person_id = $p[0]['people']['id'];
+                        foreach ($p as $key => $value) {
+                            $person_id = $value;
+                        }
                         $input = $this->Input->find('first', array('conditions' => array("Input.event_id=$event_id", "Input.person_id=$person_id"), 'fields' => array('Input.entr_codigo')));
                         if ($input == array()) {
                             $this->Input->query("INSERT INTO inputs (person_id, categoria_id, event_id, fechaescarapela) VALUES ($person_id, $cat, $event_id, NULL )");
                             $sql2 = "UPDATE `people` SET `document_type_id` = $ti, `categoria_id`=$cat, `pers_primNombre`='$nom',`pers_primApellido`='$ape',`pers_empresa`='$ent',`pers_mail`='$mail', `pers_celular`='$cel',`pers_telefono`='$tel',`ciudad` = '$ciu', `pais`= '$pai', `stan`= '$sta', `sector`='$sec', `cargo`='$pro',`observaciones`='$obs'  WHERE `pers_documento` = '$doc'";
                             $this->Person->query($sql2);
                         }
-                        $repetidos = $repetidos . ", " . $doc;
+                        $repetidos ++;
                     } else {
                         $cont = $cont + 1;
                         $sql = "INSERT INTO people (pers_documento,  document_type_id, categoria_id, pers_primNombre, pers_primApellido, pers_empresa, pers_mail, pers_celular, pers_telefono,  ciudad, pais, stan, sector, cargo, observaciones) VALUES ('$doc', $ti, $cat,'$nom','$ape', '$ent', '$mail', '$cel', '$tel', '$ciu', '$pai', '$sta', '$sec', '$pro', '$obs')";
@@ -896,7 +910,7 @@ class PeopleController extends AppController {
                         $this->Input->query("INSERT INTO inputs (person_id, categoria_id, event_id, fechaescarapela) VALUES ($person_id, $cat, $event_id, NULL )");
                     }
                 }
-                $this->Session->setFlash($inicio . $cont . " nuevas personas. " . $medio . $repetidos . ".", 'good');
+                $this->Session->setFlash($inicio . $cont . " nuevas personas. " . $medio . $repetidos . " personas.", 'good');
             }
         }
         $date = date('Y-m-d');
