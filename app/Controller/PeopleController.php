@@ -79,6 +79,7 @@ class PeopleController extends AppController {
                     }
 //                debug($person_id);die;
                 }
+                $cadena = "";
                 $disponible = true;
                 if ($data['Person']['categoria_id'] == '2') { // si es expositor pregunte si el stand tiene cupo 
                     $shelf_id = $data['Person']['shelf_id'];
@@ -137,35 +138,7 @@ class PeopleController extends AppController {
                         }
                     }
                 }
-//algoritmo para asignacion de codigo de barras
-                $if = true;
-                $while = true;
-                while ($while) {
-                    $cadena = ""; //variable para almacenar la cadena generada
-                    $ejemplo = strlen($cadena);
-                    while ($if) {
-                        if ($ejemplo < 12) {
-                            $numerodado = rand(0, 9);
-//                        debug($numerodado);
-                            $cadena = $cadena . $numerodado;
-                            $ejemplo = strlen($cadena);
-                        } else {
-                            $if = FALSE;
-                        }
-                    }
-//                    debug(strlen($cadena));die;
-                    $pdigit = substr($cadena, -12, 1);
-                    if ($pdigit != '0') {
-                        $sql = "SELECT id FROM inputs WHERE entr_codigo = $cadena";
-                        $id = $this->Input->query($sql);
-                        if ($id == array()) {
-                            $while = false;
-                        }
-                    } else {
-                        $while = true;
-                    }
-                }
-                //fin algoritmom para seleccion de codigo de barras
+
                 if ($disponible == false) {
                     $this->Session->setFlash('NO QUEDAN CUPOS DISPONIBLES PARA ESTE STAND', 'error');
                 } elseif ($person_id == '') { //echo "aqui"; die();
@@ -232,10 +205,43 @@ class PeopleController extends AppController {
                         try {
 //                    $identificador = $data['input_identificador'];
 //                    $codigo = $data['input_codigo'];
-                            $sql = "INSERT INTO inputs (person_id, entr_codigo, categoria_id, event_id, usuarioescarapela, fechaescarapela, shelf_id) values ($person_id, '$cadena', " . $data['Person']['categoria_id'] . ", $eve, $user_id, now(), $auxstan)";
+                            $sql = "INSERT INTO inputs (person_id, entr_codigo, categoria_id, event_id, usuarioescarapela, fechaescarapela, shelf_id) values ($person_id, '', " . $data['Person']['categoria_id'] . ", $eve, $user_id, now(), $auxstan)";
 //                            debug($sql);die;
                             $this->Input->query($sql);
-
+                            //capturo la ultima input insertada
+                            $newInputId = $this->Input->find('all', array(
+                                "fields" => array(
+                                    "Input.id"
+                                ),
+                                "conditions" => array(
+                                    "Input.person_id" => $person_id,
+                                    "Input.event_id" => $eve,
+                            )));
+                            $input_id = $newInputId[0]['Input']['id']; //fin de la captura
+                            //generar el codigo
+                            if (strlen($input_id) < 12) {
+                                $conteo = 12 - strlen($input_id);
+                                for ($i = 0; $i < $conteo; $i++) {
+                                    $x = $i + 1;
+                                    if ($x == $conteo) {
+                                        $cadena = $cadena . "0" . $input_id;
+                                    } else {
+                                        if ($x == 1) {
+                                            $cadena = $cadena . "9";
+                                        } else {
+                                            $cadena = $cadena . "0";
+                                        }
+                                    }
+                                }
+                            } else {
+                                $cadena = $input_id;
+                            }
+//                            debug($cadena);
+//                            debug(strlen($cadena));
+//                            die;
+                            //fin generacion de codigo
+                            //actualizo la input
+                            $this->Input->query("UPDATE inputs SET entr_codigo = $cadena WHERE id = $input_id");
                             //REGISTRO 1 CUPO SI ES STAND Y CATEGORIA EXPOSITOR
                             if ($auxstan != 0) {
                                 $this->Person->query("UPDATE `shelves` SET `control_aforo`= `control_aforo`+1 WHERE id = $auxstan");
@@ -247,14 +253,7 @@ class PeopleController extends AppController {
                             $this->loadModel("Log");
                             $user_id = $this->Session->read("User.id");
 
-                            $newInputId = $this->Input->find('all', array(
-                                "fields" => array(
-                                    "Input.id"
-                                ),
-                                "conditions" => array(
-                                    "Input.entr_codigo" => $cadena,
-                            )));
-                            $input_id = $newInputId[0]['Input']['id'];
+                            //inserta log
                             $operacion = "VENTA";
                             $sql3 = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '$operacion')";
                             $operation = $this->Data->query($sql3);
@@ -327,6 +326,42 @@ class PeopleController extends AppController {
                     if ($codigo == array()) {
                         $sql = "INSERT INTO inputs (person_id, entr_codigo, categoria_id, event_id, tipo_entrada, usuarioescarapela, fechaescarapela,shelf_id) values (" . $id . ", " . $cadena . ", " . $cat . ", $eve, 2, $user_id, NOW(), $sta)";
                         $this->Input->query($sql);
+                        //aqui va la actualizacion del codigo para la input
+                        //capturo la ultima input insertada
+                        $newInputId = $this->Input->find('all', array(
+                            "fields" => array(
+                                "Input.id"
+                            ),
+                            "conditions" => array(
+                                "Input.person_id" => $id,
+                                "Input.event_id" => $eve,
+                        )));
+                        $input_id = $newInputId[0]['Input']['id']; //fin de la captura
+                        //generar el codigo
+                        if (strlen($input_id) < 12) {
+                            $conteo = 12 - strlen($input_id);
+                            for ($i = 0; $i < $conteo; $i++) {
+                                $x = $i + 1;
+                                if ($x == $conteo) {
+                                    $cadena = $cadena . "0" . $input_id;
+                                } else {
+                                    if ($x == 1) {
+                                        $cadena = $cadena . "9";
+                                    } else {
+                                        $cadena = $cadena . "0";
+                                    }
+                                }
+                            }
+                        } else {
+                            $cadena = $input_id;
+                        }
+//                        debug($cadena);
+//                        debug(strlen($cadena));
+//                        die;
+                        //fin generacion de codigo
+                        //actualizo la input
+                        $this->Inputs->query("UPDATE inputs SET entr_codigo = $cadena WHERE id = $input_id");
+                        //fin
                         if ($sta != 0) {
                             $this->Person->query("UPDATE `shelves` SET `control_aforo`= `control_aforo`+1 WHERE id = $sta");
                         }
@@ -367,6 +402,32 @@ class PeopleController extends AppController {
                         $user_id = $this->Session->read("User.id");
                         if ($c == null) {
 //                            dCebug($cadena);die;
+                            //capturo la ultima input insertada
+
+                            $input_id = $id; //fin de la captura
+                            //generar el codigo
+                            if (strlen($input_id) < 12) {
+                                $conteo = 12 - strlen($input_id);
+                                for ($i = 0; $i < $conteo; $i++) {
+                                    $x = $i + 1;
+                                    if ($x == $conteo) {
+                                        $cadena = $cadena . "0" . $input_id;
+                                    } else {
+                                        if ($x == 1) {
+                                            $cadena = $cadena . "9";
+                                        } else {
+                                            $cadena = $cadena . "0";
+                                        }
+                                    }
+                                }
+                            } else {
+                                $cadena = $input_id;
+                            }
+//                            debug($cadena);
+//                            debug(strlen($cadena));
+//                            die;
+                            //fin generacion de codigo
+                            //fin
                             if ($cat != "2") {//es igual a expositor
                                 $data['Person']['shelf_id'] = 0;
                             }

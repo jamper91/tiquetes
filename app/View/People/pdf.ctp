@@ -48,6 +48,7 @@ if ($data['tipo'] == 2) {
     if ($data['codigo']) {
         $codigo = $data['codigo'];
         $pdf->SetY(-24);
+//        debug($codigo);die;
         if ($id == 8) {
             $pdf->cell(0, 2, $pdf->EAN13(35, $cod, "$codigo"), 0, 0, 'C');
         } else {
