@@ -6,7 +6,7 @@ $pdf = new PDF_EAN13();
 
 $pdf->Open();
 $pdf->SetAutoPageBreak(true, 0.3);
-$pdf->AddPage('P',  array('100', '120'));
+$pdf->AddPage('P', array('100', '120'));
 $id = $data['escarapela'][0]['escarapelas']['id'];
 $cod = $data['escarapela'][0]['escarapelas']['codigo'];
 $nombres = $data['escarapela'][0]['escarapelas']['nombres'];
@@ -42,16 +42,53 @@ if (strlen($doc) == 12) {
 } else {
     $numero = $doc;
 }
-$pdf->Image('../webroot/img/certificate/ocho.jpg', 0, 0, $pdf->w, $pdf->h);
+//$pdf->Image('../webroot/img/certificate/ocho.jpg', 0, 0, $pdf->w, $pdf->h);
 if ($data['tipo'] == 2) {
 
     if ($data['codigo']) {
         $codigo = $data['codigo'];
         $pdf->SetY(-24);
-        $pdf->cell(0, 2, $pdf->EAN13(35, $cod, "$codigo"), 0, 0, 'C');
+        if ($id == 8) {
+            $pdf->cell(0, 2, $pdf->EAN13(35, $cod, "$codigo"), 0, 0, 'C');
+        } else {
+            $pdf->cell(0, 2, $pdf->EAN13(35, $cod, "$codigo"), 0, 0, 'C');
+        }
         $pdf->Ln(2);
 
-        if ($id != 7) {
+        if ($id == 7) {
+            $name = $data['nombre'] . ' ' . $data['apellido'];
+            $x = strlen($name);
+            if ($x <= 19) {
+                $tam_nombres = 20;
+            } else if ($x <= 27) {
+                $tam_nombres = 15;
+            } else if ($x <= 35) {
+                $tam_nombres = 11;
+            } else {
+                $tam_nombres = 10;
+            }
+            $pdf->SetY($nombres);
+            $pdf->SetFont('Arial', 'B', $tam_nombres);
+            $pdf->Cell(0, 2, utf8_decode($name), 0, 0, 'C');
+        } elseif ($id == 8) {
+            $name = "" . $data['nombre'] . ' ' . $data['apellido'];
+            $x = strlen($name);
+            if ($x <= 19) {
+                $tam_nombres = 12;
+            } else if ($x <= 27) {
+                $name = "    " . $data['nombre'] . ' ' . $data['apellido'];
+                $tam_nombres = 11;
+            } else if ($x <= 35) {
+                $name = "        " . $data['nombre'] . ' ' . $data['apellido'];
+                $tam_nombres = 10;
+            } else {
+                $name = "            " . $data['nombre'] . ' ' . $data['apellido'];
+                $tam_nombres = 8;
+            }
+            $pdf->SetY($nombres);
+            $pdf->SetFont('Arial', 'B', $tam_nombres);
+            $pdf->Cell(0, 2, utf8_decode($name), 0, 0, 'C');
+        } else {
             $pdf->SetY($nombres);
             $pdf->SetFont('Arial', 'B', $tam_nombres);
             $pdf->Cell(0, 2, utf8_decode($data['nombre']), 0, 0, 'C');
@@ -61,28 +98,21 @@ if ($data['tipo'] == 2) {
             $pdf->SetFont('Arial', 'B', $tam_apellidos);
             $pdf->Cell(0, 2, utf8_decode($data['apellido']), 0, 0, 'C');
             $pdf->Ln(2);
-        } else {
-            $name = $data['nombre'] . ' ' . $data['apellido'];
-            $x = strlen($name);
-            if ($x <= 19) {
-                $tam_nombres = 20;
-            } else if ($x<=27){
-                $tam_nombres = 15;
-            }else if ($x<=35){
-                $tam_nombres = 11;
-            }else {
-                $tam_nombres = 10;
-            }
-            $pdf->SetY($nombres);
-            $pdf->SetFont('Arial', 'B', $tam_nombres);
-            $pdf->Cell(0, 2, utf8_decode($name), 0, 0, 'C');
         }
         if ($documento != null && $documento != '') {
-            $cedula = 'ID: ' . $numero;
-            $pdf->SetY($documento);
-            $pdf->SetFont('Arial', '', $tam_documento);
-            $pdf->Cell(0, 2, $cedula, 0, 0, 'C');
-            $pdf->Ln(2);
+            if ($id != 8) {
+                $cedula = 'ID: ' . $numero;
+                $pdf->SetY($documento);
+                $pdf->SetFont('Arial', '', $tam_documento);
+                $pdf->Cell(0, 2, $cedula, 0, 0, 'C');
+                $pdf->Ln(2);
+            } else {
+                $cedula =  $numero;
+                $pdf->SetY($documento);
+                $pdf->SetFont('Arial', '', $tam_documento);
+                $pdf->Cell(0, 2, $cedula, 0, 0, 'C');
+                $pdf->Ln(2);
+            }
         }
         if ($empresa != null && $empresa != '') {
             $pdf->SetY($empresa);

@@ -2,7 +2,7 @@
     <?php echo $this->Form->create('Person'); ?>
     <fieldset>
 
-        <legend><?php //echo __('Crear Persona');   ?></legend>
+        <legend><?php //echo __('Crear Persona');     ?></legend>
         <table>
             <tr>
                 <td>
@@ -24,7 +24,7 @@
                             //'autofocus' => 'true'
                     ));
                     ?>
-                                        
+
                 </td>
 
             </tr>
@@ -45,7 +45,7 @@
                     <?php ?>
                 </td>
                 <td>
-                    
+
                     <?php
                     echo $this->Form->input('categoria_id', array(
                         'label' => 'Categoría',
@@ -116,7 +116,7 @@
                         'type' => 'text'
                     ));
                     ?>
-                    
+
                 </td>
             </tr>
             <tr>
@@ -176,7 +176,7 @@
                     <?php ?>
                 </td>
                 <td>
-                    <?php 
+                    <?php
                     echo $this->Form->input('observaciones', array(
                         'label' => 'Observaciones',
                         'maxlength' => '200'
@@ -187,7 +187,6 @@
             <tr>
                 <td>
                     <?php
-                    
                     ?>
 
                 </td>
@@ -241,7 +240,7 @@
         var valor = $("#PersonCategoriaId").val();
 //        alert(valor);
         if (valor === '2') {
-            $("#PersonShelfId").attr("required",true);
+            $("#PersonShelfId").attr("required", true);
             $("#PersonShelfId").removeAttr("disabled");
         } else {
             $("#PersonShelfId").attr("required", false);
@@ -261,7 +260,7 @@
         ajax(url, datos, function(xml) {
             $("datos", xml).each(function() {
                 var obj = $(this).find("Person");
-                var nombre, td, apellido, cat, ciudad, direccion, telefono, exp, ciu, sec, mail, ins, st, car, pai, emp, cel;
+                var nombre, td, apellido, cat, ciudad, direccion, telefono, exp, ciu, sec, mail, ins, st, car, pai, emp, cel, observa;
                 id = $("id", obj).text();
                 td = $("document_type_id", obj).text();
                 cat = $("categoria_id", obj).text();
@@ -280,6 +279,7 @@
                 pai = $("pais", obj).text();
                 st = $("stan", obj).text();
                 sec = $("sector", obj).text();
+                observa = $("observaciones", obj).text();
 //                alert(sec);
                 if (nombre !== "") {
                     $("#PeoplePers_id").val(id);
@@ -295,13 +295,17 @@
                     $("#PersonPersEmpresa").val(emp);
                     $("#PersonPersCelular").val(cel);
                     $("#PersonPais").val(pai);
+                    $("#PersonObservaciones").val(observa);
                     $("#PersonShelfId").val($('#PersonShelfId > option:first').val());
                     $('#PersonCategoriaId').val($('#PersonCategoriaId > option:first').val());
                     $('#PersonSector').val(sec);
                     $('#PersonCategoriaId option[value="' + cat + '"]').attr("selected", true);
-                    if(cat == 2){
+                    if (cat == 2) {
                         $("#PersonShelfId").removeAttr("disabled");
-                        $("#PersonShelfId").attr("required",true);
+                        $("#PersonShelfId").attr("required", true);
+                    }
+                    else{
+                        $("#PersonShelfId").attr("disabled","disabled");
                     }
                     $('#PersonShelfId option[value="' + st + '"]').attr("selected", true);
                     $('#PersonDocumentTypeId option[value="' + td + '"]').attr("selected", true);
@@ -324,6 +328,8 @@
                     //               $('#PersonDocumentTypeId').val($('#PersonDocumentTypeId > option:first').val());
                     $('#PersonCategoriaId').val($('#PersonCategoriaId > option:first').val());
                     $('#PersonSector').val("");
+                    $("#PersonShelfId").attr("disabled","disabled");
+                    $("#PersonObservaciones").val();
                     alert("No se encuentra una persona registrada con ese número de documento");
                 }
             });
@@ -366,19 +372,31 @@
 //    });
 
     $("#crear").click(function() {
-        var documento=$("#PersonPersDocumento").val();
+        var documento = $("#PersonPersDocumento").val();
         var nombre = $("#PersonPersPrimNombre").val();
         var apellido = $("#PersonPersPrimApellido").val();
-        var categoria = $('#PersonCategoriaId').val();        
+        var categoria = $('#PersonCategoriaId').val();
+        var shelf;
         if (documento !== "") {
             if (nombre !== "") {
                 if (apellido !== "") {
                     if (categoria !== "") {
-                        $("#PersonShelfId").removeAttr("disabled");
-                        setTimeout('limpiar()', 3000);
-                        //window.scrollTo(0,0);
+                        if (categoria === '2') {
+                            shelf = $("#PersonShelfId").val();
+                            if (shelf !== "") {
+                                $("#PersonShelfId").removeAttr("disabled");
+                                setTimeout('limpiar()', 3000);
+                                //window.scrollTo(0,0);
 //                        $('#PersonCategoriaId').val($('#PersonCategoriaId > option:2').val());
-                        $("#PersonCategoriaId").focus();
+                                $("#PersonCategoriaId").focus();
+                            }
+                        } else {
+                            $("#PersonShelfId").removeAttr("disabled");
+                            setTimeout('limpiar()', 3000);
+                            //window.scrollTo(0,0);
+//                        $('#PersonCategoriaId').val($('#PersonCategoriaId > option:2').val());
+                            $("#PersonCategoriaId").focus();
+                        }
                     }
                 }
             }
@@ -401,6 +419,7 @@
         $('#PersonCategoriaId').val($('#PersonCategoriaId > option:first').val());
         $('#PersonSector').val("");
         $('#PersonDocumentTypeId').val($('#PersonDocumentTypeId > option:first').val());
+        $("#PersonObservaciones").val();
         location.reload();
     }
 
@@ -466,7 +485,7 @@
                 $('#PersonPersPrimNombre').val(nombre + " " + nombre2);
                 $('#PersonPersPrimApellido').val(apellido1 + " " + apellido2);
 //                $('#PersonPersTipoSangre').val(sangre);
-                $('#PersonPistola').val("");                
+                $('#PersonPistola').val("");
 //                        var url = "validar_admin.jsp"; // the script where you handle the form input. 
 
             }

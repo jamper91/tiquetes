@@ -310,7 +310,8 @@ class CompaniesController extends AppController {
                 "Person.sector",
                 "Person.cargo",
                 "Person.stan",
-                "Person.categoria_id"
+                "Person.categoria_id",
+                "Person.observaciones"
             ),
             "recursive" => -2
         );

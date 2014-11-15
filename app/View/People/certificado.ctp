@@ -9,7 +9,7 @@ $fpdf = new PDF_JavaScript();
 $fpdf->Open();
 $fpdf->SetAutoPageBreak(true, 0.3);
 $fpdf->AddPage('L', array('279.4', '215.9'));
-$fpdf->Image('../webroot/img/certificate/CERTIFICADOSC-03.jpg', 0, 0, $fpdf->w, $fpdf->h);
+//$fpdf->Image('../webroot/img/certificate/CERTIFICADOSC-03.jpg', 0, 0, $fpdf->w, $fpdf->h);
 //debug($data);
 //die;
 $name = $data['certificado'][0]['certificados']['nombres'];

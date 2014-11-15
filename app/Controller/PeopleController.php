@@ -137,7 +137,7 @@ class PeopleController extends AppController {
                         }
                     }
                 }
-
+//algoritmo para asignacion de codigo de barras
                 $if = true;
                 $while = true;
                 while ($while) {
@@ -165,6 +165,7 @@ class PeopleController extends AppController {
                         $while = true;
                     }
                 }
+                //fin algoritmom para seleccion de codigo de barras
                 if ($disponible == false) {
                     $this->Session->setFlash('NO QUEDAN CUPOS DISPONIBLES PARA ESTE STAND', 'error');
                 } elseif ($person_id == '') { //echo "aqui"; die();
@@ -191,13 +192,13 @@ class PeopleController extends AppController {
                     $this->request->data['Person']['ciudad'] = strtoupper($data['Person']['ciudad']);
                     $this->request->data['Person']['pais'] = strtoupper($data['Person']['pais']);
                     $this->request->data['Person']['sector'] = strtoupper($data['Person']['sector']);
-//                    debug($data['Person']['shelf_id']);die;
-                    if ($data['Person']['shelf_id'] == null) {
-                        $this->request->data['Person']['stan'] = 0;
-                        $auxstan = 0;
-                    } else {
+
+                    if ($data['Person']['categoria_id'] == '2') {
                         $this->request->data['Person']['stan'] = $data['Person']['shelf_id'];
                         $auxstan = $data['Person']['shelf_id'];
+                    } else {
+                        $this->request->data['Person']['stan'] = 0;
+                        $auxstan = 0;
                     }
                     $this->request->data['Person']['observaciones'] = strtoupper($data['Person']['observaciones']);
 
@@ -234,7 +235,7 @@ class PeopleController extends AppController {
                             $sql = "INSERT INTO inputs (person_id, entr_codigo, categoria_id, event_id, usuarioescarapela, fechaescarapela, shelf_id) values ($person_id, '$cadena', " . $data['Person']['categoria_id'] . ", $eve, $user_id, now(), $auxstan)";
 //                            debug($sql);die;
                             $this->Input->query($sql);
-                            
+
                             //REGISTRO 1 CUPO SI ES STAND Y CATEGORIA EXPOSITOR
                             if ($auxstan != 0) {
                                 $this->Person->query("UPDATE `shelves` SET `control_aforo`= `control_aforo`+1 WHERE id = $auxstan");
@@ -245,8 +246,8 @@ class PeopleController extends AppController {
                             //comienzo con el log
                             $this->loadModel("Log");
                             $user_id = $this->Session->read("User.id");
-                            
-                            $newInputId =  $this->Input->find('all', array(
+
+                            $newInputId = $this->Input->find('all', array(
                                 "fields" => array(
                                     "Input.id"
                                 ),
@@ -304,7 +305,7 @@ class PeopleController extends AppController {
                     $ciu = strtoupper($data['Person']['ciudad']);
                     $pais = strtoupper($data['Person']['pais']);
                     $sec = strtoupper($data['Person']['sector']);
-                    if ($data['Person']['shelf_id'] != null) {
+                    if ($data['Person']['categoria_id'] == '2') {
                         $sta = $data['Person']['shelf_id'];
                     } else {
                         $sta = 0;
@@ -416,7 +417,6 @@ class PeopleController extends AppController {
                                 if ($sta != 0) {
                                     $this->Person->query("UPDATE `shelves` SET `control_aforo`= `control_aforo`+1 WHERE id = $sta");
                                 }
-
                             }
                             $this->Input->query("UPDATE inputs SET shelf_id = $sta, usuarioescarapela=$user_id, fechaescarapela=NOW(), categoria_id=$cat WHERE entr_codigo =$c");
                             if ($codigo != array()) {
@@ -849,40 +849,17 @@ class PeopleController extends AppController {
             $options = array('conditions' => array('Person.' . $this->Person->primaryKey => $id));
             $this->request->data = $this->Person->find('first', $options);
         }
+        $options = "SELECT c.`id`, c.`descripcion` AS name FROM `categorias` c INNER JOIN `events_categorias` e ON e.`categoria_id` = c.`id` WHERE e.`event_id` = $eve order by c.`descripcion` asc ";
+        $catego = $this->Categoria->query($options);
+//      debug($catego);  
+        $categorias = array();
+        $p = count($catego);
+        if ($p != 0) {
+            for ($i = 0; $i < $p; $i++) {
+                $categorias[$catego[$i]['c']['id']] = $catego[$i]['c']['name'];
+            }
+        }
 
-        $categorias = $this->Categoria->find('list', array(
-            "fields" => array(
-                "Categoria.id",
-                "Categoria.descripcion"
-        )));
-
-        $products1 = $this->Product->find('list', array(
-            "fields" => array(
-                "Product.product_id",
-                "Product.name"
-        )));
-        $products = $this->Product->find('list', array(
-            "fields" => array(
-                "Product.product_id",
-                "o.product_id",
-                "Product.name",
-            ),
-            //"contain"=>array("PeopleProduct"),
-            'joins' => array(
-                array(
-                    'table' => 'people_products',
-                    'alias' => 'o',
-                    'type' => 'LEFT',
-                    'conditions' => array(
-                        'o.person_id  ' => $id, 'o.product_id=Product.product_id'
-                    )
-                )
-            ),
-                // "conditions"=>array("o.person_id"=>$id) 
-                )
-        );
-        /* echo "<pre>";
-          var_dump($products); echo "</pre>"; die(); */
         $shelves = $this->Shelf->find('list', array(
             "fields" => array(
                 "Shelf.id",
@@ -891,10 +868,22 @@ class PeopleController extends AppController {
             "conditions" => array(
                 "event_id" => $eve,
         )));
-        $documentTypes = $this->Person->DocumentType->find('list', array('fields' => array('DocumentType.tido_descripcion')));
+
+//        debug($catego);die;
+//        $products = $this->Product->find('list', array(
+//            "fields" => array(
+//                "Product.product_id",
+//                "Product.name"
+//        )));
+//        $bloodType = Array('O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'HH');
+        $documentTypes = $this->Person->DocumentType->find('list', array(
+            "fields" => array(
+                "DocumentType.id",
+                "DocumentType.tido_descripcion"
+        )));
         $cities = $this->Person->City->find('list');
         $committeesEvents = $this->Person->CommitteesEvent->find('list');
-        $this->set(compact('documentTypes', 'cities', 'shelves', 'committeesEvents', 'categorias', 'products', 'products1', 'input'));
+        $this->set(compact('documentTypes', 'cities', 'committeesEvents', /* 'bloodType',  'products', */ 'categorias', 'shelves'));
     }
 
     /**
@@ -966,41 +955,45 @@ class PeopleController extends AppController {
             $pers_primNombre = $datos["Person"]["pers_primNombre"];
             $pers_primApellido = $datos["Person"]["pers_primApellido"];
 
-            $input_identificador = $datos["input_identificador"];
+            $pers_entidad = $datos["Person"]["pers_empresa"];
 
             $conditions = "";
 
-            if ($pers_documento == null && $pers_primApellido == null && $pers_primNombre == null && $input_identificador == null) {
-                $conditions = "1";
+            if ($pers_documento == null && $pers_primApellido == null && $pers_primNombre == null && $pers_entidad == null) {
+                $conditions = "";
             }
 
             // debug($datos);
 
             if ($pers_documento != null) {
-                $conditions.=" pers_documento='" . $pers_documento . "'";
+                $conditions.=" pers_documento LIKE '%$pers_documento%'";
             }
 
             if ($pers_primNombre != null) {
                 if ($pers_documento != null) {
                     $conditions.=" AND";
                 } // si busco tb por doc entonces agrego el AND
-                $conditions.=" pers_primNombre LIKE '" . $pers_primNombre . "%'";
+                $conditions.=" pers_primNombre LIKE '%$pers_primNombre%'";
             }
 
             if ($pers_primApellido != null) {
                 if ($pers_documento != null || $pers_primNombre != null) {
                     $conditions.=" AND";
                 } // si busco por doc o primNombre agrego el AND
-                $conditions.=" pers_primApellido LIKE '" . $pers_primApellido . "%'";
+                $conditions.=" pers_primApellido LIKE '%$pers_primApellido%'";
             }
 
-            if ($input_identificador != null) {
-
-                $conditions = "SELECT * FROM people, inputs WHERE inputs.person_id=people.id AND " . $conditions . "  inputs.entr_identificador='" . $input_identificador . "' ";
+            if ($pers_entidad != null) {
+                if ($pers_documento != null || $pers_primNombre != null || $pers_primApellido != null) {
+                    $conditions.=" AND";
+                }
+                $conditions .= "pers_empresa LIKE '%$pers_entidad%' ";
+            }
+            if ($conditions != "") {
+                $conditions = "SELECT * FROM people WHERE $conditions ORDER BY pers_primNombre"; //die();
             } else {
-                $conditions = "SELECT * FROM people WHERE " . $conditions; //die();
+                $conditions = "SELECT * FROM people ORDER BY pers_primNombre"; //die();
             }
-
 
 
 

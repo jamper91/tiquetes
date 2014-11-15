@@ -23,10 +23,10 @@
                 <td>
                     <select name="data[Entrada][reporte]" style="display:block" id="EntradaReporte">
                         <option value="">Seleccione un Reporte</option>
-                        <option value="1">Asistentes Detallado</option>
-                        <option value="2">Asistentes Consolidado</option>
-                        <option value="3">Actividad Detallado</option>
                         <option value="4">Actividad Consolidado</option>
+                        <option value="3">Actividad Detallado</option>
+                        <option value="2">Asistentes Consolidado</option>
+                        <option value="1">Asistentes Detallado</option>
                         <option value="5">Escarapelas y Certificados Consolidado</option>
                     </select>
                 </td>

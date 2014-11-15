@@ -6,7 +6,7 @@
         <?php
         
         echo $this->Form->input('pers_documento', array(
-            'label' => 'Número de Documento',
+            'label' => 'Identificacion',
             'required' => 'false'
         ));
         echo $this->Form->input('pers_primNombre', array(
@@ -18,8 +18,8 @@
             'required' => 'false'
         ));
         
-        echo $this->form->input('input_identificador', array(
-            'label' => 'Identificador de Escarapela',
+        echo $this->Form->input('pers_empresa', array(
+            'label' => 'Entidad',
             'required' => 'false'
         ));
        ?>
@@ -47,7 +47,9 @@
                         <th>
                             Apellidos
                         </th>
-                        
+                        <th>
+                            Entidad
+                        </th>
                         <th>
                             Opciones
                         </th>
@@ -68,11 +70,12 @@
                             <td>
                         <?= $dato["people"]["pers_primApellido"]  ?>
                             </td>
-                          
+                          <td>
+                        <?= $dato["people"]["pers_empresa"]  ?>
+                            </td>
                             <td>
                                 <?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $dato['people']['id']),array('class'=>'btn btn-warning')); ?>
                                 <?php if (in_array('eliminar', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
-                                <?php echo $this->Form->postLink(__('Imprimir Certificado'), array('action' => 'certificate2', $dato['people']['id']), array('class' => 'btn btn-info'), __('Seguro que desea imprimir el certificado de %s?', $dato["people"]["pers_primNombre"])); ?>
                                 <?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $dato['people']['id']), array('class' => 'btn btn-danger'), __('Esta seguro que desea eliminar esta persona', $dato['people']['id'])); ?>
                                 <?php } ?>
                             </td>
