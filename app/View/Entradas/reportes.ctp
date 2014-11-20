@@ -28,6 +28,7 @@
                         <option value="2">Asistentes Consolidado</option>
                         <option value="1">Asistentes Detallado</option>
                         <option value="5">Escarapelas y Certificados Consolidado</option>
+                        <option value="6">Stands Consolidado</option>
                     </select>
                 </td>
             </tr>
@@ -144,6 +145,8 @@
                 activitiesevent();
             } else if (reporte === '5') {
                 registros();
+            } else if (reporte === '6') {
+                shelvesevent();
             }
         } else {
             alert("Por favor seleccione un evento");
@@ -214,6 +217,45 @@
                 html = html.replace("$6", aforo);
                 html = html.replace("$7", ingreso);
                 html = html.replace("$8", disponible);
+                $("#table").append(html);
+            });
+        });
+    }
+    
+    function shelvesevent() {
+        var url = urlbase + "entradas/getShelvesByEvent.xml";
+        var datos2 = {
+            even_id: $("#EntradaEventId").val()
+        };
+        ajax(url, datos2, function(xml) {
+            $("#table").html("var html = '<tr><th>CODIGO</th><th>NOMBRE</th><th>GENERO</th><th>REPRESENTANTE</th><th>AFORO</th><th>INGRESOS</th><th>DISPONIBLE</th></tr>'");
+            $("datos", xml).each(function() {
+                var obj = $(this).find("Shelf");
+                var codigo = $("codigo", obj).text();
+                var nombre = $("esta_nombre", obj).text();
+                var genero = $("genero", obj).text();
+                var representante = $("representante", obj).text();
+                var aforo;
+                var ingreso = $("control_aforo", obj).text();
+                var disponible;
+                if (parseInt($("aforo", obj).text()) > 0) {
+                    aforo = $("aforo", obj).text();
+                    disponible = 0;
+                    if (parseInt($("aforo", obj).text()) >= parseInt($("control_aforo", obj).text())) {
+                        disponible = parseInt($("aforo", obj).text()) - parseInt($("control_aforo", obj).text());
+                    }
+                } else {
+                    aforo = "";
+                    disponible = "";
+                }
+                var html = "<tr><td>$1</th><td>$2</th><th>$3</th><th>$4</th><th>$5</th><th><font color='blue'>$6</font></th><th>$7</th></tr>"
+                html = html.replace("$1", codigo);
+                html = html.replace("$2", nombre);
+                html = html.replace("$3", genero);
+                html = html.replace("$4", representante);
+                html = html.replace("$5", aforo);
+                html = html.replace("$6", ingreso);
+                html = html.replace("$7", disponible);
                 $("#table").append(html);
             });
         });

@@ -19,28 +19,31 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                     "empty" => "Seleccione un Evento",
                     'required'=>'true'
                 ));
-                ?></td>            
-            <td>Lugar</td>
-            <td><?php echo $this->Form->input('locacion', array ('label' => '', 'required'=>'true')); ?></td>
+                ?></td> 
+					<td>Actividad</td>
+            <td><?php echo $this->Form->input('nombre', array('label' => '', 'required'=>'true')); ?></td>
+            
         </tr>
         <tr>
-            <td>Actividad</td>
-            <td><?php echo $this->Form->input('nombre', array('label' => '', 'required'=>'true')); ?></td>
+            <td>Lugar</td>
+            <td><?php echo $this->Form->input('locacion', array ('label' => '', 'required'=>'true')); ?></td>
             <td>Descripcion</td>
             <td><?php echo $this->Form->input('descripcion', array('label' => '')); ?></td>
         </tr>        
         <tr>
+		<td>Observaciones</td>
+            <td><?php echo $this->Form->input('observaciones', array('label' => '')); ?></td>
             <td>Día</td>
             <td><select name="data[Activity][fecha]" id="ActivityFecha" required="true">
                     <option value="">Seleccione un Día</option></select></td>
-            <td>Hora inicial</td>
-           <td><?php echo $this->Form->input('hora_inicio', array('label' => '', 'placeholder'=>'HH:MM')); ?></td>           
+                      
         </tr>
         <tr>
+			 <td>Hora inicial</td>
+           <td><?php echo $this->Form->input('hora_inicio', array('label' => '', 'placeholder'=>'HH:MM')); ?></td>
             <td>Hora final</td>
             <td><?php echo $this->Form->input('hora_fin', array('label' => '', 'placeholder'=>'HH:MM')); ?></td>
-            <td>Observaciones</td>
-            <td><?php echo $this->Form->input('observaciones', array('label' => '', 'required'=>'true')); ?></td>
+            
         </tr>
         <tr>
             <td>Aforo</td>

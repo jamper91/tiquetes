@@ -19,13 +19,13 @@
                         <td><?php echo h($user['User']['username']); ?>&nbsp;</td>
                         <td><?php echo h($user['User']['password']); ?>&nbsp;</td>                           
                         <td>
-                            <?php echo $this->Html->link($user['Person']['pers_primNombre']); ?>
+                            <?php echo $user['Person']['pers_primNombre']; ?>
                         </td>
                         <td>
-                            <?php echo $this->Html->link($user['TypeUser']['descripcion']); ?>
+                            <?php $user['TypeUser']['descripcion']; ?>
                         </td>
                         <td>
-                            <?php echo $this->Html->link($user['Department']['descripcion']); ?>
+                            <?php echo $user['Department']['descripcion']; ?>
                         </td>                           
                         <td class="actions">
                              <span class="btn btn-warning btn-mini">

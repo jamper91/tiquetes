@@ -2,7 +2,7 @@
     <?php echo $this->Form->create('Person'); ?>
     <fieldset>
 
-        <legend><?php //echo __('Crear Persona');   ?></legend>
+        <legend><?php //echo __('Crear Persona');    ?></legend>
         <table>
             <tr>
                 <td>
@@ -24,7 +24,7 @@
                             //'autofocus' => 'true'
                     ));
                     ?>
-                                        
+
                 </td>
 
             </tr>
@@ -45,7 +45,7 @@
                     <?php ?>
                 </td>
                 <td>
-                    
+
                     <?php
                     echo $this->Form->input('categoria_id', array(
                         'label' => 'Categoría',
@@ -116,7 +116,7 @@
                         'type' => 'text'
                     ));
                     ?>
-                    
+
                 </td>
             </tr>
             <tr>
@@ -175,7 +175,7 @@
                     <?php ?>
                 </td>
                 <td>
-                    <?php 
+                    <?php
                     echo $this->Form->input('observaciones', array(
                         'label' => 'Observaciones',
                         'maxlength' => '200'
@@ -186,7 +186,6 @@
             <tr>
                 <td>
                     <?php
-                    
                     ?>
 
                 </td>
@@ -235,7 +234,11 @@
 </div>
 <script>
 //    $('#PersonCategoriaId option[value="' + 7 + '"]').attr("selected", true);
-    $("#PersonStan").attr("disabled", "disabled");
+    if ($("#PersonCategoriaId").val() != 2) {
+        $("#PersonStan").attr("disabled", "disabled");
+    }else{
+        $("#PersonStan").removeAttr("disabled", "disabled");
+    }
     $("#PersonCategoriaId").change(function() {
         var valor = $("#PersonCategoriaId").val();
 //        alert(valor);
@@ -304,8 +307,8 @@
                         $("#PersonStan").removeAttr("disabled");
                         $("#PersonStan").attr("required", true);
                     }
-                    else{
-                        $("#PersonStan").attr("disabled","disabled");
+                    else {
+                        $("#PersonStan").attr("disabled", "disabled");
                     }
                     $('#PersonStan option[value="' + st + '"]').attr("selected", true);
                     $('#PersonDocumentTypeId option[value="' + td + '"]').attr("selected", true);
@@ -328,7 +331,7 @@
                     //               $('#PersonDocumentTypeId').val($('#PersonDocumentTypeId > option:first').val());
                     $('#PersonCategoriaId').val($('#PersonCategoriaId > option:first').val());
                     $('#PersonSector').val("");
-                    $("#PersonStan").attr("disabled","disabled");
+                    $("#PersonStan").attr("disabled", "disabled");
                     $("#PersonObservaciones").val();
                     alert("No se encuentra una persona registrada con ese número de documento");
                 }
@@ -371,7 +374,7 @@
 //        $("#PersonPersCargo").val(conMayusculas($(this).val()));
 //    });
 
-    $("#crear").click(function() {
+    $("#modificar").click(function() {
         var documento = $("#PersonPersDocumento").val();
         var nombre = $("#PersonPersPrimNombre").val();
         var apellido = $("#PersonPersPrimApellido").val();
@@ -381,12 +384,11 @@
             if (nombre !== "") {
                 if (apellido !== "") {
                     if (categoria !== "") {
-                        
-                        alert(categoria);
                         if (categoria === '2') {
                             shelf = $("#PersonStan").val();
                             if (shelf !== "") {
                                 $("#PersonStan").removeAttr("disabled");
+//                                alert("envio a limpiar");
                                 setTimeout('limpiar()', 3000);
                                 //window.scrollTo(0,0);
 //                        $('#PersonCategoriaId').val($('#PersonCategoriaId > option:2').val());
@@ -394,6 +396,7 @@
                             }
                         } else {
                             $("#PersonStan").removeAttr("disabled");
+//                            alert("envio a limpiar");
                             setTimeout('limpiar()', 3000);
                             //window.scrollTo(0,0);
 //                        $('#PersonCategoriaId').val($('#PersonCategoriaId > option:2').val());
@@ -405,6 +408,7 @@
         }
     });
     function limpiar() {
+        
         $("#PeoplePers_id").val("");
         $("#PersonPistola").val("");
         $("#PersonPersDocumento").val("");
@@ -422,7 +426,6 @@
         $('#PersonSector').val("");
         $('#PersonDocumentTypeId').val($('#PersonDocumentTypeId > option:first').val());
         $("#PersonObservaciones").val();
-        location.reload();
     }
 
 

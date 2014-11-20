@@ -4,7 +4,7 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
 ?>
 <div class="events form" align="center">
     <?php echo $this->Form->create('Activity'); ?>
-    <h1>Crear Actividades</h1>
+    <h1>Editar Actividad</h1>
     <br>
     <table>
         <tr>
@@ -16,21 +16,24 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                     ),
                     'label' => '',
                     "options" => $eventos,
-                    "empty" => "Seleccione un Evento",
                     'required'=>'true'
                 ));
-                ?></td>            
-            <td>Lugar</td>
-            <td><?php echo $this->Form->input('locacion', array ('label' => '', 'required'=>'true')); ?></td>
+                ?></td>  
+<td>Actividad</td>
+            <td><?php echo $this->Form->input('nombre', array('label' => '', 'required'=>'true')); ?></td>
+            				
+            
         </tr>
         <tr>
-            <td>Actividad</td>
-            <td><?php echo $this->Form->input('nombre', array('label' => '', 'required'=>'true')); ?></td>
-            <td>Descripción</td>
+            <td>Lugar</td>
+            <td><?php echo $this->Form->input('locacion', array ('label' => '', 'required'=>'true')); ?></td>
+			<td>Descripción</td>
             <td><?php echo $this->Form->input('descripcion', array('label' => '')); ?></td>
         </tr>        
         <tr>
-            <td>Día</td>
+              <td>Observaciones</td>
+            <td><?php echo $this->Form->input('observaciones', array('label' => '')); ?></td>
+                  <td>Día</td>
             <td><?php
                 echo $this->Form->input('fecha', array(
                     "div" => array(
@@ -41,15 +44,15 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
                     "empty" => "Seleccione un día",
                     'required'=>'true'
                 ));
-                ?></td>   
-            <td>Hora inicial</td>
-           <td><?php echo $this->Form->input('hora_inicio', array('label' => '', 'placeholder'=>'HH:MM')); ?></td>           
+                ?></td>      
         </tr>
         <tr>
+		
+				<td>Hora inicial</td>
+           <td><?php echo $this->Form->input('hora_inicio', array('label' => '', 'placeholder'=>'HH:MM')); ?></td>
             <td>Hora final</td>
             <td><?php echo $this->Form->input('hora_fin', array('label' => '', 'placeholder'=>'HH:MM')); ?></td>
-            <td>Observaciones</td>
-            <td><?php echo $this->Form->input('observaciones', array('label' => '')); ?></td>
+            
         </tr>
         <tr>
             <td>Aforo</td>

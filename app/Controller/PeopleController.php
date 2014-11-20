@@ -315,96 +315,36 @@ class PeopleController extends AppController {
                     } else {
                         $cat = 0;
                     }
-                    $sql = "UPDATE `people` SET `document_type_id`=$tdoc,`pers_documento`='$doc',`pers_primNombre`='$nom',`pers_primApellido`='$ape',`pers_telefono`='$tel',`pers_celular`='$cel',`pers_mail`='$mail',`pers_empresa`='$empr',`ciudad`='$ciu',`diligenciamiento`=NOW(),`pais`='$pais',`sector`='$sec',`stan`='$sta', `cargo`='$car',  `categoria_id`=$cat, `observaciones`='$obser'  WHERE `id` = $person_id ";
-                    $this->Person->query($sql);
-                    $sql2 = "SELECT id FROM people WHERE pers_documento = '$doc'";
-                    $res = $this->Person->query($sql2);
-                    $id = $res[0]['people']['id'];
-                    $sql3 = "SELECT id, entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve";
-                    $codigo = $this->Input->query($sql3);
+                    //preguntar si el documento ya existe no deje actualizar y diga q esta intentado actulizar por alguien q ya se habia creado en otro evento o con anterioridad
+                    $antigua = $this->Person->query("SELECT id FROM `people` WHERE `pers_documento`= '$doc'");
+                    $idAnterior = '';
+                    if ($antigua != array()) {
+                        $idAnterior = $antigua[0]['people']['id'];
+                    }
+//                    debug($idAnterior);                    debug($antigua); die;
+                    if ($antigua == array() || $idAnterior == $person_id) {
+                        $sql = "UPDATE `people` SET `document_type_id`=$tdoc,`pers_documento`='$doc',`pers_primNombre`='$nom',`pers_primApellido`='$ape',`pers_telefono`='$tel',`pers_celular`='$cel',`pers_mail`='$mail',`pers_empresa`='$empr',`ciudad`='$ciu',`diligenciamiento`=NOW(),`pais`='$pais',`sector`='$sec',`stan`='$sta', `cargo`='$car',  `categoria_id`=$cat, `observaciones`='$obser'  WHERE `id` = $person_id ";
+                        $this->Person->query($sql);
+                        $sql2 = "SELECT id FROM people WHERE pers_documento = '$doc'";
+                        $res = $this->Person->query($sql2);
+                        $id = $res[0]['people']['id'];
+                        $sql3 = "SELECT id, entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve";
+                        $codigo = $this->Input->query($sql3);
 
-                    if ($codigo == array()) {
-                        $sql = "INSERT INTO inputs (person_id, entr_codigo, categoria_id, event_id, tipo_entrada, usuarioescarapela, fechaescarapela,shelf_id) values (" . $id . ", " . $cadena . ", " . $cat . ", $eve, 2, $user_id, NOW(), $sta)";
-                        $this->Input->query($sql);
-                        //aqui va la actualizacion del codigo para la input
-                        //capturo la ultima input insertada
-                        $newInputId = $this->Input->find('all', array(
-                            "fields" => array(
-                                "Input.id"
-                            ),
-                            "conditions" => array(
-                                "Input.person_id" => $id,
-                                "Input.event_id" => $eve,
-                        )));
-                        $input_id = $newInputId[0]['Input']['id']; //fin de la captura
-                        //generar el codigo
-                        if (strlen($input_id) < 12) {
-                            $conteo = 12 - strlen($input_id);
-                            for ($i = 0; $i < $conteo; $i++) {
-                                $x = $i + 1;
-                                if ($x == $conteo) {
-                                    $cadena = $cadena . "0" . $input_id;
-                                } else {
-                                    if ($x == 1) {
-                                        $cadena = $cadena . "9";
-                                    } else {
-                                        $cadena = $cadena . "0";
-                                    }
-                                }
-                            }
-                        } else {
-                            $cadena = $input_id;
-                        }
-//                        debug($cadena);
-//                        debug(strlen($cadena));
-//                        die;
-                        //fin generacion de codigo
-                        //actualizo la input
-                        $this->Inputs->query("UPDATE inputs SET entr_codigo = $cadena WHERE id = $input_id");
-                        //fin
-                        if ($sta != 0) {
-                            $this->Person->query("UPDATE `shelves` SET `control_aforo`= `control_aforo`+1 WHERE id = $sta");
-                        }
-                        $sql3 = "SELECT id FROM inputs WHERE person_id = $id and event_id = $eve";
-                        $codigo2 = $this->Input->query($sql3);
-                        //comienzo con el log
-                        $this->loadModel("Log");
-                        $user_id = $this->Session->read("User.id");
-                        $input_id = $codigo2[0]['inputs']['id'];
-                        $operacion = "VENTA";
-                        $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '$operacion')";
-                        $operation = $this->Data->query($sql);
-                        //termino el log
-                        $categoria = $this->Categoria->find('list', array(
-                            "conditions" => array(
-                                "Categoria.id" => $data['Person']['categoria_id']),
-                            "fields" => array(
-                                "Categoria.id",
-                                "Categoria.descripcion"
-                        )));
-//                    debug(cat)
-                        foreach ($categoria as $key => $value) {
-                            $cat = $value;
-                        }
-                        $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
-                        $escarapela_id = $esc_id[0]['events']['escarapela_id'];
-                        $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
-
-                        App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
-                        $this->layout = 'pdf'; //this will use the pdf.ctp layout
-                        $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', 'A4', array('287', '343')));
-                        $informacion = array('documento' => strtoupper($data['Person']['pers_documento']), 'nombre' => strtoupper($data['Person']['pers_primNombre']), 'categoria' => strtoupper($cat), 'apellido' => strtoupper($data['Person']['pers_primApellido']), 'empresa' => strtoupper($data['Person']['pers_empresa']), 'codigo' => $cadena, 'tipo' => 2, 'escarapela' => $esc);
-                        $this->set('data', $informacion);
-                        $this->render('pdf');
-                    } else {
-                        $c = $codigo[0]['inputs']['entr_codigo'];
-                        $id = $codigo[0]['inputs']['id'];
-                        $user_id = $this->Session->read("User.id");
-                        if ($c == null) {
-//                            dCebug($cadena);die;
+                        if ($codigo == array()) {
+                            $sql = "INSERT INTO inputs (person_id, entr_codigo, categoria_id, event_id, tipo_entrada, usuarioescarapela, fechaescarapela,shelf_id) values (" . $id . ", '$cadena', " . $cat . ", $eve, 2, $user_id, NOW(), $sta)";
+                            $this->Input->query($sql);
+                            //aqui va la actualizacion del codigo para la input
                             //capturo la ultima input insertada
-
-                            $input_id = $id; //fin de la captura
+                            $newInputId = $this->Input->find('all', array(
+                                "fields" => array(
+                                    "Input.id"
+                                ),
+                                "conditions" => array(
+                                    "Input.person_id" => $id,
+                                    "Input.event_id" => $eve,
+                            )));
+                            $input_id = $newInputId[0]['Input']['id']; //fin de la captura
                             //generar el codigo
                             if (strlen($input_id) < 12) {
                                 $conteo = 12 - strlen($input_id);
@@ -423,94 +363,165 @@ class PeopleController extends AppController {
                             } else {
                                 $cadena = $input_id;
                             }
-//                            debug($cadena);
-//                            debug(strlen($cadena));
-//                            die;
+//                        debug($cadena);
+//                        debug(strlen($cadena));
+//                        die;
                             //fin generacion de codigo
+                            //actualizo la input
+                            $this->Input->query("UPDATE inputs SET entr_codigo = $cadena WHERE id = $input_id");
                             //fin
-                            if ($cat != "2") {//es igual a expositor
-                                $data['Person']['shelf_id'] = 0;
-                            }
-                            $this->Input->query("UPDATE inputs SET shelf_id = $sta, usuarioescarapela=$user_id, fechaescarapela=NOW(), categoria_id=$cat, entr_codigo = '$cadena' WHERE id =$id");
                             if ($sta != 0) {
                                 $this->Person->query("UPDATE `shelves` SET `control_aforo`= `control_aforo`+1 WHERE id = $sta");
                             }
-                            if ($codigo != array()) {
-                                $categoria = $this->Categoria->find('list', array(
-                                    "conditions" => array(
-                                        "Categoria.id" => $data['Person']['categoria_id']),
-                                    "fields" => array(
-                                        "Categoria.id",
-                                        "Categoria.descripcion"
-                                )));
+                            $sql3 = "SELECT id FROM inputs WHERE person_id = $id and event_id = $eve";
+                            $codigo2 = $this->Input->query($sql3);
+                            //comienzo con el log
+                            $this->loadModel("Log");
+                            $user_id = $this->Session->read("User.id");
+                            $input_id = $codigo2[0]['inputs']['id'];
+                            $operacion = "VENTA";
+                            $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '$operacion')";
+                            $operation = $this->Data->query($sql);
+                            //termino el log
+                            $categoria = $this->Categoria->find('list', array(
+                                "conditions" => array(
+                                    "Categoria.id" => $data['Person']['categoria_id']),
+                                "fields" => array(
+                                    "Categoria.id",
+                                    "Categoria.descripcion"
+                            )));
 //                    debug(cat)
-                                if ($categoria != array()) {
-                                    foreach ($categoria as $key => $value) {
-                                        $cat = $value;
+                            foreach ($categoria as $key => $value) {
+                                $cat = $value;
+                            }
+                            $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
+                            $escarapela_id = $esc_id[0]['events']['escarapela_id'];
+                            $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
+
+                            App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
+                            $this->layout = 'pdf'; //this will use the pdf.ctp layout
+                            $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', 'A4', array('287', '343')));
+                            $informacion = array('documento' => strtoupper($data['Person']['pers_documento']), 'nombre' => strtoupper($data['Person']['pers_primNombre']), 'categoria' => strtoupper($cat), 'apellido' => strtoupper($data['Person']['pers_primApellido']), 'empresa' => strtoupper($data['Person']['pers_empresa']), 'codigo' => $cadena, 'tipo' => 2, 'escarapela' => $esc);
+                            $this->set('data', $informacion);
+                            $this->render('pdf');
+                        } else {
+                            $c = $codigo[0]['inputs']['entr_codigo'];
+                            $id = $codigo[0]['inputs']['id'];
+                            $user_id = $this->Session->read("User.id");
+                            if ($c == null) {
+//                            dCebug($cadena);die;
+                                //capturo la ultima input insertada
+
+                                $input_id = $id; //fin de la captura
+                                //generar el codigo
+                                if (strlen($input_id) < 12) {
+                                    $conteo = 12 - strlen($input_id);
+                                    for ($i = 0; $i < $conteo; $i++) {
+                                        $x = $i + 1;
+                                        if ($x == $conteo) {
+                                            $cadena = $cadena . "0" . $input_id;
+                                        } else {
+                                            if ($x == 1) {
+                                                $cadena = $cadena . "9";
+                                            } else {
+                                                $cadena = $cadena . "0";
+                                            }
+                                        }
                                     }
                                 } else {
-                                    $cat = '';
+                                    $cadena = $input_id;
                                 }
-
-                                $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
-                                $escarapela_id = $esc_id[0]['events']['escarapela_id'];
-                                $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
-
-                                App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
-                                $this->layout = 'pdf'; //this will use the pdf.ctp layout
-                                $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', array('287', '343')));
-                                $informacion = array('documento' => strtoupper($data['Person']['pers_documento']), 'nombre' => strtoupper($data['Person']['pers_primNombre']), 'categoria' => strtoupper($cat), 'apellido' => strtoupper($data['Person']['pers_primApellido']), 'empresa' => strtoupper($data['Person']['pers_empresa']), 'codigo' => $cadena, 'tipo' => 2, 'escarapela' => $esc);
-                                $this->set('data', $informacion);
-                                $this->render('pdf');
-                            }
-                        } else {
-
-                            if ($cat != "2") {//es igual a expositor
-                                $data['Person']['shelf_id'] = 0;
-                            }
-                            $shelf_viejo = $this->Person->query("SELECT shelf_id FROM inputs WHERE entr_codigo =$c");
-
-//                            debug($shelf_viejo);die;
-                            if ($shelf_viejo[0]['inputs']['shelf_id'] != $sta) {
-                                if ($shelf_viejo[0]['inputs']['shelf_id'] != 0) {
-                                    $this->Person->query("UPDATE `shelves` SET `control_aforo`= `control_aforo`-1 WHERE id = " . $shelf_viejo[0]['inputs']['shelf_id'] . "");
+//                            debug($cadena);
+//                            debug(strlen($cadena));
+//                            die;
+                                //fin generacion de codigo
+                                //fin
+                                if ($cat != "2") {//es igual a expositor
+                                    $data['Person']['shelf_id'] = 0;
                                 }
+                                $this->Input->query("UPDATE inputs SET shelf_id = $sta, usuarioescarapela=$user_id, fechaescarapela=NOW(), categoria_id=$cat, entr_codigo = '$cadena' WHERE id =$id");
                                 if ($sta != 0) {
                                     $this->Person->query("UPDATE `shelves` SET `control_aforo`= `control_aforo`+1 WHERE id = $sta");
                                 }
-                            }
-                            $this->Input->query("UPDATE inputs SET shelf_id = $sta, usuarioescarapela=$user_id, fechaescarapela=NOW(), categoria_id=$cat WHERE entr_codigo =$c");
-                            if ($codigo != array()) {
-//                    debug($codigo); die;
-                                $c = $codigo[0]['inputs']['entr_codigo'];
-                                $categoria = $this->Categoria->find('list', array(
-                                    "conditions" => array(
-                                        "Categoria.id" => $data['Person']['categoria_id']),
-                                    "fields" => array(
-                                        "Categoria.id",
-                                        "Categoria.descripcion"
-                                )));
+                                if ($codigo != array()) {
+                                    $categoria = $this->Categoria->find('list', array(
+                                        "conditions" => array(
+                                            "Categoria.id" => $data['Person']['categoria_id']),
+                                        "fields" => array(
+                                            "Categoria.id",
+                                            "Categoria.descripcion"
+                                    )));
 //                    debug(cat)
-                                if ($categoria != array()) {
-                                    foreach ($categoria as $key => $value) {
-                                        $cat = $value;
+                                    if ($categoria != array()) {
+                                        foreach ($categoria as $key => $value) {
+                                            $cat = $value;
+                                        }
+                                    } else {
+                                        $cat = '';
                                     }
-                                } else {
-                                    $cat = '';
-                                }
-                                $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
-                                $escarapela_id = $esc_id[0]['events']['escarapela_id'];
-                                $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
 
-                                App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
-                                $this->layout = 'pdf'; //this will use the pdf.ctp layout
-                                $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', array('287', '343')));
-                                $informacion = array('documento' => strtoupper($data['Person']['pers_documento']), 'nombre' => strtoupper($data['Person']['pers_primNombre']), 'categoria' => strtoupper($cat), 'apellido' => strtoupper($data['Person']['pers_primApellido']), 'empresa' => strtoupper($data['Person']['pers_empresa']), 'codigo' => $c, 'tipo' => 2, 'escarapela' => $esc);
-                                $this->set('data', $informacion);
-                                $this->render('pdf');
-                            }
+                                    $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
+                                    $escarapela_id = $esc_id[0]['events']['escarapela_id'];
+                                    $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
+
+                                    App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
+                                    $this->layout = 'pdf'; //this will use the pdf.ctp layout
+                                    $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', array('287', '343')));
+                                    $informacion = array('documento' => strtoupper($data['Person']['pers_documento']), 'nombre' => strtoupper($data['Person']['pers_primNombre']), 'categoria' => strtoupper($cat), 'apellido' => strtoupper($data['Person']['pers_primApellido']), 'empresa' => strtoupper($data['Person']['pers_empresa']), 'codigo' => $cadena, 'tipo' => 2, 'escarapela' => $esc);
+                                    $this->set('data', $informacion);
+                                    $this->render('pdf');
+                                }
+                            } else {
+
+                                if ($cat != "2") {//es igual a expositor
+                                    $data['Person']['shelf_id'] = 0;
+                                }
+                                $shelf_viejo = $this->Person->query("SELECT shelf_id FROM inputs WHERE entr_codigo =$c");
+
+//                            debug($shelf_viejo);die;
+                                if ($shelf_viejo[0]['inputs']['shelf_id'] != $sta) {
+                                    if ($shelf_viejo[0]['inputs']['shelf_id'] != 0) {
+                                        $this->Person->query("UPDATE `shelves` SET `control_aforo`= `control_aforo`-1 WHERE id = " . $shelf_viejo[0]['inputs']['shelf_id'] . "");
+                                    }
+                                    if ($sta != 0) {
+                                        $this->Person->query("UPDATE `shelves` SET `control_aforo`= `control_aforo`+1 WHERE id = $sta");
+                                    }
+                                }
+                                $this->Input->query("UPDATE inputs SET shelf_id = $sta, usuarioescarapela=$user_id, fechaescarapela=NOW(), categoria_id=$cat WHERE entr_codigo =$c");
+                                if ($codigo != array()) {
+//                    debug($codigo); die;
+                                    $c = $codigo[0]['inputs']['entr_codigo'];
+                                    $categoria = $this->Categoria->find('list', array(
+                                        "conditions" => array(
+                                            "Categoria.id" => $data['Person']['categoria_id']),
+                                        "fields" => array(
+                                            "Categoria.id",
+                                            "Categoria.descripcion"
+                                    )));
+//                    debug(cat)
+                                    if ($categoria != array()) {
+                                        foreach ($categoria as $key => $value) {
+                                            $cat = $value;
+                                        }
+                                    } else {
+                                        $cat = '';
+                                    }
+                                    $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
+                                    $escarapela_id = $esc_id[0]['events']['escarapela_id'];
+                                    $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
+
+                                    App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
+                                    $this->layout = 'pdf'; //this will use the pdf.ctp layout
+                                    $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', array('287', '343')));
+                                    $informacion = array('documento' => strtoupper($data['Person']['pers_documento']), 'nombre' => strtoupper($data['Person']['pers_primNombre']), 'categoria' => strtoupper($cat), 'apellido' => strtoupper($data['Person']['pers_primApellido']), 'empresa' => strtoupper($data['Person']['pers_empresa']), 'codigo' => $c, 'tipo' => 2, 'escarapela' => $esc);
+                                    $this->set('data', $informacion);
+                                    $this->render('pdf');
+                                }
 //               
+                            }
                         }
+                    } else {
+                        $this->Session->setFlash('No se puede actualizar la persona la identificacion ' . $doc . ' ya se asigno', 'error');
                     }
 //                $this->Session->setFlash('Error ya hay una persona con el mismo documento en la base de datos', 'error');
                 }
@@ -843,92 +854,343 @@ class PeopleController extends AppController {
         $this->loadModel('PeopleProduct');
         $this->loadModel('Data');
         $this->loadModel('Shelf');
+        $this->loadModel('Event');
         $eve = $this->Session->read('event_id');
-        $data = $this->request->data;
-        if (!$this->Person->exists($id)) {
-            throw new NotFoundException(__('Invalid person'));
-        }
-        if ($this->request->is(array('post', 'put'))) {
-            $this->Person->id = $id;
-            if ($this->Person->save($this->request->data)) {
-                $sql = "DELETE FROM people_products WHERE person_id=$id";
-                $this->Person->query($sql);
-                if (!empty($data['producto'])) {
-                    foreach ($data['producto'] as $va) {
-                        $sql = "INSERT INTO people_products (product_id, person_id) VALUES (" . $va . ", " . $id . ");";
-                        $this->Person->query($sql);
-                    }
-                }
-                $input = $this->Input->find('list', array("fields" => array('Input.id', 'Input.entr_codigo'), 'conditions' => array("Input.person_id = $id", "Input.event_id = $eve")));
-                foreach ($input as $key => $value) {
-                    $person_id = $key;
-                    $codigo = $value;
-                }
-                if ($input != array()) {
-                    if ($codigo == null) {
-                        $if = true;
-                        $while = true;
-                        while ($while) {
-                            $cadena = ""; //variable para almacenar la cadena generada
-                            $ejemplo = strlen($cadena);
-                            while ($if) {
-                                if ($ejemplo < 12) {
-                                    $numerodado = rand(0, 9);
-//                        debug($numerodado);
-                                    $cadena = $cadena . $numerodado;
-                                    $ejemplo = strlen($cadena);
-                                } else {
-                                    $if = FALSE;
-                                }
-                            }
-//                    debug(strlen($cadena));die;
-                            $pdigit = substr($cadena, -12, 1);
-                            if ($pdigit != '0') {
-                                $sql = "SELECT id FROM inputs WHERE entr_codigo = $cadena";
-                                $id = $this->Input->query($sql);
-                                if ($id == array()) {
-                                    $while = false;
+        if ($eve != NULL) {
+            $data = $this->request->data;
+            if (!$this->Person->exists($id)) {
+                throw new NotFoundException(__('Invalid person'));
+            }
+            if ($this->request->is(array('post', 'put'))) {
+
+                $cadena = "";
+                $disponible = true;
+                if ($data['Person']['categoria_id'] == '2') { // si es expositor pregunte si el stand tiene cupo 
+                    $shelf_id = $data['Person']['stan'];
+                    // consultar si shelf_id es el mismo ya registrado
+                    if ($id != "") {
+                        $codigo = $this->Input->query("SELECT entr_codigo FROM inputs WHERE person_id = $id and event_id = $eve");
+
+//                        debug($codigo);die;
+                        if ($codigo != array()) {
+                            $codigo = $codigo[0]['inputs']['entr_codigo'];
+                            if ($codigo != '') {
+                                $shelf_viejo = $this->Person->query("SELECT shelf_id FROM inputs WHERE entr_codigo =$codigo");
+//                            debug($shelf_viejo);die;
+                                if ($shelf_viejo[0]['inputs']['shelf_id'] != $shelf_id) {
+                                    $cupo = $this->Shelf->query("select (aforo - control_aforo) as cupo from shelves where id = $shelf_id AND aforo > 0");
+                                    if ($cupo != array()) {
+                                        $cupo = $cupo[0][0]['cupo'];
+                                        if ($cupo > 0) {
+                                            $disponible = true;
+                                        } else {
+                                            $disponible = false;
+                                        }
+                                    }
                                 }
                             } else {
-                                $while = true;
+                                $cupo = $this->Shelf->query("select (aforo - control_aforo) as cupo from shelves where id = $shelf_id AND aforo > 0");
+                                if ($cupo != array()) {
+                                    $cupo = $cupo[0][0]['cupo'];
+                                    if ($cupo > 0) {
+                                        $disponible = true;
+                                    } else {
+                                        $disponible = false;
+                                    }
+                                }
+                            }
+                        } else {
+                            $cupo = $this->Shelf->query("select (aforo - control_aforo) as cupo from shelves where id = $shelf_id AND aforo > 0");
+                            if ($cupo != array()) {
+                                $cupo = $cupo[0][0]['cupo'];
+                                if ($cupo > 0) {
+                                    $disponible = true;
+                                } else {
+                                    $disponible = false;
+                                }
                             }
                         }
                     } else {
-                        
+                        $cupo = $this->Person->query("select (aforo - control_aforo) as cupo from shelves where id = $shelf_id AND aforo > 0");
+                        if ($cupo != array()) {
+                            $cupo = $cupo[0][0]['cupo'];
+                            if ($cupo > 0) {
+                                $disponible = true;
+                            } else {
+                                $disponible = false;
+                            }
+                        }
                     }
                 }
-                if ($data['modificar'] == 'Imprimir') {
+                if ($disponible == false) {
+                    $this->Session->setFlash('NO QUEDAN CUPOS DISPONIBLES PARA ESTE STAND', 'error');
+                } elseif ($id != '' || $id != null) {
+                    $this->Person->id = $id;
 
+                    //mayusculas
+                    $this->request->data['Person']['pers_documento'] = strtoupper($data['Person']['pers_documento']);
+                    $doc = $this->request->data['Person']['pers_documento'];
+                    $this->request->data['Person']['pers_primNombre'] = strtoupper($data['Person']['pers_primNombre']);
+                    $this->request->data['Person']['pers_primApellido'] = strtoupper($data['Person']['pers_primApellido']);
+                    $this->request->data['Person']['pers_empresa'] = strtoupper($data['Person']['pers_empresa']);
+                    $this->request->data['Person']['cargo'] = strtoupper($data['Person']['cargo']);
+                    $this->request->data['Person']['pers_mail'] = strtoupper($data['Person']['pers_mail']);
+                    $this->request->data['Person']['ciudad'] = strtoupper($data['Person']['ciudad']);
+                    $this->request->data['Person']['pais'] = strtoupper($data['Person']['pais']);
+                    $this->request->data['Person']['sector'] = strtoupper($data['Person']['sector']);
+                    $cat = $data['Person']['categoria_id'];
+                    if ($data['Person']['categoria_id'] == '2') {
+                        $this->request->data['Person']['stan'] = $data['Person']['stan'];
+                        $sta = $data['Person']['stan'];
+                    } else {
+                        $this->request->data['Person']['stan'] = 0;
+                        $sta = 0;
+                    }
+                    $this->request->data['Person']['observaciones'] = strtoupper($data['Person']['observaciones']);
+                    $antigua = $this->Person->query("SELECT id FROM `people` WHERE `pers_documento`= '$doc'");
+                    $idAnterior = '';
+                    if ($antigua != array()) {
+                        $idAnterior = $antigua[0]['people']['id'];
+                    }
+                    if ($antigua == array() || $idAnterior == $id) {
+                        if ($this->Person->save($this->request->data)) {
+                            $sql = "DELETE FROM people_products WHERE person_id=$id";
+                            $this->Person->query($sql);
+                            if (!empty($data['producto'])) {
+                                foreach ($data['producto'] as $va) {
+                                    $sql = "INSERT INTO people_products (product_id, person_id) VALUES (" . $va . ", " . $id . ");";
+                                    $this->Person->query($sql);
+                                }
+                            }
+                            $input = $this->Input->find('list', array(
+                                "fields" => array('Input.id', 'Input.entr_codigo'),
+                                'conditions' => array("Input.person_id = $id", "Input.event_id = $eve")
+                            ));
+//                        debug($input);
+//                        die;
+                            foreach ($input as $key => $value) {
+                                $input_id = $key;
+                                $codigo = $value;
+                            }
+                            $user_id = $this->Session->read("User.id");
+                            if ($input != array()) {
+                                if ($codigo == null) {
+//                            dCebug($cadena);die;
+                                    //generar el codigo
+                                    if (strlen($input_id) < 12) {
+                                        $conteo = 12 - strlen($input_id);
+                                        for ($i = 0; $i < $conteo; $i++) {
+                                            $x = $i + 1;
+                                            if ($x == $conteo) {
+                                                $cadena = $cadena . "0" . $input_id;
+                                            } else {
+                                                if ($x == 1) {
+                                                    $cadena = $cadena . "9";
+                                                } else {
+                                                    $cadena = $cadena . "0";
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        $cadena = $input_id;
+                                    }
+//                            debug($cadena);
+//                            debug(strlen($cadena));
+//                            die;
+                                    //fin generacion de codigo
+                                    //fin
+                                    if ($cat != "2") {//es igual a expositor
+                                        $data['Person']['shelf_id'] = 0;
+                                    }
+                                    $this->Input->query("UPDATE inputs SET shelf_id = $sta, usuarioescarapela=$user_id, fechaescarapela=NOW(), categoria_id=$cat, entr_codigo = '$cadena' WHERE id =$input_id");
+                                    if ($sta != 0) {
+                                        $this->Person->query("UPDATE `shelves` SET `control_aforo`= `control_aforo`+1 WHERE id = $sta");
+                                    }
 
+                                    $categoria = $this->Categoria->find('list', array(
+                                        "conditions" => array(
+                                            "Categoria.id" => $data['Person']['categoria_id']),
+                                        "fields" => array(
+                                            "Categoria.id",
+                                            "Categoria.descripcion"
+                                    )));
+//                    debug(cat)
+                                    if ($categoria != array()) {
+                                        foreach ($categoria as $key => $value) {
+                                            $cat = $value;
+                                        }
+                                    } else {
+                                        $cat = '';
+                                    }
+
+                                    $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
+                                    $escarapela_id = $esc_id[0]['events']['escarapela_id'];
+                                    $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
+                                    if ($data['modificar'] == 'Imprimir') {
+                                        App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
+                                        $this->layout = 'pdf'; //this will use the pdf.ctp layout
+                                        $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', array('287', '343')));
+                                        $informacion = array('documento' => strtoupper($data['Person']['pers_documento']), 'nombre' => strtoupper($data['Person']['pers_primNombre']), 'categoria' => strtoupper($cat), 'apellido' => strtoupper($data['Person']['pers_primApellido']), 'empresa' => strtoupper($data['Person']['pers_empresa']), 'codigo' => $cadena, 'tipo' => 2, 'escarapela' => $esc);
+                                        $this->set('data', $informacion);
+                                        $this->render('pdf');
 //                    $this->Input->query("UPDATE inputs SET ");
-                }
-                $this->Session->setFlash(__('La persona se modificó satisfactoriamente.'), 'good');
-            } else {
-                $this->Session->setFlash(__('The person could not be saved. Please, try again.'));
-            }
-        } else {
-            $options = array('conditions' => array('Person.' . $this->Person->primaryKey => $id));
-            $this->request->data = $this->Person->find('first', $options);
-        }
-        $options = "SELECT c.`id`, c.`descripcion` AS name FROM `categorias` c INNER JOIN `events_categorias` e ON e.`categoria_id` = c.`id` WHERE e.`event_id` = $eve order by c.`descripcion` asc ";
-        $catego = $this->Categoria->query($options);
-//      debug($catego);  
-        $categorias = array();
-        $p = count($catego);
-        if ($p != 0) {
-            for ($i = 0; $i < $p; $i++) {
-                $categorias[$catego[$i]['c']['id']] = $catego[$i]['c']['name'];
-            }
-        }
+                                    }
+                                } else {
 
-        $shelves = $this->Shelf->find('list', array(
-            "fields" => array(
-                "Shelf.id",
-                "Shelf.codigo"
-            ),
-            "conditions" => array(
-                "event_id" => $eve,
-        )));
+                                    if ($cat != "2") {//es igual a expositor
+                                        $data['Person']['shelf_id'] = 0;
+                                    }
+                                    $shelf_viejo = $this->Person->query("SELECT shelf_id FROM inputs WHERE entr_codigo =$codigo");
+
+//                            debug($shelf_viejo);die;
+                                    if ($shelf_viejo[0]['inputs']['shelf_id'] != $sta) {
+                                        if ($shelf_viejo[0]['inputs']['shelf_id'] != 0) {
+                                            $this->Person->query("UPDATE `shelves` SET `control_aforo`= `control_aforo`-1 WHERE id = " . $shelf_viejo[0]['inputs']['shelf_id'] . "");
+                                        }
+                                        if ($sta != 0) {
+                                            $this->Person->query("UPDATE `shelves` SET `control_aforo`= `control_aforo`+1 WHERE id = $sta");
+                                        }
+                                    }
+                                    $this->Input->query("UPDATE inputs SET shelf_id = $sta, usuarioescarapela=$user_id, fechaescarapela=NOW(), categoria_id=$cat WHERE entr_codigo =$codigo");
+                                    if ($codigo != '') {
+//                    debug($codigo); die;
+                                        $categoria = $this->Categoria->find('list', array(
+                                            "conditions" => array(
+                                                "Categoria.id" => $data['Person']['categoria_id']),
+                                            "fields" => array(
+                                                "Categoria.id",
+                                                "Categoria.descripcion"
+                                        )));
+//                    debug(cat)
+                                        if ($categoria != array()) {
+                                            foreach ($categoria as $key => $value) {
+                                                $cat = $value;
+                                            }
+                                        } else {
+                                            $cat = '';
+                                        }
+                                        $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
+                                        $escarapela_id = $esc_id[0]['events']['escarapela_id'];
+                                        $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
+                                        if ($data['modificar'] == 'Imprimir') {
+                                            App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
+                                            $this->layout = 'pdf'; //this will use the pdf.ctp layout
+                                            $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', array('287', '343')));
+                                            $informacion = array('documento' => strtoupper($data['Person']['pers_documento']), 'nombre' => strtoupper($data['Person']['pers_primNombre']), 'categoria' => strtoupper($cat), 'apellido' => strtoupper($data['Person']['pers_primApellido']), 'empresa' => strtoupper($data['Person']['pers_empresa']), 'codigo' => $codigo, 'tipo' => 2, 'escarapela' => $esc);
+                                            $this->set('data', $informacion);
+                                            $this->render('pdf');
+                                        }
+                                    }//               
+                                }
+                            } else {
+//                            $this->Session->setFlash(__('La Persona no tiene generada una entrada a este evento se le asignara 1.'), 'error');
+                                $sql = "INSERT INTO inputs (person_id, entr_codigo, categoria_id, event_id, tipo_entrada, usuarioescarapela, fechaescarapela,shelf_id) values (" . $id . ", '$cadena', " . $cat . ", $eve, 2, $user_id, NOW(), $sta)";
+                                $this->Input->query($sql);
+                                //aqui va la actualizacion del codigo para la input
+                                //capturo la ultima input insertada
+                                $newInputId = $this->Input->find('all', array(
+                                    "fields" => array(
+                                        "Input.id"
+                                    ),
+                                    "conditions" => array(
+                                        "Input.person_id" => $id,
+                                        "Input.event_id" => $eve,
+                                )));
+                                $input_id = $newInputId[0]['Input']['id']; //fin de la captura
+                                //generar el codigo
+                                if (strlen($input_id) < 12) {
+                                    $conteo = 12 - strlen($input_id);
+                                    for ($i = 0; $i < $conteo; $i++) {
+                                        $x = $i + 1;
+                                        if ($x == $conteo) {
+                                            $cadena = $cadena . "0" . $input_id;
+                                        } else {
+                                            if ($x == 1) {
+                                                $cadena = $cadena . "9";
+                                            } else {
+                                                $cadena = $cadena . "0";
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    $cadena = $input_id;
+                                }
+//                        debug($cadena);
+//                        debug(strlen($cadena));
+//                        die;
+                                //fin generacion de codigo
+                                //actualizo la input
+                                $this->Input->query("UPDATE inputs SET entr_codigo = $cadena WHERE id = $input_id");
+                                //fin
+                                if ($sta != 0) {
+                                    $this->Person->query("UPDATE `shelves` SET `control_aforo`= `control_aforo`+1 WHERE id = $sta");
+                                }
+                                $sql3 = "SELECT id FROM inputs WHERE person_id = $id and event_id = $eve";
+                                $codigo2 = $this->Input->query($sql3);
+                                //comienzo con el log
+                                $this->loadModel("Log");
+                                $user_id = $this->Session->read("User.id");
+                                $input_id = $codigo2[0]['inputs']['id'];
+                                $operacion = "VENTA";
+                                $sql = "INSERT INTO `logs`(`user_id`, `input_id`, `descripcion`) VALUES (" . $user_id . ", " . $input_id . ", '$operacion')";
+                                $operation = $this->Data->query($sql);
+                                //termino el log
+                                $categoria = $this->Categoria->find('list', array(
+                                    "conditions" => array(
+                                        "Categoria.id" => $data['Person']['categoria_id']),
+                                    "fields" => array(
+                                        "Categoria.id",
+                                        "Categoria.descripcion"
+                                )));
+//                    debug(cat)
+                                foreach ($categoria as $key => $value) {
+                                    $cat = $value;
+                                }
+                                $esc_id = $this->Event->query("SELECT `escarapela_id` FROM `events` WHERE id= $eve");
+                                $escarapela_id = $esc_id[0]['events']['escarapela_id'];
+                                $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
+                                if ($data['modificar'] == 'Imprimir') {
+                                    App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
+                                    $this->layout = 'pdf'; //this will use the pdf.ctp layout
+                                    $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', 'A4', array('287', '343')));
+                                    $informacion = array('documento' => strtoupper($data['Person']['pers_documento']), 'nombre' => strtoupper($data['Person']['pers_primNombre']), 'categoria' => strtoupper($cat), 'apellido' => strtoupper($data['Person']['pers_primApellido']), 'empresa' => strtoupper($data['Person']['pers_empresa']), 'codigo' => $cadena, 'tipo' => 2, 'escarapela' => $esc);
+                                    $this->set('data', $informacion);
+                                    $this->render('pdf');
+                                }
+                            }
+                            $this->Session->setFlash(__('La persona se modificó satisfactoriamente.'), 'good');
+                        } else {
+                            $this->Session->setFlash(__('The person could not be saved. Please, try again.'));
+                        }
+                    } else {
+                        $this->Session->setFlash('No se puede actualizar la persona la identificacion ' . $doc . ' ya se asigno', 'error');
+                    }
+                } else {
+                    $this->Session->setFlash(__('No se encontro id de la persona.'), 'error');
+                }
+            } else {
+                $options = array('conditions' => array('Person.' . $this->Person->primaryKey => $id));
+                $this->request->data = $this->Person->find('first', $options);
+            }
+            $options = "SELECT c.`id`, c.`descripcion` AS name FROM `categorias` c INNER JOIN `events_categorias` e ON e.`categoria_id` = c.`id` WHERE e.`event_id` = $eve order by c.`descripcion` asc ";
+            $catego = $this->Categoria->query($options);
+//      debug($catego);  
+            $categorias = array();
+            $p = count($catego);
+            if ($p != 0) {
+                for ($i = 0; $i < $p; $i++) {
+                    $categorias[$catego[$i]['c']['id']] = $catego[$i]['c']['name'];
+                }
+            }
+
+            $shelves = $this->Shelf->find('list', array(
+                "fields" => array(
+                    "Shelf.id",
+                    "Shelf.codigo"
+                ),
+                "conditions" => array(
+                    "event_id" => $eve,
+            )));
 
 //        debug($catego);die;
 //        $products = $this->Product->find('list', array(
@@ -937,14 +1199,18 @@ class PeopleController extends AppController {
 //                "Product.name"
 //        )));
 //        $bloodType = Array('O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'HH');
-        $documentTypes = $this->Person->DocumentType->find('list', array(
-            "fields" => array(
-                "DocumentType.id",
-                "DocumentType.tido_descripcion"
-        )));
-        $cities = $this->Person->City->find('list');
-        $committeesEvents = $this->Person->CommitteesEvent->find('list');
-        $this->set(compact('documentTypes', 'cities', 'committeesEvents', /* 'bloodType',  'products', */ 'categorias', 'shelves'));
+            $documentTypes = $this->Person->DocumentType->find('list', array(
+                "fields" => array(
+                    "DocumentType.id",
+                    "DocumentType.tido_descripcion"
+            )));
+            $cities = $this->Person->City->find('list');
+            $committeesEvents = $this->Person->CommitteesEvent->find('list');
+            $this->set(compact('documentTypes', 'cities', 'committeesEvents', /* 'bloodType',  'products', */ 'categorias', 'shelves'));
+        } else {
+            $this->Session->setFlash('Seleccione el evento al que desea realizar registros y confirme', 'error');
+            return $this->redirect(array('action' => '../Pages/display'));
+        }
     }
 
     /**
@@ -1008,59 +1274,64 @@ class PeopleController extends AppController {
 
     public function buscador() {
 
+        $eve = $this->Session->read('event_id');
+        if ($eve != NULL) {
+            if ($this->request->is("POST")) {
 
-        if ($this->request->is("POST")) {
+                $datos = $this->request->data;
+                $pers_documento = $datos["Person"]["pers_documento"];
+                $pers_primNombre = $datos["Person"]["pers_primNombre"];
+                $pers_primApellido = $datos["Person"]["pers_primApellido"];
 
-            $datos = $this->request->data;
-            $pers_documento = $datos["Person"]["pers_documento"];
-            $pers_primNombre = $datos["Person"]["pers_primNombre"];
-            $pers_primApellido = $datos["Person"]["pers_primApellido"];
+                $pers_entidad = $datos["Person"]["pers_empresa"];
 
-            $pers_entidad = $datos["Person"]["pers_empresa"];
-
-            $conditions = "";
-
-            if ($pers_documento == null && $pers_primApellido == null && $pers_primNombre == null && $pers_entidad == null) {
                 $conditions = "";
-            }
 
-            // debug($datos);
-
-            if ($pers_documento != null) {
-                $conditions.=" pers_documento LIKE '%$pers_documento%'";
-            }
-
-            if ($pers_primNombre != null) {
-                if ($pers_documento != null) {
-                    $conditions.=" AND";
-                } // si busco tb por doc entonces agrego el AND
-                $conditions.=" pers_primNombre LIKE '%$pers_primNombre%'";
-            }
-
-            if ($pers_primApellido != null) {
-                if ($pers_documento != null || $pers_primNombre != null) {
-                    $conditions.=" AND";
-                } // si busco por doc o primNombre agrego el AND
-                $conditions.=" pers_primApellido LIKE '%$pers_primApellido%'";
-            }
-
-            if ($pers_entidad != null) {
-                if ($pers_documento != null || $pers_primNombre != null || $pers_primApellido != null) {
-                    $conditions.=" AND";
+                if ($pers_documento == null && $pers_primApellido == null && $pers_primNombre == null && $pers_entidad == null) {
+                    $conditions = "";
                 }
-                $conditions .= "pers_empresa LIKE '%$pers_entidad%' ";
-            }
-            if ($conditions != "") {
-                $conditions = "SELECT * FROM people WHERE $conditions ORDER BY pers_primNombre"; //die();
-            } else {
-                $conditions = "SELECT * FROM people ORDER BY pers_primNombre"; //die();
-            }
+
+                // debug($datos);
+
+                if ($pers_documento != null) {
+                    $conditions.=" pers_documento LIKE '%$pers_documento%'";
+                }
+
+                if ($pers_primNombre != null) {
+                    if ($pers_documento != null) {
+                        $conditions.=" AND";
+                    } // si busco tb por doc entonces agrego el AND
+                    $conditions.=" pers_primNombre LIKE '%$pers_primNombre%'";
+                }
+
+                if ($pers_primApellido != null) {
+                    if ($pers_documento != null || $pers_primNombre != null) {
+                        $conditions.=" AND";
+                    } // si busco por doc o primNombre agrego el AND
+                    $conditions.=" pers_primApellido LIKE '%$pers_primApellido%'";
+                }
+
+                if ($pers_entidad != null) {
+                    if ($pers_documento != null || $pers_primNombre != null || $pers_primApellido != null) {
+                        $conditions.=" AND";
+                    }
+                    $conditions .= " pers_empresa LIKE '%$pers_entidad%' ";
+                }
+                if ($conditions != "") {
+                    $conditions = "SELECT * FROM people WHERE $conditions ORDER BY pers_primNombre"; //die();
+                } else {
+                    $conditions = "SELECT * FROM people ORDER BY pers_primNombre"; //die();
+                }
 
 
 
-            $datos = $this->Person->query($conditions);
+                $datos = $this->Person->query($conditions);
 //            debug($datos); die;
-            $this->set("datos", $datos);
+                $this->set("datos", $datos);
+            }
+        } else {
+            $this->Session->setFlash('Seleccione el evento al que desea realizar registros y confirme', 'error');
+            return $this->redirect(array('action' => '../Pages/display'));
         }
     }
 
@@ -1109,7 +1380,7 @@ class PeopleController extends AppController {
                             $this->Input->query("INSERT INTO inputs (person_id, categoria_id, event_id, fechaescarapela) VALUES ($person_id, $cat, $event_id, NULL )");
                             $sql2 = "UPDATE `people` SET `document_type_id` = $ti, `categoria_id`=$cat, `pers_primNombre`='$nom',`pers_primApellido`='$ape',`pers_empresa`='$ent',`pers_mail`='$mail', `pers_celular`='$cel',`pers_telefono`='$tel',`ciudad` = '$ciu', `pais`= '$pai', `stan`= '$sta', `sector`='$sec', `cargo`='$pro',`observaciones`='$obs'  WHERE `pers_documento` = '$doc'";
                             $this->Person->query($sql2);
-                        }else{
+                        } else {
                             $sql2 = "UPDATE `people` SET `document_type_id` = $ti, `categoria_id`=$cat, `pers_primNombre`='$nom',`pers_primApellido`='$ape',`pers_empresa`='$ent',`pers_mail`='$mail', `pers_celular`='$cel',`pers_telefono`='$tel',`ciudad` = '$ciu', `pais`= '$pai', `stan`= '$sta', `sector`='$sec', `cargo`='$pro',`observaciones`='$obs'  WHERE `pers_documento` = '$doc'";
                             $this->Person->query($sql2);
                         }

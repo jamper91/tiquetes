@@ -121,6 +121,21 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                             </ul>
                         </li>
                     <?php } ?>
+                        <?php if (in_array('personas', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
+
+                        <li class="submenu"> 
+                            <a href="#">
+                                <i class="icon icon-th-list"></i> 
+                                <span>STANDS</span>
+                            </a>
+                            <ul>
+                                <li><a href="<?= $this->Html->url(array("controller" => "Shelves", "action" => "buscar")); ?>">Buscar STAND</a></li>
+                                <?php if ($this->Session->read('User.type_user_id') == 1) { ?> 
+                                    <li><a href="<?= $this->Html->url(array("controller" => "Shelves", "action" => "import")); ?>">Importar STAND desde excel</a></li>
+                                <?php } ?>
+                            </ul>
+                        </li>
+                    <?php } ?>
                     <?php if (in_array('personas', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
 
                         <!--                        <li class="submenu"> 
