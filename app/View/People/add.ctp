@@ -385,14 +385,14 @@
                             shelf = $("#PersonShelfId").val();
                             if (shelf !== "") {
                                 $("#PersonShelfId").removeAttr("disabled");
-                                setTimeout('limpiar()', 3000);
+                                setTimeout('limpiar()', 2000);
                                 //window.scrollTo(0,0);
 //                        $('#PersonCategoriaId').val($('#PersonCategoriaId > option:2').val());
                                 $("#PersonCategoriaId").focus();
                             }
                         } else {
                             $("#PersonShelfId").removeAttr("disabled");
-                            setTimeout('limpiar()', 3000);
+                            setTimeout('limpiar()', 2000);
                             //window.scrollTo(0,0);
 //                        $('#PersonCategoriaId').val($('#PersonCategoriaId > option:2').val());
                             $("#PersonCategoriaId").focus();

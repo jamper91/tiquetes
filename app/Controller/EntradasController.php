@@ -1207,6 +1207,40 @@ class EntradasController extends AppController {
         );
     }
 
+    public function getShelvesByEvent() {
+        $this->layout = "webservices";
+        $this->loadModel("Shelf");
+        $event_id = $this->request->data['even_id'];
+//        $total = $this->Event->query("SELECT `nombre`, `locacion`, `fecha`, `hora_inicio`, `hora_fin`,`aforo`,`control_aforo` FROM `activities` WHERE `event_id` = $event_id ORDER BY `nombre` ");
+        $options = array(
+            "conditions" => array(
+                "Shelf.event_id" => $event_id
+            ),
+            "fields" => array(
+                "Shelf.codigo",
+                "Shelf.esta_nombre",
+                "Shelf.genero",
+                "Shelf.representante",
+                "Shelf.aforo",
+                "Shelf.control_aforo",
+//                "(Activity.aforo - Activity.control_aforo) AS disponibles",
+            ),
+            "order" => array(
+                "Shelf.codigo"
+            ),
+            "recursive" => 0
+        );
+
+        $datos = $this->Shelf->find("all", $options);
+//        debug($datos);
+        $this->set(
+                array(
+                    "datos" => $datos,
+                    "_serialize" => array("datos")
+                )
+        );
+    }
+    
     public function getActivitiesByEvent() {
         $this->layout = "webservices";
         $this->loadModel("Activity");
