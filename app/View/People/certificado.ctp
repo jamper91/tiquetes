@@ -15,8 +15,8 @@ $fpdf->AddPage('L', array('279.4', '215.9'));
 $name = $data['certificado'][0]['certificados']['nombres'];
 $doc = $data['certificado'][0]['certificados']['documento'];
 $emp = $data['certificado'][0]['certificados']['empresa'];
-$emp = $data['certificado'][0]['certificados']['empresa'];
 $libre = $data['certificado'][0]['certificados']['libre'];
+$id = $data['id'];
 $cat = $data['categoria'];
 
 if ($data['nombre']) {
@@ -31,6 +31,9 @@ if ($data['nombre']) {
         $fpdf->SetFont('Arial', 'B', 33);  
     }else if($cuenta >36){
         $fpdf->SetFont('Arial', 'B', 24);  
+    }
+    if($id==3){
+    $fpdf->SetTextColor(153, 153, 153);
     }
     $fpdf->Cell(0, 2, utf8_decode($ncompleto), 0, 0, 'C');
     $fpdf->Ln(2);
@@ -54,7 +57,7 @@ if ($libre == true) {
     if ($cat == "PONENTE") {
         $fpdf->SetY(-97);
         $fpdf->SetFont('Arial', '', 16);
-        $fpdf->Cell(0, 2, utf8_decode("Participó como ponente en"), 0, 0, 'C');
+        $fpdf->Cell(0, 2, utf8_decode("Participó como ponente en el"), 0, 0, 'C');
         $fpdf->Ln(2);
     } else {
         $fpdf->SetY(-97);

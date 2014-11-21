@@ -820,6 +820,7 @@ class EventsController extends AppController {
                                     CakeSession::delete('fecha2');
                                     CakeSession::delete('fecha3');
                                     CakeSession::delete('fecha4');
+                                    CakeSession::delete('idEvent');
                                     $this->Session->setFlash(__('The event has been saved.'));
                                     return $this->redirect(array('action' => 'index/sort:even_fechInicio/direction:desc'));
                                 } else {
@@ -925,6 +926,7 @@ class EventsController extends AppController {
                                 CakeSession::delete('fecha2');
                                 CakeSession::delete('fecha3');
                                 CakeSession::delete('fecha4');
+                                CakeSession::delete('idEvent');
                                 $this->Session->setFlash(__('The event has been saved.'));
                                 return $this->redirect(array('action' => 'index/sort:even_fechInicio/direction:desc'));
                             } else {
@@ -1048,6 +1050,7 @@ class EventsController extends AppController {
                                 CakeSession::delete('fecha2');
                                 CakeSession::delete('fecha3');
                                 CakeSession::delete('fecha4');
+                                CakeSession::delete('idEvent');
                                 $this->Session->setFlash(__('The event has been saved.'));
                                 return $this->redirect(array('action' => 'index/sort:even_fechInicio/direction:desc'));
                             } else {
@@ -1156,6 +1159,7 @@ class EventsController extends AppController {
                             CakeSession::delete('fecha2');
                             CakeSession::delete('fecha3');
                             CakeSession::delete('fecha4');
+                            CakeSession::delete('idEvent');
                             $this->Session->setFlash('El evento se guardo correctamente.', 'good');
                             return $this->redirect(array('action' => 'index/sort:even_fechInicio/direction:desc'));
                         } else {

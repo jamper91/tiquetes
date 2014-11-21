@@ -104,13 +104,16 @@ class ShelvesController extends AppController {
             throw new NotFoundException(__('Invalid shelf'));
         }
         if ($this->request->is(array('post', 'put'))) {
-            $this->data['Shelf']['codigo'] = strtoupper($this->data['Shelf']['codigo']);
-            $this->data['Shelf']['esta_nombre'] = strtoupper($this->data['Shelf']['esta_nombre']);
-            $this->data['Shelf']['genero'] = strtoupper($this->data['Shelf']['genero']);
-            $this->data['Shelf']['representante'] = strtoupper($this->data['Shelf']['representante']);
-            $this->data['Shelf']['ubicacion'] = strtoupper($this->data['Shelf']['ubicacion']);
-            $this->data['Shelf']['descripcion'] = strtoupper($this->data['Shelf']['descripcion']);
-            $this->data['Shelf']['observacion'] = strtoupper($this->data['Shelf']['observacion']);
+            $this->request->data['codigo'] = strtoupper($this->data['Shelf']['codigo']);
+            $this->request->data['esta_nombre'] = strtoupper($this->data['Shelf']['esta_nombre']);
+            $this->request->data['genero'] = strtoupper($this->data['Shelf']['genero']);
+            $this->request->data['representante'] = strtoupper($this->data['Shelf']['representante']);
+            $this->request->data['ubicacion'] = strtoupper($this->data['Shelf']['ubicacion']);
+            $this->request->data['descripcion'] = strtoupper($this->data['Shelf']['descripcion']);
+            $this->request->data['observacion'] = strtoupper($this->data['Shelf']['observacion']);
+            $this->request->data['telefono'] = strtoupper($this->data['Shelf']['telefono']);
+            $this->request->data['mail'] = strtoupper($this->data['Shelf']['mail']);
+            $this->request->data['ciudad'] = strtoupper($this->data['Shelf']['ciudad']);
             if ($this->Shelf->save($this->request->data)) {
                 $this->Session->setFlash(__('The shelf has been saved.'));
                 return $this->redirect(array('action' => 'buscar'));
@@ -157,8 +160,8 @@ class ShelvesController extends AppController {
                 $event_id = $datos['Shelf']['event_id'];
                 $tam = $datos['size'];
                 $inicio = "Se registraron  ";
-                $medio = "Y se actualizaron los stands con los siguientes codigos: ";
-                $repetidos = "";
+                $medio = "Y se actualizaron: ";
+                $repetidos = 0;
                 $cont = 0;
                 for ($i = 1; $i <= $tam; $i++) {
                     $codigo = $datos["codigo$i"];
@@ -170,19 +173,21 @@ class ShelvesController extends AppController {
                     $descripcion = $datos["descripcion$i"];
                     $observacion = $datos["observacion$i"];
                     $aforo = $datos["aforo$i"];
-
+                    $telefono = $datos["telefono$i"];
+                    $mail = $datos["mail$i"];
+                    $ciudad = $datos["ciudad$i"];
                     $shelf = $this->Shelf->query("SELECT id FROM shelves WHERE codigo='$codigo' AND event_id = $event_id");
                     if ($shelf != array()) {
                         $shelf_id = $shelf[0]['shelves']['id'];
-                        $this->Shelf->query("UPDATE `shelves` SET `codigo`='$codigo',`esta_nombre`='$nombre',`genero`='$genero',`representante`='$representante',`ubicacion`='$ubicacion',`mts`=$mts,`descripcion`='$descripcion',`observacion`='$observacion',`aforo`=$aforo,`event_id`=$event_id WHERE `id`= $shelf_id");
-                        $repetidos = $repetidos . ", " . $codigo;
+                        $this->Shelf->query("UPDATE `shelves` SET `telefono`='$telefono', `mail` = '$mail', `ciudad` = '$ciudad',`codigo`='$codigo',`esta_nombre`='$nombre',`genero`='$genero',`representante`='$representante',`ubicacion`='$ubicacion',`mts`=$mts,`descripcion`='$descripcion',`observacion`='$observacion',`aforo`=$aforo,`event_id`=$event_id WHERE `id`= $shelf_id");
+                        $repetidos = $repetidos + 1;
                     } else {
                         $cont = $cont + 1;
-                        $sql = "INSERT INTO `shelves`( `codigo`, `esta_nombre`, `genero`, `representante`, `ubicacion`, `mts`, `descripcion`, `observacion`, `aforo`, `event_id`) VALUES ('$codigo','$nombre','$genero','$representante','$ubicacion',$mts,'$descripcion','$observacion',$aforo,$event_id)";
+                        $sql = "INSERT INTO `shelves`( `codigo`, `esta_nombre`, `genero`, `representante`, `ubicacion`, `mts`, `descripcion`, `observacion`, `aforo`, `event_id`, `telefono`, `mail`, `ciudad`) VALUES ('$codigo','$nombre','$genero','$representante','$ubicacion',$mts,'$descripcion','$observacion',$aforo,$event_id,'$telefono','$mail','$ciudad')";
                         $this->Shelf->query($sql);
                     }
                 }
-                $this->Session->setFlash($inicio . $cont . " nuevos stands. " . $medio . $repetidos . ".", 'good');
+                $this->Session->setFlash($inicio . $cont . " nuevos stands. " . $medio . $repetidos . " Stands.", 'good');
             }
         }
         $date = date('Y-m-d');

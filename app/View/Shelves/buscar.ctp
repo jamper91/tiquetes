@@ -5,24 +5,22 @@
         <legend><?php echo __('Buscar Stands'); ?></legend>
         <?php
         echo $this->Form->input('codigo', array(
-            'label' => 'Stand',
+            'label' => 'N° STAND',
         ));
         echo $this->Form->input('esta_nombre', array(
-            'label' => 'Nombre',
+            'label' => 'NOMBRE STAND',
             'required' => 'false'
         ));
         echo $this->form->input('genero', array(
-            'label' => 'Genero',
+            'label' => 'GENERO',
         ));
         echo $this->Form->input('representante', array(
-            'label' => 'Representante',
+            'label' => 'ENCARGADO',
         ));
-
         echo $this->form->input('ubicacion', array(
-            'label' => 'Ubicacion',
+            'label' => 'UBICACION',
         ));
         ?>
-
     </fieldset>
     <?php echo $this->Form->end(__('Buscar')); ?>
 </div>

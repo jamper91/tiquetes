@@ -23,10 +23,10 @@
                 <td>
                     <select name="data[Entrada][reporte]" style="display:block" id="EntradaReporte">
                         <option value="">Seleccione un Reporte</option>
-                        <option value="4">Actividad Consolidado</option>
-                        <option value="3">Actividad Detallado</option>
                         <option value="2">Asistentes Consolidado</option>
                         <option value="1">Asistentes Detallado</option>
+                        <option value="4">Actividad Consolidado</option>
+                        <option value="3">Actividad Detallado</option>                        
                         <option value="5">Escarapelas y Certificados Consolidado</option>
                         <option value="6">Stands Consolidado</option>
                     </select>
@@ -228,7 +228,7 @@
             even_id: $("#EntradaEventId").val()
         };
         ajax(url, datos2, function(xml) {
-            $("#table").html("var html = '<tr><th>CODIGO</th><th>NOMBRE</th><th>GENERO</th><th>REPRESENTANTE</th><th>AFORO</th><th>INGRESOS</th><th>DISPONIBLE</th></tr>'");
+            $("#table").html("var html = '<tr><th>N° STAND</th><th>NOMBRE STAND</th><th>GENERO</th><th>ENCARGADO</th><th>AFORO</th><th>ACREDITADOS</th><th>DISPONIBLE</th></tr>'");
             $("datos", xml).each(function() {
                 var obj = $(this).find("Shelf");
                 var codigo = $("codigo", obj).text();

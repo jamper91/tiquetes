@@ -1681,7 +1681,8 @@ class PeopleController extends AppController {
                                     'abr' => $abr,
                                     'empresa' => $empresa,
                                     'certificado' => $cert,
-                                    'categoria' => $categoria
+                                    'categoria' => $categoria,
+                                    'id'=> $id,
 //                    'categoria' => $categoria,
 //                    'evento' => $evento,
 //                    'ciudad' => $ciudad,
@@ -1772,6 +1773,7 @@ class PeopleController extends AppController {
                                 'empresa' => $empresa,
                                 'certificado' => $cert,
                                 'categoria' => $categoria,
+                                'id'=> $id,
 //                    'evento' => $evento,
 //                    'ciudad' => $ciudad,
 //                    'diainicio' => $diainicial,

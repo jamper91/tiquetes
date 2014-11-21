@@ -69,18 +69,23 @@
                         <th><center><strong>G</strong></center></th>
                         <th><center><strong>H</strong></center></th>
                         <th><center><strong>I</strong></center></th>
-                        
-                    <tr>
-                        <th>STAND</th>
-                        <th>NOMBRE</th>
-                        <th>GENERO</th>
-                        <th>REPRESENTANTE</th>
-                        <th>UBICACION</th>
-                        <th>MTS</th>
-                        <th>DESCRIPCION</th>
-                        <th>OBSERVACION</th>
-                        <th>AFORO</th>
-                    </tr>
+                        <th><center><strong>J</strong></center></th>
+                        <th><center><strong>K</strong></center></th>
+                        <th><center><strong>L</strong></center></th>
+                        <tr>
+                            <th>N° STAND</th>
+                            <th>NOMBRE STAND</th>
+                            <th>GENERO</th>
+                            <th>ENCARGADO</th>
+                            <th>UBICACION</th>
+                            <th>MTS</th>
+                            <th>DESCRIPCION</th>
+                            <th>OBSERVACION</th>
+                            <th>AFORO</th>
+                            <th>TELEFONO</th>
+                            <th>MAIL</th>
+                            <th>CIUDAD</th>
+                        </tr>
                 </thead>
                     <tbody>
                       	<?php
@@ -104,6 +109,9 @@
 								<td align ="center"><input type="text" id = "descripcion' . $iIndice . '" name = "descripcion' . $iIndice . '" value ="' . $objCelda['G'] . '" style="display:none">' . $objCelda['G'] . '</td>
 								<td align ="center"><input type="text" id = "observacion' . $iIndice . '" name = "observacion' . $iIndice . '" value ="' . $objCelda['H'] . '" style="display:none">' . $objCelda['H'] . '</td>
 								<td align ="center"><input type="text" id = "aforo' . $iIndice . '" name = "aforo' . $iIndice . '" value ="' . $objCelda['I'] . '" style="display:none">' . $objCelda['I'] . '</td>
+                                                                <td align ="center"><input type="text" id = "telefono' . $iIndice . '" name = "telefono' . $iIndice . '" value ="' . $objCelda['J'] . '" style="display:none">' . $objCelda['J'] . '</td>
+                                                                <td align ="center"><input type="text" id = "mail' . $iIndice . '" name = "mail' . $iIndice . '" value ="' . $objCelda['K'] . '" style="display:none">' . $objCelda['K'] . '</td>
+                                                                <td align ="center"><input type="text" id = "ciudad' . $iIndice . '" name = "ciudad' . $iIndice . '" value ="' . $objCelda['L'] . '" style="display:none">' . $objCelda['L'] . '</td>
 							</tr>
 						';
                         }

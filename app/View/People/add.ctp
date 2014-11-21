@@ -2,14 +2,14 @@
     <?php echo $this->Form->create('Person'); ?>
     <fieldset>
 
-        <legend><?php //echo __('Crear Persona');     ?></legend>
+<!--        <legend><?php //echo __('Crear Persona');     ?></legend>-->
         <table>
             <tr>
-                <td>
+                <td >
                     <div class="input text required">
                         <label for="PersonPersDocumento">Identificacion</label>
                         <input id="PersonPersDocumento" type="text" required="required" maxlength="50" name="data[Person][pers_documento]" autofocus="true"/>
-                        <input id="buscar" type="button"  name="buscar" value='Buscar'/>
+                        <input id="buscar" type="button"  name="buscar" value='Buscar' class="btn-info"/>
                     </div>
                 </td>
                 <td>
@@ -26,9 +26,10 @@
                     ?>
 
                 </td>
-
-            </tr>
-            <tr>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <?php //echo '	 '?>
+                </td>
                 <td>
                     <?php
                     echo $this->Form->input('document_type_id', array(
@@ -41,22 +42,6 @@
                     ));
                     ?>
                 </td>
-                <td>
-                    <?php ?>
-                </td>
-                <td>
-
-                    <?php
-                    echo $this->Form->input('categoria_id', array(
-                        'label' => 'Categoría',
-                        'required' => 'true',
-                        "options" => $categorias,
-                        "empty" => "Seleccione una categoria",
-                        'autofocus' => 'true'
-                    ));
-                    ?>
-                </td>
-
             </tr>
             <tr>
                 <td>
@@ -76,6 +61,25 @@
                     ));
                     ?>
                 </td>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <?php //echo '	 '?>
+                </td>
+                <td>
+                    <?php
+                    echo $this->Form->input('categoria_id', array(
+                        'label' => 'Categoría',
+                        'required' => 'true',
+                        "options" => $categorias,
+                        "empty" => "Seleccione una categoria",
+                        'autofocus' => 'true'
+                    ));
+                    ?>
+                </td>
+
+            </tr>
+            <tr>
+                
             </tr>
             <tr>
                 <td>
@@ -85,20 +89,29 @@
                     ));
                     ?>
                 </td>
+                <td></td>
                 <td>
                     <?php
-                    ?>
-                </td>
-                <td>
-                    <?php
-                    echo $this->Form->input('pers_mail', array(
-                        'label' => 'E-mail',
-                        'type' => 'email'
+                    echo $this->Form->input('cargo', array(
+                        'label' => 'Profesion o Cargo',
                     ));
                     ?>
+
+                </td>
+                <td></td>
+                <td>
+                    <?php
+                    echo $this->Form->input('shelf_id', array(
+                        'label' => 'Stand',
+                        'required' => 'false',
+                        "options" => $shelves,
+                        "empty" => "Seleccione un stand",
+                    ));
+                    ?>					
                 </td>
             </tr>
             <tr>
+                
                 <td>
                     <?php
                     echo $this->Form->input('pers_celular', array(
@@ -107,19 +120,40 @@
                     ?>
                 </td>
                 <td>
-                    <?php ?>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <?php //echo '	 '?>
                 </td>
                 <td>
                     <?php
                     echo $this->Form->input('pers_telefono', array(
-                        'label' => 'Telefono',
+                        'label' => 'Telefono Fijo',
                         'type' => 'text'
                     ));
                     ?>
 
                 </td>
+                <td>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <?php //echo '	 '?>
+                </td>
+                <td>
+                    <?php
+                    echo $this->Form->input('pers_mail', array(
+                        'label' => 'E-mail',
+//                        'type' => 'email'
+                    ));
+                    ?>
+                </td>
             </tr>
             <tr>
+                <td>
+                    <?php
+                    echo $this->Form->input('sector', array(
+                        'label' => 'Dirección',
+                    ));
+                    ?>
+                </td>
+                <td></td>
                 <td>
                     <?php
                     echo $this->Form->input('ciudad', array(
@@ -144,46 +178,18 @@
             <tr>
                 <td>
                     <?php
-                    echo $this->Form->input('cargo', array(
-                        'label' => 'Profesion',
-                    ));
-                    ?>
-
-                </td>                
-                <td>
-                    <?php ?>
-                </td>
-                <td>
-                    <?php
-                    echo $this->Form->input('sector', array(
-                        'label' => 'Sector',
-                    ));
-                    ?>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <?php
-                    echo $this->Form->input('shelf_id', array(
-                        'label' => 'Stand',
-                        'required' => 'false',
-                        "options" => $shelves,
-                        "empty" => "Seleccione un stand",
-                    ));
-                    ?>					
-                </td>
-                <td>
-                    <?php ?>
-                </td>
-                <td>
-                    <?php
                     echo $this->Form->input('observaciones', array(
                         'label' => 'Observaciones',
                         'maxlength' => '200'
                     ));
                     ?>
+                </td>                
+                <td>
+                    <?php ?>
                 </td>
+                
             </tr>
+            
             <tr>
                 <td>
                     <?php
@@ -230,7 +236,7 @@
         ?>
 
     </fieldset>
-    <input value="Crear" id="crear" name="crear" type="submit">
+    <input value="Crear" id="crear" name="crear" type="submit" class="btn-success" width="20" height="15">
 </div>
 
 <script>
