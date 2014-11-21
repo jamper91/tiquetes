@@ -168,10 +168,10 @@ foreach ($datos2 as $dato) {
                             array_push($datos, resta($entrada, $salida));
                         }
                     } else {
-                        array_push($datos, 'vacio');
+                        array_push($datos, '');
                         if ($permanencia == true) {
-                            array_push($datos, 'vacio');
-                            array_push($datos, 'vacio');
+                            array_push($datos, '');
+                            array_push($datos, '');
                         }
                     }
                     $ch++;

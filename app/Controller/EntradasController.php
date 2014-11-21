@@ -1087,11 +1087,12 @@ class EntradasController extends AppController {
                 'nombres' => $dato['nombre'],
                 'apellidos' => $dato['apellido'],
                 'entrada' => $dato['entrada'],
-                'salida' => $dato['salida'],
                 'permanencia' => $dato['permanencia'],
                 'actividad' => $dato['actividad'],
             );
-
+            if($dato['permanencia']== true){
+                $aux['salida'] = $dato['salida'];
+            }
             if (count($dato) > 8) {
                 for ($j = 1; $j < ((count($dato) - 8) / 4); $j++) {
                     array_push($aux, $dato['entrada' . $j]);
