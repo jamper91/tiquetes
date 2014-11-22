@@ -1046,8 +1046,8 @@ class EntradasController extends AppController {
         $aux2 = array();
         foreach ($dat as $key => $value) {
             $person_id = $value ['ap']['person_id'];
-            $d = $this->Log->query("SELECT p.`categoria_id`, p.`pers_documento`, p.`pers_primNombre`, p.`pers_primApellido`, ap.`fecha_entrada`, ap.`fecha_salida`, a.`permanencia`, a.`id` FROM `people` p INNER JOIN `activities_people` ap ON ap.`person_id` = p.`id` INNER JOIN `activities` a ON a.`id` = ap.`activity_id` WHERE p.`id` = $person_id ORDER BY a.`id` ASC ");
-//          
+            $d = $this->Log->query("SELECT p.`categoria_id`, p.`pers_documento`, p.`pers_primNombre`, p.`pers_primApellido`, ap.`fecha_entrada`, ap.`fecha_salida`, a.`permanencia`, a.`id` FROM `people` p INNER JOIN `activities_people` ap ON ap.`person_id` = p.`id` INNER JOIN `activities` a ON a.`id` = ap.`activity_id` WHERE p.`id` = $person_id GROUP BY a.`id` ORDER BY a.`id` ASC ");
+//          debug($d);
             $datos = array();
             for ($i = 0; $i < count($d); $i++) {
                 if ($i == 0) {
@@ -1066,6 +1066,8 @@ class EntradasController extends AppController {
                     $datos['entrada' . $i] = $d[$i]['ap']['fecha_entrada'];
                     if ($d[$i]['a']['permanencia'] == true) {
                         $datos['salida' . $i] = $d[$i]['ap']['fecha_salida'];
+                    } else {
+                        $datos['salida' . $i] = '';
                     }
                     $datos['permanencia' . $i] = $d[$i]['a']['permanencia'];
                     $datos['actividad' . $i] = $d[$i]['a']['id'];
@@ -1073,6 +1075,8 @@ class EntradasController extends AppController {
             }
             $aux2[$key] = $datos;
         }
+//        debug($aux2);
+//        die;
         $datos2 = array();
         $categoria = "";
         foreach ($aux2 as $dato) {
@@ -1081,11 +1085,10 @@ class EntradasController extends AppController {
             if ($res != array()) {
                 $categoria = $res[0]['categorias']['descripcion'];
             }
-            if($dato['permanencia']== true){
+            $salida = '';
+            if ($dato['permanencia'] == true) {
                 $salida = $dato['salida'];
-            }else{
-                $salida = '';
-            }
+            } 
             $aux = array(
                 'categoria' => $categoria,
                 'documento' => $dato['documento'],
@@ -1096,9 +1099,11 @@ class EntradasController extends AppController {
                 'permanencia' => $dato['permanencia'],
                 'actividad' => $dato['actividad'],
             );
-            
+//            debug($aux);
             if (count($dato) > 8) {
-                for ($j = 1; $j < ((count($dato) - 8) / 4); $j++) {
+//                debug(count($dato));
+                $fabio = ((count($dato) - 7) / 4);
+                for ($j = 1; $j <= $fabio; $j++) {
                     array_push($aux, $dato['entrada' . $j]);
                     array_push($aux, $dato['permanencia' . $j]);
                     if ($dato['permanencia' . $j] == true) {
@@ -1109,10 +1114,12 @@ class EntradasController extends AppController {
                     array_push($aux, $dato['actividad' . $j]);
                 }
             }
+//            debug($aux);
             $datos2[$i] = $aux;
             $i++;
         }
-//        debug($datos2);die;
+//        debug($datos2);//
+//        die;
         $actividades = $this->Activity->find('all', array('conditions' => array("Activity.event_id=$event_id"), 'fields' => array('Activity.nombre', 'Activity.permanencia', 'Activity.id')));
 //        debug($actividades);die;
         $this->set(compact('datos2', 'actividades')); //$this->set("datos", $datos2, 'actividades', $actividades);
@@ -1181,29 +1188,29 @@ class EntradasController extends AppController {
         $certnoreg = $this->Input->query("select count(*) as total FROM inputs WHERE event_id = $event_id and fechaescarapela IS NOT NULL AND fechacertificate IS NULL");
         $reg = 0;
         $noreg = 0;
-        $creg= 0;
-        $cnoreg= 0;
-        if($registradas!= array()){
+        $creg = 0;
+        $cnoreg = 0;
+        if ($registradas != array()) {
             $reg = $registradas[0][0]['total'];
         }
-        if($noregistradas!=array()){
+        if ($noregistradas != array()) {
             $noreg = $noregistradas[0][0]['total'];
         }
-        if($certreg!=array()){
-            $creg=$certreg[0][0]['total'];
+        if ($certreg != array()) {
+            $creg = $certreg[0][0]['total'];
         }
-        if($certnoreg!=array()){
-            $cnoreg=$certnoreg[0][0]['total'];
+        if ($certnoreg != array()) {
+            $cnoreg = $certnoreg[0][0]['total'];
         }
-        $total = $reg+$noreg;
-        $total2 = $creg+$cnoreg;
-        $datos['person']['reg']=$reg;
-        $datos['person']['noreg']=$noreg;
-        $datos['person']['total']=$total;
-        $datos['person']['creg']=$creg;
-        $datos['person']['cnoreg']=$cnoreg;
-        $datos['person']['total2']=$total2;
-        
+        $total = $reg + $noreg;
+        $total2 = $creg + $cnoreg;
+        $datos['person']['reg'] = $reg;
+        $datos['person']['noreg'] = $noreg;
+        $datos['person']['total'] = $total;
+        $datos['person']['creg'] = $creg;
+        $datos['person']['cnoreg'] = $cnoreg;
+        $datos['person']['total2'] = $total2;
+
         $this->set(
                 array(
                     "datos" => $datos,
@@ -1245,7 +1252,7 @@ class EntradasController extends AppController {
                 )
         );
     }
-    
+
     public function getActivitiesByEvent() {
         $this->layout = "webservices";
         $this->loadModel("Activity");
