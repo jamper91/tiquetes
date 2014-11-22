@@ -55,7 +55,7 @@
 <br><br>
 <div align='center'>
 
-    <table  width="40%" class="table-bordered" id="table" name='table'></table>
+    <table  width="40%" class="table table-bordered data-table" id="table" name='table'></table>
 </div>
 <!--        <table>
    <tr>
@@ -168,12 +168,12 @@
                 var cnoreg = $("cnoreg", obj).text();
                 var total2 = $("total2", obj).text();
 
-                var html = "<tr><td align='center'>$1</th><td  align='center'>$2</th><th align='center'>$3</th></tr>";
+                var html = "<tr><th align='center'>$1</th><th  align='center'>$2</th><th align='center'>$3</th></tr>";
                 html = html.replace("$2", reg);
                 html = html.replace("$3", noreg);
                 html = html.replace("$1", total);
                 $("#table").append(html);
-                var html2 = "<tr><td colspan='3'>&nbsp;</td></tr><tr><td colspan='3'>&nbsp;</td></tr><tr><th colspan='3' align= 'center'>CERTIFICADOS</th></tr><tr><th>REGISTROS</th><th>IMPRESOS</th><th>SIN IMPRIMIR</th></tr><tr><td align='center'>$1</th><td  align='center'>$2</th><th align='center'>$3</th></tr>";
+                var html2 = "<tr><th colspan='3'>&nbsp;</td></tr><tr><th colspan='3'>&nbsp;</td></tr><tr><th colspan='3' align= 'center'>CERTIFICADOS</th></tr><tr><th>REGISTROS</th><th>IMPRESOS</th><th>SIN IMPRIMIR</th></tr><tr><th align='center'>$1</th><th  align='center'>$2</th><th align='center'>$3</th></tr>";
                 html2 = html2.replace("$2", creg);
                 html2 = html2.replace("$3", cnoreg);
                 html2 = html2.replace("$1", total2);
@@ -277,13 +277,13 @@
                 var cantidad = $("total", obj).text();
                 var porcentaje = (cantidad * 100) / full;
                 j = parseInt(cantidad) + j;
-                var html = "<tr><th align='center'>$1</th><td align='center'>$2</td><td align='center'>$3 %</td></tr>"
+                var html = "<tr><th align='center'>$1</th><th align='center'>$2</th><th align='center'>$3 %</th></tr>"
                 html = html.replace("$1", categoria);
                 html = html.replace("$2", cantidad);
                 html = html.replace("$3", porcentaje.toFixed(2));
                 $("#table").append(html);
             });
-            var html2 = ("var html = '<tr><th align='center'>$1</th align='center'><th align='center'>$2</th><td align='center'>100 %</td></tr>'");
+            var html2 = ("var html = '<tr><th align='center'>$1</th><th align='center'>$2</th><th align='center'>100 %</th></tr>'");
             html2 = html2.replace("$1", 'TOTAL');
             html2 = html2.replace("$2", j);
             $("#table").append(html2);
