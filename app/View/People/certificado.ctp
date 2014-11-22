@@ -33,7 +33,7 @@ if ($data['nombre']) {
         $fpdf->SetFont('Arial', 'B', 24);  
     }
     if($id==3){
-    $fpdf->SetTextColor(153, 153, 153);
+    $fpdf->SetTextColor(130, 130, 130);
     }
     $fpdf->Cell(0, 2, utf8_decode($ncompleto), 0, 0, 'C');
     $fpdf->Ln(2);
@@ -54,14 +54,17 @@ if ($emp != null) {
     $fpdf->Ln(2);
 }
 if ($libre == true) {
+    
     if ($cat == "PONENTE") {
-        $fpdf->SetY(-97);
-        $fpdf->SetFont('Arial', '', 16);
+        $fpdf->SetXY(0, -99);
+//        $fpdf->SetY(-99);
+        $fpdf->SetFont('Arial', '', 14);
         $fpdf->Cell(0, 2, utf8_decode("Participó como ponente en el"), 0, 0, 'C');
         $fpdf->Ln(2);
     } else {
-        $fpdf->SetY(-97);
-        $fpdf->SetFont('Arial', '', 16);
+        $fpdf->SetXY(0, -99);
+//        $fpdf->SetY(-99);
+        $fpdf->SetFont('Arial', '', 14);
         $fpdf->Cell(0, 2, utf8_decode("Participó en el"), 0, 0, 'C');
         $fpdf->Ln(2);
     }

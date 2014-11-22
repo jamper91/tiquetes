@@ -1280,5 +1280,67 @@ class EntradasController extends AppController {
                 )
         );
     }
+    
+    public function getReportByAssistant() {
+        $this->layout = "webservices";
+        $this->loadModel("EventsCategoria");
+        $this->loadModel("Categoria");
+        $this->loadModel("Event");
+        $event_id = $this->request->data['even_id'];
+        $total = $this->Categoria->query("select c.id, c.`descripcion`, count(*) as total FROM `people` p INNER JOIN `inputs` i ON i.person_id = p.id INNER JOIN categorias c ON c.id = i.categoria_id WHERE i.event_id= $event_id group by c.descripcion");
+        $datos = array();
+        $full = 0;
+//        $cantidad = $this->Event->query("SELECT datediff(`even_fechFinal`, `even_fechInicio`) AS cantidad FROM `events` e WHERE `id` = $event_id");
+//        $dif = $cantidad[0][0]['cantidad'];
+//        $fecha = $this->Event->query("SELECT even_fechInicio FROM events WHERE id = $event_id");
+//        if ($fecha != array()) {
+//            $date = $fecha[0]['events']['even_fechInicio'];
+//            $f = date('Y-m-d', strtotime($date));
+            for ($i = 0; $i < count($total); $i++) {
+                $datos[$i]['cat']['cuenta'] = count($total);
+                $cat_id = $total[$i]['c']['id'];
+                $datos[$i]['cat']['categoria'] = $total[$i]['c']['descripcion'];
+                $datos[$i]['cat']['total'] = $total[$i][0]['total'];
+                $ingresos = $this->Entrada->query("select count(*) as total FROM inputs WHERE event_id = $event_id AND fechaescarapela IS NOT NULL ");
+                $datos[$i]['cat']['total_escarapela'] = $ingresos[0][0]['total'];
+                $ingresos = $this->Entrada->query("select count(*) as ingresos FROM inputs WHERE event_id = $event_id AND categoria_id = $cat_id AND fechaescarapela IS NOT NULL ");
+                $datos[$i]['cat']['escarapela'] = $ingresos[0][0]['ingresos'];
+                $certificados = $this->Entrada->query("select count(*) as total FROM inputs WHERE event_id = $event_id AND fechaescarapela IS NOT NULL AND fechacertificate IS NOT NULL");
+                $datos[$i]['cat']['total_certificado'] = $certificados[0][0]['total'];
+                $certificados = $this->Entrada->query("select count(*) as certificados FROM inputs WHERE event_id = $event_id AND categoria_id = $cat_id AND fechaescarapela IS NOT NULL AND fechacertificate IS NOT NULL");
+                $datos[$i]['cat']['certificado'] = $certificados[0][0]['certificados'];
+                $full = $full + $total[$i][0]['total'];
+            }
+            for ($j = 1; $j <= count($total); $j++) {
+                $datos[$i - $j]['cat']['full'] = $full;
+            }
+//            $datos2 = array();
+//            $dia = 0;
+//            for ($k = 0; $k < $dif; $k++) {
+//                $total2 = $this->Categoria->query("select c.`descripcion`, count(*) as total FROM `people` p INNER JOIN `inputs` i ON i.person_id = p.id INNER JOIN categorias c ON c.id = i.categoria_id WHERE i.event_id= $event_id AND i.fechaescarapela like '$f %' group by c.descripcion ASC ");
+//                $x = count($total2);
+//                $y = 0;
+//                if ($total == array()) {
+//                    $datos2[$k] = $dia;
+//                } else {
+//                    if ($y < $x) {
+//                        $dia = $total2[$y][0]['total'];
+//                        $datos2[$k] = $dia;
+//                        $y++;
+//                    }
+//                }
+//                $f = date('Y-m-d', strtotime('+1 days', strtotime($f)));
+//            }
+//        }
+//        for($a=0; $a<count($datos);$a++){
+//            $datos[$a]['cat']['dia']=$datos2[$a];
+//        }
+        $this->set(
+                array(
+                    "datos" => $datos,
+                    "_serialize" => array("datos")
+                )
+        );
+    }
 
 }

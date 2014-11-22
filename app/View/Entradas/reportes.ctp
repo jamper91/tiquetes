@@ -27,6 +27,7 @@
                         <option value="1">Asistentes Detallado</option>
                         <option value="4">Actividad Consolidado</option>
                         <option value="3">Actividad Detallado</option>                        
+                        <option value="7">Consolidado General</option>
                         <option value="5">Escarapelas y Certificados Consolidado</option>
                         <option value="6">Stands Consolidado</option>
                     </select>
@@ -147,7 +148,9 @@
                 registros();
             } else if (reporte === '6') {
                 shelvesevent();
-            }
+            } else if (reporte === '7') {
+                ConsolidadoGeneral();
+            }//
         } else {
             alert("Por favor seleccione un evento");
         }
@@ -221,7 +224,7 @@
             });
         });
     }
-    
+
     function shelvesevent() {
         var url = urlbase + "entradas/getShelvesByEvent.xml";
         var datos2 = {
@@ -286,6 +289,68 @@
             var html2 = ("var html = '<tr><th align='center'>$1</th><th align='center'>$2</th><th align='center'>100 %</th></tr>'");
             html2 = html2.replace("$1", 'TOTAL');
             html2 = html2.replace("$2", j);
+            $("#table").append(html2);
+        });
+    }
+
+    function ConsolidadoGeneral() {
+        var url = urlbase + "entradas/getReportByAssistant.xml";
+        var datos2 = {
+            even_id: $("#EntradaEventId").val()
+        };
+        ajax(url, datos2, function(xml) {
+            $("#table").html("var html = '<tr><th>CATEGORIA</th><th>INSCRITOS</th><th>PORCENTAJE</th><th>ESCARAPELAS IMPRESAS</th><th>PORCENTAJE</th><th>POR IMPRIMIR</th></tr><th>CERTIFICADOS IMPRESOS</th><th>PORCENTAJE</th><th>POR IMPRIMIR</th></tr>'");
+            var j = 0;
+            var total_escarapelas = 0;
+            var totalporceescarapela = 0;
+            var total_porimprescarapelas = 0;
+            var total_certificados = 0;
+            var totalporcecertificado = 0;
+            var total_porimprcertificados = 0;
+            $("datos", xml).each(function() {
+                var obj = $(this).find("cat");
+                var total;
+                total = $("cuenta", obj).text();
+                var full = $("full", obj).text();
+                var categoria = $("categoria", obj).text();
+                var cantidad = $("total", obj).text();
+                var porcentaje = (cantidad * 100) / full;
+                var escarapela = $("escarapela", obj).text();
+                var total_escarapela = $("total_escarapela", obj).text();
+                var porceescarapela = (escarapela * 100) / total_escarapela;
+                var porimprescarapela = (cantidad - escarapela);
+                var certificado = $("certificado", obj).text();
+                var total_certificado = $("total_certificado", obj).text();
+                var porcecertificado = (certificado * 100) / total_certificado;
+                var porimprcertificado = (escarapela - certificado);
+                total_escarapelas = parseInt(escarapela) + total_escarapelas;
+                totalporceescarapela = parseFloat(porceescarapela) + totalporceescarapela;
+                total_porimprescarapelas = parseInt(porimprescarapela) + total_porimprescarapelas;
+                total_certificados = parseInt(certificado) + total_certificados;
+                totalporcecertificado = parseFloat(porcecertificado) + totalporcecertificado;
+                total_porimprcertificados = parseInt(porimprcertificado) + total_porimprcertificados;
+                j = parseInt(cantidad) + j;
+                var html = "<tr><td>$1</td><th align='center'>$2</th><th align='center'>$3 %</th><th align='center'>$4</th><th align='center'>$5 %</th><th align='center'>$6</th><th align='center'>$7</th><th align='center'>$8 %</th><th align='center'>$9</th></tr>"
+                html = html.replace("$1", categoria);
+                html = html.replace("$2", cantidad);
+                html = html.replace("$3", porcentaje.toFixed(2));
+                html = html.replace("$4", escarapela);
+                html = html.replace("$5", porceescarapela.toFixed(2));
+                html = html.replace("$6", porimprescarapela);
+                html = html.replace("$7", certificado);
+                html = html.replace("$8", porcecertificado.toFixed(2));
+                html = html.replace("$9", porimprcertificado);
+                $("#table").append(html);
+            });
+            var html2 = ("var html = '<tr><th align='center'>$1</th><th align='center'>$2</th><th align='center'>100 %</th><th align='center'>$4</th><th align='center'>$5 %</th><th align='center'>$6</th><th align='center'>$7</th><th align='center'>$8 %</th><th align='center'>$9</th></tr>'");
+            html2 = html2.replace("$1", 'TOTAL');
+            html2 = html2.replace("$2", j);
+            html2 = html2.replace("$4", total_escarapelas);
+            html2 = html2.replace("$5", totalporceescarapela.toFixed(2));
+            html2 = html2.replace("$6", total_porimprescarapelas);
+            html2 = html2.replace("$7", total_certificados);
+            html2 = html2.replace("$8", totalporcecertificado.toFixed(2));
+            html2 = html2.replace("$9", total_porimprcertificados);
             $("#table").append(html2);
         });
     }
@@ -575,4 +640,4 @@ $pos = 0;
 
 
 
-<p>Entradas <?php // echo $salidas                          ?></p>-->
+<p>Entradas <?php // echo $salidas                               ?></p>-->
