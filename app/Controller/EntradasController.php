@@ -1081,18 +1081,22 @@ class EntradasController extends AppController {
             if ($res != array()) {
                 $categoria = $res[0]['categorias']['descripcion'];
             }
+            if($dato['permanencia']== true){
+                $salida = $dato['salida'];
+            }else{
+                $salida = '';
+            }
             $aux = array(
                 'categoria' => $categoria,
                 'documento' => $dato['documento'],
                 'nombres' => $dato['nombre'],
                 'apellidos' => $dato['apellido'],
                 'entrada' => $dato['entrada'],
+                'salida' => $salida,
                 'permanencia' => $dato['permanencia'],
                 'actividad' => $dato['actividad'],
             );
-            if($dato['permanencia']== true){
-                $aux['salida'] = $dato['salida'];
-            }
+            
             if (count($dato) > 8) {
                 for ($j = 1; $j < ((count($dato) - 8) / 4); $j++) {
                     array_push($aux, $dato['entrada' . $j]);
@@ -1108,6 +1112,7 @@ class EntradasController extends AppController {
             $datos2[$i] = $aux;
             $i++;
         }
+//        debug($datos2);die;
         $actividades = $this->Activity->find('all', array('conditions' => array("Activity.event_id=$event_id"), 'fields' => array('Activity.nombre', 'Activity.permanencia', 'Activity.id')));
 //        debug($actividades);die;
         $this->set(compact('datos2', 'actividades')); //$this->set("datos", $datos2, 'actividades', $actividades);

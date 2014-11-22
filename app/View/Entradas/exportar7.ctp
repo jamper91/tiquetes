@@ -64,131 +64,107 @@ for ($i = 0; $i < count($actividades); $i++) {
 //debug($b);
 //debug($c);
 //die;
-
+debug($datos2);
 foreach ($datos2 as $dato) {
-    $ch = -1;
+    $ch = 0;
     if (count($dato) == 8) {
-        $ch++;
-        if ($ch >= count($actividades)) {
-            $ch = 0;
-        }
-        $activity = $b[$ch];
-        $ch++;
-        $entrada = $dato['entrada'];
-        $rest = substr($entrada, -8);
-        $salida = $dato['salida'];
-        $rest2 = substr($salida, -8);
-        $diferencia = resta($rest, $rest2);
-
         $datos = array(
             $dato['categoria'],
             $dato['documento'],
             $dato['nombres'],
             $dato['apellidos'],
         );
-        $r = 0;
-        $blancos = 0;
-        for ($l = 0; $l < count($actividades); $l++) {
-//            debug($dato['actividad']);
-//            debug($b[$r]);
-//            debug($blancos);
-            if ($b[$r] == $dato['actividad']) {
-                if ($blancos == 0) {
-                    array_push($datos, $entrada);
-//                    debug($dato['permanencia']);
-                    if ($dato['permanencia'] == true) {
-                        array_push($datos, $salida);
-                        array_push($datos, $diferencia);
-                    }
-                    $l = count($actividades);
-                } else {
-//                    debug($c);
-                    array_push($datos, '');
-                    if ($c[0] == true) {
-                        array_push($datos, '');
-                        array_push($datos, '');
-//                        debug("ebtro");die;
-                    }
-                    array_push($datos, $entrada);
-                    if ($dato['permanencia'] == true) {
-                        array_push($datos, $salida);
-                        array_push($datos, $diferencia);
-                    }
-                }
-            }
-            $blancos++;
-            $r++;
-        }
-    } else {
-        $r = 0;
-        $ch++;
-        if ($ch >= count($actividades)) {
-            $ch = 0;
-        }
-        $activity = $b[$ch];
-        $ch++;
-        $entrada = $dato['entrada'];
-        $rest = substr($entrada, -8);
-        $salida = $dato['salida'];
-        $rest2 = substr($salida, -8);
-        $diferencia = resta($rest, $rest2);
-
-        $datos = array(
-            $dato['categoria'],
-            $dato['documento'],
-            $dato['nombres'],
-            $dato['apellidos'],
-        );
-        $balncos = 0;
-        for ($m = 0; $m < count($actividades); $m++) {
-            if ($activity == $dato['actividad']) {
+        for ($i = 0; $i < count($actividades); $i++) {
+            $activity = $b[$ch];
+            $permanencia = $c[$ch];
+            $actividad = $dato['actividad'];
+            $entrada = $dato['entrada'];
+            $rest = substr($entrada, -8);
+            if ($activity == $actividad) {
                 array_push($datos, $entrada);
                 if ($dato['permanencia'] == true) {
+                    $salida = $dato['salida'];
+                    $rest2 = substr($salida, -8);
+                    $diferencia = resta($rest, $rest2);
                     array_push($datos, $salida);
                     array_push($datos, $diferencia);
                 }
-                $k = 0;
-                for ($j = 0; $j < ((count($dato) - 8) / 4); $j++) {
-                    $entrada = $dato[$k];
-                    $k++;
-                    $permanencia = $dato[$k];
-                    $k++;                    
-                    $salida = $dato[$k];
-                    $k++;
-                    $actividad = $dato[$k];
-                    $k++;
-                    $activity = $b[$ch];
-                    debug($actividad);
-                    debug($activity);
-                    if ($activity == $actividad) {
-                        array_push($datos, $entrada);
-//                            debug($permanencia);die;
-                        if ($permanencia == true) {
-                            array_push($datos, $salida);
-                            array_push($datos, resta($entrada, $salida));
-                        }
-                    } else {
-                        array_push($datos, '');
-                        if ($permanencia == true) {
-                            array_push($datos, '');
-                            array_push($datos, '');
-                        }
-                    }
-                    $ch++;
-                    if ($ch < count($actividades)) {
-                        $activity = $b[$ch];
-                    }
+            } else {
+                array_push($datos, '');
+                if ($permanencia == true) {
+                    array_push($datos, '');
+                    array_push($datos, '');
                 }
             }
-
-
-            $r++;
+            $ch++;
+        }
+    } else {
+        $datos = array(
+            $dato['categoria'],
+            $dato['documento'],
+            $dato['nombres'],
+            $dato['apellidos'],
+        );
+        for ($i = 0; $i < count($actividades); $i++) {
+            $activity = $b[$ch];
+            $actividad = $dato['actividad'];
+            $entrada = $dato['entrada'];
+            $rest = substr($entrada, -8);
+            if ($activity == $actividad) {
+                array_push($datos, $entrada);
+                if ($dato['permanencia'] == true) {
+                    $salida = $dato['salida'];
+                    $rest2 = substr($salida, -8);
+                    $diferencia = resta($rest, $rest2);
+                    array_push($datos, $salida);
+                    array_push($datos, $diferencia);
+                }
+                $ch++;
+                break;
+            } else {
+                array_push($datos, '');
+                $permanencia = $c[$ch];
+                if ($permanencia == true) {
+                    array_push($datos, '');
+                    array_push($datos, '');
+                }
+            }
+            $ch++;
+        }
+        $k = 0;
+        for ($j = 0; $j < ((count($dato) - 8) / 4); $j++) {
+            $entrada = $dato[$k];
+            $k++;
+            $permanencia = $dato[$k];
+            $k++;
+            $salida = $dato[$k];
+            $k++;
+            $actividad = $dato[$k];
+            $k++;
+            $activity = $b[$ch];
+//            debug($activity);
+//            debug($actividad);
+            if ($activity == $actividad) {
+                array_push($datos, $entrada);
+                if ($permanencia == true) {
+                    $salida = $dato['salida'];
+                    $rest2 = substr($salida, -8);
+                    $diferencia = resta($rest, $rest2);
+                    array_push($datos, $salida);
+                    array_push($datos, $diferencia);
+                }
+            } else {
+                array_push($datos, '');
+                if ($permanencia == true) {
+                    array_push($datos, '');
+                    array_push($datos, '');
+                }
+            }
+            $ch++;
         }
     }
-    $ch++;
     $this->PhpExcel->addTableRow($datos);
 }
-
 //debug($k);
 //die;
 $this->PhpExcel->addTableFooter();
