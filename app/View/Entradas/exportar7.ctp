@@ -20,8 +20,8 @@ for ($k = 4; $k < count($actividades) + 4; $k++) {
         $table[$k + $l] = array('label' => __('FECHA DE SALIDA'), 'width' => 'auto', 'filter' => true);
         $l = $l + 1;
         $table[$k + $l] = array('label' => __('PERMANENCIA'), 'width' => 'auto', 'filter' => true);
-        $x++;
     }
+    $x++;
 }
 
 //debug($table);die;
@@ -53,7 +53,7 @@ function resta($inicio, $fin) {
     return $dif;
 }
 
-//debug($datos2);
+debug($datos2);
 //debug($actividades);
 $b = array();
 $c = array();
@@ -64,7 +64,7 @@ for ($i = 0; $i < count($actividades); $i++) {
 //debug($b);
 //debug($c);
 //die;
-debug($datos2);
+//debug($datos2);
 foreach ($datos2 as $dato) {
     $ch = 0;
     if (count($dato) == 8) {
