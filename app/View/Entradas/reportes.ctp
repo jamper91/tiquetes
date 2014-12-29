@@ -59,7 +59,7 @@
 </div>
 <!--        <table>
    <tr>
-       <td>
+       <td> table-bordered data-table
 <?php
 //                    echo $this->Form->input('country_id', array(
 //                        "div" => array(
@@ -298,7 +298,7 @@
             even_id: $("#EntradaEventId").val()
         };
         ajax(url, datos2, function(xml) {
-            $("#table").html("var html = '<tr><th>CATEGORIA</th><th>INSCRITOS</th><th>PORCENTAJE</th><th>ESCARAPELAS IMPRESAS</th><th>PORCENTAJE</th><th>POR IMPRIMIR</th></tr><th>CERTIFICADOS IMPRESOS</th><th>PORCENTAJE</th><th>POR IMPRIMIR</th></tr>'");
+            $("#table").html("var html = '<tr><th>CATEGORIA</th><th>INSCRITOS</th><th>PORCENTAJE</th><th>ESCARAPELAS IMPRESAS</th><th>PORCENTAJE</th><th>POR IMPRIMIR</th><th>CERTIFICADOS IMPRESOS</th><th>PORCENTAJE</th><th>POR IMPRIMIR</th></tr>'");
             var j = 0;
             var total_escarapelas = 0;
             var totalporceescarapela = 0;
