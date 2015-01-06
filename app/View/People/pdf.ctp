@@ -2,6 +2,7 @@
 <?php
 
 require_once('../Vendor/fpdf/ean13.php');
+require_once('../Vendor/phpqrcode/qrlib.php');
 $pdf = new PDF_EAN13();
 
 $pdf->Open();
@@ -20,6 +21,8 @@ $tam_empresa = $data['escarapela'][0]['escarapelas']['tam_empresa'];
 $categoria = $data['escarapela'][0]['escarapelas']['categoria'];
 $tam_categoria = $data['escarapela'][0]['escarapelas']['tam_categoria'];
 $doc = $data['documento'];
+//debug($data);die;
+$datos = $data['datos'];
 if (strlen($doc) == 12) {
     $numero = substr($doc, -12, 1) . substr($doc, -11, 1) . substr($doc, -10, 1) . '.' . substr($doc, -9, 1) . substr($doc, -8, 1) . substr($doc, -7, 1) . '.' . substr($doc, -6, 1) . substr($doc, -5, 1) . substr($doc, -4, 1) . '.' . substr($doc, -3, 1) . substr($doc, -2, 1) . substr($doc, -1);
 } elseif (strlen($doc) == 11) {
@@ -128,7 +131,12 @@ if ($data['tipo'] == 2) {
             $pdf->Cell(0, 2, utf8_decode($data['categoria']), 0, 0, 'C');
             $pdf->Ln(2);
         }
+        if($datos != array()){
+            QRcode::png(base64_decode($datos['nombre'] . $datos['apellido'] . $datos['documento']), '../webroot/img/certificate/QR.png');
+            $pdf->Image('../webroot/img/certificate/QR.png',0,0);
+        }
     }
+    
 }
 $pdf->AutoPrint(true);
 //$pdf->AutoPrint(true);
