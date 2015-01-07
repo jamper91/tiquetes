@@ -20,6 +20,8 @@ $empresa = $data['escarapela'][0]['escarapelas']['empresa'];
 $tam_empresa = $data['escarapela'][0]['escarapelas']['tam_empresa'];
 $categoria = $data['escarapela'][0]['escarapelas']['categoria'];
 $tam_categoria = $data['escarapela'][0]['escarapelas']['tam_categoria'];
+$qrx = $data['escarapela'][0]['escarapelas']['qrx'];
+$qry = $data['escarapela'][0]['escarapelas']['qry'];
 $doc = $data['documento'];
 //debug($data);die;
 $datos = $data['datos'];
@@ -111,32 +113,41 @@ if ($data['tipo'] == 2) {
                 $pdf->Cell(0, 2, $cedula, 0, 0, 'C');
                 $pdf->Ln(2);
             } else {
-                $cedula =  $numero;
+                $cedula = $numero;
                 $pdf->SetY($documento);
                 $pdf->SetFont('Arial', '', $tam_documento);
                 $pdf->Cell(0, 2, $cedula, 0, 0, 'C');
                 $pdf->Ln(2);
             }
         }
+        
+        if ($datos != array()) {
+            $dato = "BEGIN:VCARD\n"
+                    . "VERSION:2.1\n"
+                    . "N:" .$datos['nombre'] . ";" . $datos['apellido'] . "\n"
+                    . "FN:" . $datos['nombre'] . " " . $datos['apellido'] . "\n"
+                    . "DOC:". $datos['documento']."\n"
+                    . "TITLE:Desarrollador de Software\n"
+                    . "TEL;WORK;VOICE:(111) 555-1212\n"
+                    . "END:VCARD";
+            QRcode::png($dato, '../webroot/img/certificate/QR.png', 1, 1);
+            $pdf->Image('../webroot/img/certificate/QR.png', $qrx, $qrx);
+        }
+        
         if ($empresa != null && $empresa != '') {
             $pdf->SetY($empresa);
             $pdf->SetFont('Arial', '', $tam_empresa);
             $pdf->Cell(0, 2, utf8_decode($data['empresa']), 0, 0, 'C');
             $pdf->Ln(2);
         }
-
+        
         if ($categoria != null && $categoria != '') {
             $pdf->SetY($categoria);
             $pdf->SetFont('Arial', 'B', $tam_categoria);
             $pdf->Cell(0, 2, utf8_decode($data['categoria']), 0, 0, 'C');
             $pdf->Ln(2);
         }
-        if($datos != array()){
-            QRcode::png(base64_decode($datos['nombre'] . $datos['apellido'] . $datos['documento']), '../webroot/img/certificate/QR.png');
-            $pdf->Image('../webroot/img/certificate/QR.png',0,0);
-        }
     }
-    
 }
 $pdf->AutoPrint(true);
 //$pdf->AutoPrint(true);
