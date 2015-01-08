@@ -2,6 +2,7 @@
 <?php
 
 require_once('../Vendor/fpdf/ean13.php');
+require_once('../Vendor/phpqrcode/qrlib.php');
 $pdf = new PDF_EAN13();
 
 $pdf->Open();
@@ -19,7 +20,11 @@ $empresa = $data['escarapela'][0]['escarapelas']['empresa'];
 $tam_empresa = $data['escarapela'][0]['escarapelas']['tam_empresa'];
 $categoria = $data['escarapela'][0]['escarapelas']['categoria'];
 $tam_categoria = $data['escarapela'][0]['escarapelas']['tam_categoria'];
+$qrx = $data['escarapela'][0]['escarapelas']['qrx'];
+$qry = $data['escarapela'][0]['escarapelas']['qry'];
 $doc = $data['documento'];
+//debug($data);die;
+$datos = $data['datos'];
 if (strlen($doc) == 12) {
     $numero = substr($doc, -12, 1) . substr($doc, -11, 1) . substr($doc, -10, 1) . '.' . substr($doc, -9, 1) . substr($doc, -8, 1) . substr($doc, -7, 1) . '.' . substr($doc, -6, 1) . substr($doc, -5, 1) . substr($doc, -4, 1) . '.' . substr($doc, -3, 1) . substr($doc, -2, 1) . substr($doc, -1);
 } elseif (strlen($doc) == 11) {
@@ -108,20 +113,34 @@ if ($data['tipo'] == 2) {
                 $pdf->Cell(0, 2, $cedula, 0, 0, 'C');
                 $pdf->Ln(2);
             } else {
-                $cedula =  $numero;
+                $cedula = $numero;
                 $pdf->SetY($documento);
                 $pdf->SetFont('Arial', '', $tam_documento);
                 $pdf->Cell(0, 2, $cedula, 0, 0, 'C');
                 $pdf->Ln(2);
             }
         }
+        
+        if ($datos != array()) {
+            $dato = "BEGIN:VCARD\n"
+                    . "VERSION:2.1\n"
+                    . "N:" .$datos['nombre'] . ";" . $datos['apellido'] . "\n"
+                    . "FN:" . $datos['nombre'] . " " . $datos['apellido'] . "\n"
+                    . "DOC:". $datos['documento']."\n"
+                    . "TITLE:Desarrollador de Software\n"
+                    . "TEL;WORK;VOICE:(111) 555-1212\n"
+                    . "END:VCARD";
+            QRcode::png($dato, '../webroot/img/certificate/QR.png', 1, 1);
+            $pdf->Image('../webroot/img/certificate/QR.png', $qrx, $qrx);
+        }
+        
         if ($empresa != null && $empresa != '') {
             $pdf->SetY($empresa);
             $pdf->SetFont('Arial', '', $tam_empresa);
             $pdf->Cell(0, 2, utf8_decode($data['empresa']), 0, 0, 'C');
             $pdf->Ln(2);
         }
-
+        
         if ($categoria != null && $categoria != '') {
             $pdf->SetY($categoria);
             $pdf->SetFont('Arial', 'B', $tam_categoria);

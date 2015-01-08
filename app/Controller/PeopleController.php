@@ -259,9 +259,13 @@ class PeopleController extends AppController {
                             $operation = $this->Data->query($sql3);
 
                             App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
+                            $datos = array();
+                            $datos['nombre'] = strtoupper($this->request->data['Person']['pers_primNombre']);
+                            $datos['apellido'] = strtoupper($this->request->data['Person']['pers_primApellido']);
+                            $datos['documento'] = strtoupper($this->request->data['Person']['pers_documento']);
                             $this->layout = 'pdf'; //this will use the pdf.ctp layout
                             $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', array('287', '343')));
-                            $informacion = array('documento' => strtoupper($data['Person']['pers_documento']), 'nombre' => strtoupper($data['Person']['pers_primNombre']), 'apellido' => strtoupper($data['Person']['pers_primApellido']), 'categoria' => strtoupper($cat), 'empresa' => strtoupper($data['Person']['pers_empresa']), 'codigo' => $cadena, 'tipo' => 2, 'escarapela' => $esc);
+                            $informacion = array('documento' => strtoupper($data['Person']['pers_documento']), 'nombre' => strtoupper($data['Person']['pers_primNombre']), 'apellido' => strtoupper($data['Person']['pers_primApellido']), 'categoria' => strtoupper($cat), 'empresa' => strtoupper($data['Person']['pers_empresa']), 'codigo' => $cadena, 'tipo' => 2, 'escarapela' => $esc, 'datos' => $datos);
                             $this->set('data', $informacion);
 
                             $this->render('pdf');
@@ -399,9 +403,13 @@ class PeopleController extends AppController {
                             $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
 
                             App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
+                            $datos = array();
+                            $datos['nombre'] = strtoupper($this->request->data['Person']['pers_primNombre']);
+                            $datos['apellido'] = strtoupper($this->request->data['Person']['pers_primApellido']);
+                            $datos['documento'] = strtoupper($this->request->data['Person']['pers_documento']);
                             $this->layout = 'pdf'; //this will use the pdf.ctp layout
                             $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', 'A4', array('287', '343')));
-                            $informacion = array('documento' => strtoupper($data['Person']['pers_documento']), 'nombre' => strtoupper($data['Person']['pers_primNombre']), 'categoria' => strtoupper($cat), 'apellido' => strtoupper($data['Person']['pers_primApellido']), 'empresa' => strtoupper($data['Person']['pers_empresa']), 'codigo' => $cadena, 'tipo' => 2, 'escarapela' => $esc);
+                            $informacion = array('documento' => strtoupper($data['Person']['pers_documento']), 'nombre' => strtoupper($data['Person']['pers_primNombre']), 'categoria' => strtoupper($cat), 'apellido' => strtoupper($data['Person']['pers_primApellido']), 'empresa' => strtoupper($data['Person']['pers_empresa']), 'codigo' => $cadena, 'tipo' => 2, 'escarapela' => $esc, 'datos' => $datos);
                             $this->set('data', $informacion);
                             $this->render('pdf');
                         } else {
@@ -465,9 +473,13 @@ class PeopleController extends AppController {
                                     $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
 
                                     App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
+                                    $datos = array();
+                                    $datos['nombre'] = strtoupper($this->request->data['Person']['pers_primNombre']);
+                                    $datos['apellido'] = strtoupper($this->request->data['Person']['pers_primApellido']);
+                                    $datos['documento'] = strtoupper($this->request->data['Person']['pers_documento']);
                                     $this->layout = 'pdf'; //this will use the pdf.ctp layout
                                     $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', array('287', '343')));
-                                    $informacion = array('documento' => strtoupper($data['Person']['pers_documento']), 'nombre' => strtoupper($data['Person']['pers_primNombre']), 'categoria' => strtoupper($cat), 'apellido' => strtoupper($data['Person']['pers_primApellido']), 'empresa' => strtoupper($data['Person']['pers_empresa']), 'codigo' => $cadena, 'tipo' => 2, 'escarapela' => $esc);
+                                    $informacion = array('documento' => strtoupper($data['Person']['pers_documento']), 'nombre' => strtoupper($data['Person']['pers_primNombre']), 'categoria' => strtoupper($cat), 'apellido' => strtoupper($data['Person']['pers_primApellido']), 'empresa' => strtoupper($data['Person']['pers_empresa']), 'codigo' => $cadena, 'tipo' => 2, 'escarapela' => $esc, 'datos' => $datos);
                                     $this->set('data', $informacion);
                                     $this->render('pdf');
                                 }
@@ -511,9 +523,13 @@ class PeopleController extends AppController {
                                     $esc = $this->Event->query("SELECT * FROM `escarapelas` WHERE id= $escarapela_id");
 
                                     App::import('Vendor', 'Fpdf', array('file' => 'fpdf/fpdf.php'));
+                                    $datos = array();
+                                    $datos['nombre'] = strtoupper($this->request->data['Person']['pers_primNombre']);
+                                    $datos['apellido'] = strtoupper($this->request->data['Person']['pers_primApellido']);
+                                    $datos['documento'] = strtoupper($this->request->data['Person']['pers_documento']);
                                     $this->layout = 'pdf'; //this will use the pdf.ctp layout
                                     $this->set('pdf', new FPDF($orientation = 'P', $unit = 'mm', array('287', '343')));
-                                    $informacion = array('documento' => strtoupper($data['Person']['pers_documento']), 'nombre' => strtoupper($data['Person']['pers_primNombre']), 'categoria' => strtoupper($cat), 'apellido' => strtoupper($data['Person']['pers_primApellido']), 'empresa' => strtoupper($data['Person']['pers_empresa']), 'codigo' => $c, 'tipo' => 2, 'escarapela' => $esc);
+                                    $informacion = array('documento' => strtoupper($data['Person']['pers_documento']), 'nombre' => strtoupper($data['Person']['pers_primNombre']), 'categoria' => strtoupper($cat), 'apellido' => strtoupper($data['Person']['pers_primApellido']), 'empresa' => strtoupper($data['Person']['pers_empresa']), 'codigo' => $c, 'tipo' => 2, 'escarapela' => $esc, 'datos'=>$datos);
                                     $this->set('data', $informacion);
                                     $this->render('pdf');
                                 }
@@ -1682,7 +1698,7 @@ class PeopleController extends AppController {
                                     'empresa' => $empresa,
                                     'certificado' => $cert,
                                     'categoria' => $categoria,
-                                    'id'=> $id,
+                                    'id' => $id,
 //                    'categoria' => $categoria,
 //                    'evento' => $evento,
 //                    'ciudad' => $ciudad,
@@ -1773,7 +1789,7 @@ class PeopleController extends AppController {
                                 'empresa' => $empresa,
                                 'certificado' => $cert,
                                 'categoria' => $categoria,
-                                'id'=> $id,
+                                'id' => $id,
 //                    'evento' => $evento,
 //                    'ciudad' => $ciudad,
 //                    'diainicio' => $diainicial,
