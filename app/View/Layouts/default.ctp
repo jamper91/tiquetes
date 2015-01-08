@@ -44,6 +44,9 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         echo $this->fetch('css');
         echo $this->fetch('script');
         echo $this->Html->script(array('jquery.form', 'jquery-1.11.0.min', 'ean13.min', 'jquery-ean13.min', 'ean13'));
+
+        echo $this->Html->script(array('chat'));
+        echo $this->Html->css(array('chat','screen'));
         ?>
 <!--        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
         <script src="http://malsup.github.com/jquery.form.js"></script> -->
@@ -301,14 +304,19 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         </div>
         <!--sidebar-menu-->
         <!--main-container-part-->
+
         <div id="content">
+            <div id="main_container">
             <div class="container-fluid">
+                
+                    <a href="javascript:void(0)" onclick="javascript:chatWith('<?=$this->Session->read('User.type_user_id')?>')">Chat With Grupo </a>
                 <hr>
                 <?php
                 echo $this->Session->flash();
                 ?>
 
                 <?php echo $this->fetch('content'); ?>
+                </div>
             </div>
 
         </div>

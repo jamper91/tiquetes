@@ -1,15 +1,29 @@
 <!--<script type="text/javascript" src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.js"></script>-->
 <!-- Button to trigger modal -->
-
+<div id='contenido'>
+	<a href="javascript:history.back(1)" class="btn btn-primary">Volver</a>
 <?php
 
 
 /*foreach ($ as  $value) {
 	# code...
 }*/
-
+$parametros=$this->request->params["pass"];
 
 echo "<h1>".$location["Stage"]["esce_nombre"]." - ".$location["Location"]["loca_nombre"] ."" ;
+?>
+
+<fieldset>
+	<label style="display: inline-block;"><h4>Elige el Tipo :</h4> </label>
+	<select name="tipo" id="tipo">
+	  <option value="way">Pasillo</option>
+	  <option value="chair">Silla</option>
+	</select>
+</fieldset>
+
+
+<?php
+
 
 
 
@@ -45,7 +59,8 @@ for ($i=1; $i <=$filas ; $i++) {
 
 		echo '<td>
 
-		<a href="#myModal_'.$i.$j.'"  class="" data-toggle="modal">
+		<!--<a href="#myModal_'.$i.$j.'"  class="" data-toggle="modal">-->
+<a href="#" onClick="return enviarCuadro('.$i.','.$j.','.$location["Location"]["id"].')" class="">
 <img src="'.$this->webroot.'/images/'.$image.'.png'.'" data-toggle="modal" >
 		</a>
 
@@ -97,85 +112,44 @@ for ($i=1; $i <=$filas ; $i++) {
 
 
 
-
-
-
-
-
-
-
-
-		/*echo "<td>
-		<form id='post_".$i.$j."' action='post.php'>
-	<img id='forms_".$i.$j."' src='".$this->webroot.'/images/'.$image.'.png' ."'   data-toggle='modal' >
-		<input type='hidden' name='fil' value='".$i."'>   
-		<input type='hidden' name='col' value='".$j."'>
-		</form>
-		<script type='text/javascript'>
-			$(document).ready(function() {
-				
-				$('#forms_".$i.$j."').on('click', function () {
-				     // $('#forms_".$i.$j."').popover('show');
-				      console.log('TEXT ".$i." ".$j." '   );
-				     // $('#myModal_".$i.$j."').modal('show');
-				      $('#forms_".$i.$j."').modal('show');
-				      /*$.ajax
-					    ({ 
-					        url: 'reservebook.php',
-					        data: {'bookID': 'book_id'},
-					        type: 'post',
-					        success: function(result)
-					        {
-					            $('#myModal_".$i.$j."').text(result).fadeIn(700, function() 
-					            {
-					                setTimeout(function() 
-					                {
-					                    $('#myModal_".$i.$j."').fadeOut();
-					                }, 2000);
-					            });
-					        }
-					    });
-
-
-
-
-
-
-
-
-				 });
-			});
-
-		</script>
-
-		<div class='modal hide fade' id='forms_".$i.$j."'>
-		  <div class='modal-header'>
-		    <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
-		    <h3>Modal header</h3>
-		  </div>
-		  <div class='modal-body'>
-		    <p>One fine body…</p>
-		  </div>
-		  <div class='modal-footer'>
-		    <a href='#' class='btn'>Close</a>
-		    <a href='#' class='btn btn-primary'>Save changes</a>
-		  </div>
-		</div>
-
-
-
-
-
-
-		</td>";*/
-
 	}
 	echo "</tr>";
 
 
-	# code...
+
 }
 
 echo '</table>';
+echo "<div>";
 
 ?>
+<script type="text/javascript">
+
+function enviarCuadro(fil,col,loca){
+
+	var tipo=$("#tipo").val();
+
+	var formData = {fil:fil,col:col,loca:loca,tipo:tipo}; //Array 
+ 
+	$.ajax({
+	    url : "<?=$this->Html->url(array('controller' => 'Events', 'action' => 'guardagrid'))?>",
+	    type: "POST",
+	    data : formData,
+	    success: function(data, textStatus, jqXHR)
+	    {
+	        //data - response from server
+	        $("#contenido").load(urlbase+"Events/grid/<?=$parametros[0]?>/<?=$parametros[1]?>");
+	        setTimeout(function() {
+			   $("#tipo").val(tipo);
+			}, 100);
+	        
+	    },
+	    error: function (jqXHR, textStatus, errorThrown)
+	    {
+	 	console.log("error");
+	    }
+	});
+
+}
+
+</script>
