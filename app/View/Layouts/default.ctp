@@ -30,12 +30,12 @@ $_SESSION['username'] = $this->Session->read('nameUser') // Must be already set
 
         <?php
 //        echo $this->Html->css(array('bootstrap', 'style', 'menuVertical'));
-        echo $this->Html->css(array('bootstrap.min',  'chat','../app/webroot/font-awesome/css/font-awesome', 'screen', 'screen_ie', 'bootstrap-responsive.min', 'matrix-style', 'matrix-media', 'jquery.gritter', "select2"));
+        echo $this->Html->css(array('bootstrap.min','../app/webroot/font-awesome/css/font-awesome', 'bootstrap-responsive.min', 'matrix-style', 'matrix-media', 'jquery.gritter', "select2"));
         echo $this->Html->css(array('colorpicker', 'datepicker.css', 'uniform', 'bootstrap-wysihtml5'));
 //        echo $this->Html->script(array('jquery.min', 'menu_jquery2', 'operaciones'));
         echo $this->Html->script(array('excanvas.min', 'jquery.min', 'operaciones', 'jquery.ui.custom', 'bootstrap-modal', 'jquery.flot.min', 'jquery.flot.resize.min', 'jquery.peity.min', 'fullcalendar.min'));
         echo $this->Html->script(array('matrix', 'matrix.dashboard', 'jquery.gritter.min', 'matrix.interface', 'matrix.chat', 'jquery.validate', 'matrix.form_validation', 'jquery.wizard', 'jquery.uniform'));
-        echo $this->Html->script(array('select2.min', 'chat', 'jquery', 'matrix.popover', 'jquery.dataTables.min', 'matrix.tables'));
+        echo $this->Html->script(array('select2.min', 'matrix.popover', 'jquery.dataTables.min', 'matrix.tables'));
         ?>
         <!--<link href="http://localhost/tiquetes/app/webroot/font-awesome/css/font-awesome.css" rel="stylesheet" />-->        
         <?php
@@ -48,7 +48,7 @@ $_SESSION['username'] = $this->Session->read('nameUser') // Must be already set
         echo $this->Html->script(array('jquery.form', 'jquery-1.11.0.min', 'ean13.min', 'jquery-ean13.min', 'ean13'));
 
         echo $this->Html->script(array('chat'));
-        echo $this->Html->css(array('chat','screen'));
+        echo $this->Html->css(array('chat'));
         ?>
 <!--        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
         <script src="http://malsup.github.com/jquery.form.js"></script> -->
@@ -330,9 +330,7 @@ $_SESSION['username'] = $this->Session->read('nameUser') // Must be already set
         <div class="row-fluid">
             <!--  <div id="footer" class="span12">  <a href="http://themedesigner.in/">Themedesigner.in</a> </div> -->
         </div>
-        <a href="javascript:void(0)" onclick="javascript:chatWith('janedoe')">Chat With Jane Doe</a>
-        <a href="javascript:void(0)" onclick="javascript:chatWith('babydoe')">Chat With Baby Doe</a>
-
+        
 
 
 

@@ -45,11 +45,8 @@
                     <!--<td><?php // echo h($event['Event']['even_publicar']);  ?>&nbsp;</td>-->
 
                     <td class="actions">
-<<<<<<< HEAD
                          <?php echo $this->Html->link(__('Coordenadas'), array('action' => 'mapea', $event['Event']['id'], 0), array('class' => 'btn btn-primary btn-mini')); ?>
-=======
-                        <?php echo $this->Html->link(__('Coordenadas'), array('action' => 'mapea', $event['Event']['id'], 0), array('class' => 'btn btn-primary btn-mini')); ?>
->>>>>>> 2fc0977d3f3a9e6516af15431d8a7b9be13c3a57
+
                         <?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $event['Event']['id']), array('class' => 'btn btn-warning btn-mini')); ?>
                         <?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $event['Event']['id']), array('class' => 'btn btn-danger btn-mini'), __('Are you sure you want to delete # %s?', $event['Event']['id'])); ?>
                     </td>
