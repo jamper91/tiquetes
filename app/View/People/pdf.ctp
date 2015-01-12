@@ -120,12 +120,11 @@ if ($data['tipo'] == 2) {
                 $pdf->Ln(2);
             }
         }
-<<<<<<< HEAD
         if ($id == 9) {
             if ($empresa != null && $empresa != '') {
                 $pdf->SetY($empresa);
                 $pdf->SetFont('Arial', '', $tam_empresa);
-                $pdf->Cell(0, 2, utf8_decode($data['empresa']).' '.utf8_decode($data['categoria']), 0, 0, 'C');
+                $pdf->Cell(0, 2, utf8_decode($data['empresa']) . ' ' . utf8_decode($data['categoria']), 0, 0, 'C');
                 $pdf->Ln(2);
             }
         } else {
@@ -142,34 +141,33 @@ if ($data['tipo'] == 2) {
                 $pdf->Cell(0, 2, utf8_decode($data['categoria']), 0, 0, 'C');
                 $pdf->Ln(2);
             }
-=======
-        
-        if ($datos != array()) {
-            $dato = "BEGIN:VCARD\n"
-                    . "VERSION:2.1\n"
-                    . "N:" .$datos['nombre'] . ";" . $datos['apellido'] . "\n"
-                    . "FN:" . $datos['nombre'] . " " . $datos['apellido'] . "\n"
-                    . "DOC:". $datos['documento']."\n"
-                    . "TITLE:Desarrollador de Software\n"
-                    . "TEL;WORK;VOICE:(111) 555-1212\n"
-                    . "END:VCARD";
-            QRcode::png($dato, '../webroot/img/certificate/QR.png', 1, 1);
-            $pdf->Image('../webroot/img/certificate/QR.png', $qrx, $qrx);
-        }
-        
-        if ($empresa != null && $empresa != '') {
-            $pdf->SetY($empresa);
-            $pdf->SetFont('Arial', '', $tam_empresa);
-            $pdf->Cell(0, 2, utf8_decode($data['empresa']), 0, 0, 'C');
-            $pdf->Ln(2);
-        }
-        
-        if ($categoria != null && $categoria != '') {
-            $pdf->SetY($categoria);
-            $pdf->SetFont('Arial', 'B', $tam_categoria);
-            $pdf->Cell(0, 2, utf8_decode($data['categoria']), 0, 0, 'C');
-            $pdf->Ln(2);
->>>>>>> 9f1d7229e419643ec542942160038aee78656b57
+
+            if ($datos != array()) {
+                $dato = "BEGIN:VCARD\n"
+                        . "VERSION:2.1\n"
+                        . "N:" . $datos['nombre'] . ";" . $datos['apellido'] . "\n"
+                        . "FN:" . $datos['nombre'] . " " . $datos['apellido'] . "\n"
+                        . "DOC:" . $datos['documento'] . "\n"
+                        . "TITLE:Desarrollador de Software\n"
+                        . "TEL;WORK;VOICE:(111) 555-1212\n"
+                        . "END:VCARD";
+                QRcode::png($dato, '../webroot/img/certificate/QR.png', 1, 1);
+                $pdf->Image('../webroot/img/certificate/QR.png', $qrx, $qrx);
+            }
+
+            if ($empresa != null && $empresa != '') {
+                $pdf->SetY($empresa);
+                $pdf->SetFont('Arial', '', $tam_empresa);
+                $pdf->Cell(0, 2, utf8_decode($data['empresa']), 0, 0, 'C');
+                $pdf->Ln(2);
+            }
+
+            if ($categoria != null && $categoria != '') {
+                $pdf->SetY($categoria);
+                $pdf->SetFont('Arial', 'B', $tam_categoria);
+                $pdf->Cell(0, 2, utf8_decode($data['categoria']), 0, 0, 'C');
+                $pdf->Ln(2);
+            }
         }
     }
 }
