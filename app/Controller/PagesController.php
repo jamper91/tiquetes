@@ -37,10 +37,14 @@ class PagesController extends AppController {
  */
 	public $uses = array();
 
-//        public function beforeFilter() {
-//            parent::beforeFilter();
-//            $this->set('authUser', $this->Auth->user());
-//        }
+	public $components = array('Paginator', 'Auth', 'Session', 'RequestHandler');
+
+        public function beforeFilter() {
+            parent::beforeFilter();
+            $this->set('authUser', $this->Auth->user());
+            $this->Auth->allow('index','registro','eventos');
+           // $this->layout = "reservas_usuario";
+        }
 
         /**
  * Displays a view
@@ -79,4 +83,60 @@ class PagesController extends AppController {
 			throw new NotFoundException();
 		}
 	}
+
+
+	public function index() {
+		$this->layout = "reservas_usuario";
+        //$this->Person->recursive = 0;
+        //$this->set('people', $this->Paginator->paginate());
+    }
+
+    public function reservas(){
+    	$this->layout = "reservas_usuario";
+
+    }
+
+    public function registro(){
+		$this->layout = "reservas_usuario";    	
+    	
+    }
+
+    public function eventos(){
+    	$this->layout = "reservas_usuario";
+    	$this->loadModel('Event');
+    	$eventos=$this->Event->find('all');
+    	$this->set(compact('eventos'));
+    }
+
+    public function localidadEvento($id){
+    	$this->loadModel('Event');
+    	$this->layout = "reservas_usuario";
+    	if (!$this->Event->exists($id)) {
+            throw new NotFoundException(__('Invalid Event'));
+        }
+        $this->loadModel('Location');
+        $options = array('conditions' => array('Event.' . $this->Event->primaryKey => $id));
+        $this->set('event', $this->Event->find('first', $options));
+        $this->set('locations', $this->Location->find("all", array("conditions" => array('Location.event_id' => $id))));
+    }
+
+    public function verLocalidad($id=null){
+    	$this->loadModel('Event');
+    	$this->loadModel('Location');
+    	$this->layout = "reservas_usuario";
+    	if (!$this->Location->exists($id)) {
+            throw new NotFoundException(__('Invalid Event'));
+        }
+
+        $parametros = $this->request->params["pass"];
+        $id_loc = $id;
+        
+        $this->set('location', $this->Location->find("first", array("conditions" => array('Location.id' => $id_loc))));
+        $grid = $this->Location->query('SELECT * FROM grid_location WHERE id_location=' . $id); // Traemos datos 
+        $this->set('grid', $grid);
+
+    }
+
+
+
 }

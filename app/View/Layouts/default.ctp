@@ -18,7 +18,9 @@
 $cakeDescription = __d('cake_dev', 'Ticket Express');
 $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 ?>
-
+<?php
+$_SESSION['username'] = $this->Session->read('nameUser') // Must be already set
+?>
 <!DOCTYPE HTML>
 <html>
     <head>
@@ -28,14 +30,14 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 
         <?php
 //        echo $this->Html->css(array('bootstrap', 'style', 'menuVertical'));
-        echo $this->Html->css(array('bootstrap.min', 'bootstrap-responsive.min', 'matrix-style', 'matrix-media', 'jquery.gritter', "select2"));
+        echo $this->Html->css(array('bootstrap.min','../app/webroot/font-awesome/css/font-awesome', 'bootstrap-responsive.min', 'matrix-style', 'matrix-media', 'jquery.gritter', "select2"));
         echo $this->Html->css(array('colorpicker', 'datepicker.css', 'uniform', 'bootstrap-wysihtml5'));
 //        echo $this->Html->script(array('jquery.min', 'menu_jquery2', 'operaciones'));
-        echo $this->Html->script(array('excanvas.min', 'jquery.min', 'operaciones', 'jquery.ui.custom', 'bootstrap', 'bootstrap-modal', 'jquery.flot.min', 'jquery.flot.resize.min', 'jquery.peity.min', 'fullcalendar.min'));
+        echo $this->Html->script(array('excanvas.min', 'jquery.min', 'operaciones', 'jquery.ui.custom', 'bootstrap-modal', 'jquery.flot.min', 'jquery.flot.resize.min', 'jquery.peity.min', 'fullcalendar.min'));
         echo $this->Html->script(array('matrix', 'matrix.dashboard', 'jquery.gritter.min', 'matrix.interface', 'matrix.chat', 'jquery.validate', 'matrix.form_validation', 'jquery.wizard', 'jquery.uniform'));
         echo $this->Html->script(array('select2.min', 'matrix.popover', 'jquery.dataTables.min', 'matrix.tables'));
         ?>
-        <link href="http://localhost/tiquetes/font-awesome/css/font-awesome.css" rel="stylesheet" />        
+        <!--<link href="http://localhost/tiquetes/app/webroot/font-awesome/css/font-awesome.css" rel="stylesheet" />-->        
         <?php
         echo $this->Html->meta('icon');
 
@@ -44,6 +46,9 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         echo $this->fetch('css');
         echo $this->fetch('script');
         echo $this->Html->script(array('jquery.form', 'jquery-1.11.0.min', 'ean13.min', 'jquery-ean13.min', 'ean13'));
+
+        echo $this->Html->script(array('chat'));
+        echo $this->Html->css(array('chat'));
         ?>
 <!--        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
         <script src="http://malsup.github.com/jquery.form.js"></script> -->
@@ -114,7 +119,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                                 <?php if ($this->Session->read('User.type_user_id') == 1) { ?> 
                                     <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "excel")); ?>">Importar desde excel</a></li>
                                 <?php } ?>
-                            <!--<li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador2")); ?>">Asociar Tarjeta a Persona</a></li>-->
+                    <!--<li><a href="<?= $this->Html->url(array("controller" => "Users", "action" => "buscador2")); ?>">Asociar Tarjeta a Persona</a></li>-->
                                 <li><a href="<?= $this->Html->url(array("controller" => "Activities", "action" => "preregistro")); ?>">Actividades</a></li>
                                 <li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "buscador")); ?>">Buscar Persona</a></li>
                                 <!--<li><a href="<?= $this->Html->url(array("controller" => "People", "action" => "buscar")); ?>">Asociar Tarjeta a Usuario</a></li>-->
@@ -204,7 +209,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                             </ul>
                         </li>
                     <?php } ?>
-                        <?php if (in_array('commite', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
+                    <?php if (in_array('commite', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
                         <li class="submenu"  > 
                             <a href="#">
                                 <i class="icon icon-th-list"></i> 
@@ -282,7 +287,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
                             </ul>
                         </li>
                     <?php } ?>
-                    
+
                     <?php if (in_array('geografia', $this->Session->read('controlador')) || $this->Session->read('User.type_user_id') == 1) { ?>
                         <li class="submenu"  > 
                             <a href="#">
@@ -301,14 +306,19 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         </div>
         <!--sidebar-menu-->
         <!--main-container-part-->
+
         <div id="content">
+            <div id="main_container">
             <div class="container-fluid">
+                
+                    <a href="javascript:void(0)" onclick="javascript:chatWith('<?=$this->Session->read('User.type_user_id')?>')">Chat With Grupo </a>
                 <hr>
                 <?php
                 echo $this->Session->flash();
                 ?>
 
                 <?php echo $this->fetch('content'); ?>
+                </div>
             </div>
 
         </div>
@@ -320,10 +330,9 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         <div class="row-fluid">
             <!--  <div id="footer" class="span12">  <a href="http://themedesigner.in/">Themedesigner.in</a> </div> -->
         </div>
-
+        
 
 
 
     </body>
 </html>
-

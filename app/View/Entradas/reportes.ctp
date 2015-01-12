@@ -55,7 +55,6 @@
 </div>
 <br><br>
 <div align='center'>
-
     <table  width="40%" class="table table-bordered data-table" id="table" name='table'></table>
 </div>
 <!--        <table>
