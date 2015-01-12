@@ -42,7 +42,7 @@ if (strlen($doc) == 12) {
 } else {
     $numero = $doc;
 }
-//$pdf->Image('../webroot/img/certificate/ocho.jpg', 0, 0, $pdf->w, $pdf->h);
+$pdf->Image('../webroot/img/certificate/nueve.jpg', 0, 0, $pdf->w, $pdf->h);
 if ($data['tipo'] == 2) {
 
     if ($data['codigo']) {
@@ -56,7 +56,7 @@ if ($data['tipo'] == 2) {
         }
         $pdf->Ln(2);
 
-        if ($id == 7) {
+        if ($id == 7 || $id == 9) {
             $name = $data['nombre'] . ' ' . $data['apellido'];
             $x = strlen($name);
             if ($x <= 19) {
@@ -108,25 +108,34 @@ if ($data['tipo'] == 2) {
                 $pdf->Cell(0, 2, $cedula, 0, 0, 'C');
                 $pdf->Ln(2);
             } else {
-                $cedula =  $numero;
+                $cedula = $numero;
                 $pdf->SetY($documento);
                 $pdf->SetFont('Arial', '', $tam_documento);
                 $pdf->Cell(0, 2, $cedula, 0, 0, 'C');
                 $pdf->Ln(2);
             }
         }
-        if ($empresa != null && $empresa != '') {
-            $pdf->SetY($empresa);
-            $pdf->SetFont('Arial', '', $tam_empresa);
-            $pdf->Cell(0, 2, utf8_decode($data['empresa']), 0, 0, 'C');
-            $pdf->Ln(2);
-        }
+        if ($id == 9) {
+            if ($empresa != null && $empresa != '') {
+                $pdf->SetY($empresa);
+                $pdf->SetFont('Arial', '', $tam_empresa);
+                $pdf->Cell(0, 2, utf8_decode($data['empresa']).' '.utf8_decode($data['categoria']), 0, 0, 'C');
+                $pdf->Ln(2);
+            }
+        } else {
+            if ($empresa != null && $empresa != '') {
+                $pdf->SetY($empresa);
+                $pdf->SetFont('Arial', '', $tam_empresa);
+                $pdf->Cell(0, 2, utf8_decode($data['empresa']), 0, 0, 'C');
+                $pdf->Ln(2);
+            }
 
-        if ($categoria != null && $categoria != '') {
-            $pdf->SetY($categoria);
-            $pdf->SetFont('Arial', 'B', $tam_categoria);
-            $pdf->Cell(0, 2, utf8_decode($data['categoria']), 0, 0, 'C');
-            $pdf->Ln(2);
+            if ($categoria != null && $categoria != '') {
+                $pdf->SetY($categoria);
+                $pdf->SetFont('Arial', 'B', $tam_categoria);
+                $pdf->Cell(0, 2, utf8_decode($data['categoria']), 0, 0, 'C');
+                $pdf->Ln(2);
+            }
         }
     }
 }

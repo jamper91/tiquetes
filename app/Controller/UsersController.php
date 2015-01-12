@@ -456,7 +456,7 @@ class UsersController extends AppController {
         //$event_id = $this->request->query["event_id"];
         // debug(implode("','",$event_id));
 //        $event_id = $this->request->query["event_id"];
-        $event_id = 1;
+        $event_id = 9;
         //debug($event_id);
 
 
@@ -470,6 +470,7 @@ class UsersController extends AppController {
             }
             $this->loadModel('FormsPersonalDatum');
             $formPersonal = $this->FormsPersonalDatum->findAllByFormId($form_id);
+            debug($formPersonal);
         } else {
             $formPersonal = '';
         }

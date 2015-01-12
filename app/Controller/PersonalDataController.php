@@ -49,12 +49,31 @@ class PersonalDataController extends AppController {
      */
     public function add() {
         if ($this->request->is('post')) {
-            $this->PersonalDatum->create();
-            if ($this->PersonalDatum->save($this->request->data)) {
-                $this->Session->setFlash(__('The personal datum has been saved.'));
-                return $this->redirect(array('action' => 'add'));
-            } else {
-                $this->Session->setFlash(__('The personal datum could not be saved. Please, try again.'));
+            try {
+                $this->PersonalDatum->create();
+                if ($this->PersonalDatum->save($this->request->data)) {
+                    $newcampo = $this->PersonalDatum->getLastInsertID();
+                    $tipo = $this->request->data['PersonalDatum']['tipo'];
+                    if ($tipo == 'radio' || $tipo == 'checkbox' || $tipo == 'select') {
+                        $opciones = $this->request->data['PersonalDatum']['count'];
+                        $sw = 1;
+//                    debug($opciones);
+//                    die;
+                        while ($sw <= $opciones) {
+                            $opcion = $this->request->data['PersonalDatum']['opcion' . $sw];
+                            $opcion = strtoupper($opcion);
+                            $this->PersonalDatum->query("INSERT INTO `opciones`(`personal_datum_id`, `descripcion`) VALUES ($newcampo,'$opcion')");
+                            $sw++;
+                        }
+                    }
+
+                    $this->Session->setFlash(__('El campo se creo correctamente.'));
+                    return $this->redirect(array('action' => 'add'));
+                } else {
+                    $this->Session->setFlash(__('el campo no pudo ser creado, si éxiste no puede ser duplicado. Por favor, intente de nuevo.'));
+                }
+            } catch (Exception $exc) {
+                $this->Session->setFlash(__('el campo no pudo ser creado, si éxiste no puede ser duplicado. Por favor, intente de nuevo.'));
             }
         }
     }
@@ -103,7 +122,5 @@ class PersonalDataController extends AppController {
         }
         return $this->redirect(array('action' => 'index'));
     }
-
-    
 
 }
