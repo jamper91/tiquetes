@@ -55,7 +55,7 @@ foreach ($locations as $key => $value) {
 ?>
 
 
-<img id="mapeos" src="<?php echo $this->webroot.'/img/escenario/'.$event["Stage"]["esce_mapa"] ?>" usemap="#esenario" >
+<img id="mapeos" src="<?php echo $this->webroot.'img/escenario/'.$event["Stage"]["esce_mapa"] ?>" usemap="#esenario" >
 <map id="image_map" name="esenario">
 
 

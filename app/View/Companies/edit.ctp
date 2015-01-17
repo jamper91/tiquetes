@@ -4,9 +4,11 @@
         <legend><?php echo __('Editar Empresa'); ?></legend>
         <br>
         <legend><?php echo __('Datos del Representante Legal'); ?></legend>
+
         <table>
             <tr>
                 <td colspan="2" align="center"><?php
+//                debug($people);die;
                     echo $this->Form->input('pers_documento', array(
                         'label' => 'Identificación',
                         'required' => 'true',
@@ -72,7 +74,7 @@
                         'value' => $people [0]['p']['pers_telefono']
                     ));
                     ?></td>
-                <td><input type="hidden" name="data[Company][pers_id]" id="CompanyPers_id" value="<?php  $people [0]['p']['id']; ?>"></td>
+                <td><input type="hidden" name="data[Company][pers_id]" id="CompanyPers_id" value="<?php $people [0]['p']['id']; ?>"></td>
             </tr>
         </table>
         <legend><?php echo __('Datos de la Empresa'); ?></legend>
@@ -122,6 +124,19 @@
                         'label' => 'Página WEB'
                     ));
                     ?></td>
+                <td><?php
+                    echo $this->Form->input('password', array(
+                        'label' => 'Password'
+                    ));
+                    ?></td>
+            </tr>
+            <tr>
+                <td><?php
+                    echo $this->Form->input('confirmar', array(
+                        'label' => 'Confirmar',
+                        'type' => 'password'
+                    ));
+                    ?></td>
             </tr>
         </table>
 
@@ -151,8 +166,21 @@
             });
         });
     });
+    
     $(document).ready(function() {
-        $("#CompanyStateId").html("");        
+        
+        $("#CompanyEditForm").submit(function(e) {
+            if ($("#CompanyPassword").val() === $("#CompanyConfirmar").val()) {
+                return true;
+            } else {
+                $("#CompanyPassword").val("");
+                $("#CompanyConfirmar").val("");
+                alert("Error la contraseña no coinside con la confirmación");
+                return false;
+            }
+        });
+        
+        $("#CompanyStateId").html("");
         $("#CompanyCountryId").change(function() {
             var url = urlbase + "states/getStatesByCountry.xml";
             var datos = {
@@ -187,18 +215,18 @@
                     id = $("id", obj).text();
                     nombre = $("pers_primNombre", obj).text();
                     apellido = $("pers_primApellido", obj).text();
-                    ciudad = $("city_id", obj).text();                    
+                    ciudad = $("city_id", obj).text();
                     direccion = $("pers_direccion", obj).text();
                     telefono = $("pers_telefono", obj).text();
-                    if(nombre !== null){                        
+                    if (nombre !== null) {
                         $("#CompanyPers_id").val(id);
                         $("#CompanyPersPrimNombre").val(nombre);
                         $("#CompanyPersPrimApellido").val(apellido);
-                        $("#CompanyCityId option[value="+ciudad+"]").attr("selected",true);
+                        $("#CompanyCityId option[value=" + ciudad + "]").attr("selected", true);
                         $("#CompanyPersDireccion").val(direccion);
                         $("#CompanyPersTelefono").val(telefono);
                     } else {
-                        $("#CompanyCityId option[value='']").attr("selected",true);
+                        $("#CompanyCityId option[value='']").attr("selected", true);
                         $("#CompanyPersPrimNombre").val();
                         $("#CompanyPersPrimApellido").val();
                         $("#CompanyPersDireccion").val();

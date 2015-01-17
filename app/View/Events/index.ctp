@@ -38,8 +38,8 @@
     <!--		<td><?php // echo h($event['Event']['even_palaClave']);     ?>&nbsp;</td>
                     <td><?php // echo h($event['Event']['even_observaciones']);     ?>&nbsp;</td>
                     <td><?php // echo h($event['Event']['even_estado']);     ?>&nbsp;</td>-->
-                    <td><img width="100px"   src="<?php echo $this->webroot . '/img/events1/' . h($event['Event']['even_imagen1']); ?>" />&nbsp;</td>
-                    <!--<td><img width="100px"   src="<?php echo $this->webroot . '/img/events2/' . h($event['Event']['even_imagen2']); ?>" />&nbsp;</td>-->
+                    <td><img width="100px"   src="<?php echo $this->webroot . 'img/events1/' . h($event['Event']['even_imagen1']); ?>" />&nbsp;</td>
+                    <!--<td><img width="100px"   src="<?php echo $this->webroot . 'img/events2/' . h($event['Event']['even_imagen2']); ?>" />&nbsp;</td>-->
                     <td><?php echo h($event['Event']['even_fechInicio']); ?>&nbsp;</td>
                     <td><?php echo h($event['Event']['even_fechFinal']); ?>&nbsp;</td>
                     <!--<td><?php // echo h($event['Event']['even_publicar']);  ?>&nbsp;</td>-->

@@ -17,6 +17,12 @@ class CompaniesController extends AppController {
      */
     public $components = array('Paginator', 'Auth', 'Session', 'RequestHandler');
 
+    public function beforeFilter() {
+        parent::beforeFilter();
+        $this->set('authUser', $this->Auth->user());
+        $this->Auth->allow('search');
+        // $this->layout = "reservas_usuario";
+    }
     /**
      * index method
      *
@@ -51,6 +57,7 @@ class CompaniesController extends AppController {
         $this->loadModel("People");
         if ($this->request->is('post')) {
             $data = $this->data;
+//            debug($data);die;
             $documento = $data['Company']['pers_documento'];
             $sql = "SELECT id FROM people WHERE pers_documento=" . $documento;
             $res = $this->People->query($sql);
@@ -139,7 +146,7 @@ class CompaniesController extends AppController {
 //                        )
 //                    );
 //                    debug($data['Company']['pers_id']); die;
-                    $p = $data['Company']['pers_id'];
+                    $p = $data['people']['pers_id'];
                     $ciudad = $data['Company']['city_id'];
                     $nit = $data['Company']['empr_nit'];
                     $name = $data['Company']['empr_nombre'];
@@ -148,7 +155,8 @@ class CompaniesController extends AppController {
                     $dir = $data['Company']['empr_direccion'];
                     $barr = $data['Company']['empr_barrio'];
                     $pag = $data['Company']['empr_pagiWeb'];
-                    $insert = "INSERT INTO `companies`( `person_id`, `city_id`, `empr_nit`, `empr_nombre`, `empr_telefono`, `empr_mail`, `empr_direccion`, `empr_barrio`, `empr_pagiWeb`) VALUES (" . $p . ", " . $ciudad . ",'" . $nit . "', '" . $name . "'," . $tel . ", '" . $mail . "', '" . $dir . "', '" . $barr . "', '" . $pag . "')";
+                    $pass = $data['Company']['password'];
+                    $insert = "INSERT INTO `companies`( `person_id`, `city_id`, `empr_nit`, `empr_nombre`, `empr_telefono`, `empr_mail`, `empr_direccion`, `empr_barrio`, `empr_pagiWeb`, `password`) VALUES ($p, $ciudad ,'$nit', '$name',$tel, '$mail', '$dir', '$barr', '$pag','$pass')";
 
                     if ($this->Company->query($insert) == array()) {
                         $this->Session->setFlash('Empresa registrada exitosamente', 'good');
@@ -253,10 +261,13 @@ class CompaniesController extends AppController {
         }
         $pers_id = "SELECT person_id FROM companies WHERE id = " . $id;
         $res = $this->Company->query($pers_id);
+//        debug($res);
         $id_persona = $res [0]['companies']['person_id'];
+//        debug($id_persona);
         $sql = "SELECT p.id, p.pers_documento, p.pers_primNombre, p.pers_primApellido, p.pers_direccion, p.pers_telefono, s.id AS state_id, cs.id AS country_id FROM people p INNER JOIN cities c ON p.city_id = c.id INNER JOIN states s ON c.state_id = s.id INNER JOIN countries cs ON cs.id = s.country_id WHERE p.id =" . $id_persona;
         $people = $this->Person->query($sql);
-//        debug($people); //die;
+
+//        debug($people); die;
         $this->loadModel("Country");
         $this->loadModel("State");
         $countries = $this->Country->find('list');
@@ -336,7 +347,7 @@ class CompaniesController extends AppController {
         $documento = $this->request->data["documento"]; //
         $barras = $this->request->data["barras"]; //
         if ($documento != '') {
-            $sql = "SELECT Person.id, Person.document_type_id, Person.pers_primNombre, Person.pers_primApellido, Person.pers_empresa, Person.pers_documento FROM people Person INNER JOIN inputs i ON i.person_id = Person.id WHERE Person.pers_documento = '$documento' AND i.event_id = $even" ;
+            $sql = "SELECT Person.id, Person.document_type_id, Person.pers_primNombre, Person.pers_primApellido, Person.pers_empresa, Person.pers_documento FROM people Person INNER JOIN inputs i ON i.person_id = Person.id WHERE Person.pers_documento = '$documento' AND i.event_id = $even";
 //            $options = array(
 //                "conditions" => array(
 //                    "Person.pers_documento" => $documento
