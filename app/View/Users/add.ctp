@@ -151,7 +151,9 @@ echo $this->Html->css(array('multi-select', 'jscal2', 'steel', 'border-radius'))
             if ($("#UserPassword").val() === $("#UserPasswordConfirm").val()) {
                 return true;
             } else {
-                alert("Error la contraseña no coinside con la confirmación");
+            $("#UserPassword").val("");
+            $("#UserPasswordConfirm").val("");
+            alert("Error la contraseña no coinside con la confirmación");
                 return false;
             }
         });

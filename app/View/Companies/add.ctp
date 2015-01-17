@@ -118,6 +118,19 @@
                         'label' => 'Página WEB'
                     ));
                     ?></td>
+                <td><?php
+                    echo $this->Form->input('password', array(
+                        'label' => 'Password'
+                    ));
+                    ?></td>
+            </tr>
+            <tr>
+                <td><?php
+                    echo $this->Form->input('confirmar', array(
+                        'label' => 'Confirmar',
+                        'type' => 'password'
+                    ));
+                    ?></td>
             </tr>
         </table>
 
@@ -148,6 +161,18 @@
         });
     });
     $(document).ready(function() {
+        $(document).ready(function() {
+        $("#CompanyAddForm").submit(function(e) {
+
+            if ($("#CompanyPassword").val() === $("#CompanyConfirmar").val()) {
+                return true;
+            } else {
+            $("#CompanyPassword").val("");
+            $("#CompanyConfirmar").val("");
+            alert("Error la contraseña no coinside con la confirmación");
+                return false;
+            }
+        });
         $("#UserAddForm").submit(function(e) {
 
             if ($("#UserPassword").val() === $("#UserPasswordConfirm").val()) {
@@ -157,7 +182,7 @@
                 return false;
             }
         });
-        $("#CompanyStateId").html("");        
+        $("#CompanyStateId").html("");
         $("#CompanyCountryId").change(function() {
             var url = urlbase + "states/getStatesByCountry.xml";
             var datos = {
@@ -192,18 +217,18 @@
                     id = $("id", obj).text();
                     nombre = $("pers_primNombre", obj).text();
                     apellido = $("pers_primApellido", obj).text();
-                    ciudad = $("city_id", obj).text();                    
+                    ciudad = $("city_id", obj).text();
                     direccion = $("pers_direccion", obj).text();
                     telefono = $("pers_telefono", obj).text();
-                    if(nombre !== null){                        
+                    if (nombre !== null) {
                         $("#PeoplePers_id").val(id);
                         $("#CompanyPersPrimNombre").val(nombre);
                         $("#CompanyPersPrimApellido").val(apellido);
-                        $("#CompanyCityId option[value="+ciudad+"]").attr("selected",true);
+                        $("#CompanyCityId option[value=" + ciudad + "]").attr("selected", true);
                         $("#CompanyPersDireccion").val(direccion);
                         $("#CompanyPersTelefono").val(telefono);
-                    } else {                       
-                        $("#CompanyCityId option[value='']").attr("selected",true);
+                    } else {
+                        $("#CompanyCityId option[value='']").attr("selected", true);
                         $("#CompanyPersPrimNombre").val();
                         $("#CompanyPersPrimApellido").val();
                         $("#CompanyPersDireccion").val();
