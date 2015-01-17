@@ -22,26 +22,54 @@
                     <?php } ?>
                     <td><?php echo $value["PersonalDatum"]["descripcion"]; ?>
                     </td>
-                    <td><input type="<?php echo $value["PersonalDatum"]["tipo"] ?>" 
-                        <?php if ($value["PersonalDatum"]["obligatorio"] == 1) { ?>
-                                   required=<?php echo 'true';
-                                } ?> id="data[PersonalDatum][<?php echo $value["PersonalDatum"]["id"] ?>]" name="data[PersonalDatum][<?php echo $value["PersonalDatum"]["id"] ?>]"/>
-                    </td>
-
-
-
-
                     <?php
+                    if ($value["PersonalDatum"]["tipo"] == "select") {
+                        ?>
+                        <td>
+                            <select id="<?php echo 'data[PersonalDatum][' . $value["PersonalDatum"]["id"] ?>]" name="data[PersonalDatum][<?php echo $value["PersonalDatum"]["id"] ?>]"  <?php if ($value["PersonalDatum"]["obligatorio"] == 1) { ?> required=<?php
+                                        echo 'true';
+                                    }
+                                    ?>> 
+                                <option>Seleccione <?php echo $value["PersonalDatum"]["descripcion"]; ?></option>    
+                            </select> 
+                        </td>
+                        <?php
+                    } elseif ($value["PersonalDatum"]["tipo"] == "checkbox") {
+                        ?>
+                        <td>
+                            <input type="<?php echo $value["PersonalDatum"]["tipo"] ?>" 
+                            <?php if ($value["PersonalDatum"]["obligatorio"] == 1) { ?>
+                                       required=<?php
+                                       echo 'true';
+                                   }
+                                   ?> id="data[PersonalDatum][<?php echo $value["PersonalDatum"]["id"] ?>]" name="data[PersonalDatum][<?php echo $value["PersonalDatum"]["id"] ?>]"/>
+                        </td>
+                        <?php
+                    } elseif ($value["PersonalDatum"]["tipo"] == "radio") {
+                        
+                    } else {
+                        ?>
+
+                        <td><input type="<?php echo $value["PersonalDatum"]["tipo"] ?>" 
+                            <?php if ($value["PersonalDatum"]["obligatorio"] == 1) { ?>
+                                       required=<?php
+                                       echo 'true';
+                                   }
+                                   ?> id="data[PersonalDatum][<?php echo $value["PersonalDatum"]["id"] ?>]" name="data[PersonalDatum][<?php echo $value["PersonalDatum"]["id"] ?>]"/>
+                        </td>
+
+
+
+
+                        <?php
+                    }
                     $count ++;
                 }
             }
             ?>
         </tr>
     </table>
-<?php echo $this->Form->end(__('Enviar')); ?>
-<?php //echo $this->Form->create('User', array('action' => 'add2'));  ?>
+    <?php echo $this->Form->end(__('Enviar')); ?>
+    <?php //echo $this->Form->create('User', array('action' => 'add2'));       ?>
 
 </div>
-<script>
-    onKeyUp
-</script>
