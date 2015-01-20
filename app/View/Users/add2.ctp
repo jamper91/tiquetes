@@ -20,38 +20,63 @@
                     </tr>
                     <tr>
                     <?php } ?>
-                    <td><?php echo $value["PersonalDatum"]["descripcion"]; ?>
+                    <td><?php echo '     '.$value["PersonalDatum"]["descripcion"]; ?>
                     </td>
                     <?php
                     if ($value["PersonalDatum"]["tipo"] == "select") {
                         ?>
                         <td>
-                            <select id="<?php echo 'data[PersonalDatum][' . $value["PersonalDatum"]["id"] ?>]" name="data[PersonalDatum][<?php echo $value["PersonalDatum"]["id"] ?>]"  <?php if ($value["PersonalDatum"]["obligatorio"] == 1) { ?> required=<?php
-                                        echo 'true';
-                                    }
-                                    ?>> 
-                                <option>Seleccione <?php echo $value["PersonalDatum"]["descripcion"]; ?></option>    
-                            </select> 
+                            <?php
+                            echo $this->Form->input($value["PersonalDatum"]["id"], array(
+                                'options' => $value[0],
+                                'empty' => 'Seleccione ' . $value["PersonalDatum"]["descripcion"],
+                                'label' => '',
+                                'name' => "data[PersonalDatum][" . $value["PersonalDatum"]["id"] . "]",
+                                'id' => 'data[PersonalDatum][' . $value["PersonalDatum"]["id"] . "]"
+                            ))
+                            ?>
+
                         </td>
                         <?php
                     } elseif ($value["PersonalDatum"]["tipo"] == "checkbox") {
                         ?>
                         <td>
-                            <input type="<?php echo $value["PersonalDatum"]["tipo"] ?>" 
-                            <?php if ($value["PersonalDatum"]["obligatorio"] == 1) { ?>
-                                       required=<?php
-                                       echo 'true';
-                                   }
-                                   ?> id="data[PersonalDatum][<?php echo $value["PersonalDatum"]["id"] ?>]" name="data[PersonalDatum][<?php echo $value["PersonalDatum"]["id"] ?>]"/>
+                            <?php
+                            echo $this->Form->input($value["PersonalDatum"]["id"], array(
+//                "name" => $mnus['Product']['product_id'],
+                                "label" => "",
+                                "type" => "select",
+                                "multiple" => "checkbox",
+                                'options' => $value[0],
+                                'name' => "data[PersonalDatum][" . $value["PersonalDatum"]["id"] . "]",
+                                'id' => 'data[PersonalDatum][' . $value["PersonalDatum"]["id"] . "]"
+                            ));
+                            
+                            ?>
                         </td>
                         <?php
                     } elseif ($value["PersonalDatum"]["tipo"] == "radio") {
-                        
+                        ?>
+                        <td>
+                            <?php
+                            echo $this->form->input($value["PersonalDatum"]["id"], array(
+//                "name" => $mnus['Product']['product_id'],
+                                "label" => "",
+                                "type" => "radio",
+//                                "multiple" => "radio",
+                                'options' =>$value[0],
+                                'name' => "data[PersonalDatum][" . $value["PersonalDatum"]["id"] . "]",
+                                'id' => 'data[PersonalDatum][' . $value["PersonalDatum"]["id"] . "]"
+                            ));
+                            
+                            ?>
+                        </td>
+                        <?php
                     } else {
                         ?>
 
                         <td><input type="<?php echo $value["PersonalDatum"]["tipo"] ?>" 
-                            <?php if ($value["PersonalDatum"]["obligatorio"] == 1) { ?>
+                                   <?php if ($value["PersonalDatum"]["obligatorio"] == 1) { ?>
                                        required=<?php
                                        echo 'true';
                                    }
@@ -69,7 +94,7 @@
             ?>
         </tr>
     </table>
-    <?php echo $this->Form->end(__('Enviar')); ?>
-    <?php //echo $this->Form->create('User', array('action' => 'add2'));       ?>
+<?php echo $this->Form->end(__('Enviar')); ?>
+<?php //echo $this->Form->create('User', array('action' => 'add2'));        ?>
 
 </div>
