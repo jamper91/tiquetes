@@ -43,6 +43,18 @@ $(document).ready(function(){
 	});
 });
 
+
+function existe(carga,ide){ 
+    //var carga=new Array(1,2,3,4); 
+    var entroCarga=false;
+    for (x = 0; x <= carga.length; x++) {  
+        if(carga[x]==ide){ 
+            entroCarga=true; 
+        } 
+    }
+    return entroCarga; 
+}  
+
 function restructureChatBoxes() {
 	align = 0;
 	for (x in chatBoxes) {
@@ -180,7 +192,7 @@ function chatHeartbeat(){
 			}
 		}
 	}
-	
+	var titleAux= new Array();
 	$.ajax({
 	  url: urlbase+"chats?action=chatheartbeat",
 	  cache: false,
@@ -193,8 +205,9 @@ function chatHeartbeat(){
 
 				chatboxtitle = item.g;
 
-				if(i==0){ $("#chatbox_"+chatboxtitle+" .chatboxcontent").empty(); } // limpiamos
 
+				if(!existe(titleAux,chatboxtitle)){ $("#chatbox_"+chatboxtitle+" .chatboxcontent").empty(); } // limpiamos
+				titleAux.push(chatboxtitle);
 				if ($("#chatbox_"+chatboxtitle).length <= 0) {
 					console.log("estoy aqui");
 					createChatBox(chatboxtitle);
@@ -374,6 +387,10 @@ function startChatSession(){
 		
 	}});
 }
+
+
+
+
 
 /**
  * Cookie plugin

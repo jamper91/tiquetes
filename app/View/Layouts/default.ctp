@@ -310,8 +310,26 @@ $_SESSION['username'] = $this->Session->read('nameUser') // Must be already set
         <div id="content">
             <div id="main_container">
             <div class="container-fluid">
-                
-                    <a href="javascript:void(0)" onclick="javascript:chatWith('<?=$this->Session->read('User.type_user_id')?>')">Chat With Grupo </a>
+                    <?php 
+                  
+                    $query= AppController::prueba(); 
+                    
+                    if($this->Session->read('User.type_user_id')==1){
+                        foreach ($query as $k) {
+                            $k_id=$k["type_users"]["id"];
+                            $k_de=$k["type_users"]["descripcion"];
+                            ?>
+                            <a href="javascript:void(0)" onclick="javascript:chatWith('<?=$k_id?>')">Chat <?=$k_de?> </a>
+                            <?php
+                        }
+                    }else{
+                        ?>
+                        <a href="javascript:void(0)" onclick="javascript:chatWith('<?=$this->Session->read('User.type_user_id')?>')">Chat Grupo </a>
+                        <?php
+                    }
+                    ?>
+                    
+                    
                 <hr>
                 <?php
                 echo $this->Session->flash();

@@ -43,21 +43,48 @@ class ChatsController extends AppController {
 	
 	/*$sql = "select * from chat where (chat.to = '".mysql_real_escape_string($this->Session->read('nameUser'))."' AND recd = 0) order by id ASC";*/
 
-	$sql = "select * from chat where (chat.to = '".mysql_real_escape_string($this->Session->read('User.type_user_id'))."' AND recd = 0) order by id ASC";
+	$txt="";
+
+	if($this->Session->read('User.type_user_id')==1){
+		$sqlx = "select * from type_users";
+		$queryx=$this->Event->query($sqlx);
+		//var_dump($queryx[]);
+		foreach ($queryx as $q) {
+			$txt.="1 OR chat.to=".mysql_real_escape_string($q["type_users"]["id"])."";
+			# code...
+		}
+
+	}else{
+		$txt.="chat.to=".mysql_real_escape_string($this->Session->read('User.type_user_id'))."";
+	}
+
+
+
+	//$sql = "select * from chat where (chat.to = '".mysql_real_escape_string($this->Session->read('User.type_user_id'))."' AND recd = 0) order by id ASC";
+	$sql = "select * from chat where   ".$txt."  AND recd = 0 order by id ASC";
 	//$query = mysql_query($sql);
 	$query=$this->Event->query($sql);
+
+	
+
+
+
+
 	$items = '';
 
 	$chatBoxes = array();
 
-	//var_dump($query);
+	
 	
 		//while ($query) {
 	foreach ($query as  $chat1) {
 		//var_dump($chat["chat"]);
 		$chat=$chat1["chat"];
-		
 
+		$sql1 = "select * from type_users where (id = '".$chat['to']."') LIMIT 1";
+		$query1=$this->Event->query($sql1);
+		
+		
 		if (!isset($_SESSION['openChatBoxes'][$chat['from']]) && isset($_SESSION['chatHistory'][$chat['from']])) {
 			$items = $_SESSION['chatHistory'][$chat['from']];
 		}
@@ -67,9 +94,11 @@ class ChatsController extends AppController {
 		$items .= <<<EOD
 					   {
 			"s": "0",
+			"w": "{$query1[0]['type_users']['descripcion']}",
 			"f": "{$chat['from']}",
 			"g": "{$chat['to']}",
 			"m": "{$chat['message']}"
+			
 	   },
 EOD;
 
