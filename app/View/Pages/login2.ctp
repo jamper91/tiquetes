@@ -1,11 +1,11 @@
 <div class="pages form" align="center">
     <?php echo $this->Form->create('Page'); ?>
-    <br><h2>Bienvenido por fabor ingrese el nit de su empresa y la contraseña que le fue asignada</h2><br>
+    <br><h2>Bienvenido por fabor ingresa tu Usuario y Contraseña</h2><br>
     <table>
         <tr>
             <td>NIT</td>
             <td><?php
-                echo $this->Form->input('nit', array(
+                echo $this->Form->input('username', array(
                     'label' => '',
                     'required' => 'true'
                 ));
@@ -25,9 +25,7 @@
         </tr>
     </table>
     <br>
-    <a href="<?= $this->Html->url(array("controller" => "Pages", "action" => "remember")); ?>">Recordar Contraseña</a><br>
-    <a href="<?= $this->Html->url(array("controller" => "Pages", "action" => "dont")); ?>">No tengo contraseña</a>
-    <br>
+    <a href="<?= $this->Html->url(array("controller" => "Pages", "action" => "remember2")); ?>">Recordar Contraseña</a><br>
     <br>
     <?php echo $this->Form->end(__('Ingresar')); ?>
 </div>
