@@ -28,7 +28,7 @@
                 <div class="control-group">
                     <label class="control-label">Tipo</label>
                     <?php
-                    $sizes = array("number" => "Numerico", "text" => "Texto", "radio" => "Radio", "checkbox" => "Checkboxes", "select" => "Campos de seleccion", "data" => "Fecha");
+                    $sizes = array("number" => "Numerico", "text" => "Texto", "checkbox" => "Checkboxes", "select" => "Campos de seleccion", "data" => "Fecha");
                     echo $this->Form->input('tipo', array(
                         "div" => array(
                             "class" => "controls"
@@ -113,8 +113,5 @@
             }
         });
     });
-
-</script>
-<script>
 
 </script>

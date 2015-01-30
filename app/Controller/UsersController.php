@@ -456,12 +456,14 @@ class UsersController extends AppController {
         //$event_id = $this->request->query["event_id"];
         // debug(implode("','",$event_id));
 //        $event_id = $this->request->query["event_id"];
-        $event_id = 9;
+        $event_id = 15;
         //debug($event_id);
-
 
         $this->loadModel('Forms');
         $this->loadModel('Opcione');
+        $this->loadModel('PersonalDatum');
+        $this->loadModel('Categoria');
+        $this->loadModel('Shelf');
         $forms = $this->Forms->findAllByEventId($event_id);
         //debug(!Empty($forms));
         if (!Empty($forms)) {
@@ -469,13 +471,14 @@ class UsersController extends AppController {
                 $form_id = $form['Forms']['id'];
             }
             $this->loadModel('FormsPersonalDatum');
-            $formPersonal = $this->FormsPersonalDatum->findAllByFormId($form_id);
-            foreach ($formPersonal as $key => $value) {
-                $datum_id = $value['PersonalDatum']['id'];
+//            $formPersonal = $this->FormsPersonalDatum->findAllByFormId($form_id);
+            $formPersonal = $this->FormsPersonalDatum->find('all', array('conditions' => array("FormsPersonalDatum.form_id = $form_id"), 'order' => array('FormsPersonalDatum.ordenar'))); //AllByFormId, array('order' => array('ordenar')
+//            debug($formPersonal);die;
+            foreach ($formPersonal as $key => $values) {
+                $datum_id = $values['PersonalDatum']['id'];
                 $options = $this->Opcione->find('list', array('conditions' => array("personal_datum_id = $datum_id"), 'fields' => array('id', 'descripcion'), 'order' => array('descripcion')));
 //                if ($options != array())
-                    array_push($formPersonal[$key], $options);
-                
+                array_push($formPersonal[$key], $options);
             }
 //            debug($formPersonal);
         } else {
@@ -500,26 +503,72 @@ class UsersController extends AppController {
             $datos = $this->request->data;
 
             foreach ($datos as $dato) {
-                while ($value = current($dato)) {
 
+                while ($value = current($dato)) {
+//                    debug(current($dato));
+//                    debug($value);
 
                     if (key($dato) != 'documento') {
                         $this->loadModel('Data');
-                        $newData = $this->Data->create();
-                        $newData = array(
-                            'Data' => array(
-                                'descripcion' => $value,
-                                'forms_personal_datum_id' => key($dato),
-                                'person_id' => $newPeopleId,
-                            )
-                        );
-                        $this->Data->save($newData);
+                        $tipod = $this->PersonalDatum->find('list', array('conditions' => array("id = " . key($dato)), 'fields' => array('tipo')));
+                        if ($tipod[key($dato)] == 'checkbox') {
+                            $sw = 0;
+                            while ($sw < count($value)) {
+                                debug($value[$sw]);
+                                $newData = $this->Data->create();
+                                $newData = array(
+                                    'Data' => array(
+                                        'descripcion' => $value[$sw],
+                                        'forms_personal_datum_id' => key($dato),
+                                        'person_id' => $newPeopleId,
+                                    )
+                                );
+                                $this->Data->save($newData);
+                                $sw++;
+                            }
+                        } else {
+                            $newData = $this->Data->create();
+                            $newData = array(
+                                'Data' => array(
+                                    'descripcion' => $value,
+                                    'forms_personal_datum_id' => key($dato),
+                                    'person_id' => $newPeopleId,
+                                )
+                            );
+                            $this->Data->save($newData);
+                        }
+//                        debug(key($dato));
+//                        debug($tipod);
+//                    
                     }
                     next($dato);
                 }
             }
-            return $this->redirect(array('action' => 'elegirEvento'));
+            return $this->redirect(array('action' => 'add2'));
         }
+
+        $options = "SELECT c.`id`, c.`descripcion` AS name FROM `categorias` c INNER JOIN `events_categorias` e ON e.`categoria_id` = c.`id` WHERE e.`event_id` = $event_id order by c.`descripcion` asc ";
+        $catego = $this->Categoria->query($options);
+//      debug($catego);  
+        $categorias = array();
+        $p = count($catego);
+        if ($p != 0) {
+            for ($i = 0; $i < $p; $i++) {
+                $categorias[$catego[$i]['c']['id']] = $catego[$i]['c']['name'];
+            }
+        }
+        
+        $shelves = $this->Shelf->find('list', array(
+                "fields" => array(
+                    "Shelf.id",
+                    "Shelf.codigo"
+                ),
+                "conditions" => array(
+                    "event_id" => $event_id,
+            )));
+        
+        $this->set(compact('categorias','shelves'));
+
         $this->set('form', $formPersonal);
     }
 

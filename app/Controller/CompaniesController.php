@@ -308,6 +308,65 @@ class CompaniesController extends AppController {
             ),
             "fields" => array(
                 "Person.id",
+                "Person.stan",
+                "Person.categoria_id"
+            ),
+            "recursive" => -2
+        );
+        
+        $event_id = 15;
+        //debug($event_id);
+
+        $this->loadModel('Forms');
+        $this->loadModel('Opcione');
+        $forms = $this->Forms->findAllByEventId($event_id);
+        //debug(!Empty($forms));
+        if (!Empty($forms)) {
+            foreach ($forms as $form) {
+                $form_id = $form['Forms']['id'];
+            }
+            $this->loadModel('FormsPersonalDatum');
+//            $formPersonal = $this->FormsPersonalDatum->findAllByFormId($form_id);
+            $formPersonal = $this->FormsPersonalDatum->find('list', array('conditions' => array("FormsPersonalDatum.form_id = $form_id"), 'fields' => array('id', 'personal_datum_id'), 'order' => array('FormsPersonalDatum.ordenar'))); //AllByFormId, 
+            debug($formPersonal);
+            foreach ($formPersonal as $key => $values) {
+                debug($key);debug($values);die;
+                $datum_id = $values;
+                $opciones = $this->Opcione->find('list', array('conditions' => array("personal_datum_id = $datum_id"), 'fields' => array('id', 'descripcion'), 'order' => array('descripcion')));
+//                if ($options != array())
+                array_push($formPersonal[$key], $opciones);
+            }
+//            debug($formPersonal);
+        } else {
+            $formPersonal = '';
+        }
+        array_push($options,$formPersonal);
+//        debug($options);die;
+        $datos = $this->Person->find("all", $options);
+//        debug($datos);
+        $log = $this->Person->getDataSource()->getLog(false, false);
+        //debug($log);
+//        var_dump($cities);
+        $this->set(
+                array(
+                    "datos" => $datos,
+                    "_serialize" => array("datos")
+                )
+        );
+    }
+    
+    /*
+     * public function search() {
+        $this->loadModel("Person");
+        $this->layout = "webservices";
+        $documento = $this->request->data["documento"]; //State
+        $sql = "SELECT * FROM people p WHERE p.pers_documento = $documento";
+        $options = array(
+            "conditions" => array(
+                "Person.pers_documento" => $documento
+            ),
+            "fields" => array(
+                "Person.id",
                 "Person.document_type_id",
                 "Person.pers_primNombre",
                 "Person.pers_primApellido",
@@ -338,6 +397,7 @@ class CompaniesController extends AppController {
                 )
         );
     }
+     */
 
     public function searchCertificate() {
         $even = $this->Session->read('event_id');

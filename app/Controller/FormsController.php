@@ -53,7 +53,7 @@ class FormsController extends AppController {
             //debug($this->request->data);
             $this->Form->create();
             if ($this->Form->save($this->request->data)) {
-                
+
                 $this->Session->setFlash(__('The form has been saved.'));
                 return $this->redirect(array('action' => 'index'));
             } else {
@@ -70,9 +70,9 @@ class FormsController extends AppController {
 //                "Event.even_fechFinal >= NOW()"
 //            )
 //        ));
-        $events= array();
+        $events = array();
         foreach ($ev as $key => $e) {
-            $events[$e['events']['id']]=$e['events']['even_nombre'];
+            $events[$e['events']['id']] = $e['events']['even_nombre'];
         }
 //        debug($events); die;
         $personalData = $this->Form->PersonalDatum->find('list', array(
@@ -144,4 +144,65 @@ class FormsController extends AppController {
         }
         return $this->redirect(array('action' => 'index'));
     }
+
+    /*
+     * order method 
+     *  
+     *      */
+
+    public function order($id = null) {
+        $this->loadModel('FormsPersonalDatum');
+        $this->loadModel('Opcione');
+        if (!$this->Form->exists($id)) {
+            throw new NotFoundException(__('Invalid form'));
+        }
+        if ($this->request->is(array('post', 'put'))) {
+
+
+            $datos = $this->request->data;
+
+            foreach ($datos as $dato) {
+
+                while ($value = current($dato)) {
+//                    debug(current($dato));
+//                    debug($value);
+
+                    if (key($dato) != 'documento') {
+                        $this->loadModel('FormsPersonalDatum');
+                        $this->FormsPersonalDatum->query("UPDATE `forms_personal_data` SET `ordenar`= $value WHERE `personal_datum_id`=" . key($dato) . " AND `form_id`=$id");
+                    }
+                    next($dato);
+                }
+            }
+            return $this->redirect(array('action' => 'index'));
+        } else {
+            $options = array('conditions' => array('Form.' . $this->Form->primaryKey => $id));
+            $this->request->data = $this->Form->find('first', $options);
+        }
+        $personalData = $this->FormsPersonalDatum->findAllByFormId($id);
+        foreach ($personalData as $key => $values) {
+            $datum_id = $values['PersonalDatum']['id'];
+            $options = $this->Opcione->find('list', array(
+                'conditions' => array(
+                    "personal_datum_id = $datum_id"
+                ),
+                'fields' => array('id', 'descripcion'),
+                'order' => array('descripcion')
+                    )
+            );
+//                if ($options != array())
+            array_push($personalData[$key], $options);
+        }
+//        $personalData = $this->FormsPersonalDatum->find('all', array(
+//            "fields" => array(
+//                "FormsPersonalDatum.id",
+//                "FormsPersonalDatum.personal_datum_id"
+//            ),
+//            "conditions" => array(
+//                "FormsPersonalDatum.form_id = $id"
+//            )
+//        ));
+        $this->set(compact('personalData'));
+    }
+
 }

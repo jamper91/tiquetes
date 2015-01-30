@@ -48,6 +48,9 @@ echo $this->Html->script(array('matrix.tables'));
                                     <span class="btn btn-success btn-mini">
                                         <?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $dato['Form']['id'])); ?>
                                     </span>
+                                    <span class="btn btn-success btn-mini">
+                                        <?php echo $this->Html->link(__('Ordenamiento'), array('action' => 'order', $dato['Form']['id'])); ?>
+                                    </span>
                                     <span class="btn btn-danger btn-mini">
                                         <?php echo $this->Form->postLink(__('Eliminar'), array('action' => 'delete', $dato['Form']['id']), array(), __('Esta seguro que desea eliminar # %s?', $dato['Form']['id'])); ?>
                                     </span>

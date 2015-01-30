@@ -5,7 +5,7 @@ echo $this->Html->css(array('multi-select'));
 
 
 echo "<pre>";
-var_dump($personalData);
+//var_dump($personalData);
 //var_dump($this->request->data); 
 echo "</pre>";
 
