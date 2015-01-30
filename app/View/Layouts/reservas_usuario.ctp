@@ -30,7 +30,9 @@
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">Home</a></li>
         <li><a href="<?= $this->Html->url(array("controller" => "Pages", "action" => "registro")); ?>">Registrar</a></li>
+        <li><a href="<?= $this->Html->url(array("controller" => "Pages", "action" => "login")); ?>">Empresas</a></li>
         <li><a href="<?= $this->Html->url(array("controller" => "Pages", "action" => "eventos")); ?>">Eventos</a></li>
+        <li><a href="<?= $this->Html->url(array("controller" => "Pages", "action" => "login2")); ?>">Personas</a></li>
         <li><a href="#contact">Reservar</a></li>
       </ul>
     </div><!--/.nav-collapse -->

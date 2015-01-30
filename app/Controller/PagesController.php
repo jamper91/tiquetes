@@ -40,8 +40,8 @@ class PagesController extends AppController {
 
     public function beforeFilter() {
         parent::beforeFilter();
-        $this->set('authUser', $this->Auth->user());
-        $this->Auth->allow('index', 'registro', 'eventos', 'register', 'chose', 'remember', 'login');
+//        $this->set('authUser', $this->Auth->user());
+        $this->Auth->allow('index', 'registro', 'eventos', 'register', 'chose', 'remember', 'login', 'login2');
         // $this->layout = "reservas_usuario";
     }
 
@@ -95,8 +95,69 @@ class PagesController extends AppController {
 
     public function registro() {
         $this->layout = "reservas_usuario";
+        $this->loadModel('Person');
+        $this->loadModel('Categoria');
+        $this->loadModel('Shelf');
+        $this->loadModel('Input');
+        if ($this->request->is('POST')) {
+            $data = $this->request->data;
+            $person_id = $data['people']['pers_id'];
+            if ($person_id == '' || $person_id == null) {
+                // como no existe la persona creamos persona y entrada nuevas.
+                $doc = $data['Person']['pers_documento'];
+                $docType = $data['Person']['document_type_id'];
+                $nom = $data['Person']['pers_primNombre'];
+                $ape = $data['Person']['pers_primApellido'];
+                $tel = $data['Person']['pers_telefono'];
+                $mai = $data['Person']['pers_mail'];
+                $obs = $data['Person']['observaciones'];
+                $pass = $data['Person']['pers_institucion'];
+                $this->Person->query("INSERT INTO `people`(`document_type_id`, `pers_documento`, `pers_primNombre`, `pers_primApellido`, `pers_telefono`,   `pers_mail`, `observaciones`, `pers_institucion`) VALUES ($docType, '$doc', '$nom', '$ape', '$tel',  '$mai', '$obs', '$pass')");
+
+                $this->Session->setFlash('Tus datos han sido registrados correctamente', 'good');
+                return $this->redirect(array('action' => 'login2'));
+            } else {
+//                    $input = $this->Input->query("SELECT id FROM inputs WHERE event_id = $evento AND person_id = $person_id");
+                //capturando datos del formulario
+                $id = $data['people']['pers_id'];
+                $doc = $data['Person']['pers_documento'];
+                $docType = $data['Person']['document_type_id'];
+                $nom = $data['Person']['pers_primNombre'];
+                $ape = $data['Person']['pers_primApellido'];
+                $tel = $data['Person']['pers_telefono'];
+                $mai = $data['Person']['pers_mail'];
+                $obs = $data['Person']['observaciones'];
+                $pass = $data['Person']['pers_institucion'];
+                //actualizando la persona
+                $this->Person->query("UPDATE `people` SET `document_type_id`=$docType, `pers_documento`='$doc',`pers_primNombre`='$nom',`pers_primApellido`= '$ape',`pers_telefono`='$tel',`pers_mail`='$mai',`observaciones`='$obs', `pers_institucion` = '$pass' WHERE id = $id");
+                $this->Session->setFlash('Tus datos han sido registrados correctamente', 'good');
+                return $this->redirect(array('action' => 'login2'));
+            }
+        }
+
+        $this->loadModel('DocumentType');
+        $documentTypes = $this->DocumentType->find('list', array('fields' => array('id', 'tido_descripcion')/* , 'order'=> array('tido_descripcion') */));
+        $this->set(compact('documentTypes'));
     }
 
+    public function login2(){
+        $this->layout = "reservas_usuario";
+        $this->loadModel("Person");
+        if ($this->request->is('POST')) {
+            $data = $this->request->data;
+            $usu = $data['Page']['username'];
+            $pass = $data ['Page']['password'];
+            $datos = $this->Person->find('list', array('conditions'=>array("observaciones = '$usu'", "pers_institucion = '$pass'"), 'fields'=>array('id')));
+            if($datos == array()){
+             $this->Session->setFlash('La convinación usuario contraseña no concuerdan por favor intenta nuevamente', 'error'); 
+             return $this->redirect(array('action' => 'login2'));
+            }else{
+                $this->Session->setFlash('Bienvenido '. $usu, 'good');
+                return $this->redirect(array('action' => 'eventos'));
+            }
+            
+        }
+    }
     public function eventos() {
         $this->layout = "reservas_usuario";
         $this->loadModel('Event');
@@ -133,6 +194,7 @@ class PagesController extends AppController {
     }
 
     public function register() {
+        $this->layout = "reservas_usuario";
         $this->loadModel('Person');
         $this->loadModel('Categoria');
         $this->loadModel('Shelf');
@@ -284,6 +346,7 @@ class PagesController extends AppController {
     }
 
     public function login() {
+        $this->layout = "reservas_usuario";
         $this->loadModel('Company');
         if ($this->request->is('POST')) {
             $nit = $this->request->data['Page']['nit'];
@@ -301,6 +364,7 @@ class PagesController extends AppController {
     }
 
     public function chose() {
+        $this->layout = "reservas_usuario";
         $this->loadModel('Event');
         if ($this->request->is('POST')) {
             $this->Session->write('evento', $this->request->data['Page']['event_id']);
@@ -320,25 +384,33 @@ class PagesController extends AppController {
     }
 
     public function remember() {
+        $this->layout = "reservas_usuario";
         $this->loadModel('Company');
         if ($this->request->is('POST')) {
             $nit = $this->request->data['Page']['nit'];
             $mail = $this->request->data['Page']['email'];
-            $existe = $this->Company->find('first', array('conditions' => array('empr_nit' => "$nit"), 'fields' => array('empr_nombre', 'password')));
-            if ($existe != array()) {
-                $Email = new CakeEmail('gmail');
-                $Email->to($mail);
-                $Email->emailFormat('html');
-                $Email->subject('Recordatorio de Contraseña Ticket Express');
-                $cuerpo = 'Querido ' . $existe['Company']['empr_nombre'] . '<br> Tu contraseña para acceder al registro es: ' . $existe['Company']['password'];
-                if ($Email->send($cuerpo)) {
-                    $this->Session->setFlash('Se ha enviado la información de  accseso al correo ingresado', 'good');
-                    return $this->redirect(array('action' => 'login'));
+            $doc = $this->request->data['Page']['documento'];
+            $person_id = $this->Company->query("SELECT p.id, pers_primNombre FROM people p INNER JOIN companies c ON p.id = c.person_id WHERE p.pers_documento='$doc' AND c.empr_nit = '$nit' ");
+            if ($person_id != array()) {
+                $existe = $this->Company->find('first', array('conditions' => array('empr_nit' => "$nit"), 'fields' => array('empr_nombre', 'password')));
+                if ($existe != array()) {
+                    $Email = new CakeEmail('gmail');
+                    $Email->to($mail);
+                    $Email->emailFormat('html');
+                    $Email->subject('Recordatorio de Contraseña Ticket Express');
+                    $cuerpo = 'Querido ' . $existe['Company']['empr_nombre'] . '<br> Tu contraseña para acceder al registro es: ' . $existe['Company']['password'];
+                    if ($Email->send($cuerpo)) {
+                        $this->Session->setFlash($person_id[0]['p']['pers_primNombre'] . " En los proximos 5 minutos llegara la contraseña al correo ingresado", 'good');
+                        return $this->redirect(array('action' => 'login'));
+                    } else {
+                        $this->Session->setFlash('Error al enviar los datos de acceso, por favor intente nuevamente', 'error');
+                    }
                 } else {
-                    $this->Session->setFlash('Error al enviar los datos de acceso, por favor intente nuevamente', 'error');
+                    $this->Session->setFlash('El nit ingresado no se encuentra registrado en nuestro sistema', 'error');
                 }
             } else {
-                $this->Session->setFlash('El nit ingresado no se encuentra registrado en nuestro sistema', 'error');
+                $this->Session->setFlash('La convinación NIT-Documento no se encuentran en la base de datos. Recuerde que solo el representante legal puede ingresar.', 'error');
+                return $this->redirect(array('action' => 'remember'));
             }
         }
     }

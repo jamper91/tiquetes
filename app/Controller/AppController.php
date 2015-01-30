@@ -33,4 +33,22 @@ class AppController extends Controller {
     public function beforeFilter() {
        $this->set('authUser', $this->Auth->user()); 
     }
+
+
+    public static function prueba(){
+    	App::import('Model', 'TypeUser');
+    	$as = new TypeUser();
+    	
+    	$sql = "select * from type_users";
+    	$query=$as->query($sql);
+    	//$db = ConnectionManager::getDataSource('default');
+		//$db->rawQuery($sql);
+		//$query=$db;
+                     //var_dump($this->element('Event')); 
+          //          $query=$as->query($sql);
+    	return $query;
+    }
+
+
+
 }
